@@ -9,17 +9,7 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-// Konfigurasi Firebase dari User
-const firebaseConfig = {
-  apiKey: process.env.FIREBASE_API_KEY || 'AIzaSyADYXlJ9raZ1hNERRhHz7oAOYz3HbgLcac',
-  authDomain: process.env.FIREBASE_AUTH_DOMAIN || 'bapasmedan-173dd.firebaseapp.com',
-  databaseURL: process.env.FIREBASE_DATABASE_URL || 'https://bapasmedan-173dd-default-rtdb.asia-southeast1.firebasedatabase.app',
-  projectId: process.env.FIREBASE_PROJECT_ID || 'bapasmedan-173dd',
-  storageBucket: process.env.FIREBASE_STORAGE_BUCKET || 'bapasmedan-173dd.firebasestorage.app',
-  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID || '935746123338',
-  appId: process.env.FIREBASE_APP_ID || '1:935746123338:web:cae4391f8a8352eca8d8b3',
-  measurementId: process.env.FIREBASE_MEASUREMENT_ID || 'G-ZFRJSECLQ8'
-};
+const { firebase: firebaseConfig } = require('./envConfig');
 
 let admin = null;
 let cloudDb = null;

@@ -9,6 +9,7 @@ const ejs = require('ejs');
 
 dotenv.config();
 
+const { PORT, SESSION_SECRET } = require('./src/config/envConfig');
 const { setLocals } = require('./src/middlewares/auth');
 const publicRoutes = require('./src/routes/publicRoutes');
 const authRoutes = require('./src/routes/authRoutes');
@@ -16,7 +17,6 @@ const adminRoutes = require('./src/routes/adminRoutes');
 const clientRoutes = require('./src/routes/clientRoutes');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
 
 // View engine setup
 app.engine('ejs', (filePath, data, cb) => {
@@ -43,7 +43,7 @@ app.use(cookieParser());
 // Session Management
 app.use(
   session({
-    secret: process.env.SESSION_SECRET || 'bapas_medan_secret_key_2026',
+    secret: SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {

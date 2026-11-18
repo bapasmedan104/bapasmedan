@@ -8,9 +8,11 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-const cloudName = process.env.CLOUDINARY_CLOUD_NAME || '';
-const apiKey = process.env.CLOUDINARY_API_KEY || '314147995126986';
-const apiSecret = process.env.CLOUDINARY_API_SECRET || 's973tydm6PUqzMsBsT_S5sb6VR8';
+const { cloudinary: cldConfig } = require('./envConfig');
+
+const cloudName = cldConfig.cloudName;
+const apiKey = cldConfig.apiKey;
+const apiSecret = cldConfig.apiSecret;
 
 function isCloudinaryConfigured() {
   return Boolean(cloudName && apiKey && apiSecret);
