@@ -38,6 +38,13 @@ export default {
       });
 
       const resHeaders = new Headers(response.headers);
+      
+      // Pastikan redirect tetap berada di domain Cloudflare
+      const location = resHeaders.get('Location');
+      if (location && location.includes('bapasmedan.netlify.app')) {
+        resHeaders.set('Location', location.replace('https://bapasmedan.netlify.app', url.origin));
+      }
+
       return new Response(response.body, {
         status: response.status,
         statusText: response.statusText,
