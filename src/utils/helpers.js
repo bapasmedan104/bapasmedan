@@ -61,9 +61,15 @@ async function hashPassword(plainPassword) {
 
 async function verifyPassword(plainPassword, hashedPassword) {
   if (!hashedPassword) return false;
+  // Dukung perbandingan langsung jika tersimpan plain-text
+  if (plainPassword === hashedPassword) return true;
   // Support both bcrypt hashes ($2a$, $2b$, $2y$)
   const normalizedHash = hashedPassword.replace(/^\$2y\$/, '$2a$');
-  return bcrypt.compare(plainPassword, normalizedHash);
+  try {
+    return await bcrypt.compare(plainPassword, normalizedHash);
+  } catch {
+    return false;
+  }
 }
 
 /**
