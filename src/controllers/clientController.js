@@ -145,15 +145,23 @@ async function postUploadFoto(req, res) {
       if (!savedPathOrUrl) {
         const yearFolder = String(tahun);
         const monthFolder = String(bulan).padStart(2, '0');
-        const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'wajib_lapor', yearFolder, monthFolder);
-        if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
+        const isServerless = Boolean(process.env.NETLIFY || process.env.AWS_LAMBDA_FUNCTION_NAME);
+        const uploadDir = isServerless
+          ? path.join(require('os').tmpdir(), 'bapas_uploads', 'wajib_lapor', yearFolder, monthFolder)
+          : path.join(process.cwd(), 'public', 'uploads', 'wajib_lapor', yearFolder, monthFolder);
 
-        const base64Data = req.body.foto_base64.replace(/^data:image\/\w+;base64,/, '');
-        const buffer = Buffer.from(base64Data, 'base64');
-        const filename = `lapor_${clientId}_${Date.now()}_cam.jpg`;
-        const fullPath = path.join(uploadDir, filename);
-        fs.writeFileSync(fullPath, buffer);
-        savedPathOrUrl = `${yearFolder}/${monthFolder}/${filename}`;
+        try {
+          if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
+          const base64Data = req.body.foto_base64.replace(/^data:image\/\w+;base64,/, '');
+          const buffer = Buffer.from(base64Data, 'base64');
+          const filename = `lapor_${clientId}_${Date.now()}_cam.jpg`;
+          const fullPath = path.join(uploadDir, filename);
+          fs.writeFileSync(fullPath, buffer);
+          savedPathOrUrl = `${yearFolder}/${monthFolder}/${filename}`;
+        } catch (e) {
+          console.warn('Fallback disk write warning:', e.message);
+          savedPathOrUrl = 'camera_capture_placeholder.jpg';
+        }
       }
     } else if (req.file) {
       if (isCloudinaryConfigured()) {

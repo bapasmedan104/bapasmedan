@@ -91,35 +91,86 @@ try {
 }
 
 // ----------------------------------------------------
-// LOCAL FIRESTORE EMULATOR / FALLBACK
+// LOCAL FIRESTORE EMULATOR / FALLBACK (SERVERLESS-SAFE)
 // ----------------------------------------------------
-const dataDir = path.resolve(process.cwd(), 'data');
-if (!fs.existsSync(dataDir)) {
-  fs.mkdirSync(dataDir, { recursive: true });
+const os = require('os');
+const isServerless = Boolean(
+  process.env.NETLIFY || 
+  process.env.AWS_LAMBDA_FUNCTION_NAME || 
+  process.env.LAMBDA_TASK_ROOT ||
+  (process.env.NODE_ENV === 'production' && !process.env.LOCAL_ENV)
+);
+
+// Di lingkungan serverless (seperti Netlify Functions), filesystem /var/task adalah read-only.
+// Direktori yang bisa ditulisi adalah os.tmpdir() (/tmp)
+const dataDir = isServerless 
+  ? path.join(os.tmpdir(), 'bapas_data')
+  : path.resolve(process.cwd(), 'data');
+
+const bundledDbFile = path.resolve(process.cwd(), 'data', 'firestore_local.json');
+const localDbFile = path.join(dataDir, 'firestore_local.json');
+
+let inMemoryDb = {
+  admin: {},
+  client: {},
+  wajib_lapor: {},
+  konfigurasi_sistem: {},
+  history_log: {}
+};
+
+// Coba muat data awal dari bundled json jika tersedia
+try {
+  if (fs.existsSync(bundledDbFile)) {
+    inMemoryDb = JSON.parse(fs.readFileSync(bundledDbFile, 'utf8') || '{}');
+  }
+} catch {
+  // Tetap gunakan inMemoryDb default
 }
 
-const localDbFile = path.join(dataDir, 'firestore_local.json');
-if (!fs.existsSync(localDbFile)) {
-  fs.writeFileSync(localDbFile, JSON.stringify({
-    admin: {},
-    client: {},
-    wajib_lapor: {},
-    konfigurasi_sistem: {},
-    history_log: {}
-  }, null, 2), 'utf8');
+try {
+  if (!fs.existsSync(dataDir)) {
+    fs.mkdirSync(dataDir, { recursive: true });
+  }
+
+  if (!fs.existsSync(localDbFile)) {
+    if (fs.existsSync(bundledDbFile)) {
+      try {
+        fs.copyFileSync(bundledDbFile, localDbFile);
+      } catch {
+        // Abaikan jika copy gagal
+      }
+    } else {
+      fs.writeFileSync(localDbFile, JSON.stringify(inMemoryDb, null, 2), 'utf8');
+    }
+  } else {
+    // Jika file local sudah ada, perbarui inMemoryDb
+    inMemoryDb = JSON.parse(fs.readFileSync(localDbFile, 'utf8') || '{}');
+  }
+} catch (fsErr) {
+  console.warn('ℹ️ Sistem berjalan dalam mode serverless in-memory cache:', fsErr.message);
 }
 
 function readLocalDb() {
   try {
-    const content = fs.readFileSync(localDbFile, 'utf8');
-    return JSON.parse(content || '{}');
+    if (fs.existsSync(localDbFile)) {
+      const content = fs.readFileSync(localDbFile, 'utf8');
+      return JSON.parse(content || '{}');
+    }
   } catch {
-    return {};
+    // Fallback ke in-memory jika file tidak terbaca
   }
+  return inMemoryDb;
 }
 
 function writeLocalDb(data) {
-  fs.writeFileSync(localDbFile, JSON.stringify(data, null, 2), 'utf8');
+  inMemoryDb = data;
+  try {
+    if (fs.existsSync(dataDir)) {
+      fs.writeFileSync(localDbFile, JSON.stringify(data, null, 2), 'utf8');
+    }
+  } catch {
+    // Di serverless read-only, inMemoryDb menyimpan data state selama instance aktif
+  }
 }
 
 class LocalDocumentRef {

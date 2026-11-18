@@ -1,6 +1,14 @@
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const os = require('os');
+
+const isServerless = Boolean(
+  process.env.NETLIFY || 
+  process.env.AWS_LAMBDA_FUNCTION_NAME || 
+  process.env.LAMBDA_TASK_ROOT ||
+  (process.env.NODE_ENV === 'production' && !process.env.LOCAL_ENV)
+);
 
 // Storage untuk Foto/Video Bukti Wajib Lapor
 const wajibLaporStorage = multer.diskStorage({
@@ -8,10 +16,16 @@ const wajibLaporStorage = multer.diskStorage({
     const now = new Date();
     const year = String(req.body.tahun || now.getFullYear());
     const month = String(req.body.bulan || now.getMonth() + 1).padStart(2, '0');
-    const dir = path.join(process.cwd(), 'public', 'uploads', 'wajib_lapor', year, month);
+    const dir = isServerless
+      ? path.join(os.tmpdir(), 'bapas_uploads', 'wajib_lapor', year, month)
+      : path.join(process.cwd(), 'public', 'uploads', 'wajib_lapor', year, month);
 
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
+    try {
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
+      }
+    } catch (e) {
+      console.warn('Wajib lapor upload dir warning:', e.message);
     }
     cb(null, dir);
   },
@@ -28,10 +42,16 @@ const wajibLaporStorage = multer.diskStorage({
 const profilStorage = multer.diskStorage({
   destination: function (req, file, cb) {
     const clientId = req.session.user ? req.session.user.id : 'temp';
-    const dir = path.join(process.cwd(), 'public', 'uploads', 'profil', clientId);
+    const dir = isServerless
+      ? path.join(os.tmpdir(), 'bapas_uploads', 'profil', clientId)
+      : path.join(process.cwd(), 'public', 'uploads', 'profil', clientId);
 
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
+    try {
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
+      }
+    } catch (e) {
+      console.warn('Profil upload dir warning:', e.message);
     }
     cb(null, dir);
   },
