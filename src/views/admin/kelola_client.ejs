@@ -147,6 +147,8 @@
           <tr>
             <th>No</th>
             <th>No Register</th>
+            <th>No</th>
+            <th>No Register & Sandi Login</th>
             <th>Nama Lengkap</th>
             <th>Username</th>
             <th>Kontak / Telp</th>
@@ -160,7 +162,12 @@
           <% clients.forEach(function(c, idx) { %>
             <tr>
               <td><%= idx + 1 %></td>
-              <td><strong><%= c.no_register %></strong></td>
+              <td>
+                <strong style="color:#003580; font-size:14px;"><%= c.no_register %></strong><br>
+                <span style="font-size:11px; color:#1e293b; background:#e0f2fe; border:1px solid #bae6fd; padding:2px 6px; border-radius:4px; display:inline-flex; align-items:center; gap:4px; margin-top:3px;">
+                  <i class="fas fa-key" style="color:#0284c7; font-size:10px;"></i> Sandi: <strong><%= c.password_plain || 'client123' %></strong>
+                </span>
+              </td>
               <td>
                 <div style="display:flex; align-items:center; gap:10px;">
                   <% if (c.foto_profil) { %>
@@ -218,49 +225,66 @@
 
 <!-- MODAL TAMBAH KLIEN BARU -->
 <div class="modal" id="modalTambah">
-  <div class="modal-content">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid #e2e8f0; padding-bottom:10px;">
-      <h3 style="color:#1a3a52; font-size:18px;"><i class="fas fa-user-plus"></i> Tambah Klien Pemasyarakatan Baru</h3>
-      <button type="button" onclick="closeTambahModal()" style="border:none; background:transparent; font-size:22px; cursor:pointer;">&times;</button>
+  <div class="modal-content" style="max-width:680px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; border-bottom:1px solid #e2e8f0; padding-bottom:12px;">
+      <h3 style="color:#003580; font-size:19px; display:flex; align-items:center; gap:8px;">
+        <i class="fas fa-user-plus" style="color:#ffc107;"></i> Tambah Klien Pemasyarakatan Baru
+      </h3>
+      <button type="button" onclick="closeTambahModal()" style="border:none; background:transparent; font-size:24px; cursor:pointer; color:#64748b;">&times;</button>
     </div>
 
-    <form action="/admin/client/create" method="POST">
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
-        <div class="form-group">
-          <label for="username">Username Login *</label>
-          <input type="text" name="username" id="username" placeholder="Contoh: budi_santoso" required>
+    <form action="/admin/client/create" method="POST" autocomplete="off">
+      <!-- KOTAK UTAMA LOGIN KLIEN (NOMOR & SANDI) -->
+      <div style="background:#f0f7ff; border:1.5px solid #93c5fd; border-radius:8px; padding:16px; margin-bottom:16px;">
+        <div style="font-weight:700; color:#1e40af; font-size:13.5px; margin-bottom:12px; display:flex; align-items:center; gap:6px;">
+          <i class="fas fa-key"></i> Kredensial Login Klien (Nomor & Sandi untuk Klien Masuk)
         </div>
-        <div class="form-group">
-          <label for="password">Password *</label>
-          <input type="password" name="password" id="password" placeholder="Password minimal 6 karakter" required>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+          <div class="form-group" style="margin-bottom:0;">
+            <label for="no_register" style="color:#0f172a; font-weight:700; font-size:13px;">Nomor Register Klien *</label>
+            <input type="text" name="no_register" id="no_register" placeholder="Contoh: REG-2026-001" required autocomplete="off" style="font-weight:700; color:#003580;">
+            <small style="color:#475569; font-size:11px; display:block; margin-top:4px;">Nomor register dipakai klien untuk login.</small>
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label for="tambahPassword" style="color:#0f172a; font-weight:700; font-size:13px;">Kata Sandi (Password) Klien *</label>
+            <div style="position:relative; display:flex; align-items:center;">
+              <input type="text" name="password" id="tambahPassword" placeholder="Contoh: klien2026" required autocomplete="new-password" style="padding-right:75px; font-weight:700; font-family:monospace; font-size:14px;">
+              <button type="button" onclick="generateSandi()" style="position:absolute; right:6px; background:#003580; color:white; border:none; padding:5px 9px; border-radius:4px; font-size:11px; font-weight:700; cursor:pointer;" title="Buat Sandi Acak">
+                <i class="fas fa-random"></i> Acak
+              </button>
+            </div>
+            <small style="color:#475569; font-size:11px; display:block; margin-top:4px;">Sandi ini diberikan ke klien agar bisa login.</small>
+          </div>
         </div>
       </div>
 
-      <div style="display:grid; grid-template-columns:1.2fr 1fr; gap:15px;">
+      <!-- DATA DIRI KLIEN -->
+      <div style="display:grid; grid-template-columns:1.2fr 1fr; gap:14px;">
         <div class="form-group">
           <label for="nama_lengkap">Nama Lengkap Klien *</label>
-          <input type="text" name="nama_lengkap" id="nama_lengkap" placeholder="Nama sesuai identitas resmi" required>
+          <input type="text" name="nama_lengkap" id="nama_lengkap" placeholder="Nama lengkap sesuai berkas/KTP" required autocomplete="off">
         </div>
         <div class="form-group">
-          <label for="no_register">Nomor Register *</label>
-          <input type="text" name="no_register" id="no_register" placeholder="Contoh: REG-2025-001" required>
+          <label for="no_telepon">Nomor Telepon / WhatsApp</label>
+          <input type="text" name="no_telepon" id="no_telepon" placeholder="Contoh: 081234567890" autocomplete="off">
+          <small style="color:#64748b; font-size:11px;">Klien juga bisa login pakai nomor HP ini.</small>
         </div>
       </div>
 
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+        <div class="form-group">
+          <label for="username">Username Login (Opsional)</label>
+          <input type="text" name="username" id="username" placeholder="Kosongkan jika ingin sama dengan No. Register" autocomplete="off">
+        </div>
         <div class="form-group">
           <label for="tanggal_lahir">Tanggal Lahir</label>
           <input type="date" name="tanggal_lahir" id="tanggal_lahir">
         </div>
-        <div class="form-group">
-          <label for="no_telepon">Nomor Telepon / WhatsApp</label>
-          <input type="text" name="no_telepon" id="no_telepon" placeholder="08xxxxxxxxxx">
-        </div>
       </div>
 
       <!-- PERIODE WAJIB LAPOR -->
-      <div style="background:#f0f7ff; border:1px solid #bfdbfe; padding:15px; border-radius:6px; margin-bottom:18px;">
-        <h4 style="color:#003580; font-size:14px; margin-bottom:10px;"><i class="fas fa-calendar-alt"></i> Periode Masa Wajib Lapor Klien</h4>
+      <div style="background:#f8fafc; border:1px solid #cbd5e1; padding:14px; border-radius:8px; margin-bottom:18px;">
+        <h4 style="color:#003580; font-size:13.5px; margin-bottom:10px;"><i class="fas fa-calendar-alt"></i> Periode Masa Wajib Lapor Klien</h4>
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:10px;">
           <div>
             <label style="font-size:12px; font-weight:700;">Bulan Mulai</label>
@@ -300,7 +324,7 @@
 
       <div style="display:flex; justify-content:flex-end; gap:10px;">
         <button type="button" class="btn btn-secondary" onclick="closeTambahModal()">Batal</button>
-        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Simpan Data Klien</button>
+        <button type="submit" class="btn btn-primary" style="padding:10px 20px; font-weight:700;"><i class="fas fa-save"></i> Simpan Data Klien</button>
       </div>
     </form>
   </div>
@@ -308,13 +332,13 @@
 
 <!-- MODAL EDIT KLIEN -->
 <div class="modal" id="modalEdit">
-  <div class="modal-content">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid #e2e8f0; padding-bottom:10px;">
+  <div class="modal-content" style="max-width:640px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; border-bottom:1px solid #e2e8f0; padding-bottom:10px;">
       <h3 style="color:#1a3a52; font-size:18px;"><i class="fas fa-user-edit"></i> Edit Data Klien</h3>
       <button type="button" onclick="closeEditModal()" style="border:none; background:transparent; font-size:22px; cursor:pointer;">&times;</button>
     </div>
 
-    <form action="/admin/client/update" method="POST">
+    <form action="/admin/client/update" method="POST" autocomplete="off">
       <input type="hidden" name="client_id" id="editClientId">
 
       <div class="form-group">
@@ -324,7 +348,7 @@
 
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
         <div class="form-group">
-          <label for="editTelepon">Nomor Telepon</label>
+          <label for="editTelepon">Nomor Telepon / WhatsApp</label>
           <input type="text" name="no_telepon" id="editTelepon">
         </div>
         <div class="form-group">
@@ -342,9 +366,16 @@
         <input type="date" name="tanggal_lahir" id="editTanggalLahir">
       </div>
 
-      <div class="form-group">
-        <label for="editPassword">Reset Password (Kosongkan jika tidak ingin mengubah password)</label>
-        <input type="password" name="password" id="editPassword" placeholder="Masukkan password baru">
+      <!-- KOTAK RESET SANDI KLIEN -->
+      <div style="background:#fefce8; border:1px solid #fef08a; padding:14px; border-radius:6px; margin-bottom:18px;">
+        <label for="editPassword" style="color:#854d0e; font-weight:700; font-size:13px; display:block; margin-bottom:6px;">
+          <i class="fas fa-key"></i> Ubah / Reset Kata Sandi Klien
+        </label>
+        <div style="position:relative; display:flex; align-items:center;">
+          <input type="text" name="password" id="editPassword" placeholder="Masukkan kata sandi baru jika ingin mengubah sandi klien" autocomplete="new-password" style="font-weight:700; font-family:monospace;">
+          <button type="button" onclick="generateSandiEdit()" style="position:absolute; right:6px; background:#854d0e; color:white; border:none; padding:5px 9px; border-radius:4px; font-size:11px; cursor:pointer;">Acak</button>
+        </div>
+        <small style="color:#713f12; font-size:11px; margin-top:4px; display:block;">Kosongkan jika kata sandi klien tidak ingin diubah.</small>
       </div>
 
       <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
@@ -373,10 +404,74 @@
 </div>
 
 <script>
+  function generateSandi() {
+    const chars = 'abcdefghjkmnpqrstuvwxyz23456789';
+    let res = 'klien';
+    for (let i = 0; i < 4; i++) {
+      res += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    document.getElementById('tambahPassword').value = res;
+  }
+
+  function generateSandiEdit() {
+    const chars = 'abcdefghjkmnpqrstuvwxyz23456789';
+    let res = 'klien';
+    for (let i = 0; i < 4; i++) {
+      res += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    document.getElementById('editPassword').value = res;
+  }
+
   function openTambahModal() {
+    // Kosongkan form dari sisa input sebelumnya
+    document.getElementById('no_register').value = '';
+    document.getElementById('nama_lengkap').value = '';
+    document.getElementById('username').value = '';
+    document.getElementById('no_telepon').value = '';
+    document.getElementById('tambahPassword').value = '';
+    generateSandi(); // Berikan rekomendasi sandi awal otomatis
     document.getElementById('modalTambah').classList.add('active');
     hitungTotalBulan();
   }
+  function closeTambahModal() {
+    document.getElementById('modalTambah').classList.remove('active');
+  }
+
+  function hitungTotalBulan() {
+    const bMulai = parseInt(document.getElementById('bulan_mulai').value, 10);
+    const tMulai = parseInt(document.getElementById('tahun_mulai').value, 10);
+    const bAkhir = parseInt(document.getElementById('bulan_akhir').value, 10);
+    const tAkhir = parseInt(document.getElementById('tahun_akhir').value, 10);
+
+    let total = (tAkhir - tMulai) * 12 + (bAkhir - bMulai) + 1;
+    if (isNaN(total) || total <= 0) total = 1;
+
+    document.getElementById('labelTotalBulan').innerText = total + ' Bulan';
+    document.getElementById('total_bulan').value = total;
+  }
+
+  function openEditModal(c) {
+    document.getElementById('editClientId').value = c.id;
+    document.getElementById('editNama').value = c.nama_lengkap || '';
+    document.getElementById('editTelepon').value = c.no_telepon || '';
+    document.getElementById('editStatus').value = c.status || 'aktif';
+    document.getElementById('editTanggalLahir').value = c.tanggal_lahir || '';
+    document.getElementById('editPassword').value = '';
+    document.getElementById('modalEdit').classList.add('active');
+  }
+  function closeEditModal() {
+    document.getElementById('modalEdit').classList.remove('active');
+  }
+
+  function openHapusModal(id, nama) {
+    document.getElementById('hapusClientId').value = id;
+    document.getElementById('hapusNamaKlien').innerText = nama;
+    document.getElementById('modalHapus').classList.add('active');
+  }
+  function closeHapusModal() {
+    document.getElementById('modalHapus').classList.remove('active');
+  }
+</script>
   function closeTambahModal() {
     document.getElementById('modalTambah').classList.remove('active');
   }

@@ -133,11 +133,44 @@ async function getClientByUsername(username) {
 }
 
 async function getClientByRegister(noRegister) {
+  if (!noRegister) return null;
+  const clean = noRegister.trim();
   const col = db.collection('client');
-  const snap = await col.where('no_register', '==', noRegister).limit(1).get();
-  if (snap.empty) return null;
-  const doc = snap.docs[0];
-  return { ...doc.data(), id: doc.id };
+  let snap = await col.where('no_register', '==', clean).limit(1).get();
+  if (!snap.empty) {
+    const doc = snap.docs[0];
+    return { ...doc.data(), id: doc.id };
+  }
+  // Coba pencarian case-insensitive jika tidak ketemu langsung
+  const allSnap = await col.get();
+  for (const doc of allSnap.docs) {
+    const data = doc.data();
+    if ((data.no_register || '').trim().toLowerCase() === clean.toLowerCase()) {
+      return { ...data, id: doc.id };
+    }
+  }
+  return null;
+}
+
+async function getClientByPhone(phone) {
+  if (!phone) return null;
+  const cleanDigits = phone.replace(/[^0-9]/g, '');
+  if (!cleanDigits) return null;
+  const col = db.collection('client');
+  let snap = await col.where('no_telepon', '==', phone.trim()).limit(1).get();
+  if (!snap.empty) {
+    const doc = snap.docs[0];
+    return { ...doc.data(), id: doc.id };
+  }
+  const allSnap = await col.get();
+  for (const doc of allSnap.docs) {
+    const data = doc.data();
+    const docDigits = (data.no_telepon || '').replace(/[^0-9]/g, '');
+    if (docDigits && (docDigits === cleanDigits || docDigits.endsWith(cleanDigits) || cleanDigits.endsWith(docDigits))) {
+      return { ...data, id: doc.id };
+    }
+  }
+  return null;
 }
 
 async function getClientById(id) {
@@ -150,10 +183,20 @@ async function getClientById(id) {
 async function loginClient(identifier, password) {
   if (!identifier || !password) return null;
   const clean = identifier.trim();
-  let clientUser = await getClientByUsername(clean);
+
+  // 1. Coba login melalui No. Register Klien
+  let clientUser = await getClientByRegister(clean);
+
+  // 2. Coba login melalui Username
   if (!clientUser) {
-    clientUser = await getClientByRegister(clean);
+    clientUser = await getClientByUsername(clean);
   }
+
+  // 3. Coba login melalui Nomor Telepon / WhatsApp
+  if (!clientUser) {
+    clientUser = await getClientByPhone(clean);
+  }
+
   if (!clientUser) return null;
   if (clientUser.status !== 'aktif' && clientUser.status !== 'selesai') return null;
 
@@ -162,7 +205,7 @@ async function loginClient(identifier, password) {
 
   const docRef = db.collection('client').doc(clientUser.id);
   await docRef.set({ last_login: new Date().toISOString() }, { merge: true });
-  await logActivity('client', clientUser.id, 'Login', `Client login berhasil (${clientUser.username})`);
+  await logActivity('client', clientUser.id, 'Login', `Client login berhasil (${clientUser.nama_lengkap || clientUser.username})`);
   return clientUser;
 }
 
@@ -213,36 +256,48 @@ async function updateProfilClient(clientId, data, fotoRelatif = null) {
 }
 
 async function createClient(data, adminId) {
-  const username = (data.username || '').trim();
-  const password = data.password;
+  let username = (data.username || '').trim();
+  const password = (data.password || '').trim();
   const namaLengkap = (data.nama_lengkap || '').trim();
   const noRegister = (data.no_register || '').trim();
 
-  if (!username || !password || !namaLengkap || !noRegister) {
-    return { success: false, message: 'Field wajib tidak boleh kosong' };
+  if (!noRegister) {
+    return { success: false, message: 'Nomor Register wajib diisi!' };
+  }
+  if (!namaLengkap) {
+    return { success: false, message: 'Nama lengkap klien wajib diisi!' };
+  }
+  if (!password) {
+    return { success: false, message: 'Kata sandi klien wajib diisi!' };
   }
 
-  const existingUsername = await getClientByUsername(username);
-  if (existingUsername) {
-    return { success: false, message: 'Username sudah terdaftar' };
+  // Jika username tidak diisi admin, gunakan nomor register sebagai username default
+  if (!username) {
+    username = noRegister.toLowerCase().replace(/[^a-z0-9_]/g, '_');
   }
 
   const existingRegister = await getClientByRegister(noRegister);
   if (existingRegister) {
-    return { success: false, message: 'No. Register sudah terdaftar' };
+    return { success: false, message: `Nomor Register "${noRegister}" sudah terdaftar!` };
+  }
+
+  const existingUsername = await getClientByUsername(username);
+  if (existingUsername) {
+    username = username + '_' + Math.floor(Math.random() * 1000);
   }
 
   const hashedPassword = await hashPassword(password);
   const newClient = {
     username,
     password: hashedPassword,
+    password_plain: password, // Menyimpan sandi awal agar admin dapat mengingatkan klien jika lupa
     nama_lengkap: namaLengkap,
     no_register: noRegister,
     tanggal_lahir: data.tanggal_lahir || '',
     tempat_lahir: data.tempat_lahir || '',
     alamat: data.alamat || '',
     email: data.email || '',
-    no_telepon: data.no_telepon || '',
+    no_telepon: (data.no_telepon || '').trim(),
     status: 'aktif',
     bulan_wajib_lapor_mulai: parseInt(data.bulan_mulai, 10) || 1,
     tahun_wajib_lapor_mulai: parseInt(data.tahun_mulai, 10) || new Date().getFullYear(),
@@ -260,8 +315,8 @@ async function createClient(data, adminId) {
   };
 
   const docRef = await db.collection('client').add(newClient);
-  await logActivity('admin', adminId, 'Buat Client', `Admin membuat client baru: ${namaLengkap}`);
-  return { success: true, id: docRef.id, message: 'Client berhasil ditambahkan' };
+  await logActivity('admin', adminId, 'Buat Client', `Admin membuat client baru: ${namaLengkap} (${noRegister})`);
+  return { success: true, id: docRef.id, message: `Klien "${namaLengkap}" (${noRegister}) berhasil ditambahkan!` };
 }
 
 async function updateClient(clientId, data, adminId) {
@@ -278,8 +333,9 @@ async function updateClient(clientId, data, adminId) {
     status: data.status || snap.data().status
   };
 
-  if (data.password) {
-    updatePayload.password = await hashPassword(data.password);
+  if (data.password && data.password.trim()) {
+    updatePayload.password = await hashPassword(data.password.trim());
+    updatePayload.password_plain = data.password.trim();
   }
 
   if (data.total_bulan) {
