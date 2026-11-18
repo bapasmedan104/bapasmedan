@@ -233,7 +233,7 @@
                       <form action="/admin/lapor/terima" method="POST" style="display:inline;">
                         <input type="hidden" name="lapor_id" value="<%= lapor.id %>">
                         <input type="hidden" name="redirect_to" value="/admin/dashboard?tab=lapor">
-                        <button type="submit" class="btn btn-sm btn-success" onclick="return confirm('Terima laporan ini?')"><i class="fas fa-check"></i> Terima</button>
+                        <button type="button" class="btn btn-sm btn-success" onclick="konfirmasiTerimaLapor(this.form, '<%= lapor.nama_lengkap %>')"><i class="fas fa-check"></i> Terima</button>
                       </form>
                       <button type="button" class="btn btn-sm btn-danger" onclick="openTolakModal('<%= lapor.id %>', '<%= lapor.nama_lengkap %>')"><i class="fas fa-times"></i> Tolak</button>
                     </div>
@@ -342,6 +342,19 @@
 
   function closeTolakModal() {
     document.getElementById('modalTolak').classList.remove('active');
+  }
+
+  function konfirmasiTerimaLapor(form, namaKlien) {
+    customConfirm({
+      title: 'Verifikasi & Terima Laporan',
+      text: 'Apakah Anda yakin ingin menerima dan menyetujui laporan wajib lapor dari ' + (namaKlien || 'klien') + '?',
+      icon: 'question',
+      confirmColor: '#28a745',
+      confirmText: '<i class="fas fa-check"></i> Ya, Terima Laporan',
+      cancelText: 'Batal'
+    }).then((res) => {
+      if (res.isConfirmed) form.submit();
+    });
   }
 </script>
 

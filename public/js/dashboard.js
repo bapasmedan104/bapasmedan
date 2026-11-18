@@ -126,9 +126,33 @@ document.addEventListener('click', function (e) {
     // --- Tombol "Terima Lapor" ---
     const terimaBtn = e.target.closest('[data-action="terima-lapor"]');
     if (terimaBtn) {
-        if (!confirm('Terima laporan ini?')) return;
-        terimaBtn.disabled = true;
-        prosesLapor(terimaBtn.dataset.id, 'terima').then(res => handleProsesResult(res, terimaBtn.dataset.id));
+        const doTerima = () => {
+            terimaBtn.disabled = true;
+            prosesLapor(terimaBtn.dataset.id, 'terima').then(res => handleProsesResult(res, terimaBtn.dataset.id));
+        };
+        if (typeof customConfirm === 'function') {
+            customConfirm({
+                title: 'Verifikasi & Terima Laporan',
+                text: 'Apakah Anda yakin ingin menerima laporan ini?',
+                icon: 'question',
+                confirmColor: '#28a745',
+                confirmText: '<i class="fas fa-check"></i> Ya, Terima Laporan',
+                cancelText: 'Batal'
+            }).then(r => { if (r.isConfirmed) doTerima(); });
+        } else if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                title: 'Verifikasi & Terima Laporan',
+                text: 'Apakah Anda yakin ingin menerima laporan ini?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#64748b',
+                confirmText: 'Ya, Terima Laporan',
+                cancelText: 'Batal'
+            }).then(r => { if (r.isConfirmed) doTerima(); });
+        } else {
+            doTerima();
+        }
         return;
     }
 
@@ -152,7 +176,13 @@ document.addEventListener('click', function (e) {
         const id = confirmTolakBtn.dataset.id;
         const alasan = document.getElementById('alasanPenolakan').value.trim();
         if (!alasan) {
-            alert('Alasan penolakan wajib diisi.');
+            if (typeof window.showToast === 'function') {
+                window.showToast('Alasan penolakan wajib diisi.', 'warning');
+            } else if (typeof Swal !== 'undefined') {
+                Swal.fire('Perhatian', 'Alasan penolakan wajib diisi.', 'warning');
+            } else {
+                alert('Alasan penolakan wajib diisi.');
+            }
             return;
         }
         confirmTolakBtn.disabled = true;
@@ -163,10 +193,19 @@ document.addEventListener('click', function (e) {
 
 function handleProsesResult(res, fromTab) {
     if (res.success) {
+        if (typeof window.showToast === 'function') {
+            window.showToast('Status laporan berhasil diperbarui.', 'success');
+        }
         // reload detail supaya status ter-update, tetap di dalam shell dashboard
         loadDetail(res.id, mainContent.dataset.fromTab || 'verifikasi');
     } else {
-        alert(res.message || 'Terjadi kesalahan.');
+        if (typeof window.showToast === 'function') {
+            window.showToast(res.message || 'Terjadi kesalahan.', 'error');
+        } else if (typeof Swal !== 'undefined') {
+            Swal.fire('Gagal', res.message || 'Terjadi kesalahan.', 'error');
+        } else {
+            alert(res.message || 'Terjadi kesalahan.');
+        }
     }
 }
 

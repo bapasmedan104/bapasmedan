@@ -1,3 +1,96 @@
+<!-- SWEETALERT2 & CUSTOM NOTIFIKASI SYSTEM BAPAS MEDAN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<style>
+  .bapas-swal-popup {
+    border-radius: 14px !important;
+    font-family: 'Source Sans 3', sans-serif !important;
+    padding: 24px !important;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2) !important;
+  }
+  .bapas-swal-popup .swal2-title {
+    font-size: 20px !important;
+    font-weight: 700 !important;
+    color: #002255 !important;
+  }
+  .bapas-swal-popup .swal2-html-container {
+    font-size: 14.5px !important;
+    color: #475569 !important;
+    line-height: 1.5 !important;
+  }
+  .bapas-swal-popup .swal2-styled {
+    font-size: 13.5px !important;
+    font-weight: 700 !important;
+    padding: 10px 22px !important;
+    border-radius: 6px !important;
+  }
+  .swal2-toast {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15) !important;
+    border-radius: 8px !important;
+  }
+</style>
+
+<script>
+// Override window.alert default browser menjadi Custom SweetAlert2
+window.alert = function(msg) {
+  if (typeof Swal !== 'undefined') {
+    Swal.fire({
+      title: 'Pemberitahuan Sistem',
+      html: String(msg).replace(/\n/g, '<br>'),
+      icon: 'info',
+      confirmButtonColor: '#003580',
+      confirmButtonText: '<i class="fas fa-check"></i> Mengerti',
+      customClass: { popup: 'bapas-swal-popup' }
+    });
+  }
+};
+
+// Helper Toast Notifikasi Cepat
+window.showToast = function(title, icon = 'success') {
+  if (typeof Swal !== 'undefined') {
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 3500,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.addEventListener('mouseenter', Swal.stopTimer);
+        toast.addEventListener('mouseleave', Swal.resumeTimer);
+      }
+    });
+    Toast.fire({ icon: icon, title: title });
+  }
+};
+
+// Helper Konfirmasi Aksi Custom
+window.customConfirm = function(options) {
+  return Swal.fire({
+    title: options.title || 'Konfirmasi',
+    html: options.html || options.text || 'Apakah Anda yakin ingin melanjutkan tindakan ini?',
+    icon: options.icon || 'question',
+    showCancelButton: true,
+    confirmButtonColor: options.confirmColor || '#003580',
+    cancelButtonColor: '#64748b',
+    confirmButtonText: options.confirmText || '<i class="fas fa-check"></i> Ya, Lanjutkan',
+    cancelButtonText: options.cancelText || 'Batal',
+    reverseButtons: true,
+    customClass: { popup: 'bapas-swal-popup' }
+  });
+};
+
+document.addEventListener('DOMContentLoaded', function() {
+  <% if (typeof successMessage !== 'undefined' && successMessage) { %>
+    window.showToast('<%= successMessage %>', 'success');
+  <% } %>
+  <% if (typeof errorMessage !== 'undefined' && errorMessage) { %>
+    window.showToast('<%= errorMessage %>', 'error');
+  <% } %>
+  <% if (typeof warningMessage !== 'undefined' && warningMessage) { %>
+    window.showToast('<%= warningMessage %>', 'warning');
+  <% } %>
+});
+</script>
+
 <% if (typeof successMessage !== 'undefined' && successMessage) { %>
   <div class="alert alert-success" style="background:#d4edda; color:#155724; padding:14px 18px; border-radius:6px; margin-bottom:20px; border:1px solid #c3e6cb; display:flex; align-items:center; gap:12px;">
     <i class="fas fa-check-circle" style="font-size:18px;"></i>

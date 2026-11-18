@@ -381,10 +381,10 @@
       </div>
 
       <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid #e2e8f0; padding-top:15px;">
-        <form id="formBatalkan" action="/admin/lapor/batalkan" method="POST" onsubmit="return confirm('Batalkan status laporan ini?')">
+        <form id="formBatalkan" action="/admin/lapor/batalkan" method="POST">
           <input type="hidden" name="lapor_id" id="cancelLaporId">
           <input type="hidden" name="catatan_admin" value="Dibatalkan oleh administrator">
-          <button type="submit" class="btn btn-outline" style="color:#dc3545; border-color:#dc3545;"><i class="fas fa-ban"></i> Batalkan Laporan</button>
+          <button type="button" class="btn btn-outline" style="color:#dc3545; border-color:#dc3545;" onclick="konfirmasiBatalkanLapor(this.form)"><i class="fas fa-ban"></i> Batalkan Laporan</button>
         </form>
         <button type="button" class="btn btn-secondary" onclick="closeDetailModal()">Tutup</button>
       </div>
@@ -442,17 +442,38 @@
         loading.style.display = 'none';
         body.style.display = 'block';
       } else {
-        alert('Gagal memuat rincian laporan: ' + resJson.message);
+        if (typeof showToast === 'function') {
+          showToast('Gagal memuat rincian: ' + resJson.message, 'error');
+        } else if (typeof Swal !== 'undefined') {
+          Swal.fire('Gagal', resJson.message, 'error');
+        }
         closeDetailModal();
       }
     } catch (err) {
-      alert('Terjadi kesalahan koneksi: ' + err.message);
+      if (typeof showToast === 'function') {
+        showToast('Kesalahan koneksi: ' + err.message, 'error');
+      } else if (typeof Swal !== 'undefined') {
+        Swal.fire('Kesalahan', err.message, 'error');
+      }
       closeDetailModal();
     }
   }
 
   function closeDetailModal() {
     document.getElementById('modalDetail').classList.remove('active');
+  }
+
+  function konfirmasiBatalkanLapor(form) {
+    customConfirm({
+      title: 'Batalkan Status Laporan?',
+      text: 'Laporan ini akan dibatalkan status verifikasinya dan status akan kembali diproses. Anda yakin?',
+      icon: 'warning',
+      confirmColor: '#dc3545',
+      confirmText: '<i class="fas fa-ban"></i> Ya, Batalkan Status',
+      cancelText: 'Kembali'
+    }).then((res) => {
+      if (res.isConfirmed) form.submit();
+    });
   }
 </script>
 
