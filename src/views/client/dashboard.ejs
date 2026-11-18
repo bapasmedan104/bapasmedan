@@ -188,9 +188,9 @@
             <div style="margin-top:15px;">
               <strong style="color:#002255; font-size:14px;">Foto Bukti Terlampir:</strong><br>
               <div style="margin-top:8px;">
-                <img src="<%= getFileUrl(laporBulanIni.foto_bukti, 'wajib_lapor') %>" alt="Foto Bukti" style="max-width:100%; width:240px; height:auto; border-radius:8px; border:1px solid #cbd5e1; box-shadow:0 2px 8px rgba(0,0,0,0.08); cursor:pointer;" onclick="bukaModalFoto('/media/foto-lapor/<%= laporBulanIni.id %>', '<%= client ? client.nama_lengkap : 'Klien' %>', '<%= namaBulanIni %> <%= tahunIni %>')" onerror="this.onerror=null; this.src='/logo_pemasyarakatan-removebg-preview.png';">
+                <img src="<%= getFileUrl(laporBulanIni.foto_bukti, 'wajib_lapor') %>" alt="Foto Bukti" style="max-width:100%; width:240px; height:auto; border-radius:8px; border:1px solid #cbd5e1; box-shadow:0 2px 8px rgba(0,0,0,0.08); cursor:pointer;" onclick="bukaModalFoto('<%= getFileUrl(laporBulanIni.foto_bukti, 'wajib_lapor') %>', '<%= client ? client.nama_lengkap : 'Klien' %>', '<%= namaBulanIni %> <%= tahunIni %>')" onerror="this.onerror=null; this.src='/logo_pemasyarakatan-removebg-preview.png';">
                 <br>
-                <button type="button" class="btn btn-sm" style="margin-top:8px; font-size:12px; padding:6px 14px; background:#e8f0fe; color:#0052a3; border:1px solid #b3d1ff;" onclick="bukaModalFoto('/media/foto-lapor/<%= laporBulanIni.id %>', '<%= client ? client.nama_lengkap : 'Klien' %>', '<%= namaBulanIni %> <%= tahunIni %>')">
+                <button type="button" class="btn btn-sm" style="margin-top:8px; font-size:12px; padding:6px 14px; background:#e8f0fe; color:#0052a3; border:1px solid #b3d1ff;" onclick="bukaModalFoto('<%= getFileUrl(laporBulanIni.foto_bukti, 'wajib_lapor') %>', '<%= client ? client.nama_lengkap : 'Klien' %>', '<%= namaBulanIni %> <%= tahunIni %>')">
                   <i class="fas fa-search-plus"></i> Klik untuk Perbesar Foto
                 </button>
               </div>
@@ -312,7 +312,7 @@
                 </td>
                 <td>
                   <% if (r.foto_bukti) { %>
-                    <button type="button" class="btn btn-sm" style="color:#0052a3; font-size:12px; padding:3px 8px; background:#e8f0fe; border:1px solid #b3d1ff; cursor:pointer;" onclick="bukaModalFoto('/media/foto-lapor/<%= r.id %>', '<%= client ? client.nama_lengkap : 'Klien' %>', '<%= getNamaBulan(r.bulan) %> <%= r.tahun %>')">
+                    <button type="button" class="btn btn-sm" style="color:#0052a3; font-size:12px; padding:3px 8px; background:#e8f0fe; border:1px solid #b3d1ff; cursor:pointer;" onclick="bukaModalFoto('<%= getFileUrl(r.foto_bukti, 'wajib_lapor') %>', '<%= client ? client.nama_lengkap : 'Klien' %>', '<%= getNamaBulan(r.bulan) %> <%= r.tahun %>')">
                       <i class="fas fa-image"></i> Lihat Foto
                     </button>
                   <% } else { %>

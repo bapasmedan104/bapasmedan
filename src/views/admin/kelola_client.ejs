@@ -170,7 +170,7 @@
                 <td>
                   <div style="display:flex; align-items:center; gap:10px;">
                     <% if (c.foto_profil) { %>
-                      <img src="<%= getFileUrl(c.foto_profil, 'profil') %>" alt="Foto" style="width:34px; height:34px; border-radius:50%; object-fit:cover; border:1px solid #ccc; cursor:pointer;" onclick="bukaModalFoto('/media/foto-profil/<%= c.id %>', '<%= c.nama_lengkap %>', 'Foto Profil Klien')" onerror="this.onerror=null; this.src='/logo_pemasyarakatan-removebg-preview.png';">
+                      <img src="<%= getFileUrl(c.foto_profil, 'profil') %>" alt="Foto" style="width:34px; height:34px; border-radius:50%; object-fit:cover; border:1px solid #ccc; cursor:pointer;" onclick="bukaModalFoto('<%= getFileUrl(c.foto_profil, 'profil') %>', '<%= c.nama_lengkap %>', 'Foto Profil Klien')" onerror="this.onerror=null; this.src='/logo_pemasyarakatan-removebg-preview.png';">
                     <% } else { %>
                       <span style="width:34px; height:34px; border-radius:50%; background:#e2e8f0; display:inline-flex; align-items:center; justify-content:center; color:#64748b;"><i class="fas fa-user"></i></span>
                     <% } %>

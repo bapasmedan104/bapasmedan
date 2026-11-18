@@ -111,7 +111,7 @@
                 </td>
                 <td>
                   <% if (r.foto_bukti) { %>
-                    <button type="button" class="btn btn-sm" style="color:#0052a3; font-size:12px; padding:3px 8px; background:#e8f0fe; border:1px solid #b3d1ff; cursor:pointer;" onclick="bukaModalFoto('/media/foto-lapor/<%= r.id %>', '<%= client ? client.nama_lengkap : 'Klien' %>', '<%= getNamaBulan(r.bulan) %> <%= r.tahun %>')">
+                    <button type="button" class="btn btn-sm" style="color:#0052a3; font-size:12px; padding:3px 8px; background:#e8f0fe; border:1px solid #b3d1ff; cursor:pointer;" onclick="bukaModalFoto('<%= getFileUrl(r.foto_bukti, 'wajib_lapor') %>', '<%= client ? client.nama_lengkap : 'Klien' %>', '<%= getNamaBulan(r.bulan) %> <%= r.tahun %>')">
                       <i class="fas fa-image"></i> Lihat Foto
                     </button>
                   <% } else { %>

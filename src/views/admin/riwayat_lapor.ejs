@@ -292,7 +292,7 @@
               </td>
               <td>
                 <% if (lapor.foto_bukti) { %>
-                  <button type="button" class="btn btn-sm" style="color:#0052a3; font-weight:700; background:#e8f0fe; border:1px solid #b3d1ff; cursor:pointer; padding:4px 8px; border-radius:4px; font-size:12px; display:inline-flex; align-items:center; gap:4px;" onclick="bukaModalFoto('/media/foto-lapor/<%= lapor.id %>', '<%= lapor.nama_lengkap %>', '<%= getNamaBulan(lapor.bulan) %> <%= lapor.tahun %>')">
+                  <button type="button" class="btn btn-sm" style="color:#0052a3; font-weight:700; background:#e8f0fe; border:1px solid #b3d1ff; cursor:pointer; padding:4px 8px; border-radius:4px; font-size:12px; display:inline-flex; align-items:center; gap:4px;" onclick="bukaModalFoto('<%= getFileUrl(lapor.foto_bukti, 'wajib_lapor') %>', '<%= lapor.nama_lengkap %>', '<%= getNamaBulan(lapor.bulan) %> <%= lapor.tahun %>')">
                     <i class="fas fa-image"></i> Ada Foto
                   </button>
                 <% } else { %>

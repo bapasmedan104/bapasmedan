@@ -220,7 +220,7 @@
                   <td><%= formatTanggalWaktu(lapor.tanggal_submit) %></td>
                   <td>
                     <% if (lapor.foto_bukti) { %>
-                      <button type="button" class="btn btn-sm" style="color:#0052a3; font-weight:700; background:#e8f0fe; border:1px solid #b3d1ff; cursor:pointer; padding:5px 10px; border-radius:4px; display:inline-flex; align-items:center; gap:5px;" onclick="bukaModalFoto('/media/foto-lapor/<%= lapor.id %>', '<%= lapor.nama_lengkap %>', '<%= getNamaBulan(lapor.bulan) %> <%= lapor.tahun %>')">
+                      <button type="button" class="btn btn-sm" style="color:#0052a3; font-weight:700; background:#e8f0fe; border:1px solid #b3d1ff; cursor:pointer; padding:5px 10px; border-radius:4px; display:inline-flex; align-items:center; gap:5px;" onclick="bukaModalFoto('<%= getFileUrl(lapor.foto_bukti, 'wajib_lapor') %>', '<%= lapor.nama_lengkap %>', '<%= getNamaBulan(lapor.bulan) %> <%= lapor.tahun %>')">
                         <i class="fas fa-image"></i> Lihat Foto
                       </button>
                     <% } else { %>
