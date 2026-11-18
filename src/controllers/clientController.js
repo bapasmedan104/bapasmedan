@@ -137,31 +137,13 @@ async function postUploadFoto(req, res) {
           });
           savedPathOrUrl = cldRes.secure_url;
         } catch (cldErr) {
-          console.warn('⚠️ Gagal upload ke Cloudinary, fallback ke penyimpanan lokal:', cldErr.message);
+          console.warn('⚠️ Gagal upload ke Cloudinary, fallback ke data URI langsung:', cldErr.message);
         }
       }
 
-      // Fallback lokal jika Cloudinary belum aktif atau gagal
+      // Fallback: Jika Cloudinary belum aktif / gagal, simpan Base64 langsung agar aman di Netlify
       if (!savedPathOrUrl) {
-        const yearFolder = String(tahun);
-        const monthFolder = String(bulan).padStart(2, '0');
-        const isServerless = Boolean(process.env.NETLIFY || process.env.AWS_LAMBDA_FUNCTION_NAME);
-        const uploadDir = isServerless
-          ? path.join(require('os').tmpdir(), 'bapas_uploads', 'wajib_lapor', yearFolder, monthFolder)
-          : path.join(process.cwd(), 'public', 'uploads', 'wajib_lapor', yearFolder, monthFolder);
-
-        try {
-          if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
-          const base64Data = req.body.foto_base64.replace(/^data:image\/\w+;base64,/, '');
-          const buffer = Buffer.from(base64Data, 'base64');
-          const filename = `lapor_${clientId}_${Date.now()}_cam.jpg`;
-          const fullPath = path.join(uploadDir, filename);
-          fs.writeFileSync(fullPath, buffer);
-          savedPathOrUrl = `${yearFolder}/${monthFolder}/${filename}`;
-        } catch (e) {
-          console.warn('Fallback disk write warning:', e.message);
-          savedPathOrUrl = 'camera_capture_placeholder.jpg';
-        }
+        savedPathOrUrl = req.body.foto_base64;
       }
     } else if (req.file) {
       if (isCloudinaryConfigured()) {
@@ -173,12 +155,28 @@ async function postUploadFoto(req, res) {
           });
           savedPathOrUrl = cldRes.secure_url;
         } catch (cldErr) {
-          console.warn('⚠️ Gagal upload ke Cloudinary, fallback ke penyimpanan lokal:', cldErr.message);
+          console.warn('⚠️ Gagal upload ke Cloudinary, fallback ke penyimpanan lokal / Base64:', cldErr.message);
         }
       }
 
-      // Fallback lokal jika Cloudinary belum aktif atau gagal
-      if (!savedPathOrUrl) {
+      // Fallback data URI jika file tersedia di disk
+      if (!savedPathOrUrl && req.file.path && fs.existsSync(req.file.path)) {
+        try {
+          const buf = fs.readFileSync(req.file.path);
+          const mime = req.file.mimetype || 'image/jpeg';
+          if (buf.length < 2 * 1024 * 1024) {
+            savedPathOrUrl = `data:${mime};base64,${buf.toString('base64')}`;
+          } else {
+            const yearFolder = String(tahun);
+            const monthFolder = String(bulan).padStart(2, '0');
+            savedPathOrUrl = `${yearFolder}/${monthFolder}/${req.file.filename}`;
+          }
+        } catch {
+          const yearFolder = String(tahun);
+          const monthFolder = String(bulan).padStart(2, '0');
+          savedPathOrUrl = `${yearFolder}/${monthFolder}/${req.file.filename}`;
+        }
+      } else if (!savedPathOrUrl) {
         const yearFolder = String(tahun);
         const monthFolder = String(bulan).padStart(2, '0');
         savedPathOrUrl = `${yearFolder}/${monthFolder}/${req.file.filename}`;
@@ -227,6 +225,11 @@ async function postProfil(req, res) {
     const clientId = req.session.user.id;
     let fotoRelatif = null;
 
+    // Prioritas 1: Data Base64 terkompresi langsung dari preview canvas browser
+    if (req.body.foto_profil_base64 && req.body.foto_profil_base64.startsWith('data:image/')) {
+      fotoRelatif = req.body.foto_profil_base64;
+    }
+
     if (req.file) {
       if (isCloudinaryConfigured()) {
         try {
@@ -237,10 +240,21 @@ async function postProfil(req, res) {
           });
           fotoRelatif = cldRes.secure_url;
         } catch (cldErr) {
-          console.warn('⚠️ Gagal upload foto profil ke Cloudinary, fallback ke lokal:', cldErr.message);
+          console.warn('⚠️ Gagal upload foto profil ke Cloudinary, fallback ke data URI / lokal:', cldErr.message);
+        }
+      }
+
+      // Fallback: Jika Cloudinary gagal atau belum aktif, simpan sebagai Data URI (Base64)
+      // agar foto langsung tampil di Netlify tanpa tergantung disk read-only!
+      if (!fotoRelatif && req.file.path && fs.existsSync(req.file.path)) {
+        try {
+          const buf = fs.readFileSync(req.file.path);
+          const mime = req.file.mimetype || 'image/jpeg';
+          fotoRelatif = `data:${mime};base64,${buf.toString('base64')}`;
+        } catch {
           fotoRelatif = `${clientId}/${req.file.filename}`;
         }
-      } else {
+      } else if (!fotoRelatif) {
         fotoRelatif = `${clientId}/${req.file.filename}`;
       }
     }

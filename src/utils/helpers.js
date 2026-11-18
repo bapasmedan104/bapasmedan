@@ -73,12 +73,20 @@ async function verifyPassword(plainPassword, hashedPassword) {
 }
 
 /**
- * Normalisasi URL file (Cloudinary http/https vs path lokal /uploads/)
+ * Normalisasi URL file (Cloudinary http/https, data URI base64, vs path lokal /uploads/)
  */
 function getFileUrl(pathOrUrl, defaultSubdir = '') {
   if (!pathOrUrl) return '';
-  if (pathOrUrl.startsWith('http://') || pathOrUrl.startsWith('https://')) {
+  // Mendukung Base64 Data URI langsung atau link http/https eksternal
+  if (pathOrUrl.startsWith('data:') || pathOrUrl.startsWith('http://') || pathOrUrl.startsWith('https://')) {
     return pathOrUrl;
+  }
+  // Jika path sudah memiliki prefix /uploads/
+  if (pathOrUrl.startsWith('/uploads/')) {
+    return pathOrUrl;
+  }
+  if (pathOrUrl.startsWith('uploads/')) {
+    return `/${pathOrUrl}`;
   }
   const cleanSubdir = defaultSubdir ? defaultSubdir.replace(/^\/+|\/+$/g, '') + '/' : '';
   const cleanPath = pathOrUrl.replace(/^\/+/, '');

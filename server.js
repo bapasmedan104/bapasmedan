@@ -60,6 +60,29 @@ app.use(setLocals);
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/assets', express.static(path.join(__dirname, 'public')));
 
+// Uploads Handler (Serverless & Disk Fallback)
+const os = require('os');
+const isServerless = Boolean(
+  process.env.NETLIFY || 
+  process.env.AWS_LAMBDA_FUNCTION_NAME || 
+  process.env.LAMBDA_TASK_ROOT ||
+  (process.env.NODE_ENV === 'production' && !process.env.LOCAL_ENV)
+);
+const serverlessUploadsDir = path.join(os.tmpdir(), 'bapas_uploads');
+const localUploadsDir = path.join(__dirname, 'public', 'uploads');
+
+app.use('/uploads', express.static(serverlessUploadsDir));
+app.use('/uploads', express.static(localUploadsDir));
+
+app.get('/uploads/*', (req, res) => {
+  const relPath = req.params[0];
+  const sPath = path.join(serverlessUploadsDir, relPath);
+  if (fs.existsSync(sPath)) return res.sendFile(sPath);
+  const lPath = path.join(localUploadsDir, relPath);
+  if (fs.existsSync(lPath)) return res.sendFile(lPath);
+  res.redirect('/logo_pemasyarakatan-removebg-preview.png');
+});
+
 // Mounting Routes
 app.use('/', publicRoutes);
 app.use('/', authRoutes);

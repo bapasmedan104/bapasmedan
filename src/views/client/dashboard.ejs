@@ -94,7 +94,7 @@
   <div style="display:flex; align-items:center; gap:20px;">
     <a href="/client/profil" style="display:flex; align-items:center; gap:10px;">
       <% if (client && client.foto_profil) { %>
-        <img src="<%= getFileUrl(client.foto_profil, 'profil') %>" alt="Profil" style="width:34px; height:34px; border-radius:50%; object-fit:cover; border:2px solid #fff;">
+        <img src="<%= getFileUrl(client.foto_profil, 'profil') %>" alt="Profil" style="width:34px; height:34px; border-radius:50%; object-fit:cover; border:2px solid #fff;" onerror="this.onerror=null; this.src='/logo_pemasyarakatan-removebg-preview.png';">
       <% } else { %>
         <span style="width:34px; height:34px; border-radius:50%; background:rgba(255,255,255,0.2); display:flex; align-items:center; justify-content:center;"><i class="fas fa-user"></i></span>
       <% } %>
@@ -187,7 +187,7 @@
           <% if (laporBulanIni.foto_bukti) { %>
             <div style="margin-top:15px;">
               <strong>Foto Bukti Terlampir:</strong><br>
-              <img src="<%= getFileUrl(laporBulanIni.foto_bukti, 'wajib_lapor') %>" alt="Foto Bukti" style="max-width:280px; border-radius:6px; margin-top:8px; border:1px solid #ccc;">
+              <img src="<%= getFileUrl(laporBulanIni.foto_bukti, 'wajib_lapor') %>" alt="Foto Bukti" style="max-width:280px; border-radius:6px; margin-top:8px; border:1px solid #ccc;" onerror="this.onerror=null; this.src='/logo_pemasyarakatan-removebg-preview.png';">
             </div>
           <% } %>
           <% if (laporBulanIni.catatan_admin) { %>
@@ -252,7 +252,7 @@
           <!-- PREVIEW FOTO AKTIF -->
           <div id="fotoPreviewContainer" style="margin-top:15px; <%= (laporBulanIni && laporBulanIni.foto_bukti) ? '' : 'display:none;' %>">
             <span style="font-size:13px; font-weight:700; color:#28a745;"><i class="fas fa-check-circle"></i> Foto Terpasang:</span><br>
-            <img id="imgPreview" src="<%= (laporBulanIni && laporBulanIni.foto_bukti) ? getFileUrl(laporBulanIni.foto_bukti, 'wajib_lapor') : '' %>" alt="Preview Foto" style="max-width:240px; border-radius:6px; margin-top:8px; border:2px solid #28a745; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
+            <img id="imgPreview" src="<%= (laporBulanIni && laporBulanIni.foto_bukti) ? getFileUrl(laporBulanIni.foto_bukti, 'wajib_lapor') : '' %>" alt="Preview Foto" style="max-width:240px; border-radius:6px; margin-top:8px; border:2px solid #28a745; box-shadow:0 2px 6px rgba(0,0,0,0.1);" onerror="this.onerror=null; this.src='/logo_pemasyarakatan-removebg-preview.png';">
           </div>
           <div id="uploadStatusText" style="margin-top:10px; font-size:13px; color:#0052a3;"></div>
         </div>

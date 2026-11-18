@@ -72,16 +72,18 @@
       <div style="display:flex; gap:30px; margin-bottom:25px; flex-wrap:wrap; align-items:center;">
         <div>
           <% if (client && client.foto_profil) { %>
-            <img src="<%= getFileUrl(client.foto_profil, 'profil') %>" alt="Foto Profil" style="width:120px; height:120px; border-radius:50%; object-fit:cover; border:3px solid #003580; box-shadow:0 4px 10px rgba(0,0,0,0.15);">
+            <img id="previewFotoProfil" src="<%= getFileUrl(client.foto_profil, 'profil') %>" alt="Foto Profil" style="width:120px; height:120px; border-radius:50%; object-fit:cover; border:3px solid #003580; box-shadow:0 4px 10px rgba(0,0,0,0.15);" onerror="this.onerror=null; this.src='/logo_pemasyarakatan-removebg-preview.png';">
           <% } else { %>
-            <div style="width:120px; height:120px; border-radius:50%; background:#e2e8f0; color:#64748b; display:flex; align-items:center; justify-content:center; font-size:48px; border:3px dashed #94a3b8;">
+            <img id="previewFotoProfil" src="/logo_pemasyarakatan-removebg-preview.png" alt="Foto Profil" style="width:120px; height:120px; border-radius:50%; object-fit:cover; border:3px solid #003580; box-shadow:0 4px 10px rgba(0,0,0,0.15); display:none;" onerror="this.onerror=null; this.src='/logo_pemasyarakatan-removebg-preview.png';">
+            <div id="placeholderFotoProfil" style="width:120px; height:120px; border-radius:50%; background:#e2e8f0; color:#64748b; display:flex; align-items:center; justify-content:center; font-size:48px; border:3px dashed #94a3b8;">
               <i class="fas fa-user"></i>
             </div>
           <% } %>
         </div>
         <div style="flex:1; min-width:260px;">
           <label style="font-weight:700; margin-bottom:6px; display:block;">Unggah / Ganti Foto Profil *</label>
-          <input type="file" name="foto_profil" accept="image/jpeg,image/png,image/webp" style="margin-bottom:6px;">
+          <input type="file" name="foto_profil" id="inputFotoProfil" onchange="previewImage(this)" accept="image/jpeg,image/png,image/webp" style="margin-bottom:6px;">
+          <input type="hidden" name="foto_profil_base64" id="foto_profil_base64">
           <span style="font-size:12px; color:#64748b; display:block;">Format: JPG, PNG, atau WebP. Maksimal 5MB. Foto wajah sopan dan jelas.</span>
         </div>
       </div>
@@ -127,6 +129,57 @@
     </form>
   </div>
 </div>
+
+<script>
+function previewImage(input) {
+  if (input.files && input.files[0]) {
+    const file = input.files[0];
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const img = new Image();
+      img.onload = function() {
+        // Otomatis resize & kompres ke max 800px agar aman di Firestore & Netlify Serverless
+        const canvas = document.createElement('canvas');
+        let width = img.width;
+        let height = img.height;
+        const maxDim = 800;
+        if (width > height && width > maxDim) {
+          height = Math.round((height * maxDim) / width);
+          width = maxDim;
+        } else if (height > maxDim) {
+          width = Math.round((width * maxDim) / height);
+          height = maxDim;
+        }
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.82);
+
+        // Update preview gambar secara instan
+        const previewEl = document.getElementById('previewFotoProfil');
+        const placeholderEl = document.getElementById('placeholderFotoProfil');
+        if (previewEl) {
+          previewEl.src = dataUrl;
+          previewEl.style.display = 'block';
+        }
+        if (placeholderEl) {
+          placeholderEl.style.display = 'none';
+        }
+
+        // Masukkan data Base64 ke hidden field agar tersimpan utuh ke serverless
+        const hiddenEl = document.getElementById('foto_profil_base64');
+        if (hiddenEl) {
+          hiddenEl.value = dataUrl;
+        }
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+}
+</script>
 
 </body>
 </html>
