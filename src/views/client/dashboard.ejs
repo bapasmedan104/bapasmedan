@@ -88,21 +88,21 @@
 
 <!-- NAVBAR -->
 <div class="navbar">
-  <div style="display:flex; align-items:center; gap:12px; font-weight:700; font-size:16px;">
+  <div style="display:flex; align-items:center; gap:10px; font-weight:700; font-size:15px;">
     <i class="fas fa-gavel"></i> BAPAS MEDAN - CLIENT PORTAL
   </div>
-  <div style="display:flex; align-items:center; gap:20px;">
-    <a href="/client/profil" style="display:flex; align-items:center; gap:10px;">
+  <div style="display:flex; align-items:center; gap:12px;">
+    <a href="/client/profil" style="display:flex; align-items:center; gap:8px;">
       <% if (client && client.foto_profil) { %>
-        <img src="<%= getFileUrl(client.foto_profil, 'profil') %>" alt="Profil" style="width:34px; height:34px; border-radius:50%; object-fit:cover; border:2px solid #fff;" onerror="this.onerror=null; this.src='/logo_pemasyarakatan-removebg-preview.png';">
+        <img src="<%= getFileUrl(client.foto_profil, 'profil') %>" alt="Profil" style="width:28px; height:28px; border-radius:50%; object-fit:cover; border:2px solid #fff;" onerror="this.onerror=null; this.src='/logo_pemasyarakatan-removebg-preview.png';">
       <% } else { %>
-        <span style="width:34px; height:34px; border-radius:50%; background:rgba(255,255,255,0.2); display:flex; align-items:center; justify-content:center;"><i class="fas fa-user"></i></span>
+        <span style="width:26px; height:26px; border-radius:50%; background:rgba(255,255,255,0.2); display:inline-flex; align-items:center; justify-content:center; font-size:13px;"><i class="fas fa-user"></i></span>
       <% } %>
-      <span><%= client ? client.nama_lengkap : 'Klien' %></span>
+      <span><%= client ? client.nama_lengkap : 'Profil' %></span>
     </a>
-    <a href="/client/riwayat"><i class="fas fa-history"></i> Riwayat Lapor</a>
-    <a href="/client/jadwal"><i class="fas fa-calendar-alt"></i> Jadwal Wajib Lapor</a>
-    <a href="/logout" style="background:rgba(255,255,255,0.2); padding:6px 14px; border-radius:4px;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    <a href="/client/riwayat"><i class="fas fa-history"></i> <span>Riwayat</span></a>
+    <a href="/client/jadwal"><i class="fas fa-calendar-alt"></i> <span>Jadwal</span></a>
+    <a href="/logout" style="background:rgba(255,255,255,0.2); padding:6px 12px; border-radius:4px;"><i class="fas fa-sign-out-alt"></i> <span>Keluar</span></a>
   </div>
 </div>
 
@@ -174,30 +174,36 @@
     </div>
 
     <% if (laporBulanIni && (laporBulanIni.status === 'menunggu_verifikasi' || laporBulanIni.status === 'diterima')) { %>
-      <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:25px;">
-        <h4 style="color:#003580; margin-bottom:12px;"><i class="fas fa-check-circle" style="color:#28a745;"></i> Laporan Bulan Ini Sudah Terkirim</h4>
-        <p style="color:#555; margin-bottom:15px; font-size:14px;">
+      <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:18px 16px; box-sizing:border-box; width:100%;">
+        <h4 style="color:#003580; margin-bottom:12px; font-size:16px;"><i class="fas fa-check-circle" style="color:#28a745;"></i> Laporan Bulan Ini Sudah Terkirim</h4>
+        <p style="color:#555; margin-bottom:15px; font-size:14px; line-height:1.5;">
           Laporan Anda untuk periode <strong><%= namaBulanIni %> <%= tahunIni %></strong> telah berhasil disubmit pada <%= formatTanggal(laporBulanIni.tanggal_submit) %>.
         </p>
-        <div style="background:#fff; padding:15px; border-radius:6px; border:1px solid #e0e0e0; margin-bottom:15px;">
-          <strong>Aktivitas yang dilaporkan:</strong>
-          <p style="color:#444; margin-top:5px; font-size:14px;"><%= laporBulanIni.aktivitas_harian || '-' %></p>
-          <strong style="margin-top:10px; display:block;">Rencana ke depan:</strong>
-          <p style="color:#444; margin-top:5px; font-size:14px;"><%= laporBulanIni.rencana_mendatang || '-' %></p>
+        <div style="background:#fff; padding:14px; border-radius:6px; border:1px solid #e0e0e0; margin-bottom:15px; box-sizing:border-box; width:100%;">
+          <strong style="color:#002255; font-size:14px;">Aktivitas yang dilaporkan:</strong>
+          <p style="color:#444; margin-top:5px; font-size:14px; word-break:break-word;"><%= laporBulanIni.aktivitas_harian || '-' %></p>
+          <strong style="margin-top:12px; display:block; color:#002255; font-size:14px;">Rencana ke depan:</strong>
+          <p style="color:#444; margin-top:5px; font-size:14px; word-break:break-word;"><%= laporBulanIni.rencana_mendatang || '-' %></p>
           <% if (laporBulanIni.foto_bukti) { %>
             <div style="margin-top:15px;">
-              <strong>Foto Bukti Terlampir:</strong><br>
-              <img src="<%= getFileUrl(laporBulanIni.foto_bukti, 'wajib_lapor') %>" alt="Foto Bukti" style="max-width:280px; border-radius:6px; margin-top:8px; border:1px solid #ccc;" onerror="this.onerror=null; this.src='/logo_pemasyarakatan-removebg-preview.png';">
+              <strong style="color:#002255; font-size:14px;">Foto Bukti Terlampir:</strong><br>
+              <div style="margin-top:8px;">
+                <img src="<%= getFileUrl(laporBulanIni.foto_bukti, 'wajib_lapor') %>" alt="Foto Bukti" style="max-width:100%; width:240px; height:auto; border-radius:8px; border:1px solid #cbd5e1; box-shadow:0 2px 8px rgba(0,0,0,0.08); cursor:pointer;" onclick="bukaModalFoto('/media/foto-lapor/<%= laporBulanIni.id %>', '<%= client ? client.nama_lengkap : 'Klien' %>', '<%= namaBulanIni %> <%= tahunIni %>')" onerror="this.onerror=null; this.src='/logo_pemasyarakatan-removebg-preview.png';">
+                <br>
+                <button type="button" class="btn btn-sm" style="margin-top:8px; font-size:12px; padding:6px 14px; background:#e8f0fe; color:#0052a3; border:1px solid #b3d1ff;" onclick="bukaModalFoto('/media/foto-lapor/<%= laporBulanIni.id %>', '<%= client ? client.nama_lengkap : 'Klien' %>', '<%= namaBulanIni %> <%= tahunIni %>')">
+                  <i class="fas fa-search-plus"></i> Klik untuk Perbesar Foto
+                </button>
+              </div>
             </div>
           <% } %>
           <% if (laporBulanIni.catatan_admin) { %>
-            <div style="margin-top:15px; padding:10px; background:#fff3cd; border-radius:4px; color:#856404;">
-              <strong>Catatan dari Admin / PK:</strong><br>
+            <div style="margin-top:15px; padding:12px; background:#fff3cd; border-radius:6px; color:#856404; font-size:13px; line-height:1.5;">
+              <strong><i class="fas fa-comment-dots"></i> Catatan dari Admin / PK:</strong><br>
               <%= laporBulanIni.catatan_admin %>
             </div>
           <% } %>
         </div>
-        <a href="/client/riwayat" class="btn btn-primary"><i class="fas fa-history"></i> Buka Riwayat Laporan Lengkap</a>
+        <a href="/client/riwayat" class="btn btn-primary" style="font-size:13px;"><i class="fas fa-history"></i> Buka Riwayat Laporan Lengkap</a>
       </div>
     <% } else { %>
       <!-- FORM INPUT LAPORAN (DRAFT / BARU) -->
@@ -277,44 +283,48 @@
     </div>
 
     <% if (riwayat && riwayat.length > 0) { %>
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Periode</th>
-            <th>Tanggal Submit</th>
-            <th>Status</th>
-            <th>Foto Bukti</th>
-            <th>Catatan Petugas</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% riwayat.forEach(function(r) { %>
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
             <tr>
-              <td><strong><%= getNamaBulan(r.bulan) %> <%= r.tahun %></strong></td>
-              <td><%= formatTanggal(r.tanggal_submit) %></td>
-              <td>
-                <% if (r.status === 'diterima') { %>
-                  <span class="badge badge-success">Diterima</span>
-                <% } else if (r.status === 'menunggu_verifikasi') { %>
-                  <span class="badge badge-warning">Menunggu</span>
-                <% } else if (r.status === 'ditolak') { %>
-                  <span class="badge badge-danger">Ditolak</span>
-                <% } else { %>
-                  <span class="badge badge-secondary"><%= r.status %></span>
-                <% } %>
-              </td>
-              <td>
-                <% if (r.foto_bukti) { %>
-                  <a href="<%= getFileUrl(r.foto_bukti, 'wajib_lapor') %>" target="_blank" style="color:#0052a3; font-weight:600;"><i class="fas fa-image"></i> Lihat Foto</a>
-                <% } else { %>
-                  <span style="color:#999;">-</span>
-                <% } %>
-              </td>
-              <td><%= r.catatan_admin || '-' %></td>
+              <th>Periode</th>
+              <th>Tanggal Submit</th>
+              <th>Status</th>
+              <th>Foto Bukti</th>
+              <th>Catatan Petugas</th>
             </tr>
-          <% }); %>
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            <% riwayat.forEach(function(r) { %>
+              <tr>
+                <td><strong><%= getNamaBulan(r.bulan) %> <%= r.tahun %></strong></td>
+                <td><%= formatTanggal(r.tanggal_submit) %></td>
+                <td>
+                  <% if (r.status === 'diterima') { %>
+                    <span class="badge badge-success">Diterima</span>
+                  <% } else if (r.status === 'menunggu_verifikasi') { %>
+                    <span class="badge badge-warning">Menunggu</span>
+                  <% } else if (r.status === 'ditolak') { %>
+                    <span class="badge badge-danger">Ditolak</span>
+                  <% } else { %>
+                    <span class="badge badge-secondary"><%= r.status %></span>
+                  <% } %>
+                </td>
+                <td>
+                  <% if (r.foto_bukti) { %>
+                    <button type="button" class="btn btn-sm" style="color:#0052a3; font-size:12px; padding:3px 8px; background:#e8f0fe; border:1px solid #b3d1ff; cursor:pointer;" onclick="bukaModalFoto('/media/foto-lapor/<%= r.id %>', '<%= client ? client.nama_lengkap : 'Klien' %>', '<%= getNamaBulan(r.bulan) %> <%= r.tahun %>')">
+                      <i class="fas fa-image"></i> Lihat Foto
+                    </button>
+                  <% } else { %>
+                    <span style="color:#999;">-</span>
+                  <% } %>
+                </td>
+                <td><%= r.catatan_admin || '-' %></td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
     <% } else { %>
       <div style="text-align:center; padding:30px; color:#999;">Belum ada riwayat laporan wajib lapor.</div>
     <% } %>
@@ -458,6 +468,8 @@
     return confirm('Apakah Anda yakin data laporan dan foto bukti sudah benar? Setelah disubmit, laporan akan diverifikasi oleh petugas BAPAS.');
   }
 </script>
+
+<%- include('../partials/modal_foto') %>
 
 </body>
 </html>

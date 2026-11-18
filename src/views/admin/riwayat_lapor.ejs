@@ -253,7 +253,8 @@
     </div>
 
     <% if (laporList && laporList.length > 0) { %>
-      <table class="table">
+      <div class="table-responsive">
+        <table class="table">
         <thead>
           <tr>
             <th>No</th>
@@ -291,9 +292,9 @@
               </td>
               <td>
                 <% if (lapor.foto_bukti) { %>
-                  <a href="<%= getFileUrl(lapor.foto_bukti, 'wajib_lapor') %>" target="_blank" style="color:#0052a3; font-weight:700; text-decoration:none;">
+                  <button type="button" class="btn btn-sm" style="color:#0052a3; font-weight:700; background:#e8f0fe; border:1px solid #b3d1ff; cursor:pointer; padding:4px 8px; border-radius:4px; font-size:12px; display:inline-flex; align-items:center; gap:4px;" onclick="bukaModalFoto('/media/foto-lapor/<%= lapor.id %>', '<%= lapor.nama_lengkap %>', '<%= getNamaBulan(lapor.bulan) %> <%= lapor.tahun %>')">
                     <i class="fas fa-image"></i> Ada Foto
-                  </a>
+                  </button>
                 <% } else { %>
                   <span style="color:#94a3b8; font-size:13px;">Tanpa Foto</span>
                 <% } %>
@@ -310,6 +311,7 @@
           <% }); %>
         </tbody>
       </table>
+    </div>
     <% } else { %>
       <div style="text-align:center; padding:60px 20px; color:#94a3b8;">
         <i class="fas fa-search" style="font-size:48px; color:#cbd5e1; margin-bottom:15px;"></i>
@@ -441,6 +443,8 @@
     document.getElementById('modalDetail').classList.remove('active');
   }
 </script>
+
+<%- include('../partials/modal_foto') %>
 
 </body>
 </html>

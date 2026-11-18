@@ -74,6 +74,73 @@ const localUploadsDir = path.join(__dirname, 'public', 'uploads');
 app.use('/uploads', express.static(serverlessUploadsDir));
 app.use('/uploads', express.static(localUploadsDir));
 
+// Media Streaming Endpoint (Mencegah browser Chromium memblokir data: URI di tab baru)
+const { getLaporById, getClientById } = require('./src/models/db');
+
+app.get('/media/foto-lapor/:id', async (req, res) => {
+  try {
+    const lapor = await getLaporById(req.params.id);
+    if (!lapor || !lapor.foto_bukti) {
+      return res.redirect('/logo_pemasyarakatan-removebg-preview.png');
+    }
+    const foto = lapor.foto_bukti;
+    if (foto.startsWith('http://') || foto.startsWith('https://')) {
+      return res.redirect(foto);
+    }
+    if (foto.startsWith('data:')) {
+      const match = foto.match(/^data:([^;]+);base64,(.+)$/);
+      if (match) {
+        const mime = match[1];
+        const buffer = Buffer.from(match[2], 'base64');
+        res.set('Content-Type', mime);
+        res.set('Cache-Control', 'public, max-age=86400');
+        return res.send(buffer);
+      }
+    }
+    const clean = foto.replace(/^\/+/, '');
+    const sPath = path.join(serverlessUploadsDir, 'wajib_lapor', clean);
+    if (fs.existsSync(sPath)) return res.sendFile(sPath);
+    const lPath = path.join(localUploadsDir, 'wajib_lapor', clean);
+    if (fs.existsSync(lPath)) return res.sendFile(lPath);
+    return res.redirect('/logo_pemasyarakatan-removebg-preview.png');
+  } catch (err) {
+    console.error('Error serve media foto lapor:', err);
+    return res.redirect('/logo_pemasyarakatan-removebg-preview.png');
+  }
+});
+
+app.get('/media/foto-profil/:id', async (req, res) => {
+  try {
+    const client = await getClientById(req.params.id);
+    if (!client || !client.foto_profil) {
+      return res.redirect('/logo_pemasyarakatan-removebg-preview.png');
+    }
+    const foto = client.foto_profil;
+    if (foto.startsWith('http://') || foto.startsWith('https://')) {
+      return res.redirect(foto);
+    }
+    if (foto.startsWith('data:')) {
+      const match = foto.match(/^data:([^;]+);base64,(.+)$/);
+      if (match) {
+        const mime = match[1];
+        const buffer = Buffer.from(match[2], 'base64');
+        res.set('Content-Type', mime);
+        res.set('Cache-Control', 'public, max-age=86400');
+        return res.send(buffer);
+      }
+    }
+    const clean = foto.replace(/^\/+/, '');
+    const sPath = path.join(serverlessUploadsDir, 'profil', clean);
+    if (fs.existsSync(sPath)) return res.sendFile(sPath);
+    const lPath = path.join(localUploadsDir, 'profil', clean);
+    if (fs.existsSync(lPath)) return res.sendFile(lPath);
+    return res.redirect('/logo_pemasyarakatan-removebg-preview.png');
+  } catch (err) {
+    console.error('Error serve media foto profil:', err);
+    return res.redirect('/logo_pemasyarakatan-removebg-preview.png');
+  }
+});
+
 app.get('/uploads/*', (req, res) => {
   const relPath = req.params[0];
   const sPath = path.join(serverlessUploadsDir, relPath);
