@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= pageTitle %></title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family: 'Source Sans 3', sans-serif; background: #f5f7fa; color: #333; }
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0;
+      background: linear-gradient(135deg, #1a3a52 0%, #2d5f8d 100%);
+      color: white; padding: 15px 30px; z-index: 1000;
+      display: flex; justify-content: space-between; align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    }
+    .navbar a { color: white; text-decoration: none; font-size: 14px; margin-left: 20px; }
+    .container { max-width: 1400px; margin: 95px auto 40px; padding: 0 20px; }
+    .header { margin-bottom: 25px; }
+    .header h1 { font-family: 'Playfair Display', serif; color: #1a3a52; font-size: 30px; margin-bottom: 4px; }
+    .card { background: white; border-radius: 8px; padding: 25px; margin-bottom: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .card-title { font-size: 18px; font-weight: 700; color: #1a3a52; margin-bottom: 18px; display: flex; align-items: center; gap: 10px; }
+
+    /* FILTER BOX STYLES */
+    .filter-panel {
+      background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px;
+      padding: 22px; margin-bottom: 25px;
+    }
+    .filter-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 18px;
+    }
+    .filter-item { display: flex; flex-direction: column; }
+    .filter-item label { font-size: 12px; font-weight: 700; color: #475569; text-transform: uppercase; margin-bottom: 6px; }
+    .filter-item input, .filter-item select {
+      padding: 9px 12px; border: 1px solid #cbd5e1; border-radius: 6px;
+      font-family: inherit; font-size: 14px; background: #fff;
+    }
+    .filter-item input:focus, .filter-item select:focus {
+      outline: none; border-color: #1a3a52; box-shadow: 0 0 0 3px rgba(26,58,82,0.1);
+    }
+    .filter-actions {
+      display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap;
+      border-top: 1px solid #e2e8f0; padding-top: 15px;
+    }
+    .btn {
+      padding: 9px 18px; border: none; border-radius: 6px; font-size: 13px; font-weight: 700;
+      cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;
+    }
+    .btn-primary { background: #1a3a52; color: white; }
+    .btn-primary:hover { background: #2d5f8d; }
+    .btn-success { background: #28a745; color: white; }
+    .btn-success:hover { background: #218838; }
+    .btn-danger { background: #dc3545; color: white; }
+    .btn-danger:hover { background: #c82333; }
+    .btn-secondary { background: #64748b; color: white; }
+    .btn-secondary:hover { background: #475569; }
+    .btn-outline { background: white; border: 1px solid #cbd5e1; color: #475569; }
+    .btn-outline:hover { background: #f1f5f9; }
+
+    /* SUMMARY BADGE BAR */
+    .summary-bar {
+      display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 20px;
+      background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px; padding: 12px 18px; font-size: 13px; color: #1e40af;
+    }
+    .summary-chip {
+      background: #fff; padding: 4px 10px; border-radius: 12px; font-weight: 700; border: 1px solid #bfdbfe;
+    }
+
+    /* TABLE */
+    .table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    .table th { background: #f8fafc; padding: 12px 14px; text-align: left; font-size: 13px; font-weight: 700; color: #475569; border-bottom: 2px solid #e2e8f0; }
+    .table td { padding: 12px 14px; border-bottom: 1px solid #e2e8f0; font-size: 14px; }
+    .table tr:hover { background: #f8fafc; }
+    .badge { display: inline-block; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+    .badge-warning { background: #fff3cd; color: #856404; }
+    .badge-success { background: #d4edda; color: #155724; }
+    .badge-danger { background: #f8d7da; color: #721c24; }
+    .badge-secondary { background: #e2e8f0; color: #475569; }
+
+    /* MODAL */
+    .modal {
+      display: none; position: fixed; top:0; left:0; right:0; bottom:0;
+      background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center; padding: 20px;
+    }
+    .modal.active { display: flex; }
+    .modal-content { background: white; border-radius: 8px; padding: 28px; max-width: 650px; width: 100%; max-height: 90vh; overflow-y: auto; }
+
+    /* PRINT STYLES */
+    @media print {
+      .navbar, .filter-panel, .btn, .no-print { display: none !important; }
+      body { background: #fff !important; }
+      .container { margin: 0 !important; max-width: 100% !important; padding: 0 !important; }
+      .card { box-shadow: none !important; border: none !important; padding: 0 !important; }
+      .print-header { display: block !important; margin-bottom: 20px; text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; }
+    }
+    .print-header { display: none; }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar no-print">
+  <div style="font-weight:700; font-size:16px;">
+    <i class="fas fa-gavel"></i> BAPAS MEDAN - ADMIN
+  </div>
+  <div>
+    <a href="/admin/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+    <a href="/admin/riwayat-lapor" style="font-weight:700; border-bottom:2px solid #ffc107; padding-bottom:4px;"><i class="fas fa-filter"></i> Riwayat Lapor</a>
+    <a href="/admin/kelola-client"><i class="fas fa-users-cog"></i> Kelola Klien</a>
+    <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout (<%= user.nama_lengkap %>)</a>
+  </div>
+</div>
+
+<div class="container">
+  <!-- PRINT ONLY HEADER -->
+  <div class="print-header">
+    <h2 style="font-size:20px; text-transform:uppercase; margin-bottom:4px;">KEMENTERIAN IMIGRASI DAN PEMASYARAKATAN REPUBLIK INDONESIA</h2>
+    <h3 style="font-size:18px; margin-bottom:4px;">BALAI PEMASYARAKATAN (BAPAS) KELAS I MEDAN</h3>
+    <p style="font-size:13px;">Jl. Lembaga Pemasyarakatan, Tanjung Gusta, Kec. Medan Helvetia, Kota Medan | Telp: (061) 4516516</p>
+    <h4 style="margin-top:15px; text-decoration:underline;">REKAPITULASI PELAPORAN WAJIB LAPOR KLIEN</h4>
+    <p style="font-size:12px;">Dicetak pada: <%= new Date().toLocaleString('id-ID') %></p>
+  </div>
+
+  <div class="header no-print">
+    <h1>Riwayat & Filter Lengkap Wajib Lapor</h1>
+    <p style="color:#666;">Filter data laporan berdasarkan Status, Nama/Register Klien, Bulan, Tahun, Rentang Tanggal, Bukti Foto, dan Urutan</p>
+  </div>
+
+  <%- include('../partials/alerts') %>
+
+  <!-- PANEL FILTER LENGKAP -->
+  <div class="filter-panel no-print">
+    <form method="GET" action="/admin/riwayat-lapor" id="filterForm">
+      <div class="filter-grid">
+        <!-- 1. Filter Status -->
+        <div class="filter-item">
+          <label for="status"><i class="fas fa-traffic-light"></i> Status Laporan</label>
+          <select name="status" id="status">
+            <option value="all" <%= filters.status === 'all' ? 'selected' : '' %>>Semua Status</option>
+            <option value="menunggu_verifikasi" <%= filters.status === 'menunggu_verifikasi' ? 'selected' : '' %>>Menunggu Verifikasi</option>
+            <option value="diterima" <%= filters.status === 'diterima' ? 'selected' : '' %>>Diterima</option>
+            <option value="ditolak" <%= filters.status === 'ditolak' ? 'selected' : '' %>>Ditolak</option>
+            <option value="dibatalkan" <%= filters.status === 'dibatalkan' ? 'selected' : '' %>>Dibatalkan</option>
+            <option value="draft" <%= filters.status === 'draft' ? 'selected' : '' %>>Draft</option>
+          </select>
+        </div>
+
+        <!-- 2. Filter Client Search -->
+        <div class="filter-item">
+          <label for="client"><i class="fas fa-search"></i> Cari Klien / No. Register</label>
+          <input type="text" name="client" id="client" placeholder="Nama, No. Reg, atau Username..." value="<%= filters.client %>">
+        </div>
+
+        <!-- 3. Filter Bulan -->
+        <div class="filter-item">
+          <label for="bulan"><i class="fas fa-calendar-alt"></i> Periode Bulan</label>
+          <select name="bulan" id="bulan">
+            <option value="all" <%= filters.bulan === 'all' ? 'selected' : '' %>>Semua Bulan</option>
+            <% for (let i = 1; i <= 12; i++) { %>
+              <option value="<%= i %>" <%= String(filters.bulan) === String(i) ? 'selected' : '' %>><%= getNamaBulan(i) %></option>
+            <% } %>
+          </select>
+        </div>
+
+        <!-- 4. Filter Tahun -->
+        <div class="filter-item">
+          <label for="tahun"><i class="fas fa-calendar"></i> Periode Tahun</label>
+          <select name="tahun" id="tahun">
+            <option value="all" <%= filters.tahun === 'all' ? 'selected' : '' %>>Semua Tahun</option>
+            <% availableYears.forEach(function(yr) { %>
+              <option value="<%= yr %>" <%= String(filters.tahun) === String(yr) ? 'selected' : '' %>><%= yr %></option>
+            <% }); %>
+          </select>
+        </div>
+
+        <!-- 5. Filter Rentang Tanggal Mulai -->
+        <div class="filter-item">
+          <label for="date_start"><i class="fas fa-calendar-day"></i> Tanggal Submit (Dari)</label>
+          <input type="date" name="date_start" id="date_start" value="<%= filters.date_start %>">
+        </div>
+
+        <!-- 6. Filter Rentang Tanggal Akhir -->
+        <div class="filter-item">
+          <label for="date_end"><i class="fas fa-calendar-day"></i> Tanggal Submit (Sampai)</label>
+          <input type="date" name="date_end" id="date_end" value="<%= filters.date_end %>">
+        </div>
+
+        <!-- 7. Filter Foto Bukti -->
+        <div class="filter-item">
+          <label for="foto"><i class="fas fa-camera"></i> Foto Bukti</label>
+          <select name="foto" id="foto">
+            <option value="all" <%= filters.foto === 'all' ? 'selected' : '' %>>Semua (Ada/Tidak)</option>
+            <option value="ada" <%= filters.foto === 'ada' ? 'selected' : '' %>>Hanya yang Memiliki Foto</option>
+            <option value="tidak_ada" <%= filters.foto === 'tidak_ada' ? 'selected' : '' %>>Tanpa Foto</option>
+          </select>
+        </div>
+
+        <!-- 8. Pengurutan Data (Sorting) -->
+        <div class="filter-item">
+          <label for="sort"><i class="fas fa-sort"></i> Urutkan Berdasarkan</label>
+          <select name="sort" id="sort">
+            <option value="tanggal_submit_desc" <%= filters.sort === 'tanggal_submit_desc' ? 'selected' : '' %>>Tanggal Submit (Terbaru)</option>
+            <option value="tanggal_submit_asc" <%= filters.sort === 'tanggal_submit_asc' ? 'selected' : '' %>>Tanggal Submit (Terlama)</option>
+            <option value="nama_asc" <%= filters.sort === 'nama_asc' ? 'selected' : '' %>>Nama Klien (A-Z)</option>
+            <option value="nama_desc" <%= filters.sort === 'nama_desc' ? 'selected' : '' %>>Nama Klien (Z-A)</option>
+            <option value="periode_desc" <%= filters.sort === 'periode_desc' ? 'selected' : '' %>>Periode Lapor (Terbaru)</option>
+            <option value="periode_asc" <%= filters.sort === 'periode_asc' ? 'selected' : '' %>>Periode Lapor (Terlama)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="filter-actions">
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button type="submit" class="btn btn-primary"><i class="fas fa-filter"></i> Terapkan Filter</button>
+          <a href="/admin/riwayat-lapor" class="btn btn-outline"><i class="fas fa-undo"></i> Reset Filter</a>
+        </div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <!-- Export to CSV with current filter queries -->
+          <% 
+            const queryParams = new URLSearchParams(filters).toString();
+          %>
+          <a href="/admin/riwayat-lapor/export-csv?<%= queryParams %>" class="btn btn-success" title="Download Excel/CSV hasil filter ini">
+            <i class="fas fa-file-excel"></i> Ekspor ke CSV / Excel
+          </a>
+          <button type="button" class="btn btn-secondary" onclick="window.print()" title="Cetak halaman hasil filter ini">
+            <i class="fas fa-print"></i> Cetak Laporan
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- SUMMARY BAR (Statistik Filter Aktif) -->
+  <div class="summary-bar no-print">
+    <div><strong><i class="fas fa-info-circle"></i> Hasil Filter:</strong> Ditemukan <strong><%= filterStat.total %></strong> laporan</div>
+    <div class="summary-chip" style="color:#b7791f;"><i class="fas fa-clock"></i> <%= filterStat.menunggu %> Menunggu</div>
+    <div class="summary-chip" style="color:#28a745;"><i class="fas fa-check"></i> <%= filterStat.diterima %> Diterima</div>
+    <div class="summary-chip" style="color:#dc3545;"><i class="fas fa-times"></i> <%= filterStat.ditolak %> Ditolak</div>
+    <div class="summary-chip" style="color:#0052a3;"><i class="fas fa-camera"></i> <%= filterStat.adaFoto %> Ada Foto</div>
+  </div>
+
+  <!-- TABEL RIWAYAT LAPOR -->
+  <div class="card">
+    <div class="card-title">
+      <i class="fas fa-list-alt"></i> Tabel Data Wajib Lapor Klien
+    </div>
+
+    <% if (laporList && laporList.length > 0) { %>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Klien Pemasyarakatan</th>
+            <th>Periode Lapor</th>
+            <th>Tanggal Kirim</th>
+            <th>Status</th>
+            <th>Foto Bukti</th>
+            <th>Verifikator</th>
+            <th class="no-print">Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% laporList.forEach(function(lapor, idx) { %>
+            <tr>
+              <td><%= idx + 1 %></td>
+              <td>
+                <strong><%= lapor.nama_lengkap %></strong><br>
+                <span style="font-size:12px; color:#64748b;"><i class="fas fa-id-badge"></i> <%= lapor.no_register %></span>
+              </td>
+              <td><strong><%= getNamaBulan(lapor.bulan) %> <%= lapor.tahun %></strong></td>
+              <td><%= formatTanggalWaktu(lapor.tanggal_submit) %></td>
+              <td>
+                <% if (lapor.status === 'diterima') { %>
+                  <span class="badge badge-success"><i class="fas fa-check"></i> Diterima</span>
+                <% } else if (lapor.status === 'menunggu_verifikasi') { %>
+                  <span class="badge badge-warning"><i class="fas fa-clock"></i> Menunggu</span>
+                <% } else if (lapor.status === 'ditolak') { %>
+                  <span class="badge badge-danger"><i class="fas fa-times"></i> Ditolak</span>
+                <% } else if (lapor.status === 'dibatalkan') { %>
+                  <span class="badge badge-danger">Dibatalkan</span>
+                <% } else { %>
+                  <span class="badge badge-secondary"><%= lapor.status %></span>
+                <% } %>
+              </td>
+              <td>
+                <% if (lapor.foto_bukti) { %>
+                  <a href="<%= getFileUrl(lapor.foto_bukti, 'wajib_lapor') %>" target="_blank" style="color:#0052a3; font-weight:700; text-decoration:none;">
+                    <i class="fas fa-image"></i> Ada Foto
+                  </a>
+                <% } else { %>
+                  <span style="color:#94a3b8; font-size:13px;">Tanpa Foto</span>
+                <% } %>
+              </td>
+              <td style="font-size:13px; color:#475569;">
+                <%= lapor.admin_verifikasi || '-' %>
+              </td>
+              <td class="no-print">
+                <button type="button" class="btn btn-outline" style="padding:5px 10px; font-size:12px;" onclick="showDetailModal('<%= lapor.id %>')">
+                  <i class="fas fa-eye"></i> Detail
+                </button>
+              </td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    <% } else { %>
+      <div style="text-align:center; padding:60px 20px; color:#94a3b8;">
+        <i class="fas fa-search" style="font-size:48px; color:#cbd5e1; margin-bottom:15px;"></i>
+        <h3 style="color:#334e68; font-size:18px; margin-bottom:6px;">Tidak ada data yang cocok dengan kriteria filter</h3>
+        <p style="font-size:14px; margin-bottom:15px;">Cobalah memperluas rentang tanggal atau mereset filter status dan pencarian klien.</p>
+        <a href="/admin/riwayat-lapor" class="btn btn-outline"><i class="fas fa-undo"></i> Reset Semua Filter</a>
+      </div>
+    <% } %>
+  </div>
+</div>
+
+<!-- MODAL DETAIL LAPORAN INTERAKTIF -->
+<div class="modal no-print" id="modalDetail">
+  <div class="modal-content">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid #e2e8f0; padding-bottom:12px;">
+      <h3 style="color:#1a3a52; font-size:18px;"><i class="fas fa-file-alt"></i> Rincian Wajib Lapor Klien</h3>
+      <button type="button" onclick="closeDetailModal()" style="border:none; background:transparent; font-size:22px; cursor:pointer; color:#94a3b8;">&times;</button>
+    </div>
+
+    <div id="modalLoading" style="text-align:center; padding:30px; color:#64748b;">
+      <i class="fas fa-spinner fa-spin" style="font-size:28px;"></i><br>Memuat data laporan...
+    </div>
+
+    <div id="modalDetailBody" style="display:none;">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-bottom:15px; background:#f8fafc; padding:15px; border-radius:6px;">
+        <div>
+          <span style="font-size:12px; color:#64748b; font-weight:700;">NAMA KLIEN:</span><br>
+          <strong id="dNama" style="color:#1a3a52; font-size:15px;"></strong>
+        </div>
+        <div>
+          <span style="font-size:12px; color:#64748b; font-weight:700;">NO. REGISTER:</span><br>
+          <strong id="dRegister" style="color:#1a3a52;"></strong>
+        </div>
+        <div>
+          <span style="font-size:12px; color:#64748b; font-weight:700;">PERIODE LAPOR:</span><br>
+          <span id="dPeriode" style="font-weight:700; color:#0052a3;"></span>
+        </div>
+        <div>
+          <span style="font-size:12px; color:#64748b; font-weight:700;">TANGGAL SUBMIT:</span><br>
+          <span id="dSubmit"></span>
+        </div>
+      </div>
+
+      <div style="margin-bottom:15px;">
+        <span style="font-size:12px; color:#64748b; font-weight:700; display:block; margin-bottom:4px;">AKTIVITAS HARIAN / PEKERJAAN:</span>
+        <div id="dAktivitas" style="background:#fff; border:1px solid #e2e8f0; padding:12px; border-radius:6px; font-size:14px; color:#333;"></div>
+      </div>
+
+      <div style="margin-bottom:15px;">
+        <span style="font-size:12px; color:#64748b; font-weight:700; display:block; margin-bottom:4px;">RENCANA KEGIATAN MENDATANG:</span>
+        <div id="dRencana" style="background:#fff; border:1px solid #e2e8f0; padding:12px; border-radius:6px; font-size:14px; color:#333;"></div>
+      </div>
+
+      <div id="dFotoBox" style="margin-bottom:15px; text-align:center;">
+        <span style="font-size:12px; color:#64748b; font-weight:700; display:block; text-align:left; margin-bottom:6px;">FOTO BUKTI TERLAMPIR:</span>
+        <img id="dFotoImg" src="" alt="Bukti Foto" style="max-width:100%; max-height:280px; border-radius:8px; border:1px solid #cbd5e1; box-shadow:0 4px 10px rgba(0,0,0,0.1);">
+      </div>
+
+      <div id="dCatatanBox" style="margin-bottom:20px; padding:12px; background:#fff3cd; border-radius:6px; color:#856404; font-size:13px; display:none;">
+        <strong>Catatan Petugas Verifikator:</strong><br>
+        <span id="dCatatan"></span>
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid #e2e8f0; padding-top:15px;">
+        <form id="formBatalkan" action="/admin/lapor/batalkan" method="POST" onsubmit="return confirm('Batalkan status laporan ini?')">
+          <input type="hidden" name="lapor_id" id="cancelLaporId">
+          <input type="hidden" name="catatan_admin" value="Dibatalkan oleh administrator">
+          <button type="submit" class="btn btn-outline" style="color:#dc3545; border-color:#dc3545;"><i class="fas fa-ban"></i> Batalkan Laporan</button>
+        </form>
+        <button type="button" class="btn btn-secondary" onclick="closeDetailModal()">Tutup</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  async function showDetailModal(laporId) {
+    const modal = document.getElementById('modalDetail');
+    const loading = document.getElementById('modalLoading');
+    const body = document.getElementById('modalDetailBody');
+
+    modal.classList.add('active');
+    loading.style.display = 'block';
+    body.style.display = 'none';
+
+    try {
+      const res = await fetch('/admin/lapor/detail/' + laporId);
+      const resJson = await res.json();
+      if (resJson.success) {
+        const item = resJson.data;
+        document.getElementById('dNama').innerText = item.nama_lengkap || '-';
+        document.getElementById('dRegister').innerText = item.no_register || '-';
+        document.getElementById('dPeriode').innerText = item.nama_bulan + ' ' + item.tahun;
+        document.getElementById('dSubmit').innerText = item.tanggal_submit_formatted || '-';
+        document.getElementById('dAktivitas').innerText = item.aktivitas_harian || '(Tidak ada keterangan)';
+        document.getElementById('dRencana').innerText = item.rencana_mendatang || '(Tidak ada keterangan)';
+        document.getElementById('cancelLaporId').value = item.id;
+
+        if (item.foto_bukti) {
+          const fotoSrc = (item.foto_bukti.startsWith('http://') || item.foto_bukti.startsWith('https://'))
+            ? item.foto_bukti
+            : ('/uploads/wajib_lapor/' + item.foto_bukti);
+          document.getElementById('dFotoImg').src = fotoSrc;
+          document.getElementById('dFotoBox').style.display = 'block';
+        } else {
+          document.getElementById('dFotoBox').style.display = 'none';
+        }
+
+        if (item.catatan_admin) {
+          document.getElementById('dCatatan').innerText = item.catatan_admin;
+          document.getElementById('dCatatanBox').style.display = 'block';
+        } else {
+          document.getElementById('dCatatanBox').style.display = 'none';
+        }
+
+        loading.style.display = 'none';
+        body.style.display = 'block';
+      } else {
+        alert('Gagal memuat rincian laporan: ' + resJson.message);
+        closeDetailModal();
+      }
+    } catch (err) {
+      alert('Terjadi kesalahan koneksi: ' + err.message);
+      closeDetailModal();
+    }
+  }
+
+  function closeDetailModal() {
+    document.getElementById('modalDetail').classList.remove('active');
+  }
+</script>
+
+</body>
+</html>

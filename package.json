@@ -1,0 +1,39 @@
+{
+  "name": "bapas-medan-nodejs",
+  "version": "1.0.0",
+  "description": "Sistem Wajib Lapor Online BAPAS Kelas I Medan - Node.js & Firebase",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "seed": "node scripts/seed.js",
+    "sync-firebase": "node scripts/sync_firebase.js"
+  },
+  "keywords": [
+    "bapas",
+    "medan",
+    "wajib-lapor",
+    "nodejs",
+    "express",
+    "firebase",
+    "firestore"
+  ],
+  "author": "BAPAS Kelas I Medan",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cloudinary": "^2.11.0",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.22.3",
+    "express-session": "^1.18.0",
+    "firebase": "^13.2.0",
+    "firebase-admin": "^12.0.0",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "serverless-http": "^4.0.0",
+    "uuid": "^9.0.1"
+  }
+}

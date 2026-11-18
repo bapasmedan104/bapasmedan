@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= pageTitle %></title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family: 'Source Sans 3', sans-serif; background: #f5f7fa; color: #333; }
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0;
+      background: linear-gradient(135deg, #003580 0%, #0052a3 100%);
+      color: white; padding: 15px 30px; z-index: 1000;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .navbar a { color: white; text-decoration: none; font-size: 14px; margin-left: 20px; }
+    .container { max-width: 1050px; margin: 100px auto 40px; padding: 0 20px; }
+    .header { margin-bottom: 25px; }
+    .header h1 { font-family: 'Playfair Display', serif; color: #003580; font-size: 30px; margin-bottom: 4px; }
+    .card { background: white; border-radius: 8px; padding: 25px; margin-bottom: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .filter-box { background: #f8fafc; padding: 16px 20px; border-radius: 8px; margin-bottom: 20px; display: flex; gap: 15px; align-items: center; flex-wrap: wrap; }
+    .filter-box select { padding: 8px 14px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: inherit; font-size: 14px; }
+    .table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    .table th { background: #f8f9fa; padding: 12px 15px; text-align: left; font-size: 13px; font-weight: 600; border-bottom: 2px solid #e0e0e0; }
+    .table td { padding: 12px 15px; border-bottom: 1px solid #e0e0e0; font-size: 14px; }
+    .badge { display: inline-block; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+    .badge-warning { background: #fff3cd; color: #856404; }
+    .badge-success { background: #d4edda; color: #155724; }
+    .badge-danger { background: #f8d7da; color: #721c24; }
+    .badge-secondary { background: #e2e8f0; color: #475569; }
+    .btn { padding: 8px 14px; border-radius: 6px; font-size: 13px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+    .btn-primary { background: #003580; color: white; border: none; }
+  </style>
+</head>
+<body>
+
+<div class="navbar">
+  <div style="font-weight:700;"><i class="fas fa-gavel"></i> BAPAS MEDAN - CLIENT</div>
+  <div>
+    <a href="/client/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+    <a href="/client/jadwal"><i class="fas fa-calendar-alt"></i> Jadwal Lapor</a>
+    <a href="/client/profil"><i class="fas fa-user"></i> Profil</a>
+    <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+  </div>
+</div>
+
+<div class="container">
+  <div class="header">
+    <h1>Riwayat Wajib Lapor</h1>
+    <p style="color:#666;">Daftar seluruh laporan bulanan yang telah Anda simpan dan kirimkan ke BAPAS Kelas I Medan</p>
+  </div>
+
+  <div class="card">
+    <!-- FORM FILTER RIWAYAT -->
+    <form method="GET" action="/client/riwayat" class="filter-box">
+      <label style="font-weight:600; font-size:14px;"><i class="fas fa-filter"></i> Filter Riwayat:</label>
+      <select name="status" onchange="this.form.submit()">
+        <option value="all" <%= filterStatus === 'all' ? 'selected' : '' %>>Semua Status</option>
+        <option value="diterima" <%= filterStatus === 'diterima' ? 'selected' : '' %>>Diterima</option>
+        <option value="menunggu_verifikasi" <%= filterStatus === 'menunggu_verifikasi' ? 'selected' : '' %>>Menunggu Verifikasi</option>
+        <option value="ditolak" <%= filterStatus === 'ditolak' ? 'selected' : '' %>>Ditolak</option>
+        <option value="draft" <%= filterStatus === 'draft' ? 'selected' : '' %>>Draft</option>
+      </select>
+
+      <select name="tahun" onchange="this.form.submit()">
+        <option value="all" <%= filterTahun === 'all' ? 'selected' : '' %>>Semua Tahun</option>
+        <option value="2026" <%= filterTahun === '2026' ? 'selected' : '' %>>2026</option>
+        <option value="2025" <%= filterTahun === '2025' ? 'selected' : '' %>>2025</option>
+        <option value="2024" <%= filterTahun === '2024' ? 'selected' : '' %>>2024</option>
+      </select>
+
+      <% if (filterStatus !== 'all' || filterTahun !== 'all') { %>
+        <a href="/client/riwayat" style="color:#dc3545; font-size:13px; text-decoration:none;"><i class="fas fa-times"></i> Reset Filter</a>
+      <% } %>
+    </form>
+
+    <% if (riwayat && riwayat.length > 0) { %>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Periode Lapor</th>
+            <th>Tanggal Submit</th>
+            <th>Status</th>
+            <th>Foto Bukti</th>
+            <th>Aktivitas</th>
+            <th>Catatan Petugas</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% riwayat.forEach(function(r, idx) { %>
+            <tr>
+              <td><%= idx + 1 %></td>
+              <td><strong><%= getNamaBulan(r.bulan) %> <%= r.tahun %></strong></td>
+              <td><%= formatTanggal(r.tanggal_submit) %></td>
+              <td>
+                <% if (r.status === 'diterima') { %>
+                  <span class="badge badge-success"><i class="fas fa-check"></i> Diterima</span>
+                <% } else if (r.status === 'menunggu_verifikasi') { %>
+                  <span class="badge badge-warning"><i class="fas fa-clock"></i> Menunggu</span>
+                <% } else if (r.status === 'ditolak') { %>
+                  <span class="badge badge-danger"><i class="fas fa-times"></i> Ditolak</span>
+                <% } else { %>
+                  <span class="badge badge-secondary"><%= r.status %></span>
+                <% } %>
+              </td>
+              <td>
+                <% if (r.foto_bukti) { %>
+                  <a href="<%= getFileUrl(r.foto_bukti, 'wajib_lapor') %>" target="_blank" style="color:#0052a3; font-weight:600;"><i class="fas fa-image"></i> Lihat Foto</a>
+                <% } else { %>
+                  <span style="color:#999;">-</span>
+                <% } %>
+              </td>
+              <td style="max-width:260px; font-size:13px; color:#555;"><%= r.aktivitas_harian || '-' %></td>
+              <td style="font-size:13px; color:#856404;"><%= r.catatan_admin || '-' %></td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    <% } else { %>
+      <div style="text-align:center; padding:50px 20px; color:#999;">
+        <i class="fas fa-folder-open" style="font-size:42px; margin-bottom:12px; color:#cbd5e1;"></i>
+        <p>Tidak ada riwayat laporan yang cocok dengan filter yang dipilih.</p>
+      </div>
+    <% } %>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,289 @@
+{
+  "admin": {
+    "doc_1793953187321_0krpeh": {
+      "username": "admin",
+      "password": "$2a$10$PFsL.BXA2K1P0/fodSNxLuQf.4NINw4JSypb46UIqdq8KNpSAfbyu",
+      "nama_lengkap": "Administrator BAPAS",
+      "email": "admin@bapas.go.id",
+      "no_telepon": "(061) 4516516",
+      "status": "aktif",
+      "tanggal_daftar": "2026-11-06T08:19:47.321Z",
+      "last_login": "2026-11-18T10:34:51.833Z",
+      "id": "doc_1793953187321_0krpeh"
+    },
+    "admin_5UGpDijDxA": {
+      "id": "admin_5UGpDijDxA",
+      "username": "bapasmedan104",
+      "email": "bapasmedan104@gmail.com",
+      "nama_lengkap": "Administrator BAPAS",
+      "status": "aktif",
+      "firebase_uid": "5UGpDijDxAVVRwr0kRa1NZu3Aqj2",
+      "tanggal_daftar": "2026-11-18T10:36:42.827Z",
+      "last_login": "2026-11-18T10:39:28.045Z"
+    }
+  },
+  "client": {
+    "doc_1793953187400_a3wi75": {
+      "username": "budi_santoso",
+      "password": "$2a$10$8MYQiwRQ.RGG7OMpIBmnCerEAVBbZTTthp2IoMC3Bd9al8DHDdvGS",
+      "nama_lengkap": "Budi Santoso",
+      "no_register": "REG-2025-001",
+      "tanggal_lahir": "1995-04-12",
+      "tempat_lahir": "Medan",
+      "alamat": "Jl. Gatot Subroto No. 45, Medan",
+      "email": "budi.santoso@example.com",
+      "no_telepon": "081234567890",
+      "status": "aktif",
+      "bulan_wajib_lapor_mulai": 1,
+      "tahun_wajib_lapor_mulai": 2025,
+      "bulan_wajib_lapor_akhir": 12,
+      "tahun_wajib_lapor_akhir": 2025,
+      "total_bulan_wajib_lapor": 12,
+      "foto_profil": null,
+      "no_hp_gmail": "081234567890 / budi.santoso@gmail.com",
+      "alamat_sekarang": "Jl. Gatot Subroto No. 45, Medan",
+      "masa_wajib_lapor": "Januari 2025 s/d Desember 2025",
+      "profil_lengkap": 1,
+      "profil_updated_at": "2026-11-06T08:19:47.399Z",
+      "created_by": "doc_1793953187321_0krpeh",
+      "created_at": "2026-11-06T08:19:47.399Z",
+      "last_login": "2026-11-18T10:36:37.529Z",
+      "id": "doc_1793953187400_a3wi75"
+    },
+    "doc_1793953187404_xxqosk": {
+      "username": "joko_susilo",
+      "password": "$2a$10$8MYQiwRQ.RGG7OMpIBmnCerEAVBbZTTthp2IoMC3Bd9al8DHDdvGS",
+      "nama_lengkap": "Joko Susilo",
+      "no_register": "REG-2025-002",
+      "tanggal_lahir": "1992-08-20",
+      "tempat_lahir": "Binjai",
+      "alamat": "Jl. Sudirman No. 12, Binjai",
+      "email": "joko.susilo@example.com",
+      "no_telepon": "082198765432",
+      "status": "aktif",
+      "bulan_wajib_lapor_mulai": 3,
+      "tahun_wajib_lapor_mulai": 2025,
+      "bulan_wajib_lapor_akhir": 2,
+      "tahun_wajib_lapor_akhir": 2026,
+      "total_bulan_wajib_lapor": 12,
+      "foto_profil": null,
+      "no_hp_gmail": null,
+      "alamat_sekarang": null,
+      "masa_wajib_lapor": null,
+      "profil_lengkap": 0,
+      "profil_updated_at": null,
+      "created_by": "doc_1793953187321_0krpeh",
+      "created_at": "2026-11-06T08:19:47.399Z",
+      "last_login": null,
+      "id": "doc_1793953187404_xxqosk"
+    },
+    "doc_1793953187406_nfjm1n": {
+      "username": "siti_rahma",
+      "password": "$2a$10$8MYQiwRQ.RGG7OMpIBmnCerEAVBbZTTthp2IoMC3Bd9al8DHDdvGS",
+      "nama_lengkap": "Siti Rahma",
+      "no_register": "REG-2024-089",
+      "tanggal_lahir": "1998-11-05",
+      "tempat_lahir": "Deli Serdang",
+      "alamat": "Jl. Pertahanan No. 7, Patumbak",
+      "email": "siti.rahma@example.com",
+      "no_telepon": "085211223344",
+      "status": "selesai",
+      "bulan_wajib_lapor_mulai": 1,
+      "tahun_wajib_lapor_mulai": 2024,
+      "bulan_wajib_lapor_akhir": 12,
+      "tahun_wajib_lapor_akhir": 2024,
+      "total_bulan_wajib_lapor": 12,
+      "foto_profil": null,
+      "no_hp_gmail": "085211223344 / siti.rahma@gmail.com",
+      "alamat_sekarang": "Jl. Pertahanan No. 7, Patumbak",
+      "masa_wajib_lapor": "Januari 2024 s/d Desember 2024",
+      "profil_lengkap": 1,
+      "profil_updated_at": "2026-11-06T08:19:47.399Z",
+      "created_by": "doc_1793953187321_0krpeh",
+      "created_at": "2024-01-02T00:00:00.000Z",
+      "last_login": null,
+      "id": "doc_1793953187406_nfjm1n"
+    }
+  },
+  "wajib_lapor": {
+    "doc_1793953187411_21jvds": {
+      "client_id": "doc_1793953187400_a3wi75",
+      "bulan": 1,
+      "tahun": 2025,
+      "aktivitas_harian": "Bekerja sebagai staf mekanik di bengkel motor mitra BAPAS. Kondisi sehat dan mematuhi tata tertib pembimbingan.",
+      "rencana_mendatang": "Melanjutkan kursus keahlian kelistrikan otomotif dan mempersiapkan pembukaan usaha mandiri.",
+      "foto_bukti": null,
+      "foto_uploaded_at": null,
+      "tanggal_submit": "2025-01-05T09:30:00Z",
+      "status": "diterima",
+      "catatan_admin": "Laporan diverifikasi dan diterima dengan baik. Pertahankan kedisiplinan.",
+      "verified_by": "doc_1793953187321_0krpeh",
+      "verified_at": "2025-01-05T14:15:00Z",
+      "created_at": "2025-01-05T09:00:00Z",
+      "updated_at": "2025-01-05T14:15:00Z",
+      "id": "doc_1793953187411_21jvds"
+    },
+    "doc_1793953187414_0gdrha": {
+      "client_id": "doc_1793953187400_a3wi75",
+      "bulan": 2,
+      "tahun": 2025,
+      "aktivitas_harian": "Melakukan pekerjaan rutin di bengkel dan mengikuti bimbingan kemasyarakatan dari pembimbing kemasyarakatan BAPAS Medan.",
+      "rencana_mendatang": "Meningkatkan produktivitas kerja dan menabung modal usaha.",
+      "foto_bukti": null,
+      "foto_uploaded_at": null,
+      "tanggal_submit": "2025-02-04T10:20:00Z",
+      "status": "diterima",
+      "catatan_admin": "Laporan disetujui.",
+      "verified_by": "doc_1793953187321_0krpeh",
+      "verified_at": "2025-02-04T11:00:00Z",
+      "created_at": "2025-02-04T10:00:00Z",
+      "updated_at": "2025-02-04T11:00:00Z",
+      "id": "doc_1793953187414_0gdrha"
+    },
+    "doc_1793953187418_xad3uw": {
+      "client_id": "doc_1793953187400_a3wi75",
+      "bulan": 11,
+      "tahun": 2026,
+      "aktivitas_harian": "Menjalankan kegiatan usaha mandiri servis berkala dan aktif beribadah serta bermasyarakat di lingkungan sekitar.",
+      "rencana_mendatang": "Mengembangkan kemitraan dan mengikuti pelatihan kewirausahaan.",
+      "foto_bukti": null,
+      "foto_uploaded_at": null,
+      "tanggal_submit": "2026-11-06T08:19:47.411Z",
+      "status": "menunggu_verifikasi",
+      "catatan_admin": null,
+      "verified_by": null,
+      "verified_at": null,
+      "created_at": "2026-11-06T08:19:47.411Z",
+      "updated_at": "2026-11-06T08:19:47.411Z",
+      "id": "doc_1793953187418_xad3uw"
+    }
+  },
+  "konfigurasi_sistem": {
+    "doc_1793953187217_3hnon8": {
+      "tanggal_mulai_input": 1,
+      "tanggal_akhir_input": 15,
+      "notifikasi_tertutup": "Periode pengisian wajib lapor telah ditutup. Silakan datang ke BAPAS untuk melakukan wajib lapor secara offline.",
+      "updated_at": "2026-11-06T08:19:47.216Z",
+      "id": "doc_1793953187217_3hnon8"
+    }
+  },
+  "history_log": {
+    "doc_1794286161706_rc4cnv": {
+      "user_type": "admin",
+      "user_id": "doc_1793953187321_0krpeh",
+      "aksi": "Login",
+      "deskripsi": "Admin login berhasil",
+      "ip_address": "127.0.0.1",
+      "created_at": "2026-11-10T04:49:21.706Z",
+      "id": "doc_1794286161706_rc4cnv"
+    },
+    "doc_1794286179470_8ywyxx": {
+      "user_type": "admin",
+      "user_id": "doc_1793953187321_0krpeh",
+      "aksi": "Login",
+      "deskripsi": "Admin login berhasil",
+      "ip_address": "127.0.0.1",
+      "created_at": "2026-11-10T04:49:39.470Z",
+      "id": "doc_1794286179470_8ywyxx"
+    },
+    "doc_1794539834959_vjhd75": {
+      "user_type": "admin",
+      "user_id": "doc_1793953187321_0krpeh",
+      "aksi": "Login",
+      "deskripsi": "Admin login berhasil",
+      "ip_address": "127.0.0.1",
+      "created_at": "2026-11-13T03:17:14.958Z",
+      "id": "doc_1794539834959_vjhd75"
+    },
+    "doc_1794539901385_0v5w0c": {
+      "user_type": "client",
+      "user_id": "doc_1793953187400_a3wi75",
+      "aksi": "Login",
+      "deskripsi": "Client login berhasil",
+      "ip_address": "127.0.0.1",
+      "created_at": "2026-11-13T03:18:21.385Z",
+      "id": "doc_1794539901385_0v5w0c"
+    },
+    "doc_1794541603831_18qna9": {
+      "user_type": "client",
+      "user_id": "doc_1793953187400_a3wi75",
+      "aksi": "Login",
+      "deskripsi": "Client login berhasil",
+      "ip_address": "127.0.0.1",
+      "created_at": "2026-11-13T03:46:43.831Z",
+      "id": "doc_1794541603831_18qna9"
+    },
+    "doc_1794541762229_f2btzm": {
+      "user_type": "client",
+      "user_id": "doc_1793953187400_a3wi75",
+      "aksi": "Login",
+      "deskripsi": "Client login berhasil",
+      "ip_address": "127.0.0.1",
+      "created_at": "2026-11-13T03:49:22.229Z",
+      "id": "doc_1794541762229_f2btzm"
+    },
+    "doc_1794541777051_nrhsge": {
+      "user_type": "admin",
+      "user_id": "doc_1793953187321_0krpeh",
+      "aksi": "Login",
+      "deskripsi": "Admin login berhasil",
+      "ip_address": "127.0.0.1",
+      "created_at": "2026-11-13T03:49:37.051Z",
+      "id": "doc_1794541777051_nrhsge"
+    },
+    "doc_1794541851703_ews5g0": {
+      "user_type": "client",
+      "user_id": "doc_1793953187400_a3wi75",
+      "aksi": "Login",
+      "deskripsi": "Client login berhasil",
+      "ip_address": "127.0.0.1",
+      "created_at": "2026-11-13T03:50:51.703Z",
+      "id": "doc_1794541851703_ews5g0"
+    },
+    "doc_1794541884018_kw9en9": {
+      "user_type": "admin",
+      "user_id": "doc_1793953187321_0krpeh",
+      "aksi": "Login",
+      "deskripsi": "Admin login berhasil",
+      "ip_address": "127.0.0.1",
+      "created_at": "2026-11-13T03:51:24.018Z",
+      "id": "doc_1794541884018_kw9en9"
+    },
+    "doc_1794998093028_mabzxf": {
+      "user_type": "admin",
+      "user_id": "doc_1793953187321_0krpeh",
+      "aksi": "Login",
+      "deskripsi": "Admin login via Database (admin)",
+      "ip_address": "127.0.0.1",
+      "created_at": "2026-11-18T10:34:53.028Z",
+      "id": "doc_1794998093028_mabzxf"
+    },
+    "doc_1794998198120_i3uj36": {
+      "user_type": "client",
+      "user_id": "doc_1793953187400_a3wi75",
+      "aksi": "Login",
+      "deskripsi": "Client login berhasil (budi_santoso)",
+      "ip_address": "127.0.0.1",
+      "created_at": "2026-11-18T10:36:38.120Z",
+      "id": "doc_1794998198120_i3uj36"
+    },
+    "doc_1794998204001_js2m5o": {
+      "user_type": "admin",
+      "user_id": "admin_5UGpDijDxA",
+      "aksi": "Login",
+      "deskripsi": "Admin login via Firebase Auth (bapasmedan104@gmail.com)",
+      "ip_address": "127.0.0.1",
+      "created_at": "2026-11-18T10:36:44.001Z",
+      "id": "doc_1794998204001_js2m5o"
+    },
+    "doc_1794998368666_a4yooc": {
+      "user_type": "admin",
+      "user_id": "admin_5UGpDijDxA",
+      "aksi": "Login",
+      "deskripsi": "Admin login via Firebase Auth (bapasmedan104@gmail.com)",
+      "ip_address": "127.0.0.1",
+      "created_at": "2026-11-18T10:39:28.666Z",
+      "id": "doc_1794998368666_a4yooc"
+    }
+  }
+}

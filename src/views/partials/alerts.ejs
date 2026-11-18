@@ -1,0 +1,20 @@
+<% if (typeof successMessage !== 'undefined' && successMessage) { %>
+  <div class="alert alert-success" style="background:#d4edda; color:#155724; padding:14px 18px; border-radius:6px; margin-bottom:20px; border:1px solid #c3e6cb; display:flex; align-items:center; gap:12px;">
+    <i class="fas fa-check-circle" style="font-size:18px;"></i>
+    <div><%= successMessage %></div>
+  </div>
+<% } %>
+
+<% if (typeof errorMessage !== 'undefined' && errorMessage) { %>
+  <div class="alert alert-danger" style="background:#f8d7da; color:#721c24; padding:14px 18px; border-radius:6px; margin-bottom:20px; border:1px solid #f5c6cb; display:flex; align-items:center; gap:12px;">
+    <i class="fas fa-exclamation-circle" style="font-size:18px;"></i>
+    <div><%= errorMessage %></div>
+  </div>
+<% } %>
+
+<% if (typeof warningMessage !== 'undefined' && warningMessage) { %>
+  <div class="alert alert-warning" style="background:#fff3cd; color:#856404; padding:14px 18px; border-radius:6px; margin-bottom:20px; border:1px solid #ffeeba; display:flex; align-items:center; gap:12px;">
+    <i class="fas fa-exclamation-triangle" style="font-size:18px;"></i>
+    <div><%= warningMessage %></div>
+  </div>
+<% } %>

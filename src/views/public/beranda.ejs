@@ -1,0 +1,90 @@
+<%- include('../partials/header') %>
+<%- include('../partials/alerts') %>
+
+<!-- HERO SLIDER SECTION -->
+<section class="slider-section" style="position:relative; background:#001e4d; color:white; overflow:hidden;">
+  <div class="slider-track">
+    <div class="slide" style="padding:100px 0; background:linear-gradient(135deg, rgba(0,30,77,0.95) 0%, rgba(0,53,128,0.85) 100%);">
+      <div class="container" style="max-width:900px; text-align:center; margin:0 auto;">
+        <span style="background:#ffc107; color:#002255; font-size:12px; font-weight:700; padding:6px 14px; border-radius:20px; text-transform:uppercase; letter-spacing:1px; display:inline-block; margin-bottom:15px;">Selamat Datang</span>
+        <h2 style="font-family:'Playfair Display', serif; font-size:38px; line-height:1.2; margin-bottom:15px; color:#ffffff;">Balai Pemasyarakatan Kelas I Medan</h2>
+        <p style="font-size:16px; line-height:1.6; color:#d9e2ec; margin-bottom:30px;">
+          Membangun kemandirian klien pemasyarakatan menuju kehidupan yang lebih baik, tertib, dan bermartabat melalui sistem pembimbingan modern dan terintegrasi.
+        </p>
+        <div style="display:flex; justify-content:center; gap:15px; flex-wrap:wrap;">
+          <a href="/login" class="btn" style="background:#ffc107; color:#002255; font-weight:700; padding:12px 28px; border-radius:6px; text-decoration:none;"><i class="fas fa-clipboard-check"></i> Wajib Lapor Online</a>
+          <a href="/profil?sub=profil-pejabat" class="btn" style="background:rgba(255,255,255,0.2); color:#ffffff; font-weight:600; padding:12px 28px; border-radius:6px; text-decoration:none; border:1px solid rgba(255,255,255,0.4);"><i class="fas fa-building"></i> Profil BAPAS</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUICK STATS -->
+<div class="quick-stats" style="background:#ffffff; padding:40px 0; border-bottom:1px solid #e0e0e0; box-shadow:0 4px 12px rgba(0,0,0,0.05);">
+  <div class="container">
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:20px; text-align:center;">
+      <div style="padding:20px; border-right:1px solid #eee;">
+        <div style="font-size:36px; font-weight:800; color:#003580;">1.250+</div>
+        <div style="font-size:14px; color:#666; font-weight:600; text-transform:uppercase;">Klien Aktif</div>
+      </div>
+      <div style="padding:20px; border-right:1px solid #eee;">
+        <div style="font-size:36px; font-weight:800; color:#28a745;">98.4%</div>
+        <div style="font-size:14px; color:#666; font-weight:600; text-transform:uppercase;">Kepatuhan Lapor</div>
+      </div>
+      <div style="padding:20px; border-right:1px solid #eee;">
+        <div style="font-size:36px; font-weight:800; color:#ffc107;">45+</div>
+        <div style="font-size:14px; color:#666; font-weight:600; text-transform:uppercase;">Pembimbing Kemasyarakatan</div>
+      </div>
+      <div style="padding:20px;">
+        <div style="font-size:36px; font-weight:800; color:#0052a3;">24/7</div>
+        <div style="font-size:14px; color:#666; font-weight:600; text-transform:uppercase;">Sistem Lapor Online</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FITUR UTAMA & ALUR -->
+<section style="padding:60px 0; background:#f8f9fa;">
+  <div class="container">
+    <div style="text-align:center; margin-bottom:45px;">
+      <span style="color:#003580; font-weight:700; text-transform:uppercase; font-size:13px; letter-spacing:1px;">Layanan Unggulan</span>
+      <h2 style="font-family:'Playfair Display', serif; font-size:32px; color:#002255; margin-top:5px;">Sistem Wajib Lapor Digital</h2>
+      <div style="width:60px; height:3px; background:#003580; margin:15px auto;"></div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:25px;">
+      <div style="background:#fff; padding:30px; border-radius:8px; box-shadow:0 4px 15px rgba(0,0,0,0.06); text-align:center; border-top:4px solid #003580;">
+        <div style="width:60px; height:60px; border-radius:50%; background:#e3f2fd; color:#003580; display:flex; align-items:center; justify-content:center; margin:0 auto 20px; font-size:24px;">
+          <i class="fas fa-camera"></i>
+        </div>
+        <h3 style="font-size:18px; color:#002255; margin-bottom:12px;">Foto Bukti & Kamera</h3>
+        <p style="font-size:14px; color:#666; line-height:1.6;">
+          Dilengkapi integrasi kamera web langsung dan upload foto sebagai bukti pelaporan wajib lapor yang terverifikasi keasliannya.
+        </p>
+      </div>
+
+      <div style="background:#fff; padding:30px; border-radius:8px; box-shadow:0 4px 15px rgba(0,0,0,0.06); text-align:center; border-top:4px solid #28a745;">
+        <div style="width:60px; height:60px; border-radius:50%; background:#e8f5e9; color:#28a745; display:flex; align-items:center; justify-content:center; margin:0 auto 20px; font-size:24px;">
+          <i class="fas fa-clock"></i>
+        </div>
+        <h3 style="font-size:18px; color:#002255; margin-bottom:12px;">Periode Terjadwal</h3>
+        <p style="font-size:14px; color:#666; line-height:1.6;">
+          Pengisian dibuka setiap tanggal 1 hingga 15 setiap bulannya. Notifikasi otomatis memberi tahu batas waktu pengisian.
+        </p>
+      </div>
+
+      <div style="background:#fff; padding:30px; border-radius:8px; box-shadow:0 4px 15px rgba(0,0,0,0.06); text-align:center; border-top:4px solid #ffc107;">
+        <div style="width:60px; height:60px; border-radius:50%; background:#fff9db; color:#e67e22; display:flex; align-items:center; justify-content:center; margin:0 auto 20px; font-size:24px;">
+          <i class="fas fa-database"></i>
+        </div>
+        <h3 style="font-size:18px; color:#002255; margin-bottom:12px;">Firebase Cloud Firestore</h3>
+        <p style="font-size:14px; color:#666; line-height:1.6;">
+          Data tersimpan dengan aman, real-time, dan tersinkronisasi di Firebase dengan pencarian dan filter laporan lengkap.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,82 @@
+<%- include('../partials/header') %>
+
+<div class="content-breadcrumb" style="background:#f0f4f8; padding:15px 0; border-bottom:1px solid #d9e2ec;">
+  <div class="container" style="display:flex; align-items:center; gap:10px; font-size:13px; color:#627d98;">
+    <a href="/" style="color:#003580; text-decoration:none;">Beranda</a>
+    <i class="fas fa-chevron-right" style="font-size:10px;"></i>
+    <span>Berita</span>
+    <i class="fas fa-chevron-right" style="font-size:10px;"></i>
+    <span style="font-weight:700; color:#002255;"><%= sub === 'berita-utama' ? 'Berita Utama' : 'Berita Terkini' %></span>
+  </div>
+</div>
+
+<div class="content-page" style="padding:40px 0;">
+  <div class="container" style="display:grid; grid-template-columns:260px 1fr; gap:30px;">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div style="background:#003580; color:#fff; padding:14px 18px; border-radius:6px 6px 0 0; font-weight:700; font-size:14px;">
+        <i class="fas fa-newspaper"></i> Kategori Berita
+      </div>
+      <ul style="list-style:none; padding:0; margin:0; border:1px solid #d9e2ec; border-top:none; border-radius:0 0 6px 6px; background:#fff;">
+        <li style="border-bottom:1px solid #f0f4f8;">
+          <a href="/berita?sub=berita-utama" style="display:flex; align-items:center; gap:10px; padding:14px 18px; text-decoration:none; color:<%= sub === 'berita-utama' ? '#003580' : '#486581' %>; font-weight:<%= sub === 'berita-utama' ? '700' : '500' %>; background:<%= sub === 'berita-utama' ? '#e3f2fd' : 'transparent' %>;">
+            <i class="fas fa-star"></i> Berita Utama
+          </a>
+        </li>
+        <li>
+          <a href="/berita?sub=berita-terkini" style="display:flex; align-items:center; gap:10px; padding:14px 18px; text-decoration:none; color:<%= sub === 'berita-terkini' ? '#003580' : '#486581' %>; font-weight:<%= sub === 'berita-terkini' ? '700' : '500' %>; background:<%= sub === 'berita-terkini' ? '#e3f2fd' : 'transparent' %>;">
+            <i class="fab fa-instagram"></i> Berita Terkini
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="content-main" style="background:#fff; padding:30px; border-radius:8px; box-shadow:0 2px 10px rgba(0,0,0,0.05);">
+      <h2 style="font-family:'Playfair Display', serif; color:#002255; font-size:26px; margin-bottom:8px;">
+        <%= sub === 'berita-utama' ? 'Berita Utama BAPAS Kelas I Medan' : 'Berita & Informasi Terkini' %>
+      </h2>
+      <div style="width:50px; height:3px; background:#003580; margin-bottom:25px;"></div>
+
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:20px;">
+        <div style="border:1px solid #e0e0e0; border-radius:8px; overflow:hidden; transition:transform 0.2s; background:#fff;">
+          <div style="background:#003580; color:white; padding:30px 20px; text-align:center;">
+            <i class="fas fa-users" style="font-size:36px; color:#ffc107;"></i>
+          </div>
+          <div style="padding:20px;">
+            <span style="font-size:11px; background:#e3f2fd; color:#0052a3; font-weight:700; padding:4px 8px; border-radius:4px; text-transform:uppercase;">Kegiatan</span>
+            <span style="font-size:12px; color:#888; margin-left:8px;"><i class="fas fa-calendar-alt"></i> 22 Jan 2025</span>
+            <h3 style="font-size:16px; margin:10px 0; color:#002255; line-height:1.4;">Bapas Kelas I Medan Sukses Selenggarakan Rapat Koordinasi Pembimbingan Klien 2025</h3>
+            <p style="font-size:13px; color:#666; line-height:1.6;">Balai Pemasyarakatan Kelas I Medan menyelenggarakan rapat koordinasi yang melibatkan seluruh pembimbing kemasyarakatan dalam rangka meningkatkan kualitas layanan pembimbingan.</p>
+          </div>
+        </div>
+
+        <div style="border:1px solid #e0e0e0; border-radius:8px; overflow:hidden; transition:transform 0.2s; background:#fff;">
+          <div style="background:#1a3a52; color:white; padding:30px 20px; text-align:center;">
+            <i class="fas fa-chalkboard-teacher" style="font-size:36px; color:#ffc107;"></i>
+          </div>
+          <div style="padding:20px;">
+            <span style="font-size:11px; background:#e3f2fd; color:#0052a3; font-weight:700; padding:4px 8px; border-radius:4px; text-transform:uppercase;">SDM</span>
+            <span style="font-size:12px; color:#888; margin-left:8px;"><i class="fas fa-calendar-alt"></i> 20 Jan 2025</span>
+            <h3 style="font-size:16px; margin:10px 0; color:#002255; line-height:1.4;">Peningkatan Kapasitas SDM Pembimbing Kemasyarakatan Bapas Medan</h3>
+            <p style="font-size:13px; color:#666; line-height:1.6;">Program pelatihan dan peningkatan kapasitas SDM dilaksanakan untuk meningkatkan profesionalisme para pembimbing kemasyarakatan Bapas Medan.</p>
+          </div>
+        </div>
+
+        <div style="border:1px solid #e0e0e0; border-radius:8px; overflow:hidden; transition:transform 0.2s; background:#fff;">
+          <div style="background:#2d5f8d; color:white; padding:30px 20px; text-align:center;">
+            <i class="fas fa-file-signature" style="font-size:36px; color:#ffc107;"></i>
+          </div>
+          <div style="padding:20px;">
+            <span style="font-size:11px; background:#e3f2fd; color:#0052a3; font-weight:700; padding:4px 8px; border-radius:4px; text-transform:uppercase;">Kerjasama</span>
+            <span style="font-size:12px; color:#888; margin-left:8px;"><i class="fas fa-calendar-alt"></i> 18 Jan 2025</span>
+            <h3 style="font-size:16px; margin:10px 0; color:#002255; line-height:1.4;">Penandatanganan MOU dengan Instansi Terkait dalam Program Reintegrasi</h3>
+            <p style="font-size:13px; color:#666; line-height:1.6;">Bapas Kelas I Medan menandatangani nota kesepahaman bersama beberapa instansi pemerintah dan swasta dalam mendukung program reintegrasi sosial klien.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

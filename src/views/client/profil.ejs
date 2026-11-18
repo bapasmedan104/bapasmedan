@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= pageTitle %></title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family: 'Source Sans 3', sans-serif; background: #f5f7fa; color: #333; }
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0;
+      background: linear-gradient(135deg, #003580 0%, #0052a3 100%);
+      color: white; padding: 15px 30px; z-index: 1000;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .navbar a { color: white; text-decoration: none; font-size: 14px; }
+    .container { max-width: 900px; margin: 100px auto 40px; padding: 0 20px; }
+    .card { background: white; border-radius: 8px; padding: 30px; margin-bottom: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .card-title { font-size: 20px; font-weight: 700; color: #002255; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px; }
+    .form-group input, .form-group textarea {
+      width: 100%; padding: 10px 14px; border: 1px solid #d9e2ec; border-radius: 6px; font-family: inherit; font-size: 14px;
+    }
+    .form-group input:focus, .form-group textarea:focus {
+      outline: none; border-color: #003580; box-shadow: 0 0 0 3px rgba(0,53,128,0.1);
+    }
+    .btn {
+      padding: 12px 24px; border: none; border-radius: 6px; font-size: 14px; font-weight: 700;
+      cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-primary { background: #003580; color: white; }
+    .btn-primary:hover { background: #002255; }
+    .btn-secondary { background: #6c757d; color: white; }
+  </style>
+</head>
+<body>
+
+<div class="navbar">
+  <div style="font-weight:700;"><i class="fas fa-gavel"></i> BAPAS MEDAN - CLIENT</div>
+  <div style="display:flex; align-items:center; gap:15px;">
+    <% if (client && client.profil_lengkap) { %>
+      <a href="/client/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+    <% } %>
+    <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+  </div>
+</div>
+
+<div class="container">
+  <%- include('../partials/alerts') %>
+
+  <% if (belumLengkap) { %>
+    <div style="background:#fff3cd; color:#856404; padding:18px 20px; border-radius:8px; border:1px solid #ffeeba; margin-bottom:25px; display:flex; align-items:center; gap:15px;">
+      <i class="fas fa-exclamation-triangle" style="font-size:26px;"></i>
+      <div>
+        <strong style="font-size:16px;">Perhatian: Lengkapi Profil Klien Anda!</strong><br>
+        Sebelum dapat mengakses form wajib lapor dan fitur lainnya, Anda diwajibkan melengkapi identitas domisili, nomor HP aktif, masa wajib lapor, dan mengunggah foto profil terbaru.
+      </div>
+    </div>
+  <% } %>
+
+  <div class="card">
+    <div class="card-title">
+      <i class="fas fa-id-card" style="color:#003580;"></i> Profil Klien Pemasyarakatan
+    </div>
+
+    <form action="/client/profil" method="POST" enctype="multipart/form-data">
+      <div style="display:flex; gap:30px; margin-bottom:25px; flex-wrap:wrap; align-items:center;">
+        <div>
+          <% if (client && client.foto_profil) { %>
+            <img src="<%= getFileUrl(client.foto_profil, 'profil') %>" alt="Foto Profil" style="width:120px; height:120px; border-radius:50%; object-fit:cover; border:3px solid #003580; box-shadow:0 4px 10px rgba(0,0,0,0.15);">
+          <% } else { %>
+            <div style="width:120px; height:120px; border-radius:50%; background:#e2e8f0; color:#64748b; display:flex; align-items:center; justify-content:center; font-size:48px; border:3px dashed #94a3b8;">
+              <i class="fas fa-user"></i>
+            </div>
+          <% } %>
+        </div>
+        <div style="flex:1; min-width:260px;">
+          <label style="font-weight:700; margin-bottom:6px; display:block;">Unggah / Ganti Foto Profil *</label>
+          <input type="file" name="foto_profil" accept="image/jpeg,image/png,image/webp" style="margin-bottom:6px;">
+          <span style="font-size:12px; color:#64748b; display:block;">Format: JPG, PNG, atau WebP. Maksimal 5MB. Foto wajah sopan dan jelas.</span>
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+        <div class="form-group">
+          <label>Nomor Register Klien</label>
+          <input type="text" value="<%= client ? client.no_register : '' %>" readonly style="background:#f1f5f9; color:#64748b;">
+        </div>
+
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" value="<%= client ? client.username : '' %>" readonly style="background:#f1f5f9; color:#64748b;">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="nama_lengkap">Nama Lengkap Sesuai KTP *</label>
+        <input type="text" name="nama_lengkap" id="nama_lengkap" value="<%= client ? client.nama_lengkap : '' %>" required>
+      </div>
+
+      <div class="form-group">
+        <label for="no_hp_gmail">Nomor HP Aktif / WhatsApp / Email *</label>
+        <input type="text" name="no_hp_gmail" id="no_hp_gmail" placeholder="Contoh: 08123456789 / nama@gmail.com" value="<%= client ? (client.no_hp_gmail || client.no_telepon || '') : '' %>" required>
+      </div>
+
+      <div class="form-group">
+        <label for="alamat_sekarang">Alamat Tempat Tinggal / Domisili Saat Ini *</label>
+        <textarea name="alamat_sekarang" id="alamat_sekarang" rows="3" placeholder="Masukkan alamat lengkap RT/RW, Kelurahan, Kecamatan, Kota tempat Anda tinggal sekarang..." required><%= client ? (client.alamat_sekarang || client.alamat || '') : '' %></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="masa_wajib_lapor">Masa / Periode Wajib Lapor *</label>
+        <input type="text" name="masa_wajib_lapor" id="masa_wajib_lapor" placeholder="Contoh: Januari 2025 s/d Desember 2025" value="<%= client ? (client.masa_wajib_lapor || '') : '' %>" required>
+      </div>
+
+      <div style="display:flex; gap:12px; margin-top:30px;">
+        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Simpan & Perbarui Profil</button>
+        <% if (client && client.profil_lengkap) { %>
+          <a href="/client/dashboard" class="btn btn-secondary">Kembali ke Dashboard</a>
+        <% } %>
+      </div>
+    </form>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= pageTitle %></title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family: 'Source Sans 3', sans-serif; background: #f5f7fa; color: #333; }
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0;
+      background: linear-gradient(135deg, #003580 0%, #0052a3 100%);
+      color: white; padding: 15px 30px; z-index: 1000;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .navbar a { color: white; text-decoration: none; font-size: 14px; margin-left: 20px; }
+    .container { max-width: 950px; margin: 100px auto 40px; padding: 0 20px; }
+    .header { margin-bottom: 25px; }
+    .header h1 { font-family: 'Playfair Display', serif; color: #003580; font-size: 30px; margin-bottom: 4px; }
+    .card { background: white; border-radius: 8px; padding: 30px; margin-bottom: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; margin-bottom: 25px; }
+    .info-box { background: #f0f7ff; border-left: 4px solid #003580; padding: 18px; border-radius: 6px; }
+    .info-label { font-size: 12px; color: #64748b; text-transform: uppercase; font-weight: 700; margin-bottom: 4px; }
+    .info-val { font-size: 18px; font-weight: 700; color: #002255; }
+    .progress-bar { width: 100%; height: 26px; background: #e2e8f0; border-radius: 13px; overflow: hidden; margin: 15px 0; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, #28a745, #20c997); display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: 700; }
+  </style>
+</head>
+<body>
+
+<div class="navbar">
+  <div style="font-weight:700;"><i class="fas fa-gavel"></i> BAPAS MEDAN - CLIENT</div>
+  <div>
+    <a href="/client/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+    <a href="/client/riwayat"><i class="fas fa-history"></i> Riwayat Lapor</a>
+    <a href="/client/profil"><i class="fas fa-user"></i> Profil</a>
+    <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+  </div>
+</div>
+
+<div class="container">
+  <div class="header">
+    <h1>Jadwal & Durasi Wajib Lapor</h1>
+    <p style="color:#666;">Pantau progres dan masa kewajiban pelaporan bulanan Anda di BAPAS Kelas I Medan</p>
+  </div>
+
+  <div class="card">
+    <div class="info-grid">
+      <div class="info-box">
+        <div class="info-label">Masa Wajib Lapor Mulai</div>
+        <div class="info-val"><%= getNamaBulan(client.bulan_wajib_lapor_mulai) %> <%= client.tahun_wajib_lapor_mulai %></div>
+      </div>
+      <div class="info-box">
+        <div class="info-label">Masa Wajib Lapor Selesai</div>
+        <div class="info-val"><%= getNamaBulan(client.bulan_wajib_lapor_akhir) %> <%= client.tahun_wajib_lapor_akhir %></div>
+      </div>
+      <div class="info-box">
+        <div class="info-label">Total Kewajiban Lapor</div>
+        <div class="info-val"><%= infoWajib ? infoWajib.total_bulan_harus : 12 %> Bulan</div>
+      </div>
+      <div class="info-box">
+        <div class="info-label">Laporan Sudah Dibuat</div>
+        <div class="info-val" style="color:#28a745;"><%= infoWajib ? infoWajib.total_sudah_lapor : 0 %> Bulan</div>
+      </div>
+    </div>
+
+    <!-- PROGRESS BAR -->
+    <% 
+      const totalHarus = infoWajib ? infoWajib.total_bulan_harus : 12;
+      const sudah = infoWajib ? infoWajib.total_sudah_lapor : 0;
+      const persentase = Math.min(100, Math.round((sudah / (totalHarus || 1)) * 100));
+    %>
+    <div style="margin:25px 0;">
+      <div style="display:flex; justify-content:space-between; font-weight:700; font-size:14px; margin-bottom:6px;">
+        <span>Progress Penyelesaian Kewajiban Wajib Lapor</span>
+        <span><%= persentase %>% (<%= sudah %> dari <%= totalHarus %> Bulan)</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" style="width: <%= persentase %>%;">
+          <%= persentase %>%
+        </div>
+      </div>
+    </div>
+
+    <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:20px; margin-top:25px;">
+      <h3 style="color:#003580; font-size:16px; margin-bottom:10px;"><i class="fas fa-info-circle"></i> Ketentuan Wajib Lapor Online:</h3>
+      <ol style="padding-left:20px; font-size:14px; color:#555; line-height:1.8;">
+        <li>Jadwal pelaporan dibuka secara online pada tanggal <strong><%= config.tanggal_mulai_input %> s/d <%= config.tanggal_akhir_input %></strong> setiap bulannya.</li>
+        <li>Klien wajib menyertakan foto selfie / dokumentasi terkini sebagai verifikasi kehadiran.</li>
+        <li>Jika melewati tanggal <%= config.tanggal_akhir_input %>, sistem online otomatis ditutup dan klien diwajibkan melapor secara tatap muka (offline) ke kantor BAPAS Kelas I Medan.</li>
+        <li>Kepatuhan melapor menjadi salah satu syarat mutlak keberhasilan masa bimbingan kemasyarakatan.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

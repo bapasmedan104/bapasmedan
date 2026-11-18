@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title><%= pageTitle || 'Login - Sistem Wajib Lapor BAPAS Medan' %></title>
+  
+  <!-- SEO & Mobile Meta Tags -->
+  <meta name="description" content="Halaman Login Portal Layanan Wajib Lapor Online & Administrasi Balai Pemasyarakatan (BAPAS) Kelas I Medan.">
+  <meta name="keywords" content="login bapas medan, wajib lapor online, login klien bapas, login admin bapas medan">
+  <meta name="author" content="Balai Pemasyarakatan Kelas I Medan">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#003580">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+      background: linear-gradient(135deg, #001e4d 0%, #003580 50%, #0052a3 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .login-card {
+      background: #ffffff;
+      border-radius: 14px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.35);
+      width: 100%;
+      max-width: 460px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    .login-header {
+      background: #002b66;
+      color: #ffffff;
+      padding: 26px 20px;
+      text-align: center;
+      border-bottom: 4px solid #ffc107;
+    }
+    .login-header img {
+      height: 55px;
+      margin-bottom: 10px;
+    }
+    .login-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      margin-bottom: 4px;
+      letter-spacing: 0.5px;
+    }
+    .login-header p {
+      font-size: 13px;
+      color: #bbdefb;
+    }
+    .tabs-nav {
+      display: flex;
+      background: #f0f4f8;
+      border-bottom: 1px solid #d9e2ec;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 15px 12px;
+      border: none;
+      background: transparent;
+      font-size: 14px;
+      font-weight: 700;
+      color: #627d98;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 48px;
+    }
+    .tab-btn.active {
+      background: #ffffff;
+      color: #003580;
+      border-bottom: 3px solid #003580;
+    }
+    .login-body {
+      padding: 26px 22px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      display: block;
+      font-weight: 700;
+      font-size: 13.5px;
+      color: #102a43;
+      margin-bottom: 8px;
+    }
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .input-wrapper i.input-icon {
+      position: absolute;
+      left: 14px;
+      color: #627d98;
+      font-size: 16px;
+      pointer-events: none;
+    }
+    .input-wrapper input {
+      width: 100%;
+      padding: 13px 44px 13px 42px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 15px;
+      font-family: inherit;
+      color: #1e293b;
+      background: #f8fafc;
+      transition: all 0.2s ease;
+      min-height: 48px;
+    }
+    .input-wrapper input:focus {
+      outline: none;
+      border-color: #003580;
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(0, 53, 128, 0.15);
+    }
+    .toggle-password {
+      position: absolute;
+      right: 12px;
+      background: none;
+      border: none;
+      color: #64748b;
+      cursor: pointer;
+      padding: 8px;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .toggle-password:hover {
+      color: #003580;
+    }
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      background: #003580;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 48px;
+      box-shadow: 0 4px 12px rgba(0, 53, 128, 0.25);
+    }
+    .btn-submit:hover {
+      background: #002255;
+      transform: translateY(-1px);
+    }
+    .btn-submit:active {
+      transform: translateY(1px);
+    }
+    .alert-error {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+      padding: 12px 14px;
+      border-radius: 8px;
+      font-size: 13.5px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      line-height: 1.4;
+    }
+    .credential-hint {
+      margin-top: 18px;
+      padding: 14px;
+      background: #f0fdf4;
+      border: 1px dashed #86efac;
+      border-radius: 8px;
+      font-size: 12.5px;
+      color: #166534;
+      line-height: 1.5;
+    }
+    .credential-hint code {
+      background: #dcfce7;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+    .back-home {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      margin-top: 20px;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #475569;
+      text-decoration: none;
+      padding: 8px;
+      border-radius: 6px;
+      transition: color 0.2s;
+    }
+    .back-home:hover {
+      color: #003580;
+    }
+    
+    @media (max-width: 480px) {
+      .login-header { padding: 20px 16px; }
+      .login-header h2 { font-size: 20px; }
+      .login-body { padding: 20px 16px; }
+      .tab-btn { font-size: 13px; padding: 12px 8px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="login-card">
+  <div class="login-header">
+    <div style="display:flex; justify-content:center; gap:12px; margin-bottom:10px;">
+      <img src="/logo_kemenimpas-removebg-preview.png" alt="Logo Kemenimipas" onerror="this.style.display='none'">
+      <img src="/logo_pemasyarakatan-removebg-preview.png" alt="Logo Pemasyarakatan" onerror="this.style.display='none'">
+    </div>
+    <h2>BAPAS KELAS I MEDAN</h2>
+    <p>Sistem Informasi Wajib Lapor Online</p>
+  </div>
+
+  <div class="tabs-nav">
+    <button type="button" class="tab-btn <%= tipe === 'client' ? 'active' : '' %>" id="tabClientBtn" onclick="selectTab('client')">
+      <i class="fas fa-user"></i> Login Klien
+    </button>
+    <button type="button" class="tab-btn <%= tipe === 'admin' ? 'active' : '' %>" id="tabAdminBtn" onclick="selectTab('admin')">
+      <i class="fas fa-user-shield"></i> Login Admin
+    </button>
+  </div>
+
+  <div class="login-body">
+    <% if (error) { %>
+      <div class="alert-error">
+        <i class="fas fa-exclamation-circle" style="font-size:18px; flex-shrink:0;"></i>
+        <div><%= error %></div>
+      </div>
+    <% } %>
+
+    <form action="/login" method="POST" id="loginForm">
+      <input type="hidden" name="tipe" id="tipeInput" value="<%= tipe === 'admin' ? '1' : '2' %>">
+
+      <div class="form-group">
+        <label for="username" id="userLabel">
+          <%= tipe === 'admin' ? 'Email Terdaftar di Firebase / Username Admin' : 'Username / No. Register Klien' %>
+        </label>
+        <div class="input-wrapper">
+          <i class="fas fa-user input-icon" id="userIcon"></i>
+          <input 
+            type="text" 
+            name="username" 
+            id="username" 
+            placeholder="<%= tipe === 'admin' ? 'Masukkan Email Firebase atau username admin' : 'Masukkan username atau nomor register' %>" 
+            value="<%= username || '' %>" 
+            required 
+            autocomplete="username"
+          >
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Kata Sandi (Password)</label>
+        <div class="input-wrapper">
+          <i class="fas fa-lock input-icon"></i>
+          <input 
+            type="password" 
+            name="password" 
+            id="password" 
+            placeholder="Masukkan kata sandi Anda" 
+            required 
+            autocomplete="current-password"
+          >
+          <button type="button" class="toggle-password" id="togglePasswordBtn" onclick="togglePasswordVisibility()" aria-label="Lihat kata sandi">
+            <i class="fas fa-eye" id="eyeIcon"></i>
+          </button>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-submit" id="submitBtn">
+        <i class="fas fa-sign-in-alt"></i> Masuk Sekarang
+      </button>
+    </form>
+
+    <!-- HINT LOGIN ADMIN -->
+    <div class="credential-hint" id="adminHint" style="<%= tipe === 'admin' ? '' : 'display:none;' %>; background:#eff6ff; border-color:#93c5fd; color:#1e40af;">
+      <strong><i class="fas fa-shield-alt"></i> Panduan Login Admin:</strong><br>
+      • <strong>Firebase Auth:</strong> Gunakan <strong>Email & Sandi</strong> yang terdaftar di Firebase Console.<br>
+      • <strong>Akun Default:</strong> Username: <code>admin</code> | Sandi: <code>admin123</code>
+    </div>
+
+    <!-- HINT LOGIN KLIEN -->
+    <div class="credential-hint" id="clientHint" style="<%= tipe === 'client' ? '' : 'display:none;' %>">
+      <strong><i class="fas fa-info-circle"></i> Info Akun Klien:</strong><br>
+      Gunakan Username atau Nomor Register yang diberikan petugas BAPAS.<br>
+      • Contoh Demo: <code>budi_santoso</code> / Sandi: <code>client123</code>
+    </div>
+
+    <a href="/" class="back-home"><i class="fas fa-arrow-left"></i> Kembali ke Beranda Utama</a>
+  </div>
+</div>
+
+<script>
+  function selectTab(type) {
+    const clientBtn = document.getElementById('tabClientBtn');
+    const adminBtn = document.getElementById('tabAdminBtn');
+    const tipeInput = document.getElementById('tipeInput');
+    const adminHint = document.getElementById('adminHint');
+    const clientHint = document.getElementById('clientHint');
+    const userLabel = document.getElementById('userLabel');
+    const userInput = document.getElementById('username');
+    const userIcon = document.getElementById('userIcon');
+
+    if (type === 'admin') {
+      adminBtn.classList.add('active');
+      clientBtn.classList.remove('active');
+      tipeInput.value = '1';
+      adminHint.style.display = 'block';
+      clientHint.style.display = 'none';
+      userLabel.innerText = 'Email Terdaftar di Firebase / Username Admin';
+      userInput.placeholder = 'Masukkan Email Firebase atau username admin';
+      userIcon.className = 'fas fa-envelope input-icon';
+    } else {
+      clientBtn.classList.add('active');
+      adminBtn.classList.remove('active');
+      tipeInput.value = '2';
+      clientHint.style.display = 'block';
+      adminHint.style.display = 'none';
+      userLabel.innerText = 'Username / No. Register Klien';
+      userInput.placeholder = 'Masukkan username atau nomor register';
+      userIcon.className = 'fas fa-user input-icon';
+    }
+  }
+
+  function togglePasswordVisibility() {
+    const passwordInput = document.getElementById('password');
+    const eyeIcon = document.getElementById('eyeIcon');
+    if (passwordInput.type === 'password') {
+      passwordInput.type = 'text';
+      eyeIcon.className = 'fas fa-eye-slash';
+    } else {
+      passwordInput.type = 'password';
+      eyeIcon.className = 'fas fa-eye';
+    }
+  }
+</script>
+
+</body>
+</html>

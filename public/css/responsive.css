@@ -1,0 +1,229 @@
+/* ==========================================================
+   RESPONSIVE.CSS
+   Lapisan CSS tambahan agar seluruh halaman (publik, login,
+   dashboard admin, dashboard client) responsif dan nyaman
+   digunakan pada perangkat mobile (HP Android, iPhone & Tablet).
+   ========================================================== */
+
+/* Cegah scroll horizontal tak sengaja dan optimalkan rendering teks */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+body {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+img, video, canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ---------- Tablet & HP Besar (<=992px) ---------- */
+@media (max-width: 992px) {
+  .container {
+    padding: 0 16px;
+  }
+}
+
+/* ---------- HP & Tablet Portrait (<=768px) ---------- */
+@media (max-width: 768px) {
+  /* Cegah auto-zoom pada field input di browser mobile */
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+
+  /* Navbar Admin & Client Dashboard di Layar HP */
+  div.navbar {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    padding: 10px 14px !important;
+    row-gap: 8px !important;
+  }
+  div.navbar > div:first-child {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px !important;
+    width: 100%;
+  }
+  div.navbar > div:last-child {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+    justify-content: flex-start;
+    border-top: 1px solid rgba(255,255,255,0.15);
+    padding-top: 8px;
+    margin-left: 0 !important;
+  }
+  div.navbar a {
+    margin-left: 0 !important;
+    font-size: 12.5px !important;
+    padding: 6px 10px !important;
+    background: rgba(255,255,255,0.12);
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    min-height: 36px;
+  }
+
+  /* Jarak Konten Khusus Dashboard */
+  body > div.container {
+    margin-top: 135px !important;
+    padding: 0 14px !important;
+  }
+
+  .header h1 {
+    font-size: 22px !important;
+  }
+
+  /* Tab menu (Overview / Verifikasi Lapor / Kelola Client) digulir horizontal */
+  .tabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    scrollbar-width: thin;
+    padding-bottom: 4px;
+  }
+  .tabs::-webkit-scrollbar { height: 4px; }
+  .tabs::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+  .tab-button {
+    flex: 0 0 auto;
+    padding: 10px 16px;
+    font-size: 13px;
+    min-height: 44px;
+  }
+
+  /* Statistik: 2 kolom di tablet / HP */
+  .stat-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+  .stat-card {
+    padding: 14px !important;
+  }
+  .stat-number {
+    font-size: 22px !important;
+  }
+  .stat-label {
+    font-size: 11px !important;
+  }
+
+  /* Card & Tabel Responsif (bisa digeser ke samping dengan halus) */
+  .card {
+    padding: 16px !important;
+    margin-bottom: 18px !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+  .card-title {
+    font-size: 16px !important;
+  }
+
+  table.table {
+    min-width: 580px;
+  }
+  .table th, .table td {
+    padding: 10px 12px !important;
+    font-size: 13px !important;
+    white-space: nowrap;
+  }
+
+  .table td .btn,
+  .table td .btn-sm {
+    margin-bottom: 4px;
+  }
+
+  /* Form responsive */
+  .form-row {
+    grid-template-columns: 1fr !important;
+    gap: 0 !important;
+  }
+  .search-box input {
+    max-width: 100% !important;
+  }
+
+  /* Kamera & Bukti Foto Wajib Lapor di HP */
+  .video-container {
+    max-width: 100% !important;
+    height: auto !important;
+    margin: 10px 0 !important;
+  }
+  #videoElement {
+    width: 100% !important;
+    height: auto !important;
+    max-height: 280px !important;
+  }
+  .foto-tabs {
+    overflow-x: auto;
+    white-space: nowrap;
+    display: flex;
+    gap: 8px;
+  }
+  .foto-tab {
+    padding: 8px 14px;
+    font-size: 13px;
+    flex-shrink: 0;
+    min-height: 42px;
+  }
+
+  /* Modal responsif */
+  .modal {
+    padding: 10px !important;
+  }
+  .modal-content {
+    padding: 18px !important;
+    max-height: 88vh !important;
+    width: 100% !important;
+  }
+  .modal-content h2 {
+    font-size: 17px !important;
+  }
+  .modal-content .btn {
+    flex: 1 1 auto;
+    justify-content: center;
+    padding: 12px 14px;
+    min-height: 44px;
+  }
+
+  .btn {
+    padding: 10px 16px;
+    font-size: 13.5px;
+    min-height: 42px;
+  }
+
+  /* Flex wrap adjustments */
+  div[style*="display:flex"][style*="gap:"],
+  div[style*="display: flex"][style*="gap:"] {
+    flex-wrap: wrap;
+  }
+}
+
+/* ---------- Layar HP Kecil (<=480px) ---------- */
+@media (max-width: 480px) {
+  body > div.container {
+    margin-top: 155px !important;
+  }
+  .stat-grid {
+    grid-template-columns: 1fr !important;
+  }
+  div.navbar > div:first-child {
+    font-size: 12.5px !important;
+  }
+  .modal-content {
+    padding: 14px !important;
+  }
+  .btn {
+    width: 100%;
+    justify-content: center;
+  }
+  .table td .btn,
+  .table td .btn-sm {
+    width: 100%;
+    justify-content: center;
+  }
+}

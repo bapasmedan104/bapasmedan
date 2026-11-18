@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= pageTitle %></title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family: 'Source Sans 3', sans-serif; background: #f5f7fa; color: #333; }
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0;
+      background: linear-gradient(135deg, #1a3a52 0%, #2d5f8d 100%);
+      color: white; padding: 15px 30px; z-index: 1000;
+      display: flex; justify-content: space-between; align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    }
+    .navbar a { color: white; text-decoration: none; font-size: 14px; margin-left: 20px; }
+    .container { max-width: 1350px; margin: 95px auto 40px; padding: 0 20px; }
+    .header { margin-bottom: 25px; }
+    .header h1 { font-family: 'Playfair Display', serif; color: #1a3a52; font-size: 30px; margin-bottom: 4px; }
+    .tabs-nav { display: flex; gap: 5px; border-bottom: 2px solid #e2e8f0; margin-bottom: 25px; }
+    .tab-btn {
+      padding: 12px 22px; border: none; background: transparent; font-size: 14px; font-weight: 700;
+      color: #64748b; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .tab-btn.active { color: #1a3a52; border-bottom-color: #1a3a52; background: #ffffff; border-radius: 6px 6px 0 0; }
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px; margin-bottom: 25px; }
+    .stat-card {
+      background: white; padding: 22px; border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06); border-left: 4px solid #1a3a52;
+    }
+    .stat-label { color: #64748b; font-size: 12px; text-transform: uppercase; font-weight: 700; margin-bottom: 6px; }
+    .stat-number { font-size: 30px; font-weight: 800; color: #1a3a52; }
+    .card { background: white; border-radius: 8px; padding: 25px; margin-bottom: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .card-title { font-size: 18px; font-weight: 700; color: #1a3a52; margin-bottom: 18px; display: flex; align-items: center; gap: 10px; }
+    .table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    .table th { background: #f8fafc; padding: 12px 14px; text-align: left; font-size: 13px; font-weight: 700; color: #475569; border-bottom: 2px solid #e2e8f0; }
+    .table td { padding: 12px 14px; border-bottom: 1px solid #e2e8f0; font-size: 14px; }
+    .table tr:hover { background: #f8fafc; }
+    .badge { display: inline-block; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+    .badge-warning { background: #fff3cd; color: #856404; }
+    .badge-success { background: #d4edda; color: #155724; }
+    .badge-danger { background: #f8d7da; color: #721c24; }
+    .badge-secondary { background: #e2e8f0; color: #475569; }
+    .btn {
+      padding: 8px 16px; border: none; border-radius: 6px; font-size: 13px; font-weight: 600;
+      cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;
+    }
+    .btn-sm { padding: 6px 12px; font-size: 12px; }
+    .btn-primary { background: #1a3a52; color: white; }
+    .btn-primary:hover { background: #2d5f8d; }
+    .btn-success { background: #28a745; color: white; }
+    .btn-success:hover { background: #218838; }
+    .btn-danger { background: #dc3545; color: white; }
+    .btn-danger:hover { background: #c82333; }
+    .btn-secondary { background: #64748b; color: white; }
+    .modal {
+      display: none; position: fixed; top:0; left:0; right:0; bottom:0;
+      background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center; padding: 20px;
+    }
+    .modal.active { display: flex; }
+    .modal-content { background: white; border-radius: 8px; padding: 28px; max-width: 580px; width: 100%; max-height: 90vh; overflow-y: auto; }
+    .form-group { margin-bottom: 18px; }
+    .form-group label { display: block; font-weight: 600; font-size: 13px; color: #334e68; margin-bottom: 6px; }
+    .form-group input, .form-group textarea, .form-group select {
+      width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: inherit; font-size: 14px;
+    }
+    .form-group input:focus, .form-group textarea:focus { outline: none; border-color: #1a3a52; box-shadow: 0 0 0 3px rgba(26,58,82,0.1); }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+  <div style="font-weight:700; font-size:16px;">
+    <i class="fas fa-gavel"></i> BAPAS MEDAN - ADMINISTRATOR PANEL
+  </div>
+  <div>
+    <a href="/admin/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+    <a href="/admin/riwayat-lapor"><i class="fas fa-filter"></i> Riwayat Lapor (Filter Lengkap)</a>
+    <a href="/admin/kelola-client"><i class="fas fa-users-cog"></i> Kelola Klien</a>
+    <a href="/logout" style="background:rgba(255,255,255,0.2); padding:6px 14px; border-radius:4px;"><i class="fas fa-sign-out-alt"></i> Logout (<%= user.nama_lengkap %>)</a>
+  </div>
+</div>
+
+<div class="container">
+  <div class="header">
+    <h1>Dashboard Administrator</h1>
+    <p style="color:#666;">Pusat Manajemen Pelaporan Wajib Lapor Klien BAPAS Kelas I Medan (Firebase Database)</p>
+  </div>
+
+  <%- include('../partials/alerts') %>
+
+  <!-- STATISTIK KARTU -->
+  <div class="stat-grid">
+    <div class="stat-card" style="border-left-color: #1a3a52;">
+      <div class="stat-label">Total Klien Terdaftar</div>
+      <div class="stat-number"><%= stat.total_client %></div>
+    </div>
+    <div class="stat-card" style="border-left-color: #28a745;">
+      <div class="stat-label">Klien Aktif Bimbingan</div>
+      <div class="stat-number" style="color:#28a745;"><%= stat.client_aktif %></div>
+    </div>
+    <div class="stat-card" style="border-left-color: #ffc107;">
+      <div class="stat-label">Laporan Menunggu Verifikasi</div>
+      <div class="stat-number" style="color:#b7791f;"><%= stat.lapor_menunggu %></div>
+    </div>
+    <div class="stat-card" style="border-left-color: #20c997;">
+      <div class="stat-label">Laporan Diterima</div>
+      <div class="stat-number" style="color:#20c997;"><%= stat.lapor_diterima %></div>
+    </div>
+    <div class="stat-card" style="border-left-color: #dc3545;">
+      <div class="stat-label">Laporan Ditolak</div>
+      <div class="stat-number" style="color:#dc3545;"><%= stat.lapor_ditolak %></div>
+    </div>
+  </div>
+
+  <!-- NAVIGATION TABS -->
+  <div class="tabs-nav">
+    <button class="tab-btn <%= activeTab === 'overview' ? 'active' : '' %>" onclick="switchMainTab('overview', this)">
+      <i class="fas fa-chart-pie"></i> Ringkasan & Konfigurasi
+    </button>
+    <button class="tab-btn <%= activeTab === 'lapor' ? 'active' : '' %>" onclick="switchMainTab('lapor', this)">
+      <i class="fas fa-tasks"></i> Verifikasi Laporan (<%= laporMenunggu.length %>)
+    </button>
+    <button class="tab-btn <%= activeTab === 'client' ? 'active' : '' %>" onclick="switchMainTab('client', this)">
+      <i class="fas fa-users"></i> Klien Terbaru
+    </button>
+  </div>
+
+  <!-- TAB PANE 1: OVERVIEW & KONFIGURASI -->
+  <div class="tab-pane <%= activeTab === 'overview' ? 'active' : '' %>" id="tab-overview">
+    <div style="display:grid; grid-template-columns: 2fr 1.2fr; gap:25px;">
+      <div class="card">
+        <div class="card-title">
+          <i class="fas fa-calendar-alt"></i> Pengaturan Periode Wajib Lapor Bulanan
+        </div>
+        <p style="color:#666; font-size:14px; margin-bottom:20px;">
+          Tentukan rentang tanggal sistem wajib lapor online dibuka untuk seluruh klien binaan. Di luar tanggal ini, sistem akan otomatis tertutup.
+        </p>
+
+        <form action="/admin/konfigurasi/update" method="POST">
+          <input type="hidden" name="config_id" value="<%= config.id %>">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:18px;">
+            <div class="form-group">
+              <label for="tanggal_mulai_input">Tanggal Mulai Input (Tanggal)</label>
+              <input type="number" min="1" max="31" name="tanggal_mulai_input" id="tanggal_mulai_input" value="<%= config.tanggal_mulai_input %>" required>
+            </div>
+            <div class="form-group">
+              <label for="tanggal_akhir_input">Tanggal Akhir Input (Tanggal)</label>
+              <input type="number" min="1" max="31" name="tanggal_akhir_input" id="tanggal_akhir_input" value="<%= config.tanggal_akhir_input %>" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="notifikasi_tertutup">Pesan Pemberitahuan Saat Periode Tutup</label>
+            <textarea name="notifikasi_tertutup" id="notifikasi_tertutup" rows="3" required><%= config.notifikasi_tertutup %></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Simpan Pengaturan Sistem</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <i class="fas fa-bolt"></i> Pintasan Menu Cepat
+        </div>
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <a href="/admin/riwayat-lapor" class="btn btn-primary" style="justify-content:center; padding:14px;">
+            <i class="fas fa-filter"></i> Buka Riwayat Lapor (Filter Lengkap)
+          </a>
+          <a href="/admin/kelola-client" class="btn btn-success" style="justify-content:center; padding:14px;">
+            <i class="fas fa-user-plus"></i> Kelola & Tambah Klien Baru
+          </a>
+          <a href="/admin/riwayat-lapor/export-csv" class="btn btn-secondary" style="justify-content:center; padding:14px;">
+            <i class="fas fa-file-excel"></i> Ekspor Semua Laporan ke CSV
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB PANE 2: VERIFIKASI WAJIB LAPOR -->
+  <div class="tab-pane <%= activeTab === 'lapor' ? 'active' : '' %>" id="tab-lapor">
+    <div class="card">
+      <div class="card-title">
+        <i class="fas fa-clock" style="color:#b7791f;"></i> Daftar Laporan Menunggu Verifikasi Petugas (<%= laporMenunggu.length %>)
+      </div>
+
+      <% if (laporMenunggu && laporMenunggu.length > 0) { %>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Klien & No Register</th>
+              <th>Periode Lapor</th>
+              <th>Tanggal Kirim</th>
+              <th>Foto Bukti</th>
+              <th>Aktivitas Harian</th>
+              <th>Aksi Verifikasi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% laporMenunggu.forEach(function(lapor, idx) { %>
+              <tr>
+                <td><%= idx + 1 %></td>
+                <td>
+                  <strong><%= lapor.nama_lengkap %></strong><br>
+                  <span style="font-size:12px; color:#64748b;"><%= lapor.no_register %></span>
+                </td>
+                <td><strong><%= getNamaBulan(lapor.bulan) %> <%= lapor.tahun %></strong></td>
+                <td><%= formatTanggalWaktu(lapor.tanggal_submit) %></td>
+                <td>
+                  <% if (lapor.foto_bukti) { %>
+                    <a href="<%= getFileUrl(lapor.foto_bukti, 'wajib_lapor') %>" target="_blank" style="color:#0052a3; font-weight:700;"><i class="fas fa-image"></i> Lihat Foto</a>
+                  <% } else { %>
+                    <span style="color:#dc3545; font-size:12px;"><i class="fas fa-times-circle"></i> Tanpa Foto</span>
+                  <% } %>
+                </td>
+                <td style="max-width:240px; font-size:13px;"><%= lapor.aktivitas_harian || '-' %></td>
+                <td>
+                  <div style="display:flex; gap:6px;">
+                    <form action="/admin/lapor/terima" method="POST" style="display:inline;">
+                      <input type="hidden" name="lapor_id" value="<%= lapor.id %>">
+                      <input type="hidden" name="redirect_to" value="/admin/dashboard?tab=lapor">
+                      <button type="submit" class="btn btn-sm btn-success" onclick="return confirm('Terima laporan ini?')"><i class="fas fa-check"></i> Terima</button>
+                    </form>
+                    <button type="button" class="btn btn-sm btn-danger" onclick="openTolakModal('<%= lapor.id %>', '<%= lapor.nama_lengkap %>')"><i class="fas fa-times"></i> Tolak</button>
+                  </div>
+                </td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      <% } else { %>
+        <div style="text-align:center; padding:50px 20px; color:#94a3b8;">
+          <i class="fas fa-check-circle" style="font-size:48px; color:#28a745; margin-bottom:12px;"></i>
+          <p style="font-size:16px; font-weight:600; color:#334e68;">Semua laporan telah diverifikasi!</p>
+          <span style="font-size:13px;">Tidak ada antrean laporan yang menunggu verifikasi saat ini.</span>
+        </div>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- TAB PANE 3: KLIEN TERBARU -->
+  <div class="tab-pane <%= activeTab === 'client' ? 'active' : '' %>" id="tab-client">
+    <div class="card">
+      <div class="card-title">
+        <i class="fas fa-users"></i> Daftar Klien Pemasyarakatan Terbaru
+        <a href="/admin/kelola-client" class="btn btn-sm btn-primary" style="margin-left:auto;"><i class="fas fa-cog"></i> Buka Kelola Klien Lengkap</a>
+      </div>
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th>No Register</th>
+            <th>Nama Lengkap</th>
+            <th>Status Akun</th>
+            <th>No Telepon</th>
+            <th>Profil</th>
+            <th>Masa Wajib Lapor</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% clients.forEach(function(c) { %>
+            <tr>
+              <td><strong><%= c.no_register %></strong></td>
+              <td><%= c.nama_lengkap %></td>
+              <td>
+                <% if (c.status === 'aktif') { %>
+                  <span class="badge badge-success">Aktif</span>
+                <% } else if (c.status === 'selesai') { %>
+                  <span class="badge badge-warning">Selesai</span>
+                <% } else { %>
+                  <span class="badge badge-danger">Nonaktif</span>
+                <% } %>
+              </td>
+              <td><%= c.no_telepon || '-' %></td>
+              <td>
+                <% if (c.profil_lengkap) { %>
+                  <span style="color:#28a745; font-size:12px; font-weight:700;"><i class="fas fa-check-circle"></i> Lengkap</span>
+                <% } else { %>
+                  <span style="color:#e67e22; font-size:12px; font-weight:700;"><i class="fas fa-exclamation-circle"></i> Belum Lengkap</span>
+                <% } %>
+              </td>
+              <td style="font-size:13px;"><%= getNamaBulan(c.bulan_wajib_lapor_mulai) %> <%= c.tahun_wajib_lapor_mulai %> s/d <%= getNamaBulan(c.bulan_wajib_lapor_akhir) %> <%= c.tahun_wajib_lapor_akhir %></td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL TOLAK LAPORAN -->
+<div class="modal" id="modalTolak">
+  <div class="modal-content">
+    <h3 style="color:#dc3545; margin-bottom:15px; font-size:18px;"><i class="fas fa-exclamation-triangle"></i> Tolak Wajib Lapor Klien</h3>
+    <p style="font-size:14px; color:#555; margin-bottom:15px;">
+      Anda akan menolak laporan dari klien: <strong id="tolakClientName"></strong>. Berikan catatan alasan penolakan agar klien dapat memperbaiki laporannya:
+    </p>
+    <form action="/admin/lapor/tolak" method="POST">
+      <input type="hidden" name="lapor_id" id="tolakLaporId">
+      <input type="hidden" name="redirect_to" value="/admin/dashboard?tab=lapor">
+      <div class="form-group">
+        <label for="catatan_admin">Alasan / Catatan Penolakan *</label>
+        <textarea name="catatan_admin" id="catatan_admin" rows="4" placeholder="Misal: Foto bukti tidak jelas atau aktivitas belum lengkap diisi..." required></textarea>
+      </div>
+      <div style="display:flex; justify-content:flex-end; gap:10px;">
+        <button type="button" class="btn btn-secondary" onclick="closeTolakModal()">Batal</button>
+        <button type="submit" class="btn btn-danger"><i class="fas fa-times"></i> Kirim Penolakan</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  function switchMainTab(tabName, btn) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    const target = document.getElementById('tab-' + tabName);
+    if (target) target.classList.add('active');
+  }
+
+  function openTolakModal(laporId, clientName) {
+    document.getElementById('tolakLaporId').value = laporId;
+    document.getElementById('tolakClientName').innerText = clientName;
+    document.getElementById('modalTolak').classList.add('active');
+  }
+
+  function closeTolakModal() {
+    document.getElementById('modalTolak').classList.remove('active');
+  }
+</script>
+
+</body>
+</html>

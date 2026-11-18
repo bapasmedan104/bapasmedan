@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= pageTitle %></title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family: 'Source Sans 3', sans-serif; background: #f5f7fa; color: #333; }
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0;
+      background: linear-gradient(135deg, #1a3a52 0%, #2d5f8d 100%);
+      color: white; padding: 15px 30px; z-index: 1000;
+      display: flex; justify-content: space-between; align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    }
+    .navbar a { color: white; text-decoration: none; font-size: 14px; margin-left: 20px; }
+    .container { max-width: 1400px; margin: 95px auto 40px; padding: 0 20px; }
+    .header { margin-bottom: 25px; }
+    .header h1 { font-family: 'Playfair Display', serif; color: #1a3a52; font-size: 30px; margin-bottom: 4px; }
+    .card { background: white; border-radius: 8px; padding: 25px; margin-bottom: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .card-title { font-size: 18px; font-weight: 700; color: #1a3a52; margin-bottom: 18px; display: flex; align-items: center; gap: 10px; }
+    .filter-panel { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 18px; margin-bottom: 20px; }
+    .table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    .table th { background: #f8fafc; padding: 12px 14px; text-align: left; font-size: 13px; font-weight: 700; color: #475569; border-bottom: 2px solid #e2e8f0; }
+    .table td { padding: 12px 14px; border-bottom: 1px solid #e2e8f0; font-size: 14px; }
+    .table tr:hover { background: #f8fafc; }
+    .badge { display: inline-block; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+    .badge-success { background: #d4edda; color: #155724; }
+    .badge-warning { background: #fff3cd; color: #856404; }
+    .badge-danger { background: #f8d7da; color: #721c24; }
+    .btn {
+      padding: 9px 18px; border: none; border-radius: 6px; font-size: 13px; font-weight: 700;
+      cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;
+    }
+    .btn-sm { padding: 6px 12px; font-size: 12px; }
+    .btn-primary { background: #1a3a52; color: white; }
+    .btn-primary:hover { background: #2d5f8d; }
+    .btn-success { background: #28a745; color: white; }
+    .btn-success:hover { background: #218838; }
+    .btn-danger { background: #dc3545; color: white; }
+    .btn-danger:hover { background: #c82333; }
+    .btn-secondary { background: #64748b; color: white; }
+    .modal {
+      display: none; position: fixed; top:0; left:0; right:0; bottom:0;
+      background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center; padding: 20px;
+    }
+    .modal.active { display: flex; }
+    .modal-content { background: white; border-radius: 8px; padding: 28px; max-width: 650px; width: 100%; max-height: 90vh; overflow-y: auto; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-weight: 600; font-size: 13px; color: #334e68; margin-bottom: 6px; }
+    .form-group input, .form-group select {
+      width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: inherit; font-size: 14px;
+    }
+    .form-group input:focus, .form-group select:focus { outline: none; border-color: #1a3a52; box-shadow: 0 0 0 3px rgba(26,58,82,0.1); }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+  <div style="font-weight:700; font-size:16px;">
+    <i class="fas fa-gavel"></i> BAPAS MEDAN - ADMIN
+  </div>
+  <div>
+    <a href="/admin/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+    <a href="/admin/riwayat-lapor"><i class="fas fa-filter"></i> Riwayat Lapor</a>
+    <a href="/admin/kelola-client" style="font-weight:700; border-bottom:2px solid #ffc107; padding-bottom:4px;"><i class="fas fa-users-cog"></i> Kelola Klien</a>
+    <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout (<%= user.nama_lengkap %>)</a>
+  </div>
+</div>
+
+<div class="container">
+  <div class="header">
+    <h1>Kelola Data Klien Pemasyarakatan</h1>
+    <p style="color:#666;">Registrasi, pembaruan identitas, masa bimbingan wajib lapor, dan monitoring profil klien</p>
+  </div>
+
+  <%- include('../partials/alerts') %>
+
+  <!-- STATISTIK RINGKAS KLIEN -->
+  <div style="display:flex; gap:12px; margin-bottom:20px; flex-wrap:wrap;">
+    <div style="background:#eff6ff; border:1px solid #bfdbfe; padding:10px 16px; border-radius:6px; font-size:13px; color:#1e40af;">
+      Total: <strong><%= stat.total %> Klien</strong>
+    </div>
+    <div style="background:#e8f5e9; border:1px solid #c8e6c9; padding:10px 16px; border-radius:6px; font-size:13px; color:#2e7d32;">
+      Aktif: <strong><%= stat.aktif %> Klien</strong>
+    </div>
+    <div style="background:#fff9db; border:1px solid #ffec99; padding:10px 16px; border-radius:6px; font-size:13px; color:#f08c00;">
+      Selesai: <strong><%= stat.selesai %> Klien</strong>
+    </div>
+    <div style="background:#e3f2fd; border:1px solid #bbdefb; padding:10px 16px; border-radius:6px; font-size:13px; color:#0288d1;">
+      Profil Lengkap: <strong><%= stat.profilLengkap %> Klien</strong>
+    </div>
+  </div>
+
+  <!-- PANEL FILTER & SEARCH -->
+  <div class="filter-panel">
+    <form method="GET" action="/admin/kelola-client" style="display:flex; gap:15px; align-items:center; flex-wrap:wrap; justify-content:space-between;">
+      <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+        <input type="text" name="search" placeholder="Cari nama, register, telepon..." value="<%= filterOptions.search %>" style="padding:9px 12px; border:1px solid #cbd5e1; border-radius:6px; font-size:14px; min-width:240px;">
+
+        <select name="status" onchange="this.form.submit()" style="padding:9px 12px; border:1px solid #cbd5e1; border-radius:6px; font-size:14px;">
+          <option value="all" <%= filterOptions.status === 'all' ? 'selected' : '' %>>Semua Status</option>
+          <option value="aktif" <%= filterOptions.status === 'aktif' ? 'selected' : '' %>>Aktif</option>
+          <option value="selesai" <%= filterOptions.status === 'selesai' ? 'selected' : '' %>>Selesai</option>
+          <option value="nonaktif" <%= filterOptions.status === 'nonaktif' ? 'selected' : '' %>>Nonaktif</option>
+        </select>
+
+        <select name="profil_lengkap" onchange="this.form.submit()" style="padding:9px 12px; border:1px solid #cbd5e1; border-radius:6px; font-size:14px;">
+          <option value="all" <%= filterOptions.profil_lengkap === 'all' ? 'selected' : '' %>>Semua Status Profil</option>
+          <option value="1" <%= filterOptions.profil_lengkap === '1' ? 'selected' : '' %>>Profil Sudah Lengkap</option>
+          <option value="0" <%= filterOptions.profil_lengkap === '0' ? 'selected' : '' %>>Profil Belum Lengkap</option>
+        </select>
+
+        <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Cari</button>
+        <% if (filterOptions.search || filterOptions.status !== 'all' || filterOptions.profil_lengkap !== 'all') { %>
+          <a href="/admin/kelola-client" class="btn btn-secondary"><i class="fas fa-undo"></i> Reset</a>
+        <% } %>
+      </div>
+
+      <div style="display:flex; gap:10px;">
+        <% const queryParams = new URLSearchParams(filterOptions).toString(); %>
+        <a href="/admin/kelola-client/export-csv?<%= queryParams %>" class="btn btn-success" title="Ekspor daftar klien ke CSV">
+          <i class="fas fa-file-excel"></i> Ekspor CSV
+        </a>
+        <button type="button" class="btn btn-primary" onclick="openTambahModal()">
+          <i class="fas fa-user-plus"></i> Tambah Klien Baru
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- TABEL KLIEN -->
+  <div class="card">
+    <div class="card-title">
+      <i class="fas fa-address-book"></i> Daftar Seluruh Klien BAPAS (<%= clients.length %>)
+    </div>
+
+    <% if (clients && clients.length > 0) { %>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>No Register</th>
+            <th>Nama Lengkap</th>
+            <th>Username</th>
+            <th>Kontak / Telp</th>
+            <th>Status Akun</th>
+            <th>Masa Wajib Lapor</th>
+            <th>Profil</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% clients.forEach(function(c, idx) { %>
+            <tr>
+              <td><%= idx + 1 %></td>
+              <td><strong><%= c.no_register %></strong></td>
+              <td>
+                <div style="display:flex; align-items:center; gap:10px;">
+                  <% if (c.foto_profil) { %>
+                    <img src="<%= getFileUrl(c.foto_profil, 'profil') %>" alt="Foto" style="width:34px; height:34px; border-radius:50%; object-fit:cover; border:1px solid #ccc;">
+                  <% } else { %>
+                    <span style="width:34px; height:34px; border-radius:50%; background:#e2e8f0; display:inline-flex; align-items:center; justify-content:center; color:#64748b;"><i class="fas fa-user"></i></span>
+                  <% } %>
+                  <div>
+                    <strong><%= c.nama_lengkap %></strong>
+                    <% if (c.email) { %><br><span style="font-size:12px; color:#64748b;"><%= c.email %></span><% } %>
+                  </div>
+                </div>
+              </td>
+              <td><code><%= c.username %></code></td>
+              <td><%= c.no_telepon || '-' %></td>
+              <td>
+                <% if (c.status === 'aktif') { %>
+                  <span class="badge badge-success">Aktif</span>
+                <% } else if (c.status === 'selesai') { %>
+                  <span class="badge badge-warning">Selesai</span>
+                <% } else { %>
+                  <span class="badge badge-danger">Nonaktif</span>
+                <% } %>
+              </td>
+              <td style="font-size:13px;">
+                <%= getNamaBulan(c.bulan_wajib_lapor_mulai) %> <%= c.tahun_wajib_lapor_mulai %> s/d<br>
+                <%= getNamaBulan(c.bulan_wajib_lapor_akhir) %> <%= c.tahun_wajib_lapor_akhir %>
+                <span style="color:#64748b; font-size:11px;">(<%= c.total_bulan_wajib_lapor || 12 %> bln)</span>
+              </td>
+              <td>
+                <% if (c.profil_lengkap) { %>
+                  <span style="color:#28a745; font-size:12px; font-weight:700;"><i class="fas fa-check-circle"></i> Lengkap</span>
+                <% } else { %>
+                  <span style="color:#e67e22; font-size:12px; font-weight:700;"><i class="fas fa-exclamation-circle"></i> Belum</span>
+                <% } %>
+              </td>
+              <td>
+                <div style="display:flex; gap:6px;">
+                  <button type="button" class="btn btn-sm btn-primary" onclick='openEditModal(<%= JSON.stringify(c) %>)'><i class="fas fa-edit"></i> Edit</button>
+                  <button type="button" class="btn btn-sm btn-danger" onclick="openHapusModal('<%= c.id %>', '<%= c.nama_lengkap %>')"><i class="fas fa-trash"></i> Hapus</button>
+                </div>
+              </td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    <% } else { %>
+      <div style="text-align:center; padding:50px 20px; color:#94a3b8;">
+        <i class="fas fa-user-slash" style="font-size:48px; color:#cbd5e1; margin-bottom:12px;"></i>
+        <p>Tidak ada data klien yang cocok dengan filter yang dipilih.</p>
+      </div>
+    <% } %>
+  </div>
+</div>
+
+<!-- MODAL TAMBAH KLIEN BARU -->
+<div class="modal" id="modalTambah">
+  <div class="modal-content">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid #e2e8f0; padding-bottom:10px;">
+      <h3 style="color:#1a3a52; font-size:18px;"><i class="fas fa-user-plus"></i> Tambah Klien Pemasyarakatan Baru</h3>
+      <button type="button" onclick="closeTambahModal()" style="border:none; background:transparent; font-size:22px; cursor:pointer;">&times;</button>
+    </div>
+
+    <form action="/admin/client/create" method="POST">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
+        <div class="form-group">
+          <label for="username">Username Login *</label>
+          <input type="text" name="username" id="username" placeholder="Contoh: budi_santoso" required>
+        </div>
+        <div class="form-group">
+          <label for="password">Password *</label>
+          <input type="password" name="password" id="password" placeholder="Password minimal 6 karakter" required>
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1.2fr 1fr; gap:15px;">
+        <div class="form-group">
+          <label for="nama_lengkap">Nama Lengkap Klien *</label>
+          <input type="text" name="nama_lengkap" id="nama_lengkap" placeholder="Nama sesuai identitas resmi" required>
+        </div>
+        <div class="form-group">
+          <label for="no_register">Nomor Register *</label>
+          <input type="text" name="no_register" id="no_register" placeholder="Contoh: REG-2025-001" required>
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
+        <div class="form-group">
+          <label for="tanggal_lahir">Tanggal Lahir</label>
+          <input type="date" name="tanggal_lahir" id="tanggal_lahir">
+        </div>
+        <div class="form-group">
+          <label for="no_telepon">Nomor Telepon / WhatsApp</label>
+          <input type="text" name="no_telepon" id="no_telepon" placeholder="08xxxxxxxxxx">
+        </div>
+      </div>
+
+      <!-- PERIODE WAJIB LAPOR -->
+      <div style="background:#f0f7ff; border:1px solid #bfdbfe; padding:15px; border-radius:6px; margin-bottom:18px;">
+        <h4 style="color:#003580; font-size:14px; margin-bottom:10px;"><i class="fas fa-calendar-alt"></i> Periode Masa Wajib Lapor Klien</h4>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:10px;">
+          <div>
+            <label style="font-size:12px; font-weight:700;">Bulan Mulai</label>
+            <select name="bulan_mulai" id="bulan_mulai" onchange="hitungTotalBulan()">
+              <% for(let m=1; m<=12; m++) { %>
+                <option value="<%= m %>"><%= getNamaBulan(m) %></option>
+              <% } %>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:12px; font-weight:700;">Tahun Mulai</label>
+            <input type="number" name="tahun_mulai" id="tahun_mulai" value="<%= new Date().getFullYear() %>" onchange="hitungTotalBulan()">
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+          <div>
+            <label style="font-size:12px; font-weight:700;">Bulan Selesai</label>
+            <select name="bulan_akhir" id="bulan_akhir" onchange="hitungTotalBulan()">
+              <% for(let m=1; m<=12; m++) { %>
+                <option value="<%= m %>" <%= m===12 ? 'selected' : '' %>><%= getNamaBulan(m) %></option>
+              <% } %>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:12px; font-weight:700;">Tahun Selesai</label>
+            <input type="number" name="tahun_akhir" id="tahun_akhir" value="<%= new Date().getFullYear() %>" onchange="hitungTotalBulan()">
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span style="font-size:13px; font-weight:700; color:#1e40af;">Total Kewajiban Pelaporan:</span>
+          <span id="labelTotalBulan" style="font-weight:800; font-size:16px; color:#28a745;">12 Bulan</span>
+          <input type="hidden" name="total_bulan" id="total_bulan" value="12">
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:10px;">
+        <button type="button" class="btn btn-secondary" onclick="closeTambahModal()">Batal</button>
+        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Simpan Data Klien</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL EDIT KLIEN -->
+<div class="modal" id="modalEdit">
+  <div class="modal-content">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid #e2e8f0; padding-bottom:10px;">
+      <h3 style="color:#1a3a52; font-size:18px;"><i class="fas fa-user-edit"></i> Edit Data Klien</h3>
+      <button type="button" onclick="closeEditModal()" style="border:none; background:transparent; font-size:22px; cursor:pointer;">&times;</button>
+    </div>
+
+    <form action="/admin/client/update" method="POST">
+      <input type="hidden" name="client_id" id="editClientId">
+
+      <div class="form-group">
+        <label for="editNama">Nama Lengkap *</label>
+        <input type="text" name="nama_lengkap" id="editNama" required>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
+        <div class="form-group">
+          <label for="editTelepon">Nomor Telepon</label>
+          <input type="text" name="no_telepon" id="editTelepon">
+        </div>
+        <div class="form-group">
+          <label for="editStatus">Status Akun</label>
+          <select name="status" id="editStatus">
+            <option value="aktif">Aktif</option>
+            <option value="selesai">Selesai</option>
+            <option value="nonaktif">Nonaktif</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="editTanggalLahir">Tanggal Lahir</label>
+        <input type="date" name="tanggal_lahir" id="editTanggalLahir">
+      </div>
+
+      <div class="form-group">
+        <label for="editPassword">Reset Password (Kosongkan jika tidak ingin mengubah password)</label>
+        <input type="password" name="password" id="editPassword" placeholder="Masukkan password baru">
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
+        <button type="button" class="btn btn-secondary" onclick="closeEditModal()">Batal</button>
+        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Perbarui Klien</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL HAPUS KLIEN -->
+<div class="modal" id="modalHapus">
+  <div class="modal-content">
+    <h3 style="color:#dc3545; margin-bottom:12px; font-size:18px;"><i class="fas fa-trash"></i> Konfirmasi Hapus Data Klien</h3>
+    <p style="font-size:14px; color:#555; margin-bottom:20px;">
+      Apakah Anda yakin ingin menghapus data klien <strong id="hapusNamaKlien"></strong>? Seluruh data laporan dan riwayat wajib lapor klien tersebut juga akan terhapus permanen dari Firebase.
+    </p>
+    <form action="/admin/client/delete" method="POST">
+      <input type="hidden" name="client_id" id="hapusClientId">
+      <div style="display:flex; justify-content:flex-end; gap:10px;">
+        <button type="button" class="btn btn-secondary" onclick="closeHapusModal()">Batal</button>
+        <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i> Ya, Hapus Klien</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  function openTambahModal() {
+    document.getElementById('modalTambah').classList.add('active');
+    hitungTotalBulan();
+  }
+  function closeTambahModal() {
+    document.getElementById('modalTambah').classList.remove('active');
+  }
+
+  function hitungTotalBulan() {
+    const bMulai = parseInt(document.getElementById('bulan_mulai').value, 10);
+    const tMulai = parseInt(document.getElementById('tahun_mulai').value, 10);
+    const bAkhir = parseInt(document.getElementById('bulan_akhir').value, 10);
+    const tAkhir = parseInt(document.getElementById('tahun_akhir').value, 10);
+
+    let total = (tAkhir - tMulai) * 12 + (bAkhir - bMulai) + 1;
+    if (isNaN(total) || total <= 0) total = 1;
+
+    document.getElementById('labelTotalBulan').innerText = total + ' Bulan';
+    document.getElementById('total_bulan').value = total;
+  }
+
+  function openEditModal(c) {
+    document.getElementById('editClientId').value = c.id;
+    document.getElementById('editNama').value = c.nama_lengkap || '';
+    document.getElementById('editTelepon').value = c.no_telepon || '';
+    document.getElementById('editStatus').value = c.status || 'aktif';
+    document.getElementById('editTanggalLahir').value = c.tanggal_lahir || '';
+    document.getElementById('editPassword').value = '';
+    document.getElementById('modalEdit').classList.add('active');
+  }
+  function closeEditModal() {
+    document.getElementById('modalEdit').classList.remove('active');
+  }
+
+  function openHapusModal(id, nama) {
+    document.getElementById('hapusClientId').value = id;
+    document.getElementById('hapusNamaKlien').innerText = nama;
+    document.getElementById('modalHapus').classList.add('active');
+  }
+  function closeHapusModal() {
+    document.getElementById('modalHapus').classList.remove('active');
+  }
+</script>
+
+</body>
+</html>

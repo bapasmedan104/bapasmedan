@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  
+  <!-- Primary SEO Meta Tags -->
+  <title><%= pageTitle || 'BAPAS Kelas I Medan - Sistem Informasi & Wajib Lapor Online' %></title>
+  <meta name="title" content="<%= pageTitle || 'BAPAS Kelas I Medan - Sistem Informasi & Wajib Lapor Online' %>">
+  <meta name="description" content="<%= typeof pageDescription !== 'undefined' && pageDescription ? pageDescription : 'Situs Resmi Balai Pemasyarakatan (BAPAS) Kelas I Medan, Kementerian Imigrasi dan Pemasyarakatan RI. Layanan Wajib Lapor Online Klien Pemasyarakatan, Pembimbingan Kemasyarakatan, dan Layanan Integrasi Sosial.' %>">
+  <meta name="keywords" content="<%= typeof pageKeywords !== 'undefined' && pageKeywords ? pageKeywords : 'BAPAS Medan, Balai Pemasyarakatan Kelas I Medan, Wajib Lapor Online, Klien Pemasyarakatan, Pembimbing Kemasyarakatan, Kemenimipas, Litmas, Pembebasan Bersyarat, CB, CMB, PB' %>">
+  <meta name="author" content="Balai Pemasyarakatan Kelas I Medan">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="theme-color" content="#003580">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  
+  <!-- Canonical Link -->
+  <link rel="canonical" href="http://localhost:3000<%= typeof canonicalUrl !== 'undefined' ? canonicalUrl : '' %>">
+
+  <!-- Open Graph / Facebook / WhatsApp -->
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="id_ID">
+  <meta property="og:site_name" content="BAPAS Kelas I Medan">
+  <meta property="og:title" content="<%= pageTitle || 'BAPAS Kelas I Medan - Sistem Wajib Lapor' %>">
+  <meta property="og:description" content="<%= typeof pageDescription !== 'undefined' && pageDescription ? pageDescription : 'Situs Resmi Balai Pemasyarakatan Kelas I Medan - Layanan Wajib Lapor Online dan Informasi Pemasyarakatan.' %>">
+  <meta property="og:url" content="http://localhost:3000<%= typeof canonicalUrl !== 'undefined' ? canonicalUrl : '' %>">
+  <meta property="og:image" content="/logo_kemenimpas-removebg-preview.png">
+  <meta property="og:image:width" content="512">
+  <meta property="og:image:height" content="512">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="<%= pageTitle || 'BAPAS Kelas I Medan - Sistem Wajib Lapor' %>">
+  <meta name="twitter:description" content="<%= typeof pageDescription !== 'undefined' && pageDescription ? pageDescription : 'Situs Resmi Balai Pemasyarakatan Kelas I Medan.' %>">
+  <meta name="twitter:image" content="/logo_kemenimpas-removebg-preview.png">
+
+  <!-- Schema.org JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "GovernmentOrganization",
+    "name": "Balai Pemasyarakatan Kelas I Medan",
+    "alternateName": ["BAPAS Medan", "Bapas Kelas 1 Medan"],
+    "url": "http://localhost:3000",
+    "logo": "http://localhost:3000/logo_kemenimpas-removebg-preview.png",
+    "description": "Balai Pemasyarakatan Kelas I Medan adalah Unit Pelaksana Teknis Kementerian Imigrasi dan Pemasyarakatan yang menyelenggarakan penelitian kemasyarakatan, pembimbingan, pengawasan, dan pendampingan klien pemasyarakatan.",
+    "telephone": "(061) 4516516",
+    "email": "bapasmedan@kemenkumham.go.id",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Jl. Lembaga Pemasyarakatan, Tj. Gusta, Kec. Medan Helvetia",
+      "addressLocality": "Medan",
+      "addressRegion": "Sumatera Utara",
+      "postalCode": "20125",
+      "addressCountry": "ID"
+    },
+    "openingHoursSpecification": {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      "opens": "08:00",
+      "closes": "16:00"
+    }
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+<!-- HEADER UTAMA -->
+<header class="header">
+  <div class="container header-inner">
+    <div class="header-logo">
+      <div style="display:flex; align-items:center; gap:12px; flex-shrink:0;">
+        <img src="/logo_kemenimpas-removebg-preview.png" alt="Logo Kemenimipas" style="height:60px;" onerror="this.style.display='none'">
+        <img src="/logo_pemasyarakatan-removebg-preview.png" alt="Logo Pemasyarakatan" style="height:60px;" onerror="this.style.display='none'">
+      </div>
+      <div>
+        <span class="header-sub">
+          KEMENTERIAN IMIGRASI DAN PEMASYARAKATAN REPUBLIK INDONESIA
+        </span>
+        <h1 class="header-main">
+          BALAI PEMASYARAKATAN KELAS I MEDAN
+        </h1>
+        <span class="header-tagline">
+          Kantor Wilayah Sumatera Utara &bull; Menuju Wilayah Bebas dari Korupsi (WBK)
+        </span>
+      </div>
+    </div>
+    <div class="header-contact">
+      <i class="fas fa-envelope"></i>
+      <div>
+        <span class="contact-label">Email Resmi</span>
+        <span class="contact-value">bapasmedan@kemenkumham.go.id</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- NAVIGATION BAR -->
+<nav class="navbar" role="navigation" aria-label="Navigasi Utama">
+  <div class="container nav-container">
+    <ul class="nav-menu" id="navMenu">
+      <li class="nav-item <%= activePage === 'beranda' ? 'active' : '' %>">
+        <a href="/"><i class="fas fa-home"></i> Beranda</a>
+      </li>
+      <li class="nav-item has-dropdown <%= activePage === 'profil' ? 'active' : '' %>">
+        <a href="/profil"><i class="fas fa-building"></i> Profil <i class="fas fa-chevron-down arrow"></i></a>
+        <ul class="dropdown">
+          <li><a href="/profil?sub=profil-pejabat"><i class="fas fa-user-tie"></i> Profil Pejabat</a></li>
+          <li><a href="/profil?sub=sejarah-bapas"><i class="fas fa-history"></i> Sejarah Singkat</a></li>
+          <li><a href="/profil?sub=tugas-fungsi"><i class="fas fa-tasks"></i> Tugas & Fungsi</a></li>
+          <li><a href="/profil?sub=visi-misi"><i class="fas fa-bullseye"></i> Visi & Misi</a></li>
+          <li><a href="/profil?sub=struktur-organisasi"><i class="fas fa-sitemap"></i> Struktur Organisasi</a></li>
+        </ul>
+      </li>
+      <li class="nav-item has-dropdown <%= activePage === 'informasi' ? 'active' : '' %>">
+        <a href="/informasi"><i class="fas fa-info-circle"></i> Informasi Publik <i class="fas fa-chevron-down arrow"></i></a>
+        <ul class="dropdown">
+          <li><a href="/informasi?sub=layanan-integrasi"><i class="fas fa-hands-helping"></i> Layanan Integrasi</a></li>
+          <li><a href="/informasi?sub=alur-serah-terima"><i class="fas fa-exchange-alt"></i> Alur Serah Terima</a></li>
+          <li><a href="/informasi?sub=alur-wajib-lapor"><i class="fas fa-clipboard-list"></i> Alur Wajib Lapor</a></li>
+          <li><a href="/informasi?sub=informasi-lkip"><i class="fas fa-file-alt"></i> Laporan Kinerja (LKIP)</a></li>
+          <li><a href="/informasi?sub=laporan-keuangan"><i class="fas fa-chart-line"></i> Laporan Keuangan</a></li>
+        </ul>
+      </li>
+      <li class="nav-item has-dropdown <%= activePage === 'berita' ? 'active' : '' %>">
+        <a href="/berita"><i class="fas fa-newspaper"></i> Berita <i class="fas fa-chevron-down arrow"></i></a>
+        <ul class="dropdown">
+          <li><a href="/berita?sub=berita-utama"><i class="fas fa-star"></i> Berita Utama</a></li>
+          <li><a href="/berita?sub=berita-terkini"><i class="fas fa-clock"></i> Berita Terkini</a></li>
+        </ul>
+      </li>
+      <li class="nav-item <%= activePage === 'login' ? 'active' : '' %>">
+        <a href="/login"><i class="fas fa-clipboard-check"></i> Wajib Lapor Online</a>
+      </li>
+      <% if (isLoggedIn) { %>
+        <li class="nav-item">
+          <% if (userType === 'admin') { %>
+            <a href="/admin/dashboard" style="background:var(--primary-dark); color:var(--gold);"><i class="fas fa-tachometer-alt"></i> Panel Admin</a>
+          <% } else { %>
+            <a href="/client/dashboard" style="background:var(--primary-dark); color:var(--gold);"><i class="fas fa-user-circle"></i> Dashboard Klien</a>
+          <% } %>
+        </li>
+        <li class="nav-item">
+          <a href="/logout" style="color:#ffebee;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </li>
+      <% } %>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Buka Menu Navigasi"><i class="fas fa-bars"></i></button>
+  </div>
+</nav>

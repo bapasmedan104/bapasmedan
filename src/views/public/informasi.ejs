@@ -1,0 +1,94 @@
+<%- include('../partials/header') %>
+
+<div class="content-breadcrumb" style="background:#f0f4f8; padding:15px 0; border-bottom:1px solid #d9e2ec;">
+  <div class="container" style="display:flex; align-items:center; gap:10px; font-size:13px; color:#627d98;">
+    <a href="/" style="color:#003580; text-decoration:none;">Beranda</a>
+    <i class="fas fa-chevron-right" style="font-size:10px;"></i>
+    <span>Informasi Publik</span>
+    <i class="fas fa-chevron-right" style="font-size:10px;"></i>
+    <span style="font-weight:700; color:#002255;">
+      <% if (sub === 'layanan-integrasi') { %>Layanan Integrasi
+      <% } else if (sub === 'alur-wajib-lapor') { %>Alur Wajib Lapor Online
+      <% } else if (sub === 'alur-serah-terima') { %>Alur Serah Terima Klien
+      <% } else { %>Laporan Kinerja (LKIP)<% } %>
+    </span>
+  </div>
+</div>
+
+<div class="content-page" style="padding:40px 0;">
+  <div class="container" style="display:grid; grid-template-columns:260px 1fr; gap:30px;">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div style="background:#003580; color:#fff; padding:14px 18px; border-radius:6px 6px 0 0; font-weight:700; font-size:14px;">
+        <i class="fas fa-info-circle"></i> Menu Informasi
+      </div>
+      <ul style="list-style:none; padding:0; margin:0; border:1px solid #d9e2ec; border-top:none; border-radius:0 0 6px 6px; background:#fff;">
+        <li style="border-bottom:1px solid #f0f4f8;">
+          <a href="/informasi?sub=layanan-integrasi" style="display:flex; align-items:center; gap:10px; padding:12px 18px; text-decoration:none; color:<%= sub === 'layanan-integrasi' ? '#003580' : '#486581' %>; font-weight:<%= sub === 'layanan-integrasi' ? '700' : '500' %>; background:<%= sub === 'layanan-integrasi' ? '#e3f2fd' : 'transparent' %>;">
+            <i class="fas fa-handshake"></i> Layanan Integrasi
+          </a>
+        </li>
+        <li style="border-bottom:1px solid #f0f4f8;">
+          <a href="/informasi?sub=alur-wajib-lapor" style="display:flex; align-items:center; gap:10px; padding:12px 18px; text-decoration:none; color:<%= sub === 'alur-wajib-lapor' ? '#003580' : '#486581' %>; font-weight:<%= sub === 'alur-wajib-lapor' ? '700' : '500' %>; background:<%= sub === 'alur-wajib-lapor' ? '#e3f2fd' : 'transparent' %>;">
+            <i class="fas fa-clipboard-list"></i> Alur Wajib Lapor
+          </a>
+        </li>
+        <li style="border-bottom:1px solid #f0f4f8;">
+          <a href="/informasi?sub=alur-serah-terima" style="display:flex; align-items:center; gap:10px; padding:12px 18px; text-decoration:none; color:<%= sub === 'alur-serah-terima' ? '#003580' : '#486581' %>; font-weight:<%= sub === 'alur-serah-terima' ? '700' : '500' %>; background:<%= sub === 'alur-serah-terima' ? '#e3f2fd' : 'transparent' %>;">
+            <i class="fas fa-exchange-alt"></i> Alur Serah Terima
+          </a>
+        </li>
+        <li>
+          <a href="/informasi?sub=informasi-lkip" style="display:flex; align-items:center; gap:10px; padding:12px 18px; text-decoration:none; color:<%= sub === 'informasi-lkip' ? '#003580' : '#486581' %>; font-weight:<%= sub === 'informasi-lkip' ? '700' : '500' %>; background:<%= sub === 'informasi-lkip' ? '#e3f2fd' : 'transparent' %>;">
+            <i class="fas fa-file-alt"></i> Informasi LKIP
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="content-main" style="background:#fff; padding:35px; border-radius:8px; box-shadow:0 2px 10px rgba(0,0,0,0.05); line-height:1.8;">
+      <% if (sub === 'alur-wajib-lapor') { %>
+        <h2 style="font-family:'Playfair Display', serif; color:#002255; font-size:26px;">Alur dan Petunjuk Wajib Lapor Online</h2>
+        <div style="width:50px; height:3px; background:#003580; margin:10px 0 25px;"></div>
+        <p>Bagi klien pemasyarakatan BAPAS Kelas I Medan, kewajiban lapor bulanan dapat dilakukan secara daring melalui sistem ini:</p>
+        <div style="margin:25px 0;">
+          <div style="display:flex; gap:15px; margin-bottom:20px;">
+            <div style="width:36px; height:36px; border-radius:50%; background:#003580; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0;">1</div>
+            <div>
+              <h4 style="color:#002255; margin-bottom:4px;">Login ke Akun Klien</h4>
+              <p style="color:#666; font-size:14px;">Gunakan username dan password yang telah diberikan oleh Pembimbing Kemasyarakatan (PK) Anda.</p>
+            </div>
+          </div>
+          <div style="display:flex; gap:15px; margin-bottom:20px;">
+            <div style="width:36px; height:36px; border-radius:50%; background:#003580; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0;">2</div>
+            <div>
+              <h4 style="color:#002255; margin-bottom:4px;">Lengkapi Profil (Login Pertama Kali)</h4>
+              <p style="color:#666; font-size:14px;">Pastikan data domisili terkini, nomor HP aktif, dan foto wajah terbaru telah terisi lengkap.</p>
+            </div>
+          </div>
+          <div style="display:flex; gap:15px; margin-bottom:20px;">
+            <div style="width:36px; height:36px; border-radius:50%; background:#003580; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0;">3</div>
+            <div>
+              <h4 style="color:#002255; margin-bottom:4px;">Isi Form Wajib Lapor Bulanan & Ambil Foto</h4>
+              <p style="color:#666; font-size:14px;">Pengisian dibuka setiap tanggal 1 hingga 15. Tulis aktivitas harian terkini dan ambil foto selfie atau unggah foto bukti.</p>
+            </div>
+          </div>
+          <div style="display:flex; gap:15px;">
+            <div style="width:36px; height:36px; border-radius:50%; background:#28a745; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0;">4</div>
+            <div>
+              <h4 style="color:#002255; margin-bottom:4px;">Verifikasi oleh Admin / Petugas BAPAS</h4>
+              <p style="color:#666; font-size:14px;">Petugas akan memeriksa laporan Anda. Status laporan (Diterima / Ditolak / Menunggu) dapat dipantau di riwayat lapor.</p>
+            </div>
+          </div>
+        </div>
+      <% } else { %>
+        <h2 style="font-family:'Playfair Display', serif; color:#002255; font-size:26px;">Layanan Integrasi Pemasyarakatan</h2>
+        <div style="width:50px; height:3px; background:#003580; margin:10px 0 25px;"></div>
+        <p>Layanan integrasi mencakup pembimbingan, pengawasan, dan pendampingan bagi klien Pembebasan Bersyarat (PB), Cuti Bersyarat (CB), Cuti Menjelang Bebas (CMB), dan Asimilasi di rumah.</p>
+      <% } %>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>
