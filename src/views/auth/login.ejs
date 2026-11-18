@@ -257,15 +257,15 @@
 
       <div class="form-group">
         <label for="username" id="userLabel">
-          <%= tipe === 'admin' ? 'Email Terdaftar di Firebase / Username Admin' : 'Nomor Register / No. WhatsApp / Username Klien' %>
+          <%= tipe === 'admin' ? 'Email / Username Admin' : 'Nomor WhatsApp' %>
         </label>
         <div class="input-wrapper">
-          <i class="fas fa-<%= tipe === 'admin' ? 'user' : 'id-card' %> input-icon" id="userIcon"></i>
+          <i class="fas fa-<%= tipe === 'admin' ? 'user-shield' : 'phone' %> input-icon" id="userIcon"></i>
           <input 
             type="text" 
             name="username" 
             id="username" 
-            placeholder="<%= tipe === 'admin' ? 'Masukkan Email Firebase atau username admin' : 'Masukkan Nomor Register (contoh: REG-2025-001) atau No. HP' %>" 
+            placeholder="<%= tipe === 'admin' ? 'Masukkan email atau username admin' : 'Masukkan nomor WhatsApp Anda' %>" 
             value="<%= username || '' %>" 
             required 
             autocomplete="username"
@@ -296,18 +296,11 @@
       </button>
     </form>
 
-    <!-- HINT LOGIN ADMIN -->
-    <div class="credential-hint" id="adminHint" style="<%= tipe === 'admin' ? '' : 'display:none;' %>; background:#eff6ff; border-color:#93c5fd; color:#1e40af;">
-      <strong><i class="fas fa-shield-alt"></i> Panduan Login Admin:</strong><br>
-      • <strong>Firebase Auth:</strong> Gunakan <strong>Email & Sandi</strong> yang terdaftar di Firebase Console.<br>
-      • <strong>Akun Default:</strong> Username: <code>admin</code> | Sandi: <code>admin123</code>
-    </div>
-
     <!-- HINT LOGIN KLIEN -->
     <div class="credential-hint" id="clientHint" style="<%= tipe === 'client' ? '' : 'display:none;' %>">
       <strong><i class="fas fa-info-circle"></i> Info Akun Klien:</strong><br>
-      Gunakan <strong>Nomor Register</strong> atau <strong>Nomor WhatsApp</strong> serta kata sandi yang dibuat oleh petugas BAPAS saat registrasi.<br>
-      • Contoh Akun: Nomor: <code>REG-2025-001</code> (atau <code>budi_santoso</code>) | Sandi: <code>client123</code>
+      Gunakan <strong>Nomor WhatsApp</strong> dan kata sandi yang telah didaftarkan oleh petugas BAPAS.<br>
+      • Contoh Akun: WhatsApp: <code>08xxxxxxxxxx</code> (atau <code>xxxxx</code>) | Sandi: <code>xxxxx</code>
     </div>
 
     <a href="/" class="back-home"><i class="fas fa-arrow-left"></i> Kembali ke Beranda Utama</a>
@@ -319,7 +312,6 @@
     const clientBtn = document.getElementById('tabClientBtn');
     const adminBtn = document.getElementById('tabAdminBtn');
     const tipeInput = document.getElementById('tipeInput');
-    const adminHint = document.getElementById('adminHint');
     const clientHint = document.getElementById('clientHint');
     const userLabel = document.getElementById('userLabel');
     const userInput = document.getElementById('username');
@@ -329,20 +321,18 @@
       adminBtn.classList.add('active');
       clientBtn.classList.remove('active');
       tipeInput.value = '1';
-      adminHint.style.display = 'block';
-      clientHint.style.display = 'none';
-      userLabel.innerText = 'Email Terdaftar di Firebase / Username Admin';
-      userInput.placeholder = 'Masukkan Email Firebase atau username admin';
-      userIcon.className = 'fas fa-envelope input-icon';
+      if (clientHint) clientHint.style.display = 'none';
+      userLabel.innerText = 'Email / Username Admin';
+      userInput.placeholder = 'Masukkan email atau username admin';
+      userIcon.className = 'fas fa-user-shield input-icon';
     } else {
       clientBtn.classList.add('active');
       adminBtn.classList.remove('active');
       tipeInput.value = '2';
-      clientHint.style.display = 'block';
-      adminHint.style.display = 'none';
-      userLabel.innerText = 'Nomor Register / No. WhatsApp / Username Klien';
-      userInput.placeholder = 'Masukkan Nomor Register (contoh: REG-2025-001) atau No. HP';
-      userIcon.className = 'fas fa-id-card input-icon';
+      if (clientHint) clientHint.style.display = 'block';
+      userLabel.innerText = 'Nomor WhatsApp';
+      userInput.placeholder = 'Masukkan nomor WhatsApp Anda';
+      userIcon.className = 'fas fa-phone input-icon';
     }
   }
 
