@@ -1,11 +1,11 @@
 <%- include('../partials/header') %>
 
-<div class="content-breadcrumb" style="background:#f0f4f8; padding:15px 0; border-bottom:1px solid #d9e2ec;">
-  <div class="container" style="display:flex; align-items:center; gap:10px; font-size:13px; color:#627d98;">
-    <a href="/" style="color:#003580; text-decoration:none;">Beranda</a>
-    <i class="fas fa-chevron-right" style="font-size:10px;"></i>
+<div class="content-breadcrumb" style="background:#f0f4f8; padding:12px 0; border-bottom:1px solid #d9e2ec;">
+  <div class="container breadcrumb-container" style="display:flex; align-items:center; gap:8px; font-size:13px; color:#627d98; flex-wrap:wrap;">
+    <a href="/" style="color:#003580; text-decoration:none;"><i class="fas fa-home"></i> Beranda</a>
+    <i class="fas fa-chevron-right" style="font-size:9px; color:#94a3b8;"></i>
     <span>Profil</span>
-    <i class="fas fa-chevron-right" style="font-size:10px;"></i>
+    <i class="fas fa-chevron-right" style="font-size:9px; color:#94a3b8;"></i>
     <span style="font-weight:700; color:#002255;">
       <% if (sub === 'profil-pejabat') { %>Profil Pejabat
       <% } else if (sub === 'sejarah-bapas') { %>Sejarah BAPAS Medan
@@ -16,62 +16,62 @@
   </div>
 </div>
 
-<div class="content-page" style="padding:40px 0;">
-  <div class="container" style="display:grid; grid-template-columns:260px 1fr; gap:30px;">
+<div class="content-page" style="padding:30px 0;">
+  <div class="container page-layout">
     <!-- SIDEBAR -->
     <div class="sidebar">
-      <div style="background:#003580; color:#fff; padding:14px 18px; border-radius:6px 6px 0 0; font-weight:700; font-size:14px;">
-        <i class="fas fa-building"></i> Menu Profil
+      <div style="background:#003580; color:#fff; padding:14px 18px; border-radius:8px 8px 0 0; font-weight:700; font-size:14px; display:flex; align-items:center; gap:8px;">
+        <i class="fas fa-building" style="color:#ffc107;"></i> Menu Profil
       </div>
-      <ul style="list-style:none; padding:0; margin:0; border:1px solid #d9e2ec; border-top:none; border-radius:0 0 6px 6px; background:#fff;">
+      <ul style="list-style:none; padding:0; margin:0; border:1px solid #d9e2ec; border-top:none; border-radius:0 0 8px 8px; background:#fff; overflow:hidden;">
         <li style="border-bottom:1px solid #f0f4f8;">
-          <a href="/profil?sub=profil-pejabat" style="display:flex; align-items:center; gap:10px; padding:12px 18px; text-decoration:none; color:<%= sub === 'profil-pejabat' ? '#003580' : '#486581' %>; font-weight:<%= sub === 'profil-pejabat' ? '700' : '500' %>; background:<%= sub === 'profil-pejabat' ? '#e3f2fd' : 'transparent' %>;">
-            <i class="fas fa-user-tie"></i> Profil Pejabat
+          <a href="/profil?sub=profil-pejabat" style="display:flex; align-items:center; gap:10px; padding:12px 18px; text-decoration:none; color:<%= sub === 'profil-pejabat' ? '#003580' : '#486581' %>; font-weight:<%= sub === 'profil-pejabat' ? '700' : '500' %>; background:<%= sub === 'profil-pejabat' ? '#e3f2fd' : 'transparent' %>; min-height:44px;">
+            <i class="fas fa-user-tie" style="color:<%= sub === 'profil-pejabat' ? '#003580' : '#94a3b8' %>;"></i> Profil Pejabat
           </a>
         </li>
         <li style="border-bottom:1px solid #f0f4f8;">
-          <a href="/profil?sub=sejarah-bapas" style="display:flex; align-items:center; gap:10px; padding:12px 18px; text-decoration:none; color:<%= sub === 'sejarah-bapas' ? '#003580' : '#486581' %>; font-weight:<%= sub === 'sejarah-bapas' ? '700' : '500' %>; background:<%= sub === 'sejarah-bapas' ? '#e3f2fd' : 'transparent' %>;">
-            <i class="fas fa-history"></i> Sejarah BAPAS Medan
+          <a href="/profil?sub=sejarah-bapas" style="display:flex; align-items:center; gap:10px; padding:12px 18px; text-decoration:none; color:<%= sub === 'sejarah-bapas' ? '#003580' : '#486581' %>; font-weight:<%= sub === 'sejarah-bapas' ? '700' : '500' %>; background:<%= sub === 'sejarah-bapas' ? '#e3f2fd' : 'transparent' %>; min-height:44px;">
+            <i class="fas fa-history" style="color:<%= sub === 'sejarah-bapas' ? '#003580' : '#94a3b8' %>;"></i> Sejarah BAPAS Medan
           </a>
         </li>
         <li style="border-bottom:1px solid #f0f4f8;">
-          <a href="/profil?sub=tugas-fungsi" style="display:flex; align-items:center; gap:10px; padding:12px 18px; text-decoration:none; color:<%= sub === 'tugas-fungsi' ? '#003580' : '#486581' %>; font-weight:<%= sub === 'tugas-fungsi' ? '700' : '500' %>; background:<%= sub === 'tugas-fungsi' ? '#e3f2fd' : 'transparent' %>;">
-            <i class="fas fa-tasks"></i> Tugas dan Fungsi
+          <a href="/profil?sub=tugas-fungsi" style="display:flex; align-items:center; gap:10px; padding:12px 18px; text-decoration:none; color:<%= sub === 'tugas-fungsi' ? '#003580' : '#486581' %>; font-weight:<%= sub === 'tugas-fungsi' ? '700' : '500' %>; background:<%= sub === 'tugas-fungsi' ? '#e3f2fd' : 'transparent' %>; min-height:44px;">
+            <i class="fas fa-tasks" style="color:<%= sub === 'tugas-fungsi' ? '#003580' : '#94a3b8' %>;"></i> Tugas dan Fungsi
           </a>
         </li>
         <li style="border-bottom:1px solid #f0f4f8;">
-          <a href="/profil?sub=visi-misi" style="display:flex; align-items:center; gap:10px; padding:12px 18px; text-decoration:none; color:<%= sub === 'visi-misi' ? '#003580' : '#486581' %>; font-weight:<%= sub === 'visi-misi' ? '700' : '500' %>; background:<%= sub === 'visi-misi' ? '#e3f2fd' : 'transparent' %>;">
-            <i class="fas fa-eye"></i> Visi dan Misi
+          <a href="/profil?sub=visi-misi" style="display:flex; align-items:center; gap:10px; padding:12px 18px; text-decoration:none; color:<%= sub === 'visi-misi' ? '#003580' : '#486581' %>; font-weight:<%= sub === 'visi-misi' ? '700' : '500' %>; background:<%= sub === 'visi-misi' ? '#e3f2fd' : 'transparent' %>; min-height:44px;">
+            <i class="fas fa-eye" style="color:<%= sub === 'visi-misi' ? '#003580' : '#94a3b8' %>;"></i> Visi dan Misi
           </a>
         </li>
         <li>
-          <a href="/profil?sub=struktur-organisasi" style="display:flex; align-items:center; gap:10px; padding:12px 18px; text-decoration:none; color:<%= sub === 'struktur-organisasi' ? '#003580' : '#486581' %>; font-weight:<%= sub === 'struktur-organisasi' ? '700' : '500' %>; background:<%= sub === 'struktur-organisasi' ? '#e3f2fd' : 'transparent' %>;">
-            <i class="fas fa-sitemap"></i> Struktur Organisasi
+          <a href="/profil?sub=struktur-organisasi" style="display:flex; align-items:center; gap:10px; padding:12px 18px; text-decoration:none; color:<%= sub === 'struktur-organisasi' ? '#003580' : '#486581' %>; font-weight:<%= sub === 'struktur-organisasi' ? '700' : '500' %>; background:<%= sub === 'struktur-organisasi' ? '#e3f2fd' : 'transparent' %>; min-height:44px;">
+            <i class="fas fa-sitemap" style="color:<%= sub === 'struktur-organisasi' ? '#003580' : '#94a3b8' %>;"></i> Struktur Organisasi
           </a>
         </li>
       </ul>
     </div>
 
     <!-- MAIN CONTENT -->
-    <div class="content-main" style="background:#fff; padding:35px; border-radius:8px; box-shadow:0 2px 10px rgba(0,0,0,0.05); line-height:1.8;">
+    <div class="content-main" style="background:#fff; padding:32px; border-radius:8px; box-shadow:0 2px 12px rgba(0,0,0,0.06); line-height:1.8;">
       <% if (sub === 'profil-pejabat') { %>
-        <h2 style="font-family:'Playfair Display', serif; color:#002255; font-size:26px;">Profil Pejabat Struktural</h2>
+        <h2 style="font-family:'Playfair Display', serif; color:#002255; font-size:24px;">Profil Pejabat Struktural</h2>
         <div style="width:50px; height:3px; background:#003580; margin:10px 0 25px;"></div>
         <p style="color:#555; margin-bottom:25px;">Berikut adalah daftar pejabat struktural Balai Pemasyarakatan Kelas I Medan yang bertugas memberikan pelayanan terbaik kepada masyarakat dan klien pemasyarakatan.</p>
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:20px;">
-          <div style="border:1px solid #e2e8f0; border-radius:8px; padding:20px; text-align:center;">
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:20px;">
+          <div style="border:1px solid #e2e8f0; border-radius:8px; padding:20px; text-align:center; background:#f8fafc;">
             <div style="width:80px; height:80px; border-radius:50%; background:#e3f2fd; color:#003580; display:flex; align-items:center; justify-content:center; margin:0 auto 15px; font-size:32px;"><i class="fas fa-user-tie"></i></div>
             <h4 style="color:#002255; font-size:16px;">Wahyu Prasetyo, Bc.IP., S.Sos.</h4>
             <p style="color:#0052a3; font-weight:600; font-size:13px; margin:4px 0;">Kepala BAPAS Kelas I Medan</p>
             <span style="font-size:12px; color:#888;">NIP. 19720412 199403 1 001</span>
           </div>
-          <div style="border:1px solid #e2e8f0; border-radius:8px; padding:20px; text-align:center;">
+          <div style="border:1px solid #e2e8f0; border-radius:8px; padding:20px; text-align:center; background:#f8fafc;">
             <div style="width:80px; height:80px; border-radius:50%; background:#e3f2fd; color:#003580; display:flex; align-items:center; justify-content:center; margin:0 auto 15px; font-size:32px;"><i class="fas fa-user-tie"></i></div>
             <h4 style="color:#002255; font-size:16px;">Ir. Siti Rahmawati, S.Sos., M.Si.</h4>
             <p style="color:#0052a3; font-weight:600; font-size:13px; margin:4px 0;">Kepala Sub Bagian Tata Usaha</p>
             <span style="font-size:12px; color:#888;">NIP. 19800415 200212 2 001</span>
           </div>
-          <div style="border:1px solid #e2e8f0; border-radius:8px; padding:20px; text-align:center;">
+          <div style="border:1px solid #e2e8f0; border-radius:8px; padding:20px; text-align:center; background:#f8fafc;">
             <div style="width:80px; height:80px; border-radius:50%; background:#e3f2fd; color:#003580; display:flex; align-items:center; justify-content:center; margin:0 auto 15px; font-size:32px;"><i class="fas fa-user-tie"></i></div>
             <h4 style="color:#002255; font-size:16px;">Drs. Hendra Gunawan, S.H.</h4>
             <p style="color:#0052a3; font-weight:600; font-size:13px; margin:4px 0;">Kasi Bimbingan Klien Dewasa</p>
@@ -80,36 +80,63 @@
         </div>
 
       <% } else if (sub === 'visi-misi') { %>
-        <h2 style="font-family:'Playfair Display', serif; color:#002255; font-size:26px;">Visi dan Misi</h2>
+        <h2 style="font-family:'Playfair Display', serif; color:#002255; font-size:24px;">Visi dan Misi</h2>
         <div style="width:50px; height:3px; background:#003580; margin:10px 0 25px;"></div>
         <div style="background:#e3f2fd; border-left:4px solid #003580; padding:20px; border-radius:6px; margin-bottom:25px;">
-          <h3 style="color:#003580; font-size:18px; margin-bottom:8px;">Visi</h3>
-          <p style="color:#222; font-size:15px; font-style:italic;">"Mewujudkan Pemasyarakatan yang Maju, Humanis, dan Berkeadilan Melalui Pembimbingan Kemasyarakatan yang Berkualitas."</p>
+          <h3 style="color:#003580; font-size:17px; margin-bottom:8px;"><i class="fas fa-bullseye"></i> Visi</h3>
+          <p style="color:#222; font-size:14.5px; font-style:italic; line-height:1.7;">"Mewujudkan Pemasyarakatan yang Maju, Humanis, dan Berkeadilan Melalui Pembimbingan Kemasyarakatan yang Berkualitas."</p>
         </div>
-        <h3 style="color:#002255; font-size:18px; margin-bottom:12px;">Misi</h3>
+        <h3 style="color:#002255; font-size:17px; margin-bottom:12px;"><i class="fas fa-check-circle" style="color:#003580;"></i> Misi</h3>
         <ol style="padding-left:20px; color:#444;">
-          <li>Melaksanakan penelitian kemasyarakatan yang objektif, akurat, dan dapat dipertanggungjawabkan.</li>
-          <li>Melaksanakan pembimbingan kemasyarakatan yang berbasis kompetensi dan kemandirian klien.</li>
-          <li>Melaksanakan pengawasan secara konsisten, terukur, dan berbasis teknologi informasi.</li>
-          <li>Membangun kemitraan dan sinergi dengan instansi terkait serta kelompok masyarakat peduli pemasyarakatan.</li>
+          <li style="margin-bottom:8px;">Melaksanakan penelitian kemasyarakatan yang objektif, akurat, dan dapat dipertanggungjawabkan.</li>
+          <li style="margin-bottom:8px;">Melaksanakan pembimbingan kemasyarakatan yang berbasis kompetensi dan kemandirian klien.</li>
+          <li style="margin-bottom:8px;">Melaksanakan pengawasan secara konsisten, terukur, dan berbasis teknologi informasi.</li>
+          <li style="margin-bottom:8px;">Membangun kemitraan dan sinergi dengan instansi terkait serta kelompok masyarakat peduli pemasyarakatan.</li>
         </ol>
 
       <% } else if (sub === 'tugas-fungsi') { %>
-        <h2 style="font-family:'Playfair Display', serif; color:#002255; font-size:26px;">Tugas dan Fungsi</h2>
+        <h2 style="font-family:'Playfair Display', serif; color:#002255; font-size:24px;">Tugas dan Fungsi</h2>
         <div style="width:50px; height:3px; background:#003580; margin:10px 0 25px;"></div>
-        <p>BAPAS Kelas I Medan mempunyai tugas melaksanakan bimbingan kemasyarakatan sesuai peraturan perundang-undangan yang berlaku.</p>
-        <ul style="padding-left:20px; color:#444; margin-top:15px;">
-          <li>Melakukan penelitian kemasyarakatan (Litmas) untuk peradilan dan pembinaan.</li>
-          <li>Melakukan registrasi klien pemasyarakatan.</li>
-          <li>Melakukan bimbingan kemasyarakatan dan pengentasan anak.</li>
-          <li>Mengikuti sidang peradilan anak dan sidang Tim Pengamat Pemasyarakatan (TPP).</li>
-          <li>Melakukan urusan tata usaha dan rumah tangga BAPAS.</li>
-        </ul>
+        <p style="color:#475569; margin-bottom:15px;">Balai Pemasyarakatan Kelas I Medan mempunyai tugas pokok dan fungsi dalam menyelenggarakan pembimbingan dan pengawasan klien kemasyarakatan sesuai peraturan perundang-undangan:</p>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:15px; margin-top:20px;">
+          <div style="border:1px solid #e2e8f0; border-radius:8px; padding:18px; background:#f8fafc;">
+            <h4 style="color:#003580; font-size:15px; margin-bottom:6px;"><i class="fas fa-search" style="color:#2563eb;"></i> Litmas</h4>
+            <p style="color:#64748b; font-size:13px; margin:0;">Penelitian Kemasyarakatan untuk keperluan peradilan pidana, diversi, dan program reintegrasi sosial.</p>
+          </div>
+          <div style="border:1px solid #e2e8f0; border-radius:8px; padding:18px; background:#f8fafc;">
+            <h4 style="color:#003580; font-size:15px; margin-bottom:6px;"><i class="fas fa-user-graduate" style="color:#16a34a;"></i> Pembimbingan</h4>
+            <p style="color:#64748b; font-size:13px; margin:0;">Bimbingan kepribadian dan kemandirian agar klien siap berintegrasi kembali dengan masyarakat.</p>
+          </div>
+          <div style="border:1px solid #e2e8f0; border-radius:8px; padding:18px; background:#f8fafc;">
+            <h4 style="color:#003580; font-size:15px; margin-bottom:6px;"><i class="fas fa-shield-alt" style="color:#d97706;"></i> Pengawasan</h4>
+            <p style="color:#64748b; font-size:13px; margin:0;">Pengawasan pelaksanaan syarat umum dan khusus selama klien menjalani masa bimbingan pemasyarakatan.</p>
+          </div>
+          <div style="border:1px solid #e2e8f0; border-radius:8px; padding:18px; background:#f8fafc;">
+            <h4 style="color:#003580; font-size:15px; margin-bottom:6px;"><i class="fas fa-child" style="color:#7c3aed;"></i> Pendampingan ABH</h4>
+            <p style="color:#64748b; font-size:13px; margin:0;">Pendampingan bagi Anak yang Berhadapan dengan Hukum dari tingkat penyidikan hingga peradilan.</p>
+          </div>
+        </div>
+
+      <% } else if (sub === 'struktur-organisasi') { %>
+        <h2 style="font-family:'Playfair Display', serif; color:#002255; font-size:24px;">Struktur Organisasi</h2>
+        <div style="width:50px; height:3px; background:#003580; margin:10px 0 25px;"></div>
+        <p style="color:#475569; margin-bottom:20px;">BAPAS Kelas I Medan dipimpin oleh Kepala Balai Pemasyarakatan yang membawahi Sub Bagian Tata Usaha, Seksi Bimbingan Klien Dewasa, Seksi Bimbingan Klien Anak, dan Kelompok Jabatan Fungsional Pembimbing Kemasyarakatan (PK).</p>
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:20px; text-align:center;">
+          <i class="fas fa-sitemap" style="font-size:48px; color:#003580; margin-bottom:12px;"></i>
+          <h4 style="color:#002255; margin-bottom:8px;">Bagan Struktur Organisasi Resmi</h4>
+          <p style="color:#64748b; font-size:13.5px; max-width:600px; margin:0 auto 15px;">Struktur tata kelola Balai Pemasyarakatan Kelas I Medan disusun berdasarkan Permenkumham untuk menjamin efektivitas pembinaan dan layanan publik.</p>
+          <span style="font-size:12.5px; background:#e0f2fe; color:#0369a1; padding:6px 14px; border-radius:20px; font-weight:700;"><i class="fas fa-check-circle"></i> Sesuai Ketetapan Kementerian</span>
+        </div>
 
       <% } else { %>
-        <h2 style="font-family:'Playfair Display', serif; color:#002255; font-size:26px;">Sejarah BAPAS Kelas I Medan</h2>
+        <h2 style="font-family:'Playfair Display', serif; color:#002255; font-size:24px;">Sejarah BAPAS Kelas I Medan</h2>
         <div style="width:50px; height:3px; background:#003580; margin:10px 0 25px;"></div>
-        <p>Balai Pemasyarakatan (BAPAS) Kelas I Medan didirikan sebagai lembaga penunjang peradilan pidana dan pembinaan kemasyarakatan di wilayah Sumatera Utara. Berperan penting mendampingi anak yang berhadapan dengan hukum (ABH) dan klien dewasa dalam program reintegrasi sosial (Pembebasan Bersyarat, Cuti Menjelang Bebas, Cuti Bersyarat, dan Asimilasi).</p>
+        <p style="color:#475569; margin-bottom:15px; font-size:15px; line-height:1.8;">
+          Balai Pemasyarakatan (BAPAS) Kelas I Medan didirikan sebagai salah satu Unit Pelaksana Teknis di bawah naungan Kementerian Hukum dan HAM RI (kini Kementerian Imigrasi dan Pemasyarakatan RI). BAPAS Medan memiliki mandat penting dalam sistem peradilan pidana terpadu di Indonesia.
+        </p>
+        <p style="color:#475569; margin-bottom:15px; font-size:15px; line-height:1.8;">
+          Sebagai garda terdepan pelaksanaan keadilan restoratif dan reintegrasi sosial di wilayah Sumatera Utara, BAPAS Kelas I Medan membimbing ribuan klien pemasyarakatan dewasa maupun anak, memastikan hak-hak mereka terpenuhi serta membantu mereka pulih dan diterima kembali dengan baik oleh masyarakat luas.
+        </p>
       <% } %>
     </div>
   </div>

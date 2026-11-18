@@ -227,3 +227,36 @@ img, video, canvas {
     justify-content: center;
   }
 }
+
+/* ==========================================================
+   TAMPILAN PUBLIK RESPONSIF (BERANDA, PROFIL, INFORMASI, BERITA)
+   Mencegah Tampilan 'Serak' / Melebar di HP & Layar Kecil
+   ========================================================== */
+@media (max-width: 850px) {
+  .page-layout {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 18px !important;
+    width: 100% !important;
+  }
+  .content-page {
+    padding: 18px 0 !important;
+    width: 100% !important;
+  }
+  .content-main {
+    padding: 20px 16px !important;
+    border-radius: 8px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  .sidebar {
+    width: 100% !important;
+  }
+  .sidebar ul {
+    border-radius: 0 0 8px 8px !important;
+  }
+  .breadcrumb-container {
+    font-size: 12px !important;
+    flex-wrap: wrap !important;
+  }
+}
