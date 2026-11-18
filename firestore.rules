@@ -1,0 +1,12 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Izinkan pembacaan dan penulisan untuk sistem BAPAS Medan
+    // (admin, client, wajib_lapor, konfigurasi_sistem, history_log)
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}
