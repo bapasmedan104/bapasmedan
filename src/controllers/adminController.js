@@ -14,7 +14,7 @@ const {
   getKonfigurasi,
   updateKonfigurasi
 } = require('../models/db');
-const { getNamaBulan, formatTanggal, formatTanggalWaktu } = require('../utils/helpers');
+const { getNamaBulan, formatTanggal, formatTanggalWaktu, getFileUrl } = require('../utils/helpers');
 
 async function getDashboard(req, res) {
   try {
@@ -329,10 +329,13 @@ async function getDetailLaporJson(req, res) {
       return res.status(404).json({ success: false, message: 'Laporan tidak ditemukan' });
     }
 
+    const fotoUrl = lapor.foto_bukti ? getFileUrl(lapor.foto_bukti, 'wajib_lapor') : '';
+
     return res.json({
       success: true,
       data: {
         ...lapor,
+        foto_url: fotoUrl,
         nama_bulan: getNamaBulan(lapor.bulan),
         tanggal_submit_formatted: formatTanggalWaktu(lapor.tanggal_submit),
         verified_at_formatted: formatTanggalWaktu(lapor.verified_at)

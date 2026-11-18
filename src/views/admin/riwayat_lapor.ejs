@@ -367,7 +367,12 @@
 
       <div id="dFotoBox" style="margin-bottom:15px; text-align:center;">
         <span style="font-size:12px; color:#64748b; font-weight:700; display:block; text-align:left; margin-bottom:6px;">FOTO BUKTI TERLAMPIR:</span>
-        <img id="dFotoImg" src="" alt="Bukti Foto" style="max-width:100%; max-height:280px; border-radius:8px; border:1px solid #cbd5e1; box-shadow:0 4px 10px rgba(0,0,0,0.1);" onerror="this.onerror=null; this.src='/logo_pemasyarakatan-removebg-preview.png';">
+        <img id="dFotoImg" src="" alt="Bukti Foto" style="max-width:100%; max-height:280px; border-radius:8px; border:1px solid #cbd5e1; box-shadow:0 4px 10px rgba(0,0,0,0.1); cursor:pointer;" onclick="bukaModalFoto(this.src, document.getElementById('dNama').innerText, document.getElementById('dPeriode').innerText)" onerror="this.onerror=null; this.src='/logo_pemasyarakatan-removebg-preview.png';">
+        <div style="margin-top:8px;">
+          <button type="button" class="btn btn-sm" style="font-size:12px; padding:5px 14px; background:#e8f0fe; color:#0052a3; border:1px solid #b3d1ff; cursor:pointer;" onclick="bukaModalFoto(document.getElementById('dFotoImg').src, document.getElementById('dNama').innerText, document.getElementById('dPeriode').innerText)">
+            <i class="fas fa-search-plus"></i> Klik untuk Perbesar Layar Penuh
+          </button>
+        </div>
       </div>
 
       <div id="dCatatanBox" style="margin-bottom:20px; padding:12px; background:#fff3cd; border-radius:6px; color:#856404; font-size:13px; display:none;">
@@ -410,10 +415,17 @@
         document.getElementById('dRencana').innerText = item.rencana_mendatang || '(Tidak ada keterangan)';
         document.getElementById('cancelLaporId').value = item.id;
 
-        if (item.foto_bukti) {
-          const fotoSrc = (item.foto_bukti.startsWith('http://') || item.foto_bukti.startsWith('https://'))
-            ? item.foto_bukti
-            : ('/uploads/wajib_lapor/' + item.foto_bukti);
+        if (item.foto_bukti || item.foto_url) {
+          let fotoSrc = item.foto_url || item.foto_bukti;
+          if (!fotoSrc.startsWith('data:') && !fotoSrc.startsWith('http://') && !fotoSrc.startsWith('https://')) {
+            if (fotoSrc.startsWith('/uploads/')) {
+              // sudah ada prefix
+            } else if (fotoSrc.startsWith('uploads/')) {
+              fotoSrc = '/' + fotoSrc;
+            } else {
+              fotoSrc = '/uploads/wajib_lapor/' + fotoSrc.replace(/^\/+/, '');
+            }
+          }
           document.getElementById('dFotoImg').src = fotoSrc;
           document.getElementById('dFotoBox').style.display = 'block';
         } else {
