@@ -1,6 +1,10 @@
 <!-- SWEETALERT2 & CUSTOM NOTIFIKASI SYSTEM BAPAS MEDAN -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
+  /* Pastikan dialog SweetAlert2 SELALU muncul di layer paling depan di atas seluruh modal & backdrop (z-index tertinggi) */
+  .swal2-container {
+    z-index: 9999999 !important;
+  }
   .bapas-swal-popup {
     border-radius: 14px !important;
     font-family: 'Source Sans 3', sans-serif !important;

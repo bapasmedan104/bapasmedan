@@ -95,6 +95,11 @@
     }
     .modal.active { display: flex; }
     .modal-content { background: white; border-radius: 8px; padding: 28px; max-width: 650px; width: 100%; max-height: 90vh; overflow-y: auto; }
+    
+    /* Pastikan dialog konfirmasi SweetAlert2 selalu tampil di depan modal */
+    .swal2-container {
+      z-index: 9999999 !important;
+    }
 
     /* PRINT STYLES */
     @media print {
@@ -443,7 +448,7 @@
             <input type="hidden" name="lapor_id" id="hapusLaporId">
             <input type="hidden" name="redirect_to" value="/admin/riwayat-lapor">
             <button type="button" class="btn btn-outline" style="color:#dc3545; border-color:#fca5a5;" onclick="konfirmasiHapusLaporPermanen(this.form)" title="Hapus permanen dari database">
-              <i class="fas fa-trash"></i>
+              <i class="fas fa-trash"></i> Hapus
             </button>
           </form>
         </div>

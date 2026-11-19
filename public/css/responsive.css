@@ -837,3 +837,8 @@ textarea:focus {
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25) !important;
   border: 2px solid #003580 !important;
 }
+
+/* SweetAlert2 Popup & Backdrop Z-Index fix agar selalu tampil di depan modal */
+.swal2-container {
+  z-index: 9999999 !important;
+}
