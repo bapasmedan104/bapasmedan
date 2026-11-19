@@ -5,7 +5,7 @@
 
 function getHomePage(req, res) {
   res.render('public/beranda', {
-    pageTitle: 'Beranda - Balai Pemasyarakatan Kelas I Medan | Sistem Wajib Lapor Online',
+    pageTitle: 'Balai Pemasyarakatan Kelas I Medan - Kementerian Imigrasi dan Pemasyarakatan RI',
     pageDescription: 'Situs Resmi Balai Pemasyarakatan (BAPAS) Kelas I Medan, Kementerian Imigrasi dan Pemasyarakatan RI. Layanan Wajib Lapor Klien Online, pembimbingan kemasyarakatan terintegrasi, transparan, dan profesional.',
     pageKeywords: 'BAPAS Medan, Balai Pemasyarakatan Kelas I Medan, Wajib Lapor Online, Klien Pemasyarakatan, Pembimbing Kemasyarakatan, Kemenimipas, Litmas, Asimilasi, Pembebasan Bersyarat, CB, CMB, PB',
     canonicalUrl: '/',
