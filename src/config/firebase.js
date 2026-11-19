@@ -59,25 +59,19 @@ try {
   // Abaikan jika admin SDK gagal
 }
 
-// 2. Inisialisasi Firebase Client SDK (Firestore & Authentication)
+// 2. Inisialisasi Firebase Client SDK (Hanya Authentication untuk verifikasi login email)
 let firebaseAuth = null;
 try {
   const firebase = require('firebase/compat/app');
-  require('firebase/compat/firestore');
   require('firebase/compat/auth');
 
   if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
   }
-  if (!cloudDb) {
-    cloudDb = firebase.firestore();
-    isCloudActive = true;
-    console.log(`🔥 Terhubung ke Firebase Cloud Project: ${firebaseConfig.projectId}`);
-  }
   firebaseAuth = firebase.auth();
   console.log('🔐 Firebase Authentication siap digunakan untuk login');
 } catch (err) {
-  console.warn('⚠️ Gagal inisialisasi Firebase Web/Auth SDK:', err.message);
+  console.warn('⚠️ Gagal inisialisasi Firebase Auth SDK:', err.message);
 }
 
 // ----------------------------------------------------
@@ -100,7 +94,19 @@ const dataDir = isServerless
 const bundledDbFile = path.resolve(process.cwd(), 'data', 'firestore_local.json');
 const localDbFile = path.join(dataDir, 'firestore_local.json');
 
-let inMemoryDb = {
+// BUNDLED SEED DATA - embedded langsung agar tersedia di Cloudflare Workers tanpa filesystem
+let bundledSeedData = null;
+try {
+  bundledSeedData = require('../data/seedData');
+} catch (e) {
+  try {
+    bundledSeedData = require('../../data/firestore_local.json');
+  } catch (e2) {
+    bundledSeedData = null;
+  }
+}
+
+let inMemoryDb = bundledSeedData || {
   admin: {},
   client: {},
   wajib_lapor: {},
@@ -108,13 +114,18 @@ let inMemoryDb = {
   history_log: {}
 };
 
-// Coba muat data awal dari bundled json jika tersedia
+// Coba muat data terbaru dari file lokal jika tersedia (override seed data)
 try {
   if (fs.existsSync(bundledDbFile)) {
-    inMemoryDb = JSON.parse(fs.readFileSync(bundledDbFile, 'utf8') || '{}');
+    const fileContent = JSON.parse(fs.readFileSync(bundledDbFile, 'utf8') || '{}');
+    // Merge file content di atas seed data, file lokal lebih prioritas
+    inMemoryDb = { ...inMemoryDb, ...fileContent };
+    for (const col of Object.keys(fileContent)) {
+      inMemoryDb[col] = { ...(inMemoryDb[col] || {}), ...fileContent[col] };
+    }
   }
 } catch {
-  // Tetap gunakan inMemoryDb default
+  // Tetap gunakan bundled seed data
 }
 
 try {
@@ -355,7 +366,10 @@ class ResilientDocumentRef {
   async get() {
     if (cloudDb) {
       try {
-        const snap = await this.cloudDocRef.get();
+        const timeoutPromise = new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('Firestore doc get timeout')), 4000)
+        );
+        const snap = await Promise.race([this.cloudDocRef.get(), timeoutPromise]);
         return snap;
       } catch (err) {
         if (isPermissionError(err)) {
@@ -450,7 +464,11 @@ class ResilientQuery {
   async get() {
     if (cloudDb && this.cloudQuery) {
       try {
-        const snap = await this.cloudQuery.get();
+        // Timeout 4 detik agar di Cloudflare Workers tidak hang (CPU time limit)
+        const timeoutPromise = new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('Firestore query timeout')), 4000)
+        );
+        const snap = await Promise.race([this.cloudQuery.get(), timeoutPromise]);
         // Jika cloud kosong tapi local ada data (misal baru mulai), gunakan local
         if (snap.empty) {
           const localSnap = await this.localQuery.get();

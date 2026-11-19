@@ -18,6 +18,7 @@ const adminRoutes = require('./src/routes/adminRoutes');
 const clientRoutes = require('./src/routes/clientRoutes');
 
 const app = express();
+app.set('trust proxy', 1);
 
 // Diagnostic ping langsung di level teratas sebelum middleware apapun
 app.get('/ping', (req, res) => {
