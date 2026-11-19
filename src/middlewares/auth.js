@@ -3,9 +3,26 @@ const { getFileUrl } = require('../utils/helpers');
 
 function setLocals(req, res, next) {
   const sess = req.session || {};
-  res.locals.user = sess.user || null;
-  res.locals.userType = sess.userType || null;
-  res.locals.isLoggedIn = Boolean(sess.isLoggedIn);
+  const isReqAdmin = req.path.startsWith('/admin') || req.path.startsWith('/administrator');
+  const isReqClient = req.path.startsWith('/client');
+
+  let currentUser = null;
+  let currentUserType = null;
+
+  if (isReqAdmin && sess.adminUser) {
+    currentUser = sess.adminUser;
+    currentUserType = 'admin';
+  } else if (isReqClient && sess.clientUser) {
+    currentUser = sess.clientUser;
+    currentUserType = 'client';
+  } else {
+    currentUser = sess.user || sess.clientUser || sess.adminUser || null;
+    currentUserType = sess.userType || (sess.clientUser ? 'client' : (sess.adminUser ? 'admin' : null));
+  }
+
+  res.locals.user = currentUser;
+  res.locals.userType = currentUserType;
+  res.locals.isLoggedIn = Boolean(currentUser);
   res.locals.successMessage = sess.successMessage || null;
   res.locals.errorMessage = sess.errorMessage || null;
   res.locals.warningMessage = sess.warningMessage || null;
@@ -22,43 +39,63 @@ function setLocals(req, res, next) {
 }
 
 function requireAdmin(req, res, next) {
-  if (!req.session || !req.session.isLoggedIn || req.session.userType !== 'admin') {
+  const admin = req.session && (req.session.adminUser || (req.session.isLoggedIn && req.session.userType === 'admin' ? req.session.user : null));
+  if (!admin) {
     return res.redirect('/administrator?pesan=login_required');
   }
 
   const now = Date.now();
   const INACTIVITY_TIMEOUT = 2 * 60 * 1000; // 2 Menit (120.000 ms)
+  const lastActivity = req.session.lastAdminActivity || now;
 
-  if (req.session.lastAdminActivity && (now - req.session.lastAdminActivity > INACTIVITY_TIMEOUT)) {
-    // Sesi kedaluwarsa karena tidak ada aktivitas selama 2 menit
-    if (typeof req.session.destroy === 'function') {
-      req.session.destroy();
+  if (now - lastActivity > INACTIVITY_TIMEOUT) {
+    delete req.session.adminUser;
+    if (req.session.userType === 'admin') {
+      delete req.session.user;
+      delete req.session.userType;
+      if (!req.session.clientUser) {
+        req.session.isLoggedIn = false;
+      }
     }
-    req.session = null;
     return res.redirect('/administrator?pesan=timeout');
   }
 
-  // Perbarui waktu aktivitas terakhir
+  // Perbarui waktu aktivitas terakhir & sinkronkan session context admin
   req.session.lastAdminActivity = now;
+  req.session.adminUser = admin;
+  req.session.user = admin;
+  req.session.userType = 'admin';
+  req.session.isLoggedIn = true;
   next();
 }
 
 function requireClient(req, res, next) {
-  if (!req.session.isLoggedIn || req.session.userType !== 'client') {
+  const client = req.session && (req.session.clientUser || (req.session.isLoggedIn && req.session.userType === 'client' ? req.session.user : null));
+  if (!client) {
     return res.redirect('/login?tipe=client&pesan=login_required');
   }
+  // Sinkronkan session context client
+  req.session.clientUser = client;
+  req.session.user = client;
+  req.session.userType = 'client';
+  req.session.isLoggedIn = true;
   next();
 }
 
 async function requireProfilLengkap(req, res, next) {
-  if (!req.session.isLoggedIn || req.session.userType !== 'client') {
-    return res.redirect('/login');
+  const client = req.session && (req.session.clientUser || (req.session.isLoggedIn && req.session.userType === 'client' ? req.session.user : null));
+  if (!client) {
+    return res.redirect('/login?tipe=client&pesan=login_required');
   }
-  const isLengkap = await isProfilClientLengkap(req.session.user.id);
+  const isLengkap = await isProfilClientLengkap(client.id);
   if (!isLengkap) {
     req.session.warningMessage = 'Silakan lengkapi profil Anda terlebih dahulu sebelum mengakses layanan wajib lapor.';
     return res.redirect('/client/profil?belum_lengkap=1');
   }
+  req.session.clientUser = client;
+  req.session.user = client;
+  req.session.userType = 'client';
+  req.session.isLoggedIn = true;
   next();
 }
 

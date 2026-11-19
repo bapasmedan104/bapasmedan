@@ -1,24 +1,23 @@
 const { loginAdmin, loginClient } = require('../models/db');
 
 async function getLoginPage(req, res) {
-  if (req.session && req.session.isLoggedIn) {
-    if (req.session.userType === 'admin') {
-      return res.redirect('/admin/dashboard');
-    }
+  // Hanya jika klien sudah memiliki sesi aktif, alihkan ke dashboard klien
+  const isClientLoggedIn = Boolean(req.session && (req.session.clientUser || (req.session.isLoggedIn && req.session.userType === 'client')));
+  if (isClientLoggedIn) {
     return res.redirect('/client/dashboard');
   }
 
   const tipe = req.query.tipe || 'client';
   const pesan = req.query.pesan || '';
 
-  // Jika ada permintaan admin ke /login, alihkan ke /administrator
+  // Jika ada permintaan admin ke /login?tipe=admin, alihkan ke /administrator
   if (tipe === 'admin') {
     return res.redirect('/administrator' + (pesan ? '?pesan=' + encodeURIComponent(pesan) : ''));
   }
 
   let error = '';
   if (pesan === 'login_required') {
-    error = 'Silakan login terlebih dahulu untuk mengakses halaman tersebut.';
+    error = 'Silakan login terlebih dahulu untuk mengakses layanan klien.';
   } else if (pesan === 'logout_sukses') {
     req.session.successMessage = 'Anda telah berhasil logout.';
   }
@@ -33,11 +32,10 @@ async function getLoginPage(req, res) {
 }
 
 async function getAdminLoginPage(req, res) {
-  if (req.session && req.session.isLoggedIn) {
-    if (req.session.userType === 'admin') {
-      return res.redirect('/admin/dashboard');
-    }
-    return res.redirect('/client/dashboard');
+  // Hanya jika admin sudah memiliki sesi aktif, alihkan ke dashboard admin
+  const isAdminLoggedIn = Boolean(req.session && (req.session.adminUser || (req.session.isLoggedIn && req.session.userType === 'admin')));
+  if (isAdminLoggedIn) {
+    return res.redirect('/admin/dashboard');
   }
 
   const pesan = req.query.pesan || '';
@@ -133,15 +131,16 @@ async function postAdminLogin(req, res) {
       });
     }
 
-    req.session.isLoggedIn = true;
-    req.session.userType = 'admin';
-    req.session.lastAdminActivity = Date.now();
-    req.session.user = {
+    req.session.adminUser = {
       id: adminUser.id,
       username: adminUser.username,
       nama_lengkap: adminUser.nama_lengkap,
       email: adminUser.email
     };
+    req.session.user = req.session.adminUser;
+    req.session.userType = 'admin';
+    req.session.isLoggedIn = true;
+    req.session.lastAdminActivity = Date.now();
     req.session.successMessage = `Selamat datang kembali, ${adminUser.nama_lengkap}!`;
     return res.redirect('/admin/dashboard');
   } catch (err) {
@@ -249,9 +248,7 @@ async function postLogin(req, res) {
       });
     }
 
-    req.session.isLoggedIn = true;
-    req.session.userType = 'client';
-    req.session.user = {
+    req.session.clientUser = {
       id: clientUser.id,
       username: clientUser.username,
       nama_lengkap: clientUser.nama_lengkap,
@@ -260,6 +257,9 @@ async function postLogin(req, res) {
       foto_profil: (clientUser.foto_profil && !clientUser.foto_profil.startsWith('data:')) ? clientUser.foto_profil : (clientUser.foto_profil ? 'has_photo' : null),
       profil_lengkap: clientUser.profil_lengkap
     };
+    req.session.user = req.session.clientUser;
+    req.session.userType = 'client';
+    req.session.isLoggedIn = true;
 
     if (!clientUser.profil_lengkap) {
       req.session.warningMessage = 'Selamat datang! Silakan lengkapi profil Anda terlebih dahulu.';
@@ -282,17 +282,34 @@ async function postLogin(req, res) {
 
 async function logout(req, res) {
   const pesan = req.query.pesan || 'logout_sukses';
-  const isAdmin = (req.session && req.session.userType === 'admin') || req.query.tipe === 'admin';
-  
-  if (req.session && typeof req.session.destroy === 'function') {
-    req.session.destroy(err => {
-      if (err) console.error('Logout error:', err);
-      res.redirect(isAdmin ? `/administrator?pesan=${pesan}` : `/login?pesan=${pesan}`);
-    });
-  } else {
-    req.session = null;
-    res.redirect(isAdmin ? `/administrator?pesan=${pesan}` : `/login?pesan=${pesan}`);
+  const isAdmin = req.query.tipe === 'admin' || (req.headers.referer && req.headers.referer.includes('/admin'));
+
+  if (req.session) {
+    if (isAdmin) {
+      delete req.session.adminUser;
+      if (req.session.userType === 'admin') {
+        req.session.user = req.session.clientUser || null;
+        req.session.userType = req.session.clientUser ? 'client' : null;
+        req.session.isLoggedIn = Boolean(req.session.clientUser);
+      }
+    } else {
+      delete req.session.clientUser;
+      if (req.session.userType === 'client') {
+        req.session.user = req.session.adminUser || null;
+        req.session.userType = req.session.adminUser ? 'admin' : null;
+        req.session.isLoggedIn = Boolean(req.session.adminUser);
+      }
+    }
+
+    if (!req.session.adminUser && !req.session.clientUser) {
+      if (typeof req.session.destroy === 'function') {
+        req.session.destroy();
+      }
+      req.session = null;
+    }
   }
+
+  res.redirect(isAdmin ? `/administrator?pesan=${pesan}` : `/login?pesan=${pesan}`);
 }
 
 module.exports = {

@@ -237,15 +237,24 @@ async function postProfil(req, res) {
     const result = await updateProfilClient(clientId, req.body, fotoRelatif);
 
     if (result.success) {
-      if (req.session && req.session.user) {
-        req.session.user.nama_lengkap = req.body.nama_lengkap;
-        req.session.user.profil_lengkap = 1;
-        // PENTING: JANGAN simpan string base64 gambar yang besar di session cookie (batas max cookie 4KB)
-        // Data gambar asli sudah aman tersimpan di database Firestore
-        if (fotoRelatif && !fotoRelatif.startsWith('data:')) {
-          req.session.user.foto_profil = fotoRelatif;
-        } else if (fotoRelatif) {
-          req.session.user.foto_profil = 'has_photo';
+      if (req.session) {
+        if (req.session.clientUser) {
+          req.session.clientUser.nama_lengkap = req.body.nama_lengkap;
+          req.session.clientUser.profil_lengkap = 1;
+          if (fotoRelatif && !fotoRelatif.startsWith('data:')) {
+            req.session.clientUser.foto_profil = fotoRelatif;
+          } else if (fotoRelatif) {
+            req.session.clientUser.foto_profil = 'has_photo';
+          }
+        }
+        if (req.session.user) {
+          req.session.user.nama_lengkap = req.body.nama_lengkap;
+          req.session.user.profil_lengkap = 1;
+          if (fotoRelatif && !fotoRelatif.startsWith('data:')) {
+            req.session.user.foto_profil = fotoRelatif;
+          } else if (fotoRelatif) {
+            req.session.user.foto_profil = 'has_photo';
+          }
         }
       }
       req.session.successMessage = 'Profil Anda berhasil disimpan!';
