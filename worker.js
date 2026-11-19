@@ -1,15 +1,21 @@
 /**
- * Cloudflare Worker Gateway for BAPAS Kelas I Medan
+ * Cloudflare Worker Native Node.js Server for BAPAS Kelas I Medan
  * 
- * Melayani aset statis dari Cloudflare Global Edge Network
- * dan meneruskan rute dinamis (Express + EJS + Firebase) ke backend serverless.
+ * Menjalankan aplikasi Node.js Express & Firebase Firestore secara NATIVE
+ * langsung di Cloudflare Edge Network (100% mandiri tanpa Netlify).
  */
+
+import { httpServerHandler } from 'cloudflare:node';
+import app from './server.js';
+
+// Jalankan listener server Node.js internal pada port 3000
+app.listen(3000);
+
+const nodeHandler = httpServerHandler({ port: 3000 });
 
 export default {
   async fetch(request, env, ctx) {
-    const url = new URL(request.url);
-
-    // 1. Coba layani aset statis (CSS, JS, gambar) jika binding ASSETS tersedia
+    // 1. Sajikan aset statis (CSS, JS, logo) langsung dari edge cache jika tersedia
     if (env.ASSETS && typeof env.ASSETS.fetch === 'function') {
       try {
         const assetResponse = await env.ASSETS.fetch(request);
@@ -17,44 +23,11 @@ export default {
           return assetResponse;
         }
       } catch (err) {
-        // Lanjutkan ke proxy jika aset tidak ditemukan
+        // Lanjutkan ke Express jika bukan aset statis
       }
     }
 
-    // 2. Proksikan permintaan dinamis ke backend utama BAPAS Medan
-    const targetUrl = new URL(url.pathname + url.search, 'https://bapasmedan.netlify.app');
-
-    const headers = new Headers(request.headers);
-    headers.set('Host', 'bapasmedan.netlify.app');
-    headers.set('X-Forwarded-Host', url.host);
-    headers.set('X-Forwarded-Proto', url.protocol.replace(':', ''));
-
-    try {
-      const response = await fetch(targetUrl.toString(), {
-        method: request.method,
-        headers: headers,
-        body: ['GET', 'HEAD'].includes(request.method) ? undefined : request.body,
-        redirect: 'manual'
-      });
-
-      const resHeaders = new Headers(response.headers);
-      
-      // Pastikan redirect tetap berada di domain Cloudflare
-      const location = resHeaders.get('Location');
-      if (location && location.includes('bapasmedan.netlify.app')) {
-        resHeaders.set('Location', location.replace('https://bapasmedan.netlify.app', url.origin));
-      }
-
-      return new Response(response.body, {
-        status: response.status,
-        statusText: response.statusText,
-        headers: resHeaders
-      });
-    } catch (proxyErr) {
-      return new Response('Gateway Error: Gagal menghubungkan ke backend BAPAS Medan. ' + proxyErr.message, {
-        status: 502,
-        headers: { 'Content-Type': 'text/plain; charset=utf-8' }
-      });
-    }
+    // 2. Jalankan aplikasi Express Node.js secara langsung di Cloudflare
+    return nodeHandler.fetch(request, env, ctx);
   }
 };

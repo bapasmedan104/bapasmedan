@@ -19,8 +19,37 @@ const clientRoutes = require('./src/routes/clientRoutes');
 
 const app = express();
 
-// View engine setup
+let precompiledViews = null;
+try {
+  precompiledViews = require('./src/views/precompiledViews');
+} catch (e) {
+  console.warn('Precompiled views not loaded, using ejs.renderFile fallback.');
+}
+
+// View engine setup (Mendukung precompiled views murni untuk Cloudflare Workers tanpa akses filesystem)
 app.engine('ejs', (filePath, data, cb) => {
+  if (precompiledViews) {
+    const rel = path.relative(path.join(__dirname, 'src', 'views'), filePath)
+                    .replace(/\\/g, '/')
+                    .replace(/\.ejs$/, '');
+    const fn = precompiledViews[rel] || precompiledViews[rel + '.ejs'];
+    if (fn) {
+      try {
+        function includeHelper(name, incData) {
+          const dir = path.posix.dirname(rel);
+          const resolved = path.posix.normalize(path.posix.join(dir, name)).replace(/\.ejs$/, '');
+          const childFn = precompiledViews[resolved] || precompiledViews[resolved + '.ejs'] || precompiledViews[name] || precompiledViews['partials/' + name];
+          if (!childFn) throw new Error('Include not found in precompiled views: ' + name);
+          return childFn(Object.assign({}, data, incData), ejs.escapeXML, includeHelper);
+        }
+        const html = fn(data, ejs.escapeXML, includeHelper);
+        return cb(null, html);
+      } catch (err) {
+        console.warn('Precompiled render error for ' + rel + ', trying renderFile:', err.message);
+      }
+    }
+  }
+
   const opts = {
     views: data.settings && data.settings.views,
     cache: Boolean(data.settings && data.settings['view cache']),
@@ -186,3 +215,4 @@ if (require.main === module) {
 }
 
 module.exports = app;
+module.exports.default = app;

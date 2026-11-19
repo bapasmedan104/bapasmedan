@@ -1,0 +1,2991 @@
+/** Auto-generated precompiled EJS templates for Cloudflare Workers & Serverless **/
+const ejs = require("ejs");
+
+const views = {
+  "admin/dashboard": function anonymous(locals, escapeFn, include, rethrow
+) {
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append("<!DOCTYPE html>\n<html lang=\"id\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>")
+    ; __append(escapeFn( pageTitle ))
+    ; __append("</title>\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n  <link href=\"https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700&display=swap\" rel=\"stylesheet\">\n  <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css\">\n  <link rel=\"stylesheet\" href=\"/css/responsive.css\">\n  <style>\n    * { margin:0; padding:0; box-sizing:border-box; }\n    body { font-family: 'Source Sans 3', sans-serif; background: #f5f7fa; color: #333; }\n    .navbar {\n      position: sticky; top: 0; left: 0; right: 0; width: 100%;\n      background: linear-gradient(135deg, #1a3a52 0%, #2d5f8d 100%);\n      color: white; padding: 15px 30px; z-index: 1000;\n      display: flex; justify-content: space-between; align-items: center;\n      box-shadow: 0 2px 10px rgba(0,0,0,0.15);\n    }\n    .navbar a { color: white; text-decoration: none; font-size: 14px; margin-left: 20px; }\n    .container { max-width: 1350px; margin: 25px auto 40px; padding: 0 20px; }\n    .header { margin-bottom: 25px; }\n    .header h1 { font-family: 'Playfair Display', serif; color: #1a3a52; font-size: 30px; margin-bottom: 4px; }\n    .tabs-nav { display: flex; gap: 5px; border-bottom: 2px solid #e2e8f0; margin-bottom: 25px; }\n    .tab-btn {\n      padding: 12px 22px; border: none; background: transparent; font-size: 14px; font-weight: 700;\n      color: #64748b; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s;\n      display: flex; align-items: center; gap: 8px;\n    }\n    .tab-btn.active { color: #1a3a52; border-bottom-color: #1a3a52; background: #ffffff; border-radius: 6px 6px 0 0; }\n    .tab-pane { display: none; }\n    .tab-pane.active { display: block; }\n    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px; margin-bottom: 25px; }\n    .stat-card {\n      background: white; padding: 22px; border-radius: 8px;\n      box-shadow: 0 2px 8px rgba(0,0,0,0.06); border-left: 4px solid #1a3a52;\n    }\n    .stat-label { color: #64748b; font-size: 12px; text-transform: uppercase; font-weight: 700; margin-bottom: 6px; }\n    .stat-number { font-size: 30px; font-weight: 800; color: #1a3a52; }\n    .card { background: white; border-radius: 8px; padding: 25px; margin-bottom: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }\n    .card-title { font-size: 18px; font-weight: 700; color: #1a3a52; margin-bottom: 18px; display: flex; align-items: center; gap: 10px; }\n    .table { width: 100%; border-collapse: collapse; margin-top: 10px; }\n    .table th { background: #f8fafc; padding: 12px 14px; text-align: left; font-size: 13px; font-weight: 700; color: #475569; border-bottom: 2px solid #e2e8f0; }\n    .table td { padding: 12px 14px; border-bottom: 1px solid #e2e8f0; font-size: 14px; }\n    .table tr:hover { background: #f8fafc; }\n    .badge { display: inline-block; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }\n    .badge-warning { background: #fff3cd; color: #856404; }\n    .badge-success { background: #d4edda; color: #155724; }\n    .badge-danger { background: #f8d7da; color: #721c24; }\n    .badge-secondary { background: #e2e8f0; color: #475569; }\n    .btn {\n      padding: 8px 16px; border: none; border-radius: 6px; font-size: 13px; font-weight: 600;\n      cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;\n    }\n    .btn-sm { padding: 6px 12px; font-size: 12px; }\n    .btn-primary { background: #1a3a52; color: white; }\n    .btn-primary:hover { background: #2d5f8d; }\n    .btn-success { background: #28a745; color: white; }\n    .btn-success:hover { background: #218838; }\n    .btn-danger { background: #dc3545; color: white; }\n    .btn-danger:hover { background: #c82333; }\n    .btn-secondary { background: #64748b; color: white; }\n    .modal {\n      display: none; position: fixed; top:0; left:0; right:0; bottom:0;\n      background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center; padding: 20px;\n    }\n    .modal.active { display: flex; }\n    .modal-content { background: white; border-radius: 8px; padding: 28px; max-width: 580px; width: 100%; max-height: 90vh; overflow-y: auto; }\n    .form-group { margin-bottom: 18px; }\n    .form-group label { display: block; font-weight: 600; font-size: 13px; color: #334e68; margin-bottom: 6px; }\n    .form-group input, .form-group textarea, .form-group select {\n      width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: inherit; font-size: 14px;\n    }\n    .form-group input:focus, .form-group textarea:focus { outline: none; border-color: #1a3a52; box-shadow: 0 0 0 3px rgba(26,58,82,0.1); }\n  </style>\n</head>\n<body>\n\n<!-- NAVBAR -->\n<div class=\"navbar\">\n  <div style=\"font-weight:700; font-size:16px;\">\n    <i class=\"fas fa-gavel\"></i> BAPAS MEDAN - ADMIN\n  </div>\n  <div>\n    <a href=\"/admin/dashboard\" style=\"font-weight:700; border-bottom:2px solid #ffc107; padding-bottom:4px;\"><i class=\"fas fa-tachometer-alt\"></i> Dashboard</a>\n    <a href=\"/admin/riwayat-lapor\"><i class=\"fas fa-filter\"></i> Riwayat Lapor</a>\n    <a href=\"/admin/kelola-client\"><i class=\"fas fa-users-cog\"></i> Kelola Klien</a>\n    <a href=\"/logout\"><i class=\"fas fa-sign-out-alt\"></i> Logout</a>\n  </div>\n</div>\n\n<div class=\"container\">\n  <div class=\"header\">\n    <h1>Dashboard Administrator</h1>\n    <p style=\"color:#666;\">Pusat Manajemen Pelaporan Wajib Lapor Klien BAPAS Kelas I Medan</p>\n  </div>\n\n  ")
+    ; __append( include('../partials/alerts') )
+    ; __append("\n\n  <!-- STATISTIK KARTU -->\n  <div class=\"stat-grid\">\n    <div class=\"stat-card\" style=\"border-left-color: #1a3a52;\">\n      <div class=\"stat-label\">Total Klien Terdaftar</div>\n      <div class=\"stat-number\">")
+    ; __append(escapeFn( stat.total_client ))
+    ; __append("</div>\n    </div>\n    <div class=\"stat-card\" style=\"border-left-color: #28a745;\">\n      <div class=\"stat-label\">Klien Aktif Bimbingan</div>\n      <div class=\"stat-number\" style=\"color:#28a745;\">")
+    ; __append(escapeFn( stat.client_aktif ))
+    ; __append("</div>\n    </div>\n    <div class=\"stat-card\" style=\"border-left-color: #ffc107;\">\n      <div class=\"stat-label\">Laporan Menunggu Verifikasi</div>\n      <div class=\"stat-number\" style=\"color:#b7791f;\">")
+    ; __append(escapeFn( stat.lapor_menunggu ))
+    ; __append("</div>\n    </div>\n    <div class=\"stat-card\" style=\"border-left-color: #20c997;\">\n      <div class=\"stat-label\">Laporan Diterima</div>\n      <div class=\"stat-number\" style=\"color:#20c997;\">")
+    ; __append(escapeFn( stat.lapor_diterima ))
+    ; __append("</div>\n    </div>\n    <div class=\"stat-card\" style=\"border-left-color: #dc3545;\">\n      <div class=\"stat-label\">Laporan Ditolak</div>\n      <div class=\"stat-number\" style=\"color:#dc3545;\">")
+    ; __append(escapeFn( stat.lapor_ditolak ))
+    ; __append("</div>\n    </div>\n  </div>\n\n  <!-- NAVIGATION TABS -->\n  <div class=\"tabs-nav\">\n    <button class=\"tab-btn ")
+    ; __append(escapeFn( activeTab === 'overview' ? 'active' : '' ))
+    ; __append("\" onclick=\"switchMainTab('overview', this)\">\n      <i class=\"fas fa-chart-pie\"></i> Ringkasan & Konfigurasi\n    </button>\n    <button class=\"tab-btn ")
+    ; __append(escapeFn( activeTab === 'lapor' ? 'active' : '' ))
+    ; __append("\" onclick=\"switchMainTab('lapor', this)\">\n      <i class=\"fas fa-tasks\"></i> Verifikasi Laporan (")
+    ; __append(escapeFn( laporMenunggu.length ))
+    ; __append(")\n    </button>\n    <button class=\"tab-btn ")
+    ; __append(escapeFn( activeTab === 'client' ? 'active' : '' ))
+    ; __append("\" onclick=\"switchMainTab('client', this)\">\n      <i class=\"fas fa-users\"></i> Klien Terbaru\n    </button>\n  </div>\n\n  <!-- TAB PANE 1: OVERVIEW & KONFIGURASI -->\n  <div class=\"tab-pane ")
+    ; __append(escapeFn( activeTab === 'overview' ? 'active' : '' ))
+    ; __append("\" id=\"tab-overview\">\n    <div class=\"admin-overview-grid\" style=\"display:grid; grid-template-columns: 2fr 1.2fr; gap:25px;\">\n      <div class=\"card\">\n        <div class=\"card-title\">\n          <i class=\"fas fa-calendar-alt\"></i> Pengaturan Periode Wajib Lapor Bulanan\n        </div>\n        <p style=\"color:#666; font-size:14px; margin-bottom:20px;\">\n          Tentukan rentang tanggal sistem wajib lapor online dibuka untuk seluruh klien binaan. Di luar tanggal ini, sistem akan otomatis tertutup.\n        </p>\n\n        <form action=\"/admin/konfigurasi/update\" method=\"POST\">\n          <input type=\"hidden\" name=\"config_id\" value=\"")
+    ; __append(escapeFn( config.id ))
+    ; __append("\">\n          <div class=\"form-row-2col\" style=\"display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:18px;\">\n            <div class=\"form-group\">\n              <label for=\"tanggal_mulai_input\">Tanggal Mulai Input (Tanggal)</label>\n              <input type=\"number\" min=\"1\" max=\"31\" name=\"tanggal_mulai_input\" id=\"tanggal_mulai_input\" value=\"")
+    ; __append(escapeFn( config.tanggal_mulai_input ))
+    ; __append("\" required>\n            </div>\n            <div class=\"form-group\">\n              <label for=\"tanggal_akhir_input\">Tanggal Akhir Input (Tanggal)</label>\n              <input type=\"number\" min=\"1\" max=\"31\" name=\"tanggal_akhir_input\" id=\"tanggal_akhir_input\" value=\"")
+    ; __append(escapeFn( config.tanggal_akhir_input ))
+    ; __append("\" required>\n            </div>\n          </div>\n\n          <div class=\"form-group\">\n            <label for=\"notifikasi_tertutup\">Pesan Pemberitahuan Saat Periode Tutup</label>\n            <textarea name=\"notifikasi_tertutup\" id=\"notifikasi_tertutup\" rows=\"3\" required>")
+    ; __append(escapeFn( config.notifikasi_tertutup ))
+    ; __append("</textarea>\n          </div>\n\n          <button type=\"submit\" class=\"btn btn-primary\"><i class=\"fas fa-save\"></i> Simpan Pengaturan Sistem</button>\n        </form>\n      </div>\n\n      <div class=\"card\">\n        <div class=\"card-title\">\n          <i class=\"fas fa-bolt\"></i> Pintasan Menu Cepat\n        </div>\n        <div style=\"display:flex; flex-direction:column; gap:12px;\">\n          <a href=\"/admin/riwayat-lapor\" class=\"btn btn-primary\" style=\"justify-content:center; padding:14px;\">\n            <i class=\"fas fa-filter\"></i> Buka Riwayat Lapor (Filter Lengkap)\n          </a>\n          <a href=\"/admin/kelola-client\" class=\"btn btn-success\" style=\"justify-content:center; padding:14px;\">\n            <i class=\"fas fa-user-plus\"></i> Kelola & Tambah Klien Baru\n          </a>\n          <a href=\"/admin/riwayat-lapor/export-csv\" class=\"btn btn-secondary\" style=\"justify-content:center; padding:14px;\">\n            <i class=\"fas fa-file-excel\"></i> Ekspor Semua Laporan ke CSV\n          </a>\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <!-- TAB PANE 2: VERIFIKASI WAJIB LAPOR -->\n  <div class=\"tab-pane ")
+    ; __append(escapeFn( activeTab === 'lapor' ? 'active' : '' ))
+    ; __append("\" id=\"tab-lapor\">\n    <div class=\"card\">\n      <div class=\"card-title\">\n        <i class=\"fas fa-clock\" style=\"color:#b7791f;\"></i> Daftar Laporan Menunggu Verifikasi Petugas (")
+    ; __append(escapeFn( laporMenunggu.length ))
+    ; __append(")\n      </div>\n\n      ")
+    ;  if (laporMenunggu && laporMenunggu.length > 0) { 
+    ; __append("\n        <div class=\"table-responsive\">\n          <table class=\"table\">\n            <thead>\n              <tr>\n                <th>No</th>\n                <th>Klien & No Register</th>\n                <th>Periode Lapor</th>\n                <th>Tanggal Kirim</th>\n                <th>Foto Bukti</th>\n                <th>Aktivitas Harian</th>\n                <th>Aksi Verifikasi</th>\n              </tr>\n            </thead>\n            <tbody>\n              ")
+    ;  laporMenunggu.forEach(function(lapor, idx) { 
+    ; __append("\n                <tr>\n                  <td>")
+    ; __append(escapeFn( idx + 1 ))
+    ; __append("</td>\n                  <td>\n                    <strong>")
+    ; __append(escapeFn( lapor.nama_lengkap ))
+    ; __append("</strong><br>\n                    <span style=\"font-size:12px; color:#64748b;\">")
+    ; __append(escapeFn( lapor.no_register ))
+    ; __append("</span>\n                  </td>\n                  <td><strong>")
+    ; __append(escapeFn( getNamaBulan(lapor.bulan) ))
+    ; __append(" ")
+    ; __append(escapeFn( lapor.tahun ))
+    ; __append("</strong></td>\n                  <td>")
+    ; __append(escapeFn( formatTanggalWaktu(lapor.tanggal_submit) ))
+    ; __append("</td>\n                  <td>\n                    ")
+    ;  if (lapor.foto_bukti) { 
+    ; __append("\n                      <button type=\"button\" class=\"btn btn-sm\" style=\"color:#0052a3; font-weight:700; background:#e8f0fe; border:1px solid #b3d1ff; cursor:pointer; padding:5px 10px; border-radius:4px; display:inline-flex; align-items:center; gap:5px;\" onclick=\"bukaModalFoto('")
+    ; __append(escapeFn( getFileUrl(lapor.foto_bukti, 'wajib_lapor') ))
+    ; __append("', '")
+    ; __append(escapeFn( lapor.nama_lengkap ))
+    ; __append("', '")
+    ; __append(escapeFn( getNamaBulan(lapor.bulan) ))
+    ; __append(" ")
+    ; __append(escapeFn( lapor.tahun ))
+    ; __append("')\">\n                        <i class=\"fas fa-image\"></i> Lihat Foto\n                      </button>\n                    ")
+    ;  } else { 
+    ; __append("\n                      <span style=\"color:#dc3545; font-size:12px;\"><i class=\"fas fa-times-circle\"></i> Tanpa Foto</span>\n                    ")
+    ;  } 
+    ; __append("\n                  </td>\n                  <td style=\"max-width:240px; font-size:13px;\">")
+    ; __append(escapeFn( lapor.aktivitas_harian || '-' ))
+    ; __append("</td>\n                  <td>\n                    <div style=\"display:flex; gap:6px;\">\n                      <form action=\"/admin/lapor/terima\" method=\"POST\" style=\"display:inline;\">\n                        <input type=\"hidden\" name=\"lapor_id\" value=\"")
+    ; __append(escapeFn( lapor.id ))
+    ; __append("\">\n                        <input type=\"hidden\" name=\"redirect_to\" value=\"/admin/dashboard?tab=lapor\">\n                        <button type=\"button\" class=\"btn btn-sm btn-success\" onclick=\"konfirmasiTerimaLapor(this.form, '")
+    ; __append(escapeFn( lapor.nama_lengkap ))
+    ; __append("')\"><i class=\"fas fa-check\"></i> Terima</button>\n                      </form>\n                      <button type=\"button\" class=\"btn btn-sm btn-danger\" onclick=\"openTolakModal('")
+    ; __append(escapeFn( lapor.id ))
+    ; __append("', '")
+    ; __append(escapeFn( lapor.nama_lengkap ))
+    ; __append("')\"><i class=\"fas fa-times\"></i> Tolak</button>\n                    </div>\n                  </td>\n                </tr>\n              ")
+    ;  }); 
+    ; __append("\n            </tbody>\n          </table>\n        </div>\n      ")
+    ;  } else { 
+    ; __append("\n        <div style=\"text-align:center; padding:50px 20px; color:#94a3b8;\">\n          <i class=\"fas fa-check-circle\" style=\"font-size:48px; color:#28a745; margin-bottom:12px;\"></i>\n          <p style=\"font-size:16px; font-weight:600; color:#334e68;\">Semua laporan telah diverifikasi!</p>\n          <span style=\"font-size:13px;\">Tidak ada antrean laporan yang menunggu verifikasi saat ini.</span>\n        </div>\n      ")
+    ;  } 
+    ; __append("\n    </div>\n  </div>\n\n  <!-- TAB PANE 3: KLIEN TERBARU -->\n  <div class=\"tab-pane ")
+    ; __append(escapeFn( activeTab === 'client' ? 'active' : '' ))
+    ; __append("\" id=\"tab-client\">\n    <div class=\"card\">\n      <div class=\"card-title\">\n        <i class=\"fas fa-users\"></i> Daftar Klien Pemasyarakatan Terbaru\n        <a href=\"/admin/kelola-client\" class=\"btn btn-sm btn-primary\" style=\"margin-left:auto;\"><i class=\"fas fa-cog\"></i> Buka Kelola Klien Lengkap</a>\n      </div>\n\n      <table class=\"table\">\n        <thead>\n          <tr>\n            <th>No Register</th>\n            <th>Nama Lengkap</th>\n            <th>Status Akun</th>\n            <th>No Telepon</th>\n            <th>Profil</th>\n            <th>Masa Wajib Lapor</th>\n          </tr>\n        </thead>\n        <tbody>\n          ")
+    ;  clients.forEach(function(c) { 
+    ; __append("\n            <tr>\n              <td><strong>")
+    ; __append(escapeFn( c.no_register ))
+    ; __append("</strong></td>\n              <td>")
+    ; __append(escapeFn( c.nama_lengkap ))
+    ; __append("</td>\n              <td>\n                ")
+    ;  if (c.status === 'aktif') { 
+    ; __append("\n                  <span class=\"badge badge-success\">Aktif</span>\n                ")
+    ;  } else if (c.status === 'selesai') { 
+    ; __append("\n                  <span class=\"badge badge-warning\">Selesai</span>\n                ")
+    ;  } else { 
+    ; __append("\n                  <span class=\"badge badge-danger\">Nonaktif</span>\n                ")
+    ;  } 
+    ; __append("\n              </td>\n              <td>")
+    ; __append(escapeFn( c.no_telepon || '-' ))
+    ; __append("</td>\n              <td>\n                ")
+    ;  if (c.profil_lengkap) { 
+    ; __append("\n                  <span style=\"color:#28a745; font-size:12px; font-weight:700;\"><i class=\"fas fa-check-circle\"></i> Lengkap</span>\n                ")
+    ;  } else { 
+    ; __append("\n                  <span style=\"color:#e67e22; font-size:12px; font-weight:700;\"><i class=\"fas fa-exclamation-circle\"></i> Belum Lengkap</span>\n                ")
+    ;  } 
+    ; __append("\n              </td>\n              <td style=\"font-size:13px;\">")
+    ; __append(escapeFn( getNamaBulan(c.bulan_wajib_lapor_mulai) ))
+    ; __append(" ")
+    ; __append(escapeFn( c.tahun_wajib_lapor_mulai ))
+    ; __append(" s/d ")
+    ; __append(escapeFn( getNamaBulan(c.bulan_wajib_lapor_akhir) ))
+    ; __append(" ")
+    ; __append(escapeFn( c.tahun_wajib_lapor_akhir ))
+    ; __append("</td>\n            </tr>\n          ")
+    ;  }); 
+    ; __append("\n        </tbody>\n      </table>\n    </div>\n  </div>\n</div>\n\n<!-- MODAL TOLAK LAPORAN -->\n<div class=\"modal\" id=\"modalTolak\">\n  <div class=\"modal-content\">\n    <h3 style=\"color:#dc3545; margin-bottom:15px; font-size:18px;\"><i class=\"fas fa-exclamation-triangle\"></i> Tolak Wajib Lapor Klien</h3>\n    <p style=\"font-size:14px; color:#555; margin-bottom:15px;\">\n      Anda akan menolak laporan dari klien: <strong id=\"tolakClientName\"></strong>. Berikan catatan alasan penolakan agar klien dapat memperbaiki laporannya:\n    </p>\n    <form action=\"/admin/lapor/tolak\" method=\"POST\">\n      <input type=\"hidden\" name=\"lapor_id\" id=\"tolakLaporId\">\n      <input type=\"hidden\" name=\"redirect_to\" value=\"/admin/dashboard?tab=lapor\">\n      <div class=\"form-group\">\n        <label for=\"catatan_admin\">Alasan / Catatan Penolakan *</label>\n        <textarea name=\"catatan_admin\" id=\"catatan_admin\" rows=\"4\" placeholder=\"Misal: Foto bukti tidak jelas atau aktivitas belum lengkap diisi...\" required></textarea>\n      </div>\n      <div style=\"display:flex; justify-content:flex-end; gap:10px;\">\n        <button type=\"button\" class=\"btn btn-secondary\" onclick=\"closeTolakModal()\">Batal</button>\n        <button type=\"submit\" class=\"btn btn-danger\"><i class=\"fas fa-times\"></i> Kirim Penolakan</button>\n      </div>\n    </form>\n  </div>\n</div>\n\n<script>\n  function switchMainTab(tabName, btn) {\n    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));\n    document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));\n    if (btn) btn.classList.add('active');\n    const target = document.getElementById('tab-' + tabName);\n    if (target) target.classList.add('active');\n  }\n\n  function openTolakModal(laporId, clientName) {\n    document.getElementById('tolakLaporId').value = laporId;\n    document.getElementById('tolakClientName').innerText = clientName;\n    document.getElementById('modalTolak').classList.add('active');\n  }\n\n  function closeTolakModal() {\n    document.getElementById('modalTolak').classList.remove('active');\n  }\n\n  function konfirmasiTerimaLapor(form, namaKlien) {\n    customConfirm({\n      title: 'Verifikasi & Terima Laporan',\n      text: 'Apakah Anda yakin ingin menerima dan menyetujui laporan wajib lapor dari ' + (namaKlien || 'klien') + '?',\n      icon: 'question',\n      confirmColor: '#28a745',\n      confirmText: '<i class=\"fas fa-check\"></i> Ya, Terima Laporan',\n      cancelText: 'Batal'\n    }).then((res) => {\n      if (res.isConfirmed) form.submit();\n    });\n  }\n</script>\n\n")
+    ; __append( include('../partials/modal_foto') )
+    ; __append("\n\n</body>\n</html>\n")
+  }
+  return __output;
+
+},
+  "admin/dashboard.ejs": function anonymous(locals, escapeFn, include, rethrow
+) {
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append("<!DOCTYPE html>\n<html lang=\"id\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>")
+    ; __append(escapeFn( pageTitle ))
+    ; __append("</title>\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n  <link href=\"https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700&display=swap\" rel=\"stylesheet\">\n  <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css\">\n  <link rel=\"stylesheet\" href=\"/css/responsive.css\">\n  <style>\n    * { margin:0; padding:0; box-sizing:border-box; }\n    body { font-family: 'Source Sans 3', sans-serif; background: #f5f7fa; color: #333; }\n    .navbar {\n      position: sticky; top: 0; left: 0; right: 0; width: 100%;\n      background: linear-gradient(135deg, #1a3a52 0%, #2d5f8d 100%);\n      color: white; padding: 15px 30px; z-index: 1000;\n      display: flex; justify-content: space-between; align-items: center;\n      box-shadow: 0 2px 10px rgba(0,0,0,0.15);\n    }\n    .navbar a { color: white; text-decoration: none; font-size: 14px; margin-left: 20px; }\n    .container { max-width: 1350px; margin: 25px auto 40px; padding: 0 20px; }\n    .header { margin-bottom: 25px; }\n    .header h1 { font-family: 'Playfair Display', serif; color: #1a3a52; font-size: 30px; margin-bottom: 4px; }\n    .tabs-nav { display: flex; gap: 5px; border-bottom: 2px solid #e2e8f0; margin-bottom: 25px; }\n    .tab-btn {\n      padding: 12px 22px; border: none; background: transparent; font-size: 14px; font-weight: 700;\n      color: #64748b; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s;\n      display: flex; align-items: center; gap: 8px;\n    }\n    .tab-btn.active { color: #1a3a52; border-bottom-color: #1a3a52; background: #ffffff; border-radius: 6px 6px 0 0; }\n    .tab-pane { display: none; }\n    .tab-pane.active { display: block; }\n    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px; margin-bottom: 25px; }\n    .stat-card {\n      background: white; padding: 22px; border-radius: 8px;\n      box-shadow: 0 2px 8px rgba(0,0,0,0.06); border-left: 4px solid #1a3a52;\n    }\n    .stat-label { color: #64748b; font-size: 12px; text-transform: uppercase; font-weight: 700; margin-bottom: 6px; }\n    .stat-number { font-size: 30px; font-weight: 800; color: #1a3a52; }\n    .card { background: white; border-radius: 8px; padding: 25px; margin-bottom: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }\n    .card-title { font-size: 18px; font-weight: 700; color: #1a3a52; margin-bottom: 18px; display: flex; align-items: center; gap: 10px; }\n    .table { width: 100%; border-collapse: collapse; margin-top: 10px; }\n    .table th { background: #f8fafc; padding: 12px 14px; text-align: left; font-size: 13px; font-weight: 700; color: #475569; border-bottom: 2px solid #e2e8f0; }\n    .table td { padding: 12px 14px; border-bottom: 1px solid #e2e8f0; font-size: 14px; }\n    .table tr:hover { background: #f8fafc; }\n    .badge { display: inline-block; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }\n    .badge-warning { background: #fff3cd; color: #856404; }\n    .badge-success { background: #d4edda; color: #155724; }\n    .badge-danger { background: #f8d7da; color: #721c24; }\n    .badge-secondary { background: #e2e8f0; color: #475569; }\n    .btn {\n      padding: 8px 16px; border: none; border-radius: 6px; font-size: 13px; font-weight: 600;\n      cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;\n    }\n    .btn-sm { padding: 6px 12px; font-size: 12px; }\n    .btn-primary { background: #1a3a52; color: white; }\n    .btn-primary:hover { background: #2d5f8d; }\n    .btn-success { background: #28a745; color: white; }\n    .btn-success:hover { background: #218838; }\n    .btn-danger { background: #dc3545; color: white; }\n    .btn-danger:hover { background: #c82333; }\n    .btn-secondary { background: #64748b; color: white; }\n    .modal {\n      display: none; position: fixed; top:0; left:0; right:0; bottom:0;\n      background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center; padding: 20px;\n    }\n    .modal.active { display: flex; }\n    .modal-content { background: white; border-radius: 8px; padding: 28px; max-width: 580px; width: 100%; max-height: 90vh; overflow-y: auto; }\n    .form-group { margin-bottom: 18px; }\n    .form-group label { display: block; font-weight: 600; font-size: 13px; color: #334e68; margin-bottom: 6px; }\n    .form-group input, .form-group textarea, .form-group select {\n      width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: inherit; font-size: 14px;\n    }\n    .form-group input:focus, .form-group textarea:focus { outline: none; border-color: #1a3a52; box-shadow: 0 0 0 3px rgba(26,58,82,0.1); }\n  </style>\n</head>\n<body>\n\n<!-- NAVBAR -->\n<div class=\"navbar\">\n  <div style=\"font-weight:700; font-size:16px;\">\n    <i class=\"fas fa-gavel\"></i> BAPAS MEDAN - ADMIN\n  </div>\n  <div>\n    <a href=\"/admin/dashboard\" style=\"font-weight:700; border-bottom:2px solid #ffc107; padding-bottom:4px;\"><i class=\"fas fa-tachometer-alt\"></i> Dashboard</a>\n    <a href=\"/admin/riwayat-lapor\"><i class=\"fas fa-filter\"></i> Riwayat Lapor</a>\n    <a href=\"/admin/kelola-client\"><i class=\"fas fa-users-cog\"></i> Kelola Klien</a>\n    <a href=\"/logout\"><i class=\"fas fa-sign-out-alt\"></i> Logout</a>\n  </div>\n</div>\n\n<div class=\"container\">\n  <div class=\"header\">\n    <h1>Dashboard Administrator</h1>\n    <p style=\"color:#666;\">Pusat Manajemen Pelaporan Wajib Lapor Klien BAPAS Kelas I Medan</p>\n  </div>\n\n  ")
+    ; __append( include('../partials/alerts') )
+    ; __append("\n\n  <!-- STATISTIK KARTU -->\n  <div class=\"stat-grid\">\n    <div class=\"stat-card\" style=\"border-left-color: #1a3a52;\">\n      <div class=\"stat-label\">Total Klien Terdaftar</div>\n      <div class=\"stat-number\">")
+    ; __append(escapeFn( stat.total_client ))
+    ; __append("</div>\n    </div>\n    <div class=\"stat-card\" style=\"border-left-color: #28a745;\">\n      <div class=\"stat-label\">Klien Aktif Bimbingan</div>\n      <div class=\"stat-number\" style=\"color:#28a745;\">")
+    ; __append(escapeFn( stat.client_aktif ))
+    ; __append("</div>\n    </div>\n    <div class=\"stat-card\" style=\"border-left-color: #ffc107;\">\n      <div class=\"stat-label\">Laporan Menunggu Verifikasi</div>\n      <div class=\"stat-number\" style=\"color:#b7791f;\">")
+    ; __append(escapeFn( stat.lapor_menunggu ))
+    ; __append("</div>\n    </div>\n    <div class=\"stat-card\" style=\"border-left-color: #20c997;\">\n      <div class=\"stat-label\">Laporan Diterima</div>\n      <div class=\"stat-number\" style=\"color:#20c997;\">")
+    ; __append(escapeFn( stat.lapor_diterima ))
+    ; __append("</div>\n    </div>\n    <div class=\"stat-card\" style=\"border-left-color: #dc3545;\">\n      <div class=\"stat-label\">Laporan Ditolak</div>\n      <div class=\"stat-number\" style=\"color:#dc3545;\">")
+    ; __append(escapeFn( stat.lapor_ditolak ))
+    ; __append("</div>\n    </div>\n  </div>\n\n  <!-- NAVIGATION TABS -->\n  <div class=\"tabs-nav\">\n    <button class=\"tab-btn ")
+    ; __append(escapeFn( activeTab === 'overview' ? 'active' : '' ))
+    ; __append("\" onclick=\"switchMainTab('overview', this)\">\n      <i class=\"fas fa-chart-pie\"></i> Ringkasan & Konfigurasi\n    </button>\n    <button class=\"tab-btn ")
+    ; __append(escapeFn( activeTab === 'lapor' ? 'active' : '' ))
+    ; __append("\" onclick=\"switchMainTab('lapor', this)\">\n      <i class=\"fas fa-tasks\"></i> Verifikasi Laporan (")
+    ; __append(escapeFn( laporMenunggu.length ))
+    ; __append(")\n    </button>\n    <button class=\"tab-btn ")
+    ; __append(escapeFn( activeTab === 'client' ? 'active' : '' ))
+    ; __append("\" onclick=\"switchMainTab('client', this)\">\n      <i class=\"fas fa-users\"></i> Klien Terbaru\n    </button>\n  </div>\n\n  <!-- TAB PANE 1: OVERVIEW & KONFIGURASI -->\n  <div class=\"tab-pane ")
+    ; __append(escapeFn( activeTab === 'overview' ? 'active' : '' ))
+    ; __append("\" id=\"tab-overview\">\n    <div class=\"admin-overview-grid\" style=\"display:grid; grid-template-columns: 2fr 1.2fr; gap:25px;\">\n      <div class=\"card\">\n        <div class=\"card-title\">\n          <i class=\"fas fa-calendar-alt\"></i> Pengaturan Periode Wajib Lapor Bulanan\n        </div>\n        <p style=\"color:#666; font-size:14px; margin-bottom:20px;\">\n          Tentukan rentang tanggal sistem wajib lapor online dibuka untuk seluruh klien binaan. Di luar tanggal ini, sistem akan otomatis tertutup.\n        </p>\n\n        <form action=\"/admin/konfigurasi/update\" method=\"POST\">\n          <input type=\"hidden\" name=\"config_id\" value=\"")
+    ; __append(escapeFn( config.id ))
+    ; __append("\">\n          <div class=\"form-row-2col\" style=\"display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:18px;\">\n            <div class=\"form-group\">\n              <label for=\"tanggal_mulai_input\">Tanggal Mulai Input (Tanggal)</label>\n              <input type=\"number\" min=\"1\" max=\"31\" name=\"tanggal_mulai_input\" id=\"tanggal_mulai_input\" value=\"")
+    ; __append(escapeFn( config.tanggal_mulai_input ))
+    ; __append("\" required>\n            </div>\n            <div class=\"form-group\">\n              <label for=\"tanggal_akhir_input\">Tanggal Akhir Input (Tanggal)</label>\n              <input type=\"number\" min=\"1\" max=\"31\" name=\"tanggal_akhir_input\" id=\"tanggal_akhir_input\" value=\"")
+    ; __append(escapeFn( config.tanggal_akhir_input ))
+    ; __append("\" required>\n            </div>\n          </div>\n\n          <div class=\"form-group\">\n            <label for=\"notifikasi_tertutup\">Pesan Pemberitahuan Saat Periode Tutup</label>\n            <textarea name=\"notifikasi_tertutup\" id=\"notifikasi_tertutup\" rows=\"3\" required>")
+    ; __append(escapeFn( config.notifikasi_tertutup ))
+    ; __append("</textarea>\n          </div>\n\n          <button type=\"submit\" class=\"btn btn-primary\"><i class=\"fas fa-save\"></i> Simpan Pengaturan Sistem</button>\n        </form>\n      </div>\n\n      <div class=\"card\">\n        <div class=\"card-title\">\n          <i class=\"fas fa-bolt\"></i> Pintasan Menu Cepat\n        </div>\n        <div style=\"display:flex; flex-direction:column; gap:12px;\">\n          <a href=\"/admin/riwayat-lapor\" class=\"btn btn-primary\" style=\"justify-content:center; padding:14px;\">\n            <i class=\"fas fa-filter\"></i> Buka Riwayat Lapor (Filter Lengkap)\n          </a>\n          <a href=\"/admin/kelola-client\" class=\"btn btn-success\" style=\"justify-content:center; padding:14px;\">\n            <i class=\"fas fa-user-plus\"></i> Kelola & Tambah Klien Baru\n          </a>\n          <a href=\"/admin/riwayat-lapor/export-csv\" class=\"btn btn-secondary\" style=\"justify-content:center; padding:14px;\">\n            <i class=\"fas fa-file-excel\"></i> Ekspor Semua Laporan ke CSV\n          </a>\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <!-- TAB PANE 2: VERIFIKASI WAJIB LAPOR -->\n  <div class=\"tab-pane ")
+    ; __append(escapeFn( activeTab === 'lapor' ? 'active' : '' ))
+    ; __append("\" id=\"tab-lapor\">\n    <div class=\"card\">\n      <div class=\"card-title\">\n        <i class=\"fas fa-clock\" style=\"color:#b7791f;\"></i> Daftar Laporan Menunggu Verifikasi Petugas (")
+    ; __append(escapeFn( laporMenunggu.length ))
+    ; __append(")\n      </div>\n\n      ")
+    ;  if (laporMenunggu && laporMenunggu.length > 0) { 
+    ; __append("\n        <div class=\"table-responsive\">\n          <table class=\"table\">\n            <thead>\n              <tr>\n                <th>No</th>\n                <th>Klien & No Register</th>\n                <th>Periode Lapor</th>\n                <th>Tanggal Kirim</th>\n                <th>Foto Bukti</th>\n                <th>Aktivitas Harian</th>\n                <th>Aksi Verifikasi</th>\n              </tr>\n            </thead>\n            <tbody>\n              ")
+    ;  laporMenunggu.forEach(function(lapor, idx) { 
+    ; __append("\n                <tr>\n                  <td>")
+    ; __append(escapeFn( idx + 1 ))
+    ; __append("</td>\n                  <td>\n                    <strong>")
+    ; __append(escapeFn( lapor.nama_lengkap ))
+    ; __append("</strong><br>\n                    <span style=\"font-size:12px; color:#64748b;\">")
+    ; __append(escapeFn( lapor.no_register ))
+    ; __append("</span>\n                  </td>\n                  <td><strong>")
+    ; __append(escapeFn( getNamaBulan(lapor.bulan) ))
+    ; __append(" ")
+    ; __append(escapeFn( lapor.tahun ))
+    ; __append("</strong></td>\n                  <td>")
+    ; __append(escapeFn( formatTanggalWaktu(lapor.tanggal_submit) ))
+    ; __append("</td>\n                  <td>\n                    ")
+    ;  if (lapor.foto_bukti) { 
+    ; __append("\n                      <button type=\"button\" class=\"btn btn-sm\" style=\"color:#0052a3; font-weight:700; background:#e8f0fe; border:1px solid #b3d1ff; cursor:pointer; padding:5px 10px; border-radius:4px; display:inline-flex; align-items:center; gap:5px;\" onclick=\"bukaModalFoto('")
+    ; __append(escapeFn( getFileUrl(lapor.foto_bukti, 'wajib_lapor') ))
+    ; __append("', '")
+    ; __append(escapeFn( lapor.nama_lengkap ))
+    ; __append("', '")
+    ; __append(escapeFn( getNamaBulan(lapor.bulan) ))
+    ; __append(" ")
+    ; __append(escapeFn( lapor.tahun ))
+    ; __append("')\">\n                        <i class=\"fas fa-image\"></i> Lihat Foto\n                      </button>\n                    ")
+    ;  } else { 
+    ; __append("\n                      <span style=\"color:#dc3545; font-size:12px;\"><i class=\"fas fa-times-circle\"></i> Tanpa Foto</span>\n                    ")
+    ;  } 
+    ; __append("\n                  </td>\n                  <td style=\"max-width:240px; font-size:13px;\">")
+    ; __append(escapeFn( lapor.aktivitas_harian || '-' ))
+    ; __append("</td>\n                  <td>\n                    <div style=\"display:flex; gap:6px;\">\n                      <form action=\"/admin/lapor/terima\" method=\"POST\" style=\"display:inline;\">\n                        <input type=\"hidden\" name=\"lapor_id\" value=\"")
+    ; __append(escapeFn( lapor.id ))
+    ; __append("\">\n                        <input type=\"hidden\" name=\"redirect_to\" value=\"/admin/dashboard?tab=lapor\">\n                        <button type=\"button\" class=\"btn btn-sm btn-success\" onclick=\"konfirmasiTerimaLapor(this.form, '")
+    ; __append(escapeFn( lapor.nama_lengkap ))
+    ; __append("')\"><i class=\"fas fa-check\"></i> Terima</button>\n                      </form>\n                      <button type=\"button\" class=\"btn btn-sm btn-danger\" onclick=\"openTolakModal('")
+    ; __append(escapeFn( lapor.id ))
+    ; __append("', '")
+    ; __append(escapeFn( lapor.nama_lengkap ))
+    ; __append("')\"><i class=\"fas fa-times\"></i> Tolak</button>\n                    </div>\n                  </td>\n                </tr>\n              ")
+    ;  }); 
+    ; __append("\n            </tbody>\n          </table>\n        </div>\n      ")
+    ;  } else { 
+    ; __append("\n        <div style=\"text-align:center; padding:50px 20px; color:#94a3b8;\">\n          <i class=\"fas fa-check-circle\" style=\"font-size:48px; color:#28a745; margin-bottom:12px;\"></i>\n          <p style=\"font-size:16px; font-weight:600; color:#334e68;\">Semua laporan telah diverifikasi!</p>\n          <span style=\"font-size:13px;\">Tidak ada antrean laporan yang menunggu verifikasi saat ini.</span>\n        </div>\n      ")
+    ;  } 
+    ; __append("\n    </div>\n  </div>\n\n  <!-- TAB PANE 3: KLIEN TERBARU -->\n  <div class=\"tab-pane ")
+    ; __append(escapeFn( activeTab === 'client' ? 'active' : '' ))
+    ; __append("\" id=\"tab-client\">\n    <div class=\"card\">\n      <div class=\"card-title\">\n        <i class=\"fas fa-users\"></i> Daftar Klien Pemasyarakatan Terbaru\n        <a href=\"/admin/kelola-client\" class=\"btn btn-sm btn-primary\" style=\"margin-left:auto;\"><i class=\"fas fa-cog\"></i> Buka Kelola Klien Lengkap</a>\n      </div>\n\n      <table class=\"table\">\n        <thead>\n          <tr>\n            <th>No Register</th>\n            <th>Nama Lengkap</th>\n            <th>Status Akun</th>\n            <th>No Telepon</th>\n            <th>Profil</th>\n            <th>Masa Wajib Lapor</th>\n          </tr>\n        </thead>\n        <tbody>\n          ")
+    ;  clients.forEach(function(c) { 
+    ; __append("\n            <tr>\n              <td><strong>")
+    ; __append(escapeFn( c.no_register ))
+    ; __append("</strong></td>\n              <td>")
+    ; __append(escapeFn( c.nama_lengkap ))
+    ; __append("</td>\n              <td>\n                ")
+    ;  if (c.status === 'aktif') { 
+    ; __append("\n                  <span class=\"badge badge-success\">Aktif</span>\n                ")
+    ;  } else if (c.status === 'selesai') { 
+    ; __append("\n                  <span class=\"badge badge-warning\">Selesai</span>\n                ")
+    ;  } else { 
+    ; __append("\n                  <span class=\"badge badge-danger\">Nonaktif</span>\n                ")
+    ;  } 
+    ; __append("\n              </td>\n              <td>")
+    ; __append(escapeFn( c.no_telepon || '-' ))
+    ; __append("</td>\n              <td>\n                ")
+    ;  if (c.profil_lengkap) { 
+    ; __append("\n                  <span style=\"color:#28a745; font-size:12px; font-weight:700;\"><i class=\"fas fa-check-circle\"></i> Lengkap</span>\n                ")
+    ;  } else { 
+    ; __append("\n                  <span style=\"color:#e67e22; font-size:12px; font-weight:700;\"><i class=\"fas fa-exclamation-circle\"></i> Belum Lengkap</span>\n                ")
+    ;  } 
+    ; __append("\n              </td>\n              <td style=\"font-size:13px;\">")
+    ; __append(escapeFn( getNamaBulan(c.bulan_wajib_lapor_mulai) ))
+    ; __append(" ")
+    ; __append(escapeFn( c.tahun_wajib_lapor_mulai ))
+    ; __append(" s/d ")
+    ; __append(escapeFn( getNamaBulan(c.bulan_wajib_lapor_akhir) ))
+    ; __append(" ")
+    ; __append(escapeFn( c.tahun_wajib_lapor_akhir ))
+    ; __append("</td>\n            </tr>\n          ")
+    ;  }); 
+    ; __append("\n        </tbody>\n      </table>\n    </div>\n  </div>\n</div>\n\n<!-- MODAL TOLAK LAPORAN -->\n<div class=\"modal\" id=\"modalTolak\">\n  <div class=\"modal-content\">\n    <h3 style=\"color:#dc3545; margin-bottom:15px; font-size:18px;\"><i class=\"fas fa-exclamation-triangle\"></i> Tolak Wajib Lapor Klien</h3>\n    <p style=\"font-size:14px; color:#555; margin-bottom:15px;\">\n      Anda akan menolak laporan dari klien: <strong id=\"tolakClientName\"></strong>. Berikan catatan alasan penolakan agar klien dapat memperbaiki laporannya:\n    </p>\n    <form action=\"/admin/lapor/tolak\" method=\"POST\">\n      <input type=\"hidden\" name=\"lapor_id\" id=\"tolakLaporId\">\n      <input type=\"hidden\" name=\"redirect_to\" value=\"/admin/dashboard?tab=lapor\">\n      <div class=\"form-group\">\n        <label for=\"catatan_admin\">Alasan / Catatan Penolakan *</label>\n        <textarea name=\"catatan_admin\" id=\"catatan_admin\" rows=\"4\" placeholder=\"Misal: Foto bukti tidak jelas atau aktivitas belum lengkap diisi...\" required></textarea>\n      </div>\n      <div style=\"display:flex; justify-content:flex-end; gap:10px;\">\n        <button type=\"button\" class=\"btn btn-secondary\" onclick=\"closeTolakModal()\">Batal</button>\n        <button type=\"submit\" class=\"btn btn-danger\"><i class=\"fas fa-times\"></i> Kirim Penolakan</button>\n      </div>\n    </form>\n  </div>\n</div>\n\n<script>\n  function switchMainTab(tabName, btn) {\n    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));\n    document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));\n    if (btn) btn.classList.add('active');\n    const target = document.getElementById('tab-' + tabName);\n    if (target) target.classList.add('active');\n  }\n\n  function openTolakModal(laporId, clientName) {\n    document.getElementById('tolakLaporId').value = laporId;\n    document.getElementById('tolakClientName').innerText = clientName;\n    document.getElementById('modalTolak').classList.add('active');\n  }\n\n  function closeTolakModal() {\n    document.getElementById('modalTolak').classList.remove('active');\n  }\n\n  function konfirmasiTerimaLapor(form, namaKlien) {\n    customConfirm({\n      title: 'Verifikasi & Terima Laporan',\n      text: 'Apakah Anda yakin ingin menerima dan menyetujui laporan wajib lapor dari ' + (namaKlien || 'klien') + '?',\n      icon: 'question',\n      confirmColor: '#28a745',\n      confirmText: '<i class=\"fas fa-check\"></i> Ya, Terima Laporan',\n      cancelText: 'Batal'\n    }).then((res) => {\n      if (res.isConfirmed) form.submit();\n    });\n  }\n</script>\n\n")
+    ; __append( include('../partials/modal_foto') )
+    ; __append("\n\n</body>\n</html>\n")
+  }
+  return __output;
+
+},
+  "admin/kelola_client": function anonymous(locals, escapeFn, include, rethrow
+) {
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append("<!DOCTYPE html>\n<html lang=\"id\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>")
+    ; __append(escapeFn( pageTitle ))
+    ; __append("</title>\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n  <link href=\"https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700&display=swap\" rel=\"stylesheet\">\n  <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css\">\n  <link rel=\"stylesheet\" href=\"/css/responsive.css\">\n  <style>\n    * { margin:0; padding:0; box-sizing:border-box; }\n    body { font-family: 'Source Sans 3', sans-serif; background: #f5f7fa; color: #333; }\n    .navbar {\n      position: sticky; top: 0; left: 0; right: 0; width: 100%;\n      background: linear-gradient(135deg, #1a3a52 0%, #2d5f8d 100%);\n      color: white; padding: 15px 30px; z-index: 1000;\n      display: flex; justify-content: space-between; align-items: center;\n      box-shadow: 0 2px 10px rgba(0,0,0,0.15);\n    }\n    .navbar a { color: white; text-decoration: none; font-size: 14px; margin-left: 20px; }\n    .container { max-width: 1400px; margin: 25px auto 40px; padding: 0 20px; }\n    .header { margin-bottom: 25px; }\n    .header h1 { font-family: 'Playfair Display', serif; color: #1a3a52; font-size: 30px; margin-bottom: 4px; }\n    .card { background: white; border-radius: 8px; padding: 25px; margin-bottom: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }\n    .card-title { font-size: 18px; font-weight: 700; color: #1a3a52; margin-bottom: 18px; display: flex; align-items: center; gap: 10px; }\n    .filter-panel { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 18px; margin-bottom: 20px; }\n    .table { width: 100%; border-collapse: collapse; margin-top: 10px; }\n    .table th { background: #f8fafc; padding: 12px 14px; text-align: left; font-size: 13px; font-weight: 700; color: #475569; border-bottom: 2px solid #e2e8f0; }\n    .table td { padding: 12px 14px; border-bottom: 1px solid #e2e8f0; font-size: 14px; }\n    .table tr:hover { background: #f8fafc; }\n    .badge { display: inline-block; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }\n    .badge-success { background: #d4edda; color: #155724; }\n    .badge-warning { background: #fff3cd; color: #856404; }\n    .badge-danger { background: #f8d7da; color: #721c24; }\n    .btn {\n      padding: 9px 18px; border: none; border-radius: 6px; font-size: 13px; font-weight: 700;\n      cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;\n    }\n    .btn-sm { padding: 6px 12px; font-size: 12px; }\n    .btn-primary { background: #1a3a52; color: white; }\n    .btn-primary:hover { background: #2d5f8d; }\n    .btn-success { background: #28a745; color: white; }\n    .btn-success:hover { background: #218838; }\n    .btn-danger { background: #dc3545; color: white; }\n    .btn-danger:hover { background: #c82333; }\n    .btn-secondary { background: #64748b; color: white; }\n    .modal {\n      display: none; position: fixed; top:0; left:0; right:0; bottom:0;\n      background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center; padding: 20px;\n    }\n    .modal.active { display: flex; }\n    .modal-content { background: white; border-radius: 8px; padding: 28px; max-width: 650px; width: 100%; max-height: 90vh; overflow-y: auto; }\n    .form-group { margin-bottom: 16px; }\n    .form-group label { display: block; font-weight: 600; font-size: 13px; color: #334e68; margin-bottom: 6px; }\n    .form-group input, .form-group select {\n      width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: inherit; font-size: 14px;\n    }\n    .form-group input:focus, .form-group select:focus { outline: none; border-color: #1a3a52; box-shadow: 0 0 0 3px rgba(26,58,82,0.1); }\n  </style>\n</head>\n<body>\n\n<!-- NAVBAR -->\n<div class=\"navbar\">\n  <div style=\"font-weight:700; font-size:16px;\">\n    <i class=\"fas fa-gavel\"></i> BAPAS MEDAN - ADMIN\n  </div>\n  <div>\n    <a href=\"/admin/dashboard\"><i class=\"fas fa-tachometer-alt\"></i> Dashboard</a>\n    <a href=\"/admin/riwayat-lapor\"><i class=\"fas fa-filter\"></i> Riwayat Lapor</a>\n    <a href=\"/admin/kelola-client\" style=\"font-weight:700; border-bottom:2px solid #ffc107; padding-bottom:4px;\"><i class=\"fas fa-users-cog\"></i> Kelola Klien</a>\n    <a href=\"/logout\"><i class=\"fas fa-sign-out-alt\"></i> Logout</a>\n  </div>\n</div>\n\n<div class=\"container\">\n  <div class=\"header\">\n    <h1>Kelola Data Klien Pemasyarakatan</h1>\n    <p style=\"color:#666;\">Registrasi, pembaruan identitas, masa bimbingan wajib lapor, dan monitoring profil klien</p>\n  </div>\n\n  ")
+    ; __append( include('../partials/alerts') )
+    ; __append("\n\n  <!-- STATISTIK RINGKAS KLIEN -->\n  <div class=\"stat-chips\" style=\"display:flex; gap:12px; margin-bottom:20px; flex-wrap:wrap;\">\n    <div style=\"background:#eff6ff; border:1px solid #bfdbfe; padding:10px 16px; border-radius:6px; font-size:13px; color:#1e40af;\">\n      Total: <strong>")
+    ; __append(escapeFn( stat.total ))
+    ; __append(" Klien</strong>\n    </div>\n    <div style=\"background:#e8f5e9; border:1px solid #c8e6c9; padding:10px 16px; border-radius:6px; font-size:13px; color:#2e7d32;\">\n      Aktif: <strong>")
+    ; __append(escapeFn( stat.aktif ))
+    ; __append(" Klien</strong>\n    </div>\n    <div style=\"background:#fff9db; border:1px solid #ffec99; padding:10px 16px; border-radius:6px; font-size:13px; color:#f08c00;\">\n      Selesai: <strong>")
+    ; __append(escapeFn( stat.selesai ))
+    ; __append(" Klien</strong>\n    </div>\n    <div style=\"background:#e3f2fd; border:1px solid #bbdefb; padding:10px 16px; border-radius:6px; font-size:13px; color:#0288d1;\">\n      Profil Lengkap: <strong>")
+    ; __append(escapeFn( stat.profilLengkap ))
+    ; __append(" Klien</strong>\n    </div>\n  </div>\n\n  <!-- PANEL FILTER & SEARCH -->\n  <div class=\"filter-panel\">\n    <form method=\"GET\" action=\"/admin/kelola-client\" style=\"display:flex; gap:15px; align-items:center; flex-wrap:wrap; justify-content:space-between;\">\n      <div style=\"display:flex; gap:12px; flex-wrap:wrap; align-items:center;\">\n        <input type=\"text\" name=\"search\" placeholder=\"Cari nama, register, telepon...\" value=\"")
+    ; __append(escapeFn( filterOptions.search ))
+    ; __append("\" style=\"padding:9px 12px; border:1px solid #cbd5e1; border-radius:6px; font-size:14px; min-width:240px;\">\n\n        <select name=\"status\" onchange=\"this.form.submit()\" style=\"padding:9px 12px; border:1px solid #cbd5e1; border-radius:6px; font-size:14px;\">\n          <option value=\"all\" ")
+    ; __append(escapeFn( filterOptions.status === 'all' ? 'selected' : '' ))
+    ; __append(">Semua Status</option>\n          <option value=\"aktif\" ")
+    ; __append(escapeFn( filterOptions.status === 'aktif' ? 'selected' : '' ))
+    ; __append(">Aktif</option>\n          <option value=\"selesai\" ")
+    ; __append(escapeFn( filterOptions.status === 'selesai' ? 'selected' : '' ))
+    ; __append(">Selesai</option>\n          <option value=\"nonaktif\" ")
+    ; __append(escapeFn( filterOptions.status === 'nonaktif' ? 'selected' : '' ))
+    ; __append(">Nonaktif</option>\n        </select>\n\n        <select name=\"profil_lengkap\" onchange=\"this.form.submit()\" style=\"padding:9px 12px; border:1px solid #cbd5e1; border-radius:6px; font-size:14px;\">\n          <option value=\"all\" ")
+    ; __append(escapeFn( filterOptions.profil_lengkap === 'all' ? 'selected' : '' ))
+    ; __append(">Semua Status Profil</option>\n          <option value=\"1\" ")
+    ; __append(escapeFn( filterOptions.profil_lengkap === '1' ? 'selected' : '' ))
+    ; __append(">Profil Sudah Lengkap</option>\n          <option value=\"0\" ")
+    ; __append(escapeFn( filterOptions.profil_lengkap === '0' ? 'selected' : '' ))
+    ; __append(">Profil Belum Lengkap</option>\n        </select>\n\n        <button type=\"submit\" class=\"btn btn-primary\"><i class=\"fas fa-search\"></i> Cari</button>\n        ")
+    ;  if (filterOptions.search || filterOptions.status !== 'all' || filterOptions.profil_lengkap !== 'all') { 
+    ; __append("\n          <a href=\"/admin/kelola-client\" class=\"btn btn-secondary\"><i class=\"fas fa-undo\"></i> Reset</a>\n        ")
+    ;  } 
+    ; __append("\n      </div>\n\n      <div style=\"display:flex; gap:10px;\">\n        ")
+    ;  const queryParams = new URLSearchParams(filterOptions).toString(); 
+    ; __append("\n        <a href=\"/admin/kelola-client/export-csv?")
+    ; __append(escapeFn( queryParams ))
+    ; __append("\" class=\"btn btn-success\" title=\"Ekspor daftar klien ke CSV\">\n          <i class=\"fas fa-file-excel\"></i> Ekspor CSV\n        </a>\n        <button type=\"button\" class=\"btn btn-primary\" onclick=\"openTambahModal()\">\n          <i class=\"fas fa-user-plus\"></i> Tambah Klien Baru\n        </button>\n      </div>\n    </form>\n  </div>\n\n  <!-- TABEL KLIEN -->\n  <div class=\"card\">\n    <div class=\"card-title\">\n      <i class=\"fas fa-address-book\"></i> Daftar Seluruh Klien BAPAS (")
+    ; __append(escapeFn( clients.length ))
+    ; __append(")\n    </div>\n\n    ")
+    ;  if (clients && clients.length > 0) { 
+    ; __append("\n      <div class=\"table-responsive\">\n        <table class=\"table\">\n          <thead>\n            <tr>\n              <th>No</th>\n              <th>No Register & Sandi Login</th>\n              <th>Nama Lengkap</th>\n              <th>Username</th>\n              <th>Kontak / Telp</th>\n              <th>Status Akun</th>\n              <th>Masa Wajib Lapor</th>\n              <th>Profil</th>\n              <th>Aksi</th>\n            </tr>\n          </thead>\n          <tbody>\n            ")
+    ;  clients.forEach(function(c, idx) { 
+    ; __append("\n              <tr>\n                <td>")
+    ; __append(escapeFn( idx + 1 ))
+    ; __append("</td>\n                <td>\n                  <strong style=\"color:#003580; font-size:14px;\">")
+    ; __append(escapeFn( c.no_register ))
+    ; __append("</strong><br>\n                  <span style=\"font-size:11px; color:#1e293b; background:#e0f2fe; border:1px solid #bae6fd; padding:2px 6px; border-radius:4px; display:inline-flex; align-items:center; gap:4px; margin-top:3px;\">\n                    <i class=\"fas fa-key\" style=\"color:#0284c7; font-size:10px;\"></i> Sandi: <strong>")
+    ; __append(escapeFn( c.password_plain || 'client123' ))
+    ; __append("</strong>\n                  </span>\n                </td>\n                <td>\n                  <div style=\"display:flex; align-items:center; gap:10px;\">\n                    ")
+    ;  if (c.foto_profil) { 
+    ; __append("\n                      <img src=\"")
+    ; __append(escapeFn( getFileUrl(c.foto_profil, 'profil') ))
+    ; __append("\" alt=\"Foto\" style=\"width:34px; height:34px; border-radius:50%; object-fit:cover; border:1px solid #ccc; cursor:pointer;\" onclick=\"bukaModalFoto('")
+    ; __append(escapeFn( getFileUrl(c.foto_profil, 'profil') ))
+    ; __append("', '")
+    ; __append(escapeFn( c.nama_lengkap ))
+    ; __append("', 'Foto Profil Klien')\" onerror=\"this.onerror=null; this.src='/logo_pemasyarakatan-removebg-preview.png';\">\n                    ")
+    ;  } else { 
+    ; __append("\n                      <span style=\"width:34px; height:34px; border-radius:50%; background:#e2e8f0; display:inline-flex; align-items:center; justify-content:center; color:#64748b;\"><i class=\"fas fa-user\"></i></span>\n                    ")
+    ;  } 
+    ; __append("\n                    <div>\n                      <strong>")
+    ; __append(escapeFn( c.nama_lengkap ))
+    ; __append("</strong>\n                      ")
+    ;  if (c.email) { 
+    ; __append("<br><span style=\"font-size:12px; color:#64748b;\">")
+    ; __append(escapeFn( c.email ))
+    ; __append("</span>")
+    ;  } 
+    ; __append("\n                    </div>\n                  </div>\n                </td>\n              <td><code>")
+    ; __append(escapeFn( c.username ))
+    ; __append("</code></td>\n              <td>")
+    ; __append(escapeFn( c.no_telepon || '-' ))
+    ; __append("</td>\n              <td>\n                ")
+    ;  if (c.status === 'aktif') { 
+    ; __append("\n                  <span class=\"badge badge-success\">Aktif</span>\n                ")
+    ;  } else if (c.status === 'selesai') { 
+    ; __append("\n                  <span class=\"badge badge-warning\">Selesai</span>\n                ")
+    ;  } else { 
+    ; __append("\n                  <span class=\"badge badge-danger\">Nonaktif</span>\n                ")
+    ;  } 
+    ; __append("\n              </td>\n              <td style=\"font-size:13px;\">\n                ")
+    ; __append(escapeFn( getNamaBulan(c.bulan_wajib_lapor_mulai) ))
+    ; __append(" ")
+    ; __append(escapeFn( c.tahun_wajib_lapor_mulai ))
+    ; __append(" s/d<br>\n                ")
+    ; __append(escapeFn( getNamaBulan(c.bulan_wajib_lapor_akhir) ))
+    ; __append(" ")
+    ; __append(escapeFn( c.tahun_wajib_lapor_akhir ))
+    ; __append("\n                <span style=\"color:#64748b; font-size:11px;\">(")
+    ; __append(escapeFn( c.total_bulan_wajib_lapor || 12 ))
+    ; __append(" bln)</span>\n              </td>\n              <td>\n                ")
+    ;  if (c.profil_lengkap) { 
+    ; __append("\n                  <span style=\"color:#28a745; font-size:12px; font-weight:700;\"><i class=\"fas fa-check-circle\"></i> Lengkap</span>\n                ")
+    ;  } else { 
+    ; __append("\n                  <span style=\"color:#e67e22; font-size:12px; font-weight:700;\"><i class=\"fas fa-exclamation-circle\"></i> Belum</span>\n                ")
+    ;  } 
+    ; __append("\n              </td>\n              <td>\n                <div style=\"display:flex; gap:6px;\">\n                  <button type=\"button\" class=\"btn btn-sm btn-primary\" onclick='openEditModal(")
+    ; __append(escapeFn( JSON.stringify(c) ))
+    ; __append(")'><i class=\"fas fa-edit\"></i> Edit</button>\n                  <button type=\"button\" class=\"btn btn-sm btn-danger\" onclick=\"openHapusModal('")
+    ; __append(escapeFn( c.id ))
+    ; __append("', '")
+    ; __append(escapeFn( c.nama_lengkap ))
+    ; __append("')\"><i class=\"fas fa-trash\"></i> Hapus</button>\n                </div>\n              </td>\n            </tr>\n          ")
+    ;  }); 
+    ; __append("\n        </tbody>\n      </table>\n    </div>\n    ")
+    ;  } else { 
+    ; __append("\n      <div style=\"text-align:center; padding:50px 20px; color:#94a3b8;\">\n        <i class=\"fas fa-user-slash\" style=\"font-size:48px; color:#cbd5e1; margin-bottom:12px;\"></i>\n        <p>Tidak ada data klien yang cocok dengan filter yang dipilih.</p>\n      </div>\n    ")
+    ;  } 
+    ; __append("\n  </div>\n</div>\n\n<!-- MODAL TAMBAH KLIEN BARU -->\n<div class=\"modal\" id=\"modalTambah\">\n  <div class=\"modal-content\" style=\"max-width:680px;\">\n    <div style=\"display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; border-bottom:1px solid #e2e8f0; padding-bottom:12px;\">\n      <h3 style=\"color:#003580; font-size:19px; display:flex; align-items:center; gap:8px;\">\n        <i class=\"fas fa-user-plus\" style=\"color:#ffc107;\"></i> Tambah Klien Pemasyarakatan Baru\n      </h3>\n      <button type=\"button\" onclick=\"closeTambahModal()\" style=\"border:none; background:transparent; font-size:24px; cursor:pointer; color:#64748b;\">&times;</button>\n    </div>\n\n    <form action=\"/admin/client/create\" method=\"POST\" autocomplete=\"off\">\n      <!-- KOTAK UTAMA LOGIN KLIEN (NOMOR & SANDI) -->\n      <div style=\"background:#f0f7ff; border:1.5px solid #93c5fd; border-radius:8px; padding:16px; margin-bottom:16px;\">\n        <div style=\"font-weight:700; color:#1e40af; font-size:13.5px; margin-bottom:12px; display:flex; align-items:center; gap:6px;\">\n          <i class=\"fas fa-key\"></i> Kredensial Login Klien (Nomor & Sandi untuk Klien Masuk)\n        </div>\n        <div style=\"display:grid; grid-template-columns:1fr 1fr; gap:14px;\">\n          <div class=\"form-group\" style=\"margin-bottom:0;\">\n            <label for=\"no_register\" style=\"color:#0f172a; font-weight:700; font-size:13px;\">Nomor Register Klien *</label>\n            <input type=\"text\" name=\"no_register\" id=\"no_register\" placeholder=\"Contoh: REG-2026-001\" required autocomplete=\"off\" style=\"font-weight:700; color:#003580;\">\n            <small style=\"color:#475569; font-size:11px; display:block; margin-top:4px;\">Nomor register dipakai klien untuk login.</small>\n          </div>\n          <div class=\"form-group\" style=\"margin-bottom:0;\">\n            <label for=\"tambahPassword\" style=\"color:#0f172a; font-weight:700; font-size:13px;\">Kata Sandi (Password) Klien *</label>\n            <div style=\"position:relative; display:flex; align-items:center;\">\n              <input type=\"text\" name=\"password\" id=\"tambahPassword\" placeholder=\"Contoh: klien2026\" required autocomplete=\"new-password\" style=\"padding-right:75px; font-weight:700; font-family:monospace; font-size:14px;\">\n              <button type=\"button\" onclick=\"generateSandi()\" style=\"position:absolute; right:6px; background:#003580; color:white; border:none; padding:5px 9px; border-radius:4px; font-size:11px; font-weight:700; cursor:pointer;\" title=\"Buat Sandi Acak\">\n                <i class=\"fas fa-random\"></i> Acak\n              </button>\n            </div>\n            <small style=\"color:#475569; font-size:11px; display:block; margin-top:4px;\">Sandi ini diberikan ke klien agar bisa login.</small>\n          </div>\n        </div>\n      </div>\n\n      <!-- DATA DIRI KLIEN -->\n      <div style=\"display:grid; grid-template-columns:1.2fr 1fr; gap:14px;\">\n        <div class=\"form-group\">\n          <label for=\"nama_lengkap\">Nama Lengkap Klien *</label>\n          <input type=\"text\" name=\"nama_lengkap\" id=\"nama_lengkap\" placeholder=\"Nama lengkap sesuai berkas/KTP\" required autocomplete=\"off\">\n        </div>\n        <div class=\"form-group\">\n          <label for=\"no_telepon\">Nomor Telepon / WhatsApp</label>\n          <input type=\"text\" name=\"no_telepon\" id=\"no_telepon\" placeholder=\"Contoh: 081234567890\" autocomplete=\"off\">\n          <small style=\"color:#64748b; font-size:11px;\">Klien juga bisa login pakai nomor HP ini.</small>\n        </div>\n      </div>\n\n      <div style=\"display:grid; grid-template-columns:1fr 1fr; gap:14px;\">\n        <div class=\"form-group\">\n          <label for=\"username\">Username Login (Opsional)</label>\n          <input type=\"text\" name=\"username\" id=\"username\" placeholder=\"Kosongkan jika ingin sama dengan No. Register\" autocomplete=\"off\">\n        </div>\n        <div class=\"form-group\">\n          <label for=\"tanggal_lahir\">Tanggal Lahir</label>\n          <input type=\"date\" name=\"tanggal_lahir\" id=\"tanggal_lahir\">\n        </div>\n      </div>\n\n      <!-- PERIODE WAJIB LAPOR -->\n      <div style=\"background:#f8fafc; border:1px solid #cbd5e1; padding:14px; border-radius:8px; margin-bottom:18px;\">\n        <h4 style=\"color:#003580; font-size:13.5px; margin-bottom:10px;\"><i class=\"fas fa-calendar-alt\"></i> Periode Masa Wajib Lapor Klien</h4>\n        <div style=\"display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:10px;\">\n          <div>\n            <label style=\"font-size:12px; font-weight:700;\">Bulan Mulai</label>\n            <select name=\"bulan_mulai\" id=\"bulan_mulai\" onchange=\"hitungTotalBulan()\">\n              ")
+    ;  for(let m=1; m<=12; m++) { 
+    ; __append("\n                <option value=\"")
+    ; __append(escapeFn( m ))
+    ; __append("\">")
+    ; __append(escapeFn( getNamaBulan(m) ))
+    ; __append("</option>\n              ")
+    ;  } 
+    ; __append("\n            </select>\n          </div>\n          <div>\n            <label style=\"font-size:12px; font-weight:700;\">Tahun Mulai</label>\n            <input type=\"number\" name=\"tahun_mulai\" id=\"tahun_mulai\" value=\"")
+    ; __append(escapeFn( new Date().getFullYear() ))
+    ; __append("\" onchange=\"hitungTotalBulan()\">\n          </div>\n        </div>\n\n        <div style=\"display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;\">\n          <div>\n            <label style=\"font-size:12px; font-weight:700;\">Bulan Selesai</label>\n            <select name=\"bulan_akhir\" id=\"bulan_akhir\" onchange=\"hitungTotalBulan()\">\n              ")
+    ;  for(let m=1; m<=12; m++) { 
+    ; __append("\n                <option value=\"")
+    ; __append(escapeFn( m ))
+    ; __append("\" ")
+    ; __append(escapeFn( m===12 ? 'selected' : '' ))
+    ; __append(">")
+    ; __append(escapeFn( getNamaBulan(m) ))
+    ; __append("</option>\n              ")
+    ;  } 
+    ; __append("\n            </select>\n          </div>\n          <div>\n            <label style=\"font-size:12px; font-weight:700;\">Tahun Selesai</label>\n            <input type=\"number\" name=\"tahun_akhir\" id=\"tahun_akhir\" value=\"")
+    ; __append(escapeFn( new Date().getFullYear() ))
+    ; __append("\" onchange=\"hitungTotalBulan()\">\n          </div>\n        </div>\n\n        <div style=\"display:flex; justify-content:space-between; align-items:center;\">\n          <span style=\"font-size:13px; font-weight:700; color:#1e40af;\">Total Kewajiban Pelaporan:</span>\n          <span id=\"labelTotalBulan\" style=\"font-weight:800; font-size:16px; color:#28a745;\">12 Bulan</span>\n          <input type=\"hidden\" name=\"total_bulan\" id=\"total_bulan\" value=\"12\">\n        </div>\n      </div>\n\n      <div style=\"display:flex; justify-content:flex-end; gap:10px;\">\n        <button type=\"button\" class=\"btn btn-secondary\" onclick=\"closeTambahModal()\">Batal</button>\n        <button type=\"submit\" class=\"btn btn-primary\" style=\"padding:10px 20px; font-weight:700;\"><i class=\"fas fa-save\"></i> Simpan Data Klien</button>\n      </div>\n    </form>\n  </div>\n</div>\n\n<!-- MODAL EDIT KLIEN -->\n<div class=\"modal\" id=\"modalEdit\">\n  <div class=\"modal-content\" style=\"max-width:640px;\">\n    <div style=\"display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; border-bottom:1px solid #e2e8f0; padding-bottom:10px;\">\n      <h3 style=\"color:#1a3a52; font-size:18px;\"><i class=\"fas fa-user-edit\"></i> Edit Data Klien</h3>\n      <button type=\"button\" onclick=\"closeEditModal()\" style=\"border:none; background:transparent; font-size:22px; cursor:pointer;\">&times;</button>\n    </div>\n\n    <form action=\"/admin/client/update\" method=\"POST\" autocomplete=\"off\">\n      <input type=\"hidden\" name=\"client_id\" id=\"editClientId\">\n\n      <div class=\"form-group\">\n        <label for=\"editNama\">Nama Lengkap *</label>\n        <input type=\"text\" name=\"nama_lengkap\" id=\"editNama\" required>\n      </div>\n\n      <div style=\"display:grid; grid-template-columns:1fr 1fr; gap:15px;\">\n        <div class=\"form-group\">\n          <label for=\"editTelepon\">Nomor Telepon / WhatsApp</label>\n          <input type=\"text\" name=\"no_telepon\" id=\"editTelepon\">\n        </div>\n        <div class=\"form-group\">\n          <label for=\"editStatus\">Status Akun</label>\n          <select name=\"status\" id=\"editStatus\">\n            <option value=\"aktif\">Aktif</option>\n            <option value=\"selesai\">Selesai</option>\n            <option value=\"nonaktif\">Nonaktif</option>\n          </select>\n        </div>\n      </div>\n\n      <div class=\"form-group\">\n        <label for=\"editTanggalLahir\">Tanggal Lahir</label>\n        <input type=\"date\" name=\"tanggal_lahir\" id=\"editTanggalLahir\">\n      </div>\n\n      <!-- KOTAK RESET SANDI KLIEN -->\n      <div style=\"background:#fefce8; border:1px solid #fef08a; padding:14px; border-radius:6px; margin-bottom:18px;\">\n        <label for=\"editPassword\" style=\"color:#854d0e; font-weight:700; font-size:13px; display:block; margin-bottom:6px;\">\n          <i class=\"fas fa-key\"></i> Ubah / Reset Kata Sandi Klien\n        </label>\n        <div style=\"position:relative; display:flex; align-items:center;\">\n          <input type=\"text\" name=\"password\" id=\"editPassword\" placeholder=\"Masukkan kata sandi baru jika ingin mengubah sandi klien\" autocomplete=\"new-password\" style=\"font-weight:700; font-family:monospace;\">\n          <button type=\"button\" onclick=\"generateSandiEdit()\" style=\"position:absolute; right:6px; background:#854d0e; color:white; border:none; padding:5px 9px; border-radius:4px; font-size:11px; cursor:pointer;\">Acak</button>\n        </div>\n        <small style=\"color:#713f12; font-size:11px; margin-top:4px; display:block;\">Kosongkan jika kata sandi klien tidak ingin diubah.</small>\n      </div>\n\n      <div style=\"display:flex; justify-content:flex-end; gap:10px; margin-top:20px;\">\n        <button type=\"button\" class=\"btn btn-secondary\" onclick=\"closeEditModal()\">Batal</button>\n        <button type=\"submit\" class=\"btn btn-primary\"><i class=\"fas fa-save\"></i> Perbarui Klien</button>\n      </div>\n    </form>\n  </div>\n</div>\n\n<!-- MODAL HAPUS KLIEN -->\n<div class=\"modal\" id=\"modalHapus\">\n  <div class=\"modal-content\">\n    <h3 style=\"color:#dc3545; margin-bottom:12px; font-size:18px;\"><i class=\"fas fa-trash\"></i> Konfirmasi Hapus Data Klien</h3>\n    <p style=\"font-size:14px; color:#555; margin-bottom:20px;\">\n      Apakah Anda yakin ingin menghapus data klien <strong id=\"hapusNamaKlien\"></strong>? Seluruh data laporan dan riwayat wajib lapor klien tersebut juga akan terhapus permanen dari sistem.\n    </p>\n    <form action=\"/admin/client/delete\" method=\"POST\">\n      <input type=\"hidden\" name=\"client_id\" id=\"hapusClientId\">\n      <div style=\"display:flex; justify-content:flex-end; gap:10px;\">\n        <button type=\"button\" class=\"btn btn-secondary\" onclick=\"closeHapusModal()\">Batal</button>\n        <button type=\"submit\" class=\"btn btn-danger\"><i class=\"fas fa-trash\"></i> Ya, Hapus Klien</button>\n      </div>\n    </form>\n  </div>\n</div>\n\n<script>\n  function generateSandi() {\n    const chars = 'abcdefghjkmnpqrstuvwxyz23456789';\n    let res = 'klien';\n    for (let i = 0; i < 4; i++) {\n      res += chars.charAt(Math.floor(Math.random() * chars.length));\n    }\n    document.getElementById('tambahPassword').value = res;\n  }\n\n  function generateSandiEdit() {\n    const chars = 'abcdefghjkmnpqrstuvwxyz23456789';\n    let res = 'klien';\n    for (let i = 0; i < 4; i++) {\n      res += chars.charAt(Math.floor(Math.random() * chars.length));\n    }\n    document.getElementById('editPassword').value = res;\n  }\n\n  function openTambahModal() {\n    // Kosongkan form dari sisa input sebelumnya\n    document.getElementById('no_register').value = '';\n    document.getElementById('nama_lengkap').value = '';\n    document.getElementById('username').value = '';\n    document.getElementById('no_telepon').value = '';\n    document.getElementById('tambahPassword').value = '';\n    generateSandi(); // Berikan rekomendasi sandi awal otomatis\n    document.getElementById('modalTambah').classList.add('active');\n    hitungTotalBulan();\n  }\n  function closeTambahModal() {\n    document.getElementById('modalTambah').classList.remove('active');\n  }\n\n  function hitungTotalBulan() {\n    const bMulai = parseInt(document.getElementById('bulan_mulai').value, 10);\n    const tMulai = parseInt(document.getElementById('tahun_mulai').value, 10);\n    const bAkhir = parseInt(document.getElementById('bulan_akhir').value, 10);\n    const tAkhir = parseInt(document.getElementById('tahun_akhir').value, 10);\n\n    let total = (tAkhir - tMulai) * 12 + (bAkhir - bMulai) + 1;\n    if (isNaN(total) || total <= 0) total = 1;\n\n    document.getElementById('labelTotalBulan').innerText = total + ' Bulan';\n    document.getElementById('total_bulan').value = total;\n  }\n\n  function openEditModal(c) {\n    document.getElementById('editClientId').value = c.id;\n    document.getElementById('editNama').value = c.nama_lengkap || '';\n    document.getElementById('editTelepon').value = c.no_telepon || '';\n    document.getElementById('editStatus').value = c.status || 'aktif';\n    document.getElementById('editTanggalLahir').value = c.tanggal_lahir || '';\n    document.getElementById('editPassword').value = '';\n    document.getElementById('modalEdit').classList.add('active');\n  }\n  function closeEditModal() {\n    document.getElementById('modalEdit').classList.remove('active');\n  }\n\n  function openHapusModal(id, nama) {\n    document.getElementById('hapusClientId').value = id;\n    document.getElementById('hapusNamaKlien').innerText = nama;\n    document.getElementById('modalHapus').classList.add('active');\n  }\n  function closeHapusModal() {\n    document.getElementById('modalHapus').classList.remove('active');\n  }\n</script>\n\n")
+    ; __append( include('../partials/modal_foto') )
+    ; __append("\n\n</body>\n</html>\n")
+  }
+  return __output;
+
+},
+  "admin/kelola_client.ejs": function anonymous(locals, escapeFn, include, rethrow
+) {
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append("<!DOCTYPE html>\n<html lang=\"id\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>")
+    ; __append(escapeFn( pageTitle ))
+    ; __append("</title>\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n  <link href=\"https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700&display=swap\" rel=\"stylesheet\">\n  <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css\">\n  <link rel=\"stylesheet\" href=\"/css/responsive.css\">\n  <style>\n    * { margin:0; padding:0; box-sizing:border-box; }\n    body { font-family: 'Source Sans 3', sans-serif; background: #f5f7fa; color: #333; }\n    .navbar {\n      position: sticky; top: 0; left: 0; right: 0; width: 100%;\n      background: linear-gradient(135deg, #1a3a52 0%, #2d5f8d 100%);\n      color: white; padding: 15px 30px; z-index: 1000;\n      display: flex; justify-content: space-between; align-items: center;\n      box-shadow: 0 2px 10px rgba(0,0,0,0.15);\n    }\n    .navbar a { color: white; text-decoration: none; font-size: 14px; margin-left: 20px; }\n    .container { max-width: 1400px; margin: 25px auto 40px; padding: 0 20px; }\n    .header { margin-bottom: 25px; }\n    .header h1 { font-family: 'Playfair Display', serif; color: #1a3a52; font-size: 30px; margin-bottom: 4px; }\n    .card { background: white; border-radius: 8px; padding: 25px; margin-bottom: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }\n    .card-title { font-size: 18px; font-weight: 700; color: #1a3a52; margin-bottom: 18px; display: flex; align-items: center; gap: 10px; }\n    .filter-panel { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 18px; margin-bottom: 20px; }\n    .table { width: 100%; border-collapse: collapse; margin-top: 10px; }\n    .table th { background: #f8fafc; padding: 12px 14px; text-align: left; font-size: 13px; font-weight: 700; color: #475569; border-bottom: 2px solid #e2e8f0; }\n    .table td { padding: 12px 14px; border-bottom: 1px solid #e2e8f0; font-size: 14px; }\n    .table tr:hover { background: #f8fafc; }\n    .badge { display: inline-block; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }\n    .badge-success { background: #d4edda; color: #155724; }\n    .badge-warning { background: #fff3cd; color: #856404; }\n    .badge-danger { background: #f8d7da; color: #721c24; }\n    .btn {\n      padding: 9px 18px; border: none; border-radius: 6px; font-size: 13px; font-weight: 700;\n      cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;\n    }\n    .btn-sm { padding: 6px 12px; font-size: 12px; }\n    .btn-primary { background: #1a3a52; color: white; }\n    .btn-primary:hover { background: #2d5f8d; }\n    .btn-success { background: #28a745; color: white; }\n    .btn-success:hover { background: #218838; }\n    .btn-danger { background: #dc3545; color: white; }\n    .btn-danger:hover { background: #c82333; }\n    .btn-secondary { background: #64748b; color: white; }\n    .modal {\n      display: none; position: fixed; top:0; left:0; right:0; bottom:0;\n      background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center; padding: 20px;\n    }\n    .modal.active { display: flex; }\n    .modal-content { background: white; border-radius: 8px; padding: 28px; max-width: 650px; width: 100%; max-height: 90vh; overflow-y: auto; }\n    .form-group { margin-bottom: 16px; }\n    .form-group label { display: block; font-weight: 600; font-size: 13px; color: #334e68; margin-bottom: 6px; }\n    .form-group input, .form-group select {\n      width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: inherit; font-size: 14px;\n    }\n    .form-group input:focus, .form-group select:focus { outline: none; border-color: #1a3a52; box-shadow: 0 0 0 3px rgba(26,58,82,0.1); }\n  </style>\n</head>\n<body>\n\n<!-- NAVBAR -->\n<div class=\"navbar\">\n  <div style=\"font-weight:700; font-size:16px;\">\n    <i class=\"fas fa-gavel\"></i> BAPAS MEDAN - ADMIN\n  </div>\n  <div>\n    <a href=\"/admin/dashboard\"><i class=\"fas fa-tachometer-alt\"></i> Dashboard</a>\n    <a href=\"/admin/riwayat-lapor\"><i class=\"fas fa-filter\"></i> Riwayat Lapor</a>\n    <a href=\"/admin/kelola-client\" style=\"font-weight:700; border-bottom:2px solid #ffc107; padding-bottom:4px;\"><i class=\"fas fa-users-cog\"></i> Kelola Klien</a>\n    <a href=\"/logout\"><i class=\"fas fa-sign-out-alt\"></i> Logout</a>\n  </div>\n</div>\n\n<div class=\"container\">\n  <div class=\"header\">\n    <h1>Kelola Data Klien Pemasyarakatan</h1>\n    <p style=\"color:#666;\">Registrasi, pembaruan identitas, masa bimbingan wajib lapor, dan monitoring profil klien</p>\n  </div>\n\n  ")
+    ; __append( include('../partials/alerts') )
+    ; __append("\n\n  <!-- STATISTIK RINGKAS KLIEN -->\n  <div class=\"stat-chips\" style=\"display:flex; gap:12px; margin-bottom:20px; flex-wrap:wrap;\">\n    <div style=\"background:#eff6ff; border:1px solid #bfdbfe; padding:10px 16px; border-radius:6px; font-size:13px; color:#1e40af;\">\n      Total: <strong>")
+    ; __append(escapeFn( stat.total ))
+    ; __append(" Klien</strong>\n    </div>\n    <div style=\"background:#e8f5e9; border:1px solid #c8e6c9; padding:10px 16px; border-radius:6px; font-size:13px; color:#2e7d32;\">\n      Aktif: <strong>")
+    ; __append(escapeFn( stat.aktif ))
+    ; __append(" Klien</strong>\n    </div>\n    <div style=\"background:#fff9db; border:1px solid #ffec99; padding:10px 16px; border-radius:6px; font-size:13px; color:#f08c00;\">\n      Selesai: <strong>")
+    ; __append(escapeFn( stat.selesai ))
+    ; __append(" Klien</strong>\n    </div>\n    <div style=\"background:#e3f2fd; border:1px solid #bbdefb; padding:10px 16px; border-radius:6px; font-size:13px; color:#0288d1;\">\n      Profil Lengkap: <strong>")
+    ; __append(escapeFn( stat.profilLengkap ))
+    ; __append(" Klien</strong>\n    </div>\n  </div>\n\n  <!-- PANEL FILTER & SEARCH -->\n  <div class=\"filter-panel\">\n    <form method=\"GET\" action=\"/admin/kelola-client\" style=\"display:flex; gap:15px; align-items:center; flex-wrap:wrap; justify-content:space-between;\">\n      <div style=\"display:flex; gap:12px; flex-wrap:wrap; align-items:center;\">\n        <input type=\"text\" name=\"search\" placeholder=\"Cari nama, register, telepon...\" value=\"")
+    ; __append(escapeFn( filterOptions.search ))
+    ; __append("\" style=\"padding:9px 12px; border:1px solid #cbd5e1; border-radius:6px; font-size:14px; min-width:240px;\">\n\n        <select name=\"status\" onchange=\"this.form.submit()\" style=\"padding:9px 12px; border:1px solid #cbd5e1; border-radius:6px; font-size:14px;\">\n          <option value=\"all\" ")
+    ; __append(escapeFn( filterOptions.status === 'all' ? 'selected' : '' ))
+    ; __append(">Semua Status</option>\n          <option value=\"aktif\" ")
+    ; __append(escapeFn( filterOptions.status === 'aktif' ? 'selected' : '' ))
+    ; __append(">Aktif</option>\n          <option value=\"selesai\" ")
+    ; __append(escapeFn( filterOptions.status === 'selesai' ? 'selected' : '' ))
+    ; __append(">Selesai</option>\n          <option value=\"nonaktif\" ")
+    ; __append(escapeFn( filterOptions.status === 'nonaktif' ? 'selected' : '' ))
+    ; __append(">Nonaktif</option>\n        </select>\n\n        <select name=\"profil_lengkap\" onchange=\"this.form.submit()\" style=\"padding:9px 12px; border:1px solid #cbd5e1; border-radius:6px; font-size:14px;\">\n          <option value=\"all\" ")
+    ; __append(escapeFn( filterOptions.profil_lengkap === 'all' ? 'selected' : '' ))
+    ; __append(">Semua Status Profil</option>\n          <option value=\"1\" ")
+    ; __append(escapeFn( filterOptions.profil_lengkap === '1' ? 'selected' : '' ))
+    ; __append(">Profil Sudah Lengkap</option>\n          <option value=\"0\" ")
+    ; __append(escapeFn( filterOptions.profil_lengkap === '0' ? 'selected' : '' ))
+    ; __append(">Profil Belum Lengkap</option>\n        </select>\n\n        <button type=\"submit\" class=\"btn btn-primary\"><i class=\"fas fa-search\"></i> Cari</button>\n        ")
+    ;  if (filterOptions.search || filterOptions.status !== 'all' || filterOptions.profil_lengkap !== 'all') { 
+    ; __append("\n          <a href=\"/admin/kelola-client\" class=\"btn btn-secondary\"><i class=\"fas fa-undo\"></i> Reset</a>\n        ")
+    ;  } 
+    ; __append("\n      </div>\n\n      <div style=\"display:flex; gap:10px;\">\n        ")
+    ;  const queryParams = new URLSearchParams(filterOptions).toString(); 
+    ; __append("\n        <a href=\"/admin/kelola-client/export-csv?")
+    ; __append(escapeFn( queryParams ))
+    ; __append("\" class=\"btn btn-success\" title=\"Ekspor daftar klien ke CSV\">\n          <i class=\"fas fa-file-excel\"></i> Ekspor CSV\n        </a>\n        <button type=\"button\" class=\"btn btn-primary\" onclick=\"openTambahModal()\">\n          <i class=\"fas fa-user-plus\"></i> Tambah Klien Baru\n        </button>\n      </div>\n    </form>\n  </div>\n\n  <!-- TABEL KLIEN -->\n  <div class=\"card\">\n    <div class=\"card-title\">\n      <i class=\"fas fa-address-book\"></i> Daftar Seluruh Klien BAPAS (")
+    ; __append(escapeFn( clients.length ))
+    ; __append(")\n    </div>\n\n    ")
+    ;  if (clients && clients.length > 0) { 
+    ; __append("\n      <div class=\"table-responsive\">\n        <table class=\"table\">\n          <thead>\n            <tr>\n              <th>No</th>\n              <th>No Register & Sandi Login</th>\n              <th>Nama Lengkap</th>\n              <th>Username</th>\n              <th>Kontak / Telp</th>\n              <th>Status Akun</th>\n              <th>Masa Wajib Lapor</th>\n              <th>Profil</th>\n              <th>Aksi</th>\n            </tr>\n          </thead>\n          <tbody>\n            ")
+    ;  clients.forEach(function(c, idx) { 
+    ; __append("\n              <tr>\n                <td>")
+    ; __append(escapeFn( idx + 1 ))
+    ; __append("</td>\n                <td>\n                  <strong style=\"color:#003580; font-size:14px;\">")
+    ; __append(escapeFn( c.no_register ))
+    ; __append("</strong><br>\n                  <span style=\"font-size:11px; color:#1e293b; background:#e0f2fe; border:1px solid #bae6fd; padding:2px 6px; border-radius:4px; display:inline-flex; align-items:center; gap:4px; margin-top:3px;\">\n                    <i class=\"fas fa-key\" style=\"color:#0284c7; font-size:10px;\"></i> Sandi: <strong>")
+    ; __append(escapeFn( c.password_plain || 'client123' ))
+    ; __append("</strong>\n                  </span>\n                </td>\n                <td>\n                  <div style=\"display:flex; align-items:center; gap:10px;\">\n                    ")
+    ;  if (c.foto_profil) { 
+    ; __append("\n                      <img src=\"")
+    ; __append(escapeFn( getFileUrl(c.foto_profil, 'profil') ))
+    ; __append("\" alt=\"Foto\" style=\"width:34px; height:34px; border-radius:50%; object-fit:cover; border:1px solid #ccc; cursor:pointer;\" onclick=\"bukaModalFoto('")
+    ; __append(escapeFn( getFileUrl(c.foto_profil, 'profil') ))
+    ; __append("', '")
+    ; __append(escapeFn( c.nama_lengkap ))
+    ; __append("', 'Foto Profil Klien')\" onerror=\"this.onerror=null; this.src='/logo_pemasyarakatan-removebg-preview.png';\">\n                    ")
+    ;  } else { 
+    ; __append("\n                      <span style=\"width:34px; height:34px; border-radius:50%; background:#e2e8f0; display:inline-flex; align-items:center; justify-content:center; color:#64748b;\"><i class=\"fas fa-user\"></i></span>\n                    ")
+    ;  } 
+    ; __append("\n                    <div>\n                      <strong>")
+    ; __append(escapeFn( c.nama_lengkap ))
+    ; __append("</strong>\n                      ")
+    ;  if (c.email) { 
+    ; __append("<br><span style=\"font-size:12px; color:#64748b;\">")
+    ; __append(escapeFn( c.email ))
+    ; __append("</span>")
+    ;  } 
+    ; __append("\n                    </div>\n                  </div>\n                </td>\n              <td><code>")
+    ; __append(escapeFn( c.username ))
+    ; __append("</code></td>\n              <td>")
+    ; __append(escapeFn( c.no_telepon || '-' ))
+    ; __append("</td>\n              <td>\n                ")
+    ;  if (c.status === 'aktif') { 
+    ; __append("\n                  <span class=\"badge badge-success\">Aktif</span>\n                ")
+    ;  } else if (c.status === 'selesai') { 
+    ; __append("\n                  <span class=\"badge badge-warning\">Selesai</span>\n                ")
+    ;  } else { 
+    ; __append("\n                  <span class=\"badge badge-danger\">Nonaktif</span>\n                ")
+    ;  } 
+    ; __append("\n              </td>\n              <td style=\"font-size:13px;\">\n                ")
+    ; __append(escapeFn( getNamaBulan(c.bulan_wajib_lapor_mulai) ))
+    ; __append(" ")
+    ; __append(escapeFn( c.tahun_wajib_lapor_mulai ))
+    ; __append(" s/d<br>\n                ")
+    ; __append(escapeFn( getNamaBulan(c.bulan_wajib_lapor_akhir) ))
+    ; __append(" ")
+    ; __append(escapeFn( c.tahun_wajib_lapor_akhir ))
+    ; __append("\n                <span style=\"color:#64748b; font-size:11px;\">(")
+    ; __append(escapeFn( c.total_bulan_wajib_lapor || 12 ))
+    ; __append(" bln)</span>\n              </td>\n              <td>\n                ")
+    ;  if (c.profil_lengkap) { 
+    ; __append("\n                  <span style=\"color:#28a745; font-size:12px; font-weight:700;\"><i class=\"fas fa-check-circle\"></i> Lengkap</span>\n                ")
+    ;  } else { 
+    ; __append("\n                  <span style=\"color:#e67e22; font-size:12px; font-weight:700;\"><i class=\"fas fa-exclamation-circle\"></i> Belum</span>\n                ")
+    ;  } 
+    ; __append("\n              </td>\n              <td>\n                <div style=\"display:flex; gap:6px;\">\n                  <button type=\"button\" class=\"btn btn-sm btn-primary\" onclick='openEditModal(")
+    ; __append(escapeFn( JSON.stringify(c) ))
+    ; __append(")'><i class=\"fas fa-edit\"></i> Edit</button>\n                  <button type=\"button\" class=\"btn btn-sm btn-danger\" onclick=\"openHapusModal('")
+    ; __append(escapeFn( c.id ))
+    ; __append("', '")
+    ; __append(escapeFn( c.nama_lengkap ))
+    ; __append("')\"><i class=\"fas fa-trash\"></i> Hapus</button>\n                </div>\n              </td>\n            </tr>\n          ")
+    ;  }); 
+    ; __append("\n        </tbody>\n      </table>\n    </div>\n    ")
+    ;  } else { 
+    ; __append("\n      <div style=\"text-align:center; padding:50px 20px; color:#94a3b8;\">\n        <i class=\"fas fa-user-slash\" style=\"font-size:48px; color:#cbd5e1; margin-bottom:12px;\"></i>\n        <p>Tidak ada data klien yang cocok dengan filter yang dipilih.</p>\n      </div>\n    ")
+    ;  } 
+    ; __append("\n  </div>\n</div>\n\n<!-- MODAL TAMBAH KLIEN BARU -->\n<div class=\"modal\" id=\"modalTambah\">\n  <div class=\"modal-content\" style=\"max-width:680px;\">\n    <div style=\"display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; border-bottom:1px solid #e2e8f0; padding-bottom:12px;\">\n      <h3 style=\"color:#003580; font-size:19px; display:flex; align-items:center; gap:8px;\">\n        <i class=\"fas fa-user-plus\" style=\"color:#ffc107;\"></i> Tambah Klien Pemasyarakatan Baru\n      </h3>\n      <button type=\"button\" onclick=\"closeTambahModal()\" style=\"border:none; background:transparent; font-size:24px; cursor:pointer; color:#64748b;\">&times;</button>\n    </div>\n\n    <form action=\"/admin/client/create\" method=\"POST\" autocomplete=\"off\">\n      <!-- KOTAK UTAMA LOGIN KLIEN (NOMOR & SANDI) -->\n      <div style=\"background:#f0f7ff; border:1.5px solid #93c5fd; border-radius:8px; padding:16px; margin-bottom:16px;\">\n        <div style=\"font-weight:700; color:#1e40af; font-size:13.5px; margin-bottom:12px; display:flex; align-items:center; gap:6px;\">\n          <i class=\"fas fa-key\"></i> Kredensial Login Klien (Nomor & Sandi untuk Klien Masuk)\n        </div>\n        <div style=\"display:grid; grid-template-columns:1fr 1fr; gap:14px;\">\n          <div class=\"form-group\" style=\"margin-bottom:0;\">\n            <label for=\"no_register\" style=\"color:#0f172a; font-weight:700; font-size:13px;\">Nomor Register Klien *</label>\n            <input type=\"text\" name=\"no_register\" id=\"no_register\" placeholder=\"Contoh: REG-2026-001\" required autocomplete=\"off\" style=\"font-weight:700; color:#003580;\">\n            <small style=\"color:#475569; font-size:11px; display:block; margin-top:4px;\">Nomor register dipakai klien untuk login.</small>\n          </div>\n          <div class=\"form-group\" style=\"margin-bottom:0;\">\n            <label for=\"tambahPassword\" style=\"color:#0f172a; font-weight:700; font-size:13px;\">Kata Sandi (Password) Klien *</label>\n            <div style=\"position:relative; display:flex; align-items:center;\">\n              <input type=\"text\" name=\"password\" id=\"tambahPassword\" placeholder=\"Contoh: klien2026\" required autocomplete=\"new-password\" style=\"padding-right:75px; font-weight:700; font-family:monospace; font-size:14px;\">\n              <button type=\"button\" onclick=\"generateSandi()\" style=\"position:absolute; right:6px; background:#003580; color:white; border:none; padding:5px 9px; border-radius:4px; font-size:11px; font-weight:700; cursor:pointer;\" title=\"Buat Sandi Acak\">\n                <i class=\"fas fa-random\"></i> Acak\n              </button>\n            </div>\n            <small style=\"color:#475569; font-size:11px; display:block; margin-top:4px;\">Sandi ini diberikan ke klien agar bisa login.</small>\n          </div>\n        </div>\n      </div>\n\n      <!-- DATA DIRI KLIEN -->\n      <div style=\"display:grid; grid-template-columns:1.2fr 1fr; gap:14px;\">\n        <div class=\"form-group\">\n          <label for=\"nama_lengkap\">Nama Lengkap Klien *</label>\n          <input type=\"text\" name=\"nama_lengkap\" id=\"nama_lengkap\" placeholder=\"Nama lengkap sesuai berkas/KTP\" required autocomplete=\"off\">\n        </div>\n        <div class=\"form-group\">\n          <label for=\"no_telepon\">Nomor Telepon / WhatsApp</label>\n          <input type=\"text\" name=\"no_telepon\" id=\"no_telepon\" placeholder=\"Contoh: 081234567890\" autocomplete=\"off\">\n          <small style=\"color:#64748b; font-size:11px;\">Klien juga bisa login pakai nomor HP ini.</small>\n        </div>\n      </div>\n\n      <div style=\"display:grid; grid-template-columns:1fr 1fr; gap:14px;\">\n        <div class=\"form-group\">\n          <label for=\"username\">Username Login (Opsional)</label>\n          <input type=\"text\" name=\"username\" id=\"username\" placeholder=\"Kosongkan jika ingin sama dengan No. Register\" autocomplete=\"off\">\n        </div>\n        <div class=\"form-group\">\n          <label for=\"tanggal_lahir\">Tanggal Lahir</label>\n          <input type=\"date\" name=\"tanggal_lahir\" id=\"tanggal_lahir\">\n        </div>\n      </div>\n\n      <!-- PERIODE WAJIB LAPOR -->\n      <div style=\"background:#f8fafc; border:1px solid #cbd5e1; padding:14px; border-radius:8px; margin-bottom:18px;\">\n        <h4 style=\"color:#003580; font-size:13.5px; margin-bottom:10px;\"><i class=\"fas fa-calendar-alt\"></i> Periode Masa Wajib Lapor Klien</h4>\n        <div style=\"display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:10px;\">\n          <div>\n            <label style=\"font-size:12px; font-weight:700;\">Bulan Mulai</label>\n            <select name=\"bulan_mulai\" id=\"bulan_mulai\" onchange=\"hitungTotalBulan()\">\n              ")
+    ;  for(let m=1; m<=12; m++) { 
+    ; __append("\n                <option value=\"")
+    ; __append(escapeFn( m ))
+    ; __append("\">")
+    ; __append(escapeFn( getNamaBulan(m) ))
+    ; __append("</option>\n              ")
+    ;  } 
+    ; __append("\n            </select>\n          </div>\n          <div>\n            <label style=\"font-size:12px; font-weight:700;\">Tahun Mulai</label>\n            <input type=\"number\" name=\"tahun_mulai\" id=\"tahun_mulai\" value=\"")
+    ; __append(escapeFn( new Date().getFullYear() ))
+    ; __append("\" onchange=\"hitungTotalBulan()\">\n          </div>\n        </div>\n\n        <div style=\"display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;\">\n          <div>\n            <label style=\"font-size:12px; font-weight:700;\">Bulan Selesai</label>\n            <select name=\"bulan_akhir\" id=\"bulan_akhir\" onchange=\"hitungTotalBulan()\">\n              ")
+    ;  for(let m=1; m<=12; m++) { 
+    ; __append("\n                <option value=\"")
+    ; __append(escapeFn( m ))
+    ; __append("\" ")
+    ; __append(escapeFn( m===12 ? 'selected' : '' ))
+    ; __append(">")
+    ; __append(escapeFn( getNamaBulan(m) ))
+    ; __append("</option>\n              ")
+    ;  } 
+    ; __append("\n            </select>\n          </div>\n          <div>\n            <label style=\"font-size:12px; font-weight:700;\">Tahun Selesai</label>\n            <input type=\"number\" name=\"tahun_akhir\" id=\"tahun_akhir\" value=\"")
+    ; __append(escapeFn( new Date().getFullYear() ))
+    ; __append("\" onchange=\"hitungTotalBulan()\">\n          </div>\n        </div>\n\n        <div style=\"display:flex; justify-content:space-between; align-items:center;\">\n          <span style=\"font-size:13px; font-weight:700; color:#1e40af;\">Total Kewajiban Pelaporan:</span>\n          <span id=\"labelTotalBulan\" style=\"font-weight:800; font-size:16px; color:#28a745;\">12 Bulan</span>\n          <input type=\"hidden\" name=\"total_bulan\" id=\"total_bulan\" value=\"12\">\n        </div>\n      </div>\n\n      <div style=\"display:flex; justify-content:flex-end; gap:10px;\">\n        <button type=\"button\" class=\"btn btn-secondary\" onclick=\"closeTambahModal()\">Batal</button>\n        <button type=\"submit\" class=\"btn btn-primary\" style=\"padding:10px 20px; font-weight:700;\"><i class=\"fas fa-save\"></i> Simpan Data Klien</button>\n      </div>\n    </form>\n  </div>\n</div>\n\n<!-- MODAL EDIT KLIEN -->\n<div class=\"modal\" id=\"modalEdit\">\n  <div class=\"modal-content\" style=\"max-width:640px;\">\n    <div style=\"display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; border-bottom:1px solid #e2e8f0; padding-bottom:10px;\">\n      <h3 style=\"color:#1a3a52; font-size:18px;\"><i class=\"fas fa-user-edit\"></i> Edit Data Klien</h3>\n      <button type=\"button\" onclick=\"closeEditModal()\" style=\"border:none; background:transparent; font-size:22px; cursor:pointer;\">&times;</button>\n    </div>\n\n    <form action=\"/admin/client/update\" method=\"POST\" autocomplete=\"off\">\n      <input type=\"hidden\" name=\"client_id\" id=\"editClientId\">\n\n      <div class=\"form-group\">\n        <label for=\"editNama\">Nama Lengkap *</label>\n        <input type=\"text\" name=\"nama_lengkap\" id=\"editNama\" required>\n      </div>\n\n      <div style=\"display:grid; grid-template-columns:1fr 1fr; gap:15px;\">\n        <div class=\"form-group\">\n          <label for=\"editTelepon\">Nomor Telepon / WhatsApp</label>\n          <input type=\"text\" name=\"no_telepon\" id=\"editTelepon\">\n        </div>\n        <div class=\"form-group\">\n          <label for=\"editStatus\">Status Akun</label>\n          <select name=\"status\" id=\"editStatus\">\n            <option value=\"aktif\">Aktif</option>\n            <option value=\"selesai\">Selesai</option>\n            <option value=\"nonaktif\">Nonaktif</option>\n          </select>\n        </div>\n      </div>\n\n      <div class=\"form-group\">\n        <label for=\"editTanggalLahir\">Tanggal Lahir</label>\n        <input type=\"date\" name=\"tanggal_lahir\" id=\"editTanggalLahir\">\n      </div>\n\n      <!-- KOTAK RESET SANDI KLIEN -->\n      <div style=\"background:#fefce8; border:1px solid #fef08a; padding:14px; border-radius:6px; margin-bottom:18px;\">\n        <label for=\"editPassword\" style=\"color:#854d0e; font-weight:700; font-size:13px; display:block; margin-bottom:6px;\">\n          <i class=\"fas fa-key\"></i> Ubah / Reset Kata Sandi Klien\n        </label>\n        <div style=\"position:relative; display:flex; align-items:center;\">\n          <input type=\"text\" name=\"password\" id=\"editPassword\" placeholder=\"Masukkan kata sandi baru jika ingin mengubah sandi klien\" autocomplete=\"new-password\" style=\"font-weight:700; font-family:monospace;\">\n          <button type=\"button\" onclick=\"generateSandiEdit()\" style=\"position:absolute; right:6px; background:#854d0e; color:white; border:none; padding:5px 9px; border-radius:4px; font-size:11px; cursor:pointer;\">Acak</button>\n        </div>\n        <small style=\"color:#713f12; font-size:11px; margin-top:4px; display:block;\">Kosongkan jika kata sandi klien tidak ingin diubah.</small>\n      </div>\n\n      <div style=\"display:flex; justify-content:flex-end; gap:10px; margin-top:20px;\">\n        <button type=\"button\" class=\"btn btn-secondary\" onclick=\"closeEditModal()\">Batal</button>\n        <button type=\"submit\" class=\"btn btn-primary\"><i class=\"fas fa-save\"></i> Perbarui Klien</button>\n      </div>\n    </form>\n  </div>\n</div>\n\n<!-- MODAL HAPUS KLIEN -->\n<div class=\"modal\" id=\"modalHapus\">\n  <div class=\"modal-content\">\n    <h3 style=\"color:#dc3545; margin-bottom:12px; font-size:18px;\"><i class=\"fas fa-trash\"></i> Konfirmasi Hapus Data Klien</h3>\n    <p style=\"font-size:14px; color:#555; margin-bottom:20px;\">\n      Apakah Anda yakin ingin menghapus data klien <strong id=\"hapusNamaKlien\"></strong>? Seluruh data laporan dan riwayat wajib lapor klien tersebut juga akan terhapus permanen dari sistem.\n    </p>\n    <form action=\"/admin/client/delete\" method=\"POST\">\n      <input type=\"hidden\" name=\"client_id\" id=\"hapusClientId\">\n      <div style=\"display:flex; justify-content:flex-end; gap:10px;\">\n        <button type=\"button\" class=\"btn btn-secondary\" onclick=\"closeHapusModal()\">Batal</button>\n        <button type=\"submit\" class=\"btn btn-danger\"><i class=\"fas fa-trash\"></i> Ya, Hapus Klien</button>\n      </div>\n    </form>\n  </div>\n</div>\n\n<script>\n  function generateSandi() {\n    const chars = 'abcdefghjkmnpqrstuvwxyz23456789';\n    let res = 'klien';\n    for (let i = 0; i < 4; i++) {\n      res += chars.charAt(Math.floor(Math.random() * chars.length));\n    }\n    document.getElementById('tambahPassword').value = res;\n  }\n\n  function generateSandiEdit() {\n    const chars = 'abcdefghjkmnpqrstuvwxyz23456789';\n    let res = 'klien';\n    for (let i = 0; i < 4; i++) {\n      res += chars.charAt(Math.floor(Math.random() * chars.length));\n    }\n    document.getElementById('editPassword').value = res;\n  }\n\n  function openTambahModal() {\n    // Kosongkan form dari sisa input sebelumnya\n    document.getElementById('no_register').value = '';\n    document.getElementById('nama_lengkap').value = '';\n    document.getElementById('username').value = '';\n    document.getElementById('no_telepon').value = '';\n    document.getElementById('tambahPassword').value = '';\n    generateSandi(); // Berikan rekomendasi sandi awal otomatis\n    document.getElementById('modalTambah').classList.add('active');\n    hitungTotalBulan();\n  }\n  function closeTambahModal() {\n    document.getElementById('modalTambah').classList.remove('active');\n  }\n\n  function hitungTotalBulan() {\n    const bMulai = parseInt(document.getElementById('bulan_mulai').value, 10);\n    const tMulai = parseInt(document.getElementById('tahun_mulai').value, 10);\n    const bAkhir = parseInt(document.getElementById('bulan_akhir').value, 10);\n    const tAkhir = parseInt(document.getElementById('tahun_akhir').value, 10);\n\n    let total = (tAkhir - tMulai) * 12 + (bAkhir - bMulai) + 1;\n    if (isNaN(total) || total <= 0) total = 1;\n\n    document.getElementById('labelTotalBulan').innerText = total + ' Bulan';\n    document.getElementById('total_bulan').value = total;\n  }\n\n  function openEditModal(c) {\n    document.getElementById('editClientId').value = c.id;\n    document.getElementById('editNama').value = c.nama_lengkap || '';\n    document.getElementById('editTelepon').value = c.no_telepon || '';\n    document.getElementById('editStatus').value = c.status || 'aktif';\n    document.getElementById('editTanggalLahir').value = c.tanggal_lahir || '';\n    document.getElementById('editPassword').value = '';\n    document.getElementById('modalEdit').classList.add('active');\n  }\n  function closeEditModal() {\n    document.getElementById('modalEdit').classList.remove('active');\n  }\n\n  function openHapusModal(id, nama) {\n    document.getElementById('hapusClientId').value = id;\n    document.getElementById('hapusNamaKlien').innerText = nama;\n    document.getElementById('modalHapus').classList.add('active');\n  }\n  function closeHapusModal() {\n    document.getElementById('modalHapus').classList.remove('active');\n  }\n</script>\n\n")
+    ; __append( include('../partials/modal_foto') )
+    ; __append("\n\n</body>\n</html>\n")
+  }
+  return __output;
+
+},
+  "admin/riwayat_lapor": function anonymous(locals, escapeFn, include, rethrow
+) {
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append("<!DOCTYPE html>\n<html lang=\"id\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>")
+    ; __append(escapeFn( pageTitle ))
+    ; __append("</title>\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n  <link href=\"https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700&display=swap\" rel=\"stylesheet\">\n  <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css\">\n  <link rel=\"stylesheet\" href=\"/css/responsive.css\">\n  <style>\n    * { margin:0; padding:0; box-sizing:border-box; }\n    body { font-family: 'Source Sans 3', sans-serif; background: #f5f7fa; color: #333; }\n    .navbar {\n      position: sticky; top: 0; left: 0; right: 0; width: 100%;\n      background: linear-gradient(135deg, #1a3a52 0%, #2d5f8d 100%);\n      color: white; padding: 15px 30px; z-index: 1000;\n      display: flex; justify-content: space-between; align-items: center;\n      box-shadow: 0 2px 10px rgba(0,0,0,0.15);\n    }\n    .navbar a { color: white; text-decoration: none; font-size: 14px; margin-left: 20px; }\n    .container { max-width: 1400px; margin: 25px auto 40px; padding: 0 20px; }\n    .header { margin-bottom: 25px; }\n    .header h1 { font-family: 'Playfair Display', serif; color: #1a3a52; font-size: 30px; margin-bottom: 4px; }\n    .card { background: white; border-radius: 8px; padding: 25px; margin-bottom: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }\n    .card-title { font-size: 18px; font-weight: 700; color: #1a3a52; margin-bottom: 18px; display: flex; align-items: center; gap: 10px; }\n\n    /* FILTER BOX STYLES */\n    .filter-panel {\n      background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px;\n      padding: 22px; margin-bottom: 25px;\n    }\n    .filter-grid {\n      display: grid;\n      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));\n      gap: 15px;\n      margin-bottom: 18px;\n    }\n    .filter-item { display: flex; flex-direction: column; }\n    .filter-item label { font-size: 12px; font-weight: 700; color: #475569; text-transform: uppercase; margin-bottom: 6px; }\n    .filter-item input, .filter-item select {\n      padding: 9px 12px; border: 1px solid #cbd5e1; border-radius: 6px;\n      font-family: inherit; font-size: 14px; background: #fff;\n    }\n    .filter-item input:focus, .filter-item select:focus {\n      outline: none; border-color: #1a3a52; box-shadow: 0 0 0 3px rgba(26,58,82,0.1);\n    }\n    .filter-actions {\n      display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap;\n      border-top: 1px solid #e2e8f0; padding-top: 15px;\n    }\n    .btn {\n      padding: 9px 18px; border: none; border-radius: 6px; font-size: 13px; font-weight: 700;\n      cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;\n    }\n    .btn-primary { background: #1a3a52; color: white; }\n    .btn-primary:hover { background: #2d5f8d; }\n    .btn-success { background: #28a745; color: white; }\n    .btn-success:hover { background: #218838; }\n    .btn-danger { background: #dc3545; color: white; }\n    .btn-danger:hover { background: #c82333; }\n    .btn-secondary { background: #64748b; color: white; }\n    .btn-secondary:hover { background: #475569; }\n    .btn-outline { background: white; border: 1px solid #cbd5e1; color: #475569; }\n    .btn-outline:hover { background: #f1f5f9; }\n\n    /* SUMMARY BADGE BAR */\n    .summary-bar {\n      display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 20px;\n      background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px; padding: 12px 18px; font-size: 13px; color: #1e40af;\n    }\n    .summary-chip {\n      background: #fff; padding: 4px 10px; border-radius: 12px; font-weight: 700; border: 1px solid #bfdbfe;\n    }\n\n    /* TABLE */\n    .table { width: 100%; border-collapse: collapse; margin-top: 10px; }\n    .table th { background: #f8fafc; padding: 12px 14px; text-align: left; font-size: 13px; font-weight: 700; color: #475569; border-bottom: 2px solid #e2e8f0; }\n    .table td { padding: 12px 14px; border-bottom: 1px solid #e2e8f0; font-size: 14px; }\n    .table tr:hover { background: #f8fafc; }\n    .badge { display: inline-block; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }\n    .badge-warning { background: #fff3cd; color: #856404; }\n    .badge-success { background: #d4edda; color: #155724; }\n    .badge-danger { background: #f8d7da; color: #721c24; }\n    .badge-secondary { background: #e2e8f0; color: #475569; }\n\n    /* MODAL */\n    .modal {\n      display: none; position: fixed; top:0; left:0; right:0; bottom:0;\n      background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center; padding: 20px;\n    }\n    .modal.active { display: flex; }\n    .modal-content { background: white; border-radius: 8px; padding: 28px; max-width: 650px; width: 100%; max-height: 90vh; overflow-y: auto; }\n\n    /* PRINT STYLES */\n    @media print {\n      .navbar, .filter-panel, .btn, .no-print { display: none !important; }\n      body { background: #fff !important; }\n      .container { margin: 0 !important; max-width: 100% !important; padding: 0 !important; }\n      .card { box-shadow: none !important; border: none !important; padding: 0 !important; }\n      .print-header { display: block !important; margin-bottom: 20px; text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; }\n    }\n    .print-header { display: none; }\n  </style>\n</head>\n<body>\n\n<!-- NAVBAR -->\n<div class=\"navbar no-print\">\n  <div style=\"font-weight:700; font-size:16px;\">\n    <i class=\"fas fa-gavel\"></i> BAPAS MEDAN - ADMIN\n  </div>\n  <div>\n    <a href=\"/admin/dashboard\"><i class=\"fas fa-tachometer-alt\"></i> Dashboard</a>\n    <a href=\"/admin/riwayat-lapor\" style=\"font-weight:700; border-bottom:2px solid #ffc107; padding-bottom:4px;\"><i class=\"fas fa-filter\"></i> Riwayat Lapor</a>\n    <a href=\"/admin/kelola-client\"><i class=\"fas fa-users-cog\"></i> Kelola Klien</a>\n    <a href=\"/logout\"><i class=\"fas fa-sign-out-alt\"></i> Logout</a>\n  </div>\n</div>\n\n<div class=\"container\">\n  <!-- PRINT ONLY HEADER -->\n  <div class=\"print-header\">\n    <h2 style=\"font-size:20px; text-transform:uppercase; margin-bottom:4px;\">KEMENTERIAN IMIGRASI DAN PEMASYARAKATAN REPUBLIK INDONESIA</h2>\n    <h3 style=\"font-size:18px; margin-bottom:4px;\">BALAI PEMASYARAKATAN (BAPAS) KELAS I MEDAN</h3>\n    <p style=\"font-size:13px;\">Jl. Lembaga Pemasyarakatan, Tanjung Gusta, Kec. Medan Helvetia, Kota Medan | Telp: (061) 4516516</p>\n    <h4 style=\"margin-top:15px; text-decoration:underline;\">REKAPITULASI PELAPORAN WAJIB LAPOR KLIEN</h4>\n    <p style=\"font-size:12px;\">Dicetak pada: ")
+    ; __append(escapeFn( new Date().toLocaleString('id-ID') ))
+    ; __append("</p>\n  </div>\n\n  <div class=\"header no-print\">\n    <h1>Riwayat & Filter Lengkap Wajib Lapor</h1>\n    <p style=\"color:#666;\">Filter data laporan berdasarkan Status, Nama/Register Klien, Bulan, Tahun, Rentang Tanggal, Bukti Foto, dan Urutan</p>\n  </div>\n\n  ")
+    ; __append( include('../partials/alerts') )
+    ; __append("\n\n  <!-- PANEL FILTER LENGKAP -->\n  <div class=\"filter-panel no-print\">\n    <form method=\"GET\" action=\"/admin/riwayat-lapor\" id=\"filterForm\">\n      <div class=\"filter-grid\">\n        <!-- 1. Filter Status -->\n        <div class=\"filter-item\">\n          <label for=\"status\"><i class=\"fas fa-traffic-light\"></i> Status Laporan</label>\n          <select name=\"status\" id=\"status\">\n            <option value=\"all\" ")
+    ; __append(escapeFn( filters.status === 'all' ? 'selected' : '' ))
+    ; __append(">Semua Status</option>\n            <option value=\"menunggu_verifikasi\" ")
+    ; __append(escapeFn( filters.status === 'menunggu_verifikasi' ? 'selected' : '' ))
+    ; __append(">Menunggu Verifikasi</option>\n            <option value=\"diterima\" ")
+    ; __append(escapeFn( filters.status === 'diterima' ? 'selected' : '' ))
+    ; __append(">Diterima</option>\n            <option value=\"ditolak\" ")
+    ; __append(escapeFn( filters.status === 'ditolak' ? 'selected' : '' ))
+    ; __append(">Ditolak</option>\n            <option value=\"dibatalkan\" ")
+    ; __append(escapeFn( filters.status === 'dibatalkan' ? 'selected' : '' ))
+    ; __append(">Dibatalkan</option>\n            <option value=\"draft\" ")
+    ; __append(escapeFn( filters.status === 'draft' ? 'selected' : '' ))
+    ; __append(">Draft</option>\n          </select>\n        </div>\n\n        <!-- 2. Filter Client Search -->\n        <div class=\"filter-item\">\n          <label for=\"client\"><i class=\"fas fa-search\"></i> Cari Klien / No. Register</label>\n          <input type=\"text\" name=\"client\" id=\"client\" placeholder=\"Nama, No. Reg, atau Username...\" value=\"")
+    ; __append(escapeFn( filters.client ))
+    ; __append("\">\n        </div>\n\n        <!-- 3. Filter Bulan -->\n        <div class=\"filter-item\">\n          <label for=\"bulan\"><i class=\"fas fa-calendar-alt\"></i> Periode Bulan</label>\n          <select name=\"bulan\" id=\"bulan\">\n            <option value=\"all\" ")
+    ; __append(escapeFn( filters.bulan === 'all' ? 'selected' : '' ))
+    ; __append(">Semua Bulan</option>\n            ")
+    ;  for (let i = 1; i <= 12; i++) { 
+    ; __append("\n              <option value=\"")
+    ; __append(escapeFn( i ))
+    ; __append("\" ")
+    ; __append(escapeFn( String(filters.bulan) === String(i) ? 'selected' : '' ))
+    ; __append(">")
+    ; __append(escapeFn( getNamaBulan(i) ))
+    ; __append("</option>\n            ")
+    ;  } 
+    ; __append("\n          </select>\n        </div>\n\n        <!-- 4. Filter Tahun -->\n        <div class=\"filter-item\">\n          <label for=\"tahun\"><i class=\"fas fa-calendar\"></i> Periode Tahun</label>\n          <select name=\"tahun\" id=\"tahun\">\n            <option value=\"all\" ")
+    ; __append(escapeFn( filters.tahun === 'all' ? 'selected' : '' ))
+    ; __append(">Semua Tahun</option>\n            ")
+    ;  availableYears.forEach(function(yr) { 
+    ; __append("\n              <option value=\"")
+    ; __append(escapeFn( yr ))
+    ; __append("\" ")
+    ; __append(escapeFn( String(filters.tahun) === String(yr) ? 'selected' : '' ))
+    ; __append(">")
+    ; __append(escapeFn( yr ))
+    ; __append("</option>\n            ")
+    ;  }); 
+    ; __append("\n          </select>\n        </div>\n\n        <!-- 5. Filter Rentang Tanggal Mulai -->\n        <div class=\"filter-item\">\n          <label for=\"date_start\"><i class=\"fas fa-calendar-day\"></i> Tanggal Submit (Dari)</label>\n          <input type=\"date\" name=\"date_start\" id=\"date_start\" value=\"")
+    ; __append(escapeFn( filters.date_start ))
+    ; __append("\">\n        </div>\n\n        <!-- 6. Filter Rentang Tanggal Akhir -->\n        <div class=\"filter-item\">\n          <label for=\"date_end\"><i class=\"fas fa-calendar-day\"></i> Tanggal Submit (Sampai)</label>\n          <input type=\"date\" name=\"date_end\" id=\"date_end\" value=\"")
+    ; __append(escapeFn( filters.date_end ))
+    ; __append("\">\n        </div>\n\n        <!-- 7. Filter Foto Bukti -->\n        <div class=\"filter-item\">\n          <label for=\"foto\"><i class=\"fas fa-camera\"></i> Foto Bukti</label>\n          <select name=\"foto\" id=\"foto\">\n            <option value=\"all\" ")
+    ; __append(escapeFn( filters.foto === 'all' ? 'selected' : '' ))
+    ; __append(">Semua (Ada/Tidak)</option>\n            <option value=\"ada\" ")
+    ; __append(escapeFn( filters.foto === 'ada' ? 'selected' : '' ))
+    ; __append(">Hanya yang Memiliki Foto</option>\n            <option value=\"tidak_ada\" ")
+    ; __append(escapeFn( filters.foto === 'tidak_ada' ? 'selected' : '' ))
+    ; __append(">Tanpa Foto</option>\n          </select>\n        </div>\n\n        <!-- 8. Pengurutan Data (Sorting) -->\n        <div class=\"filter-item\">\n          <label for=\"sort\"><i class=\"fas fa-sort\"></i> Urutkan Berdasarkan</label>\n          <select name=\"sort\" id=\"sort\">\n            <option value=\"tanggal_submit_desc\" ")
+    ; __append(escapeFn( filters.sort === 'tanggal_submit_desc' ? 'selected' : '' ))
+    ; __append(">Tanggal Submit (Terbaru)</option>\n            <option value=\"tanggal_submit_asc\" ")
+    ; __append(escapeFn( filters.sort === 'tanggal_submit_asc' ? 'selected' : '' ))
+    ; __append(">Tanggal Submit (Terlama)</option>\n            <option value=\"nama_asc\" ")
+    ; __append(escapeFn( filters.sort === 'nama_asc' ? 'selected' : '' ))
+    ; __append(">Nama Klien (A-Z)</option>\n            <option value=\"nama_desc\" ")
+    ; __append(escapeFn( filters.sort === 'nama_desc' ? 'selected' : '' ))
+    ; __append(">Nama Klien (Z-A)</option>\n            <option value=\"periode_desc\" ")
+    ; __append(escapeFn( filters.sort === 'periode_desc' ? 'selected' : '' ))
+    ; __append(">Periode Lapor (Terbaru)</option>\n            <option value=\"periode_asc\" ")
+    ; __append(escapeFn( filters.sort === 'periode_asc' ? 'selected' : '' ))
+    ; __append(">Periode Lapor (Terlama)</option>\n          </select>\n        </div>\n      </div>\n\n      <div class=\"filter-actions\">\n        <div style=\"display:flex; gap:10px; flex-wrap:wrap;\">\n          <button type=\"submit\" class=\"btn btn-primary\"><i class=\"fas fa-filter\"></i> Terapkan Filter</button>\n          <a href=\"/admin/riwayat-lapor\" class=\"btn btn-outline\"><i class=\"fas fa-undo\"></i> Reset Filter</a>\n        </div>\n        <div style=\"display:flex; gap:10px; flex-wrap:wrap;\">\n          <!-- Export to CSV with current filter queries -->\n          ")
+    ;  
+            const queryParams = new URLSearchParams(filters).toString();
+          
+    ; __append("\n          <a href=\"/admin/riwayat-lapor/export-csv?")
+    ; __append(escapeFn( queryParams ))
+    ; __append("\" class=\"btn btn-success\" title=\"Download Excel/CSV hasil filter ini\">\n            <i class=\"fas fa-file-excel\"></i> Ekspor ke CSV / Excel\n          </a>\n          <button type=\"button\" class=\"btn btn-secondary\" onclick=\"window.print()\" title=\"Cetak halaman hasil filter ini\">\n            <i class=\"fas fa-print\"></i> Cetak Laporan\n          </button>\n        </div>\n      </div>\n    </form>\n  </div>\n\n  <!-- SUMMARY BAR (Statistik Filter Aktif) -->\n  <div class=\"summary-bar no-print\">\n    <div><strong><i class=\"fas fa-info-circle\"></i> Hasil Filter:</strong> Ditemukan <strong>")
+    ; __append(escapeFn( filterStat.total ))
+    ; __append("</strong> laporan</div>\n    <div class=\"summary-chip\" style=\"color:#b7791f;\"><i class=\"fas fa-clock\"></i> ")
+    ; __append(escapeFn( filterStat.menunggu ))
+    ; __append(" Menunggu</div>\n    <div class=\"summary-chip\" style=\"color:#28a745;\"><i class=\"fas fa-check\"></i> ")
+    ; __append(escapeFn( filterStat.diterima ))
+    ; __append(" Diterima</div>\n    <div class=\"summary-chip\" style=\"color:#dc3545;\"><i class=\"fas fa-times\"></i> ")
+    ; __append(escapeFn( filterStat.ditolak ))
+    ; __append(" Ditolak</div>\n    <div class=\"summary-chip\" style=\"color:#0052a3;\"><i class=\"fas fa-camera\"></i> ")
+    ; __append(escapeFn( filterStat.adaFoto ))
+    ; __append(" Ada Foto</div>\n  </div>\n\n  <!-- TABEL RIWAYAT LAPOR -->\n  <div class=\"card\">\n    <div class=\"card-title\">\n      <i class=\"fas fa-list-alt\"></i> Tabel Data Wajib Lapor Klien\n    </div>\n\n    ")
+    ;  if (laporList && laporList.length > 0) { 
+    ; __append("\n      <div class=\"table-responsive\">\n        <table class=\"table\">\n        <thead>\n          <tr>\n            <th>No</th>\n            <th>Klien Pemasyarakatan</th>\n            <th>Periode Lapor</th>\n            <th>Tanggal Kirim</th>\n            <th>Status</th>\n            <th>Foto Bukti</th>\n            <th>Verifikator</th>\n            <th class=\"no-print\">Aksi</th>\n          </tr>\n        </thead>\n        <tbody>\n          ")
+    ;  laporList.forEach(function(lapor, idx) { 
+    ; __append("\n            <tr>\n              <td>")
+    ; __append(escapeFn( idx + 1 ))
+    ; __append("</td>\n              <td>\n                <strong>")
+    ; __append(escapeFn( lapor.nama_lengkap ))
+    ; __append("</strong><br>\n                <span style=\"font-size:12px; color:#64748b;\"><i class=\"fas fa-id-badge\"></i> ")
+    ; __append(escapeFn( lapor.no_register ))
+    ; __append("</span>\n              </td>\n              <td><strong>")
+    ; __append(escapeFn( getNamaBulan(lapor.bulan) ))
+    ; __append(" ")
+    ; __append(escapeFn( lapor.tahun ))
+    ; __append("</strong></td>\n              <td>")
+    ; __append(escapeFn( formatTanggalWaktu(lapor.tanggal_submit) ))
+    ; __append("</td>\n              <td>\n                ")
+    ;  if (lapor.status === 'diterima') { 
+    ; __append("\n                  <span class=\"badge badge-success\"><i class=\"fas fa-check\"></i> Diterima</span>\n                ")
+    ;  } else if (lapor.status === 'menunggu_verifikasi') { 
+    ; __append("\n                  <span class=\"badge badge-warning\"><i class=\"fas fa-clock\"></i> Menunggu</span>\n                ")
+    ;  } else if (lapor.status === 'ditolak') { 
+    ; __append("\n                  <span class=\"badge badge-danger\"><i class=\"fas fa-times\"></i> Ditolak</span>\n                ")
+    ;  } else if (lapor.status === 'dibatalkan') { 
+    ; __append("\n                  <span class=\"badge badge-danger\">Dibatalkan</span>\n                ")
+    ;  } else { 
+    ; __append("\n                  <span class=\"badge badge-secondary\">")
+    ; __append(escapeFn( lapor.status ))
+    ; __append("</span>\n                ")
+    ;  } 
+    ; __append("\n              </td>\n              <td>\n                ")
+    ;  if (lapor.foto_bukti) { 
+    ; __append("\n                  <button type=\"button\" class=\"btn btn-sm\" style=\"color:#0052a3; font-weight:700; background:#e8f0fe; border:1px solid #b3d1ff; cursor:pointer; padding:4px 8px; border-radius:4px; font-size:12px; display:inline-flex; align-items:center; gap:4px;\" onclick=\"bukaModalFoto('")
+    ; __append(escapeFn( getFileUrl(lapor.foto_bukti, 'wajib_lapor') ))
+    ; __append("', '")
+    ; __append(escapeFn( lapor.nama_lengkap ))
+    ; __append("', '")
+    ; __append(escapeFn( getNamaBulan(lapor.bulan) ))
+    ; __append(" ")
+    ; __append(escapeFn( lapor.tahun ))
+    ; __append("')\">\n                    <i class=\"fas fa-image\"></i> Ada Foto\n                  </button>\n                ")
+    ;  } else { 
+    ; __append("\n                  <span style=\"color:#94a3b8; font-size:13px;\">Tanpa Foto</span>\n                ")
+    ;  } 
+    ; __append("\n              </td>\n              <td style=\"font-size:13px; color:#475569;\">\n                ")
+    ; __append(escapeFn( lapor.admin_verifikasi || '-' ))
+    ; __append("\n              </td>\n              <td class=\"no-print\">\n                <button type=\"button\" class=\"btn btn-outline\" style=\"padding:5px 10px; font-size:12px;\" onclick=\"showDetailModal('")
+    ; __append(escapeFn( lapor.id ))
+    ; __append("')\">\n                  <i class=\"fas fa-eye\"></i> Detail\n                </button>\n              </td>\n            </tr>\n          ")
+    ;  }); 
+    ; __append("\n        </tbody>\n      </table>\n    </div>\n    ")
+    ;  } else { 
+    ; __append("\n      <div style=\"text-align:center; padding:60px 20px; color:#94a3b8;\">\n        <i class=\"fas fa-search\" style=\"font-size:48px; color:#cbd5e1; margin-bottom:15px;\"></i>\n        <h3 style=\"color:#334e68; font-size:18px; margin-bottom:6px;\">Tidak ada data yang cocok dengan kriteria filter</h3>\n        <p style=\"font-size:14px; margin-bottom:15px;\">Cobalah memperluas rentang tanggal atau mereset filter status dan pencarian klien.</p>\n        <a href=\"/admin/riwayat-lapor\" class=\"btn btn-outline\"><i class=\"fas fa-undo\"></i> Reset Semua Filter</a>\n      </div>\n    ")
+    ;  } 
+    ; __append("\n  </div>\n</div>\n\n<!-- MODAL DETAIL LAPORAN INTERAKTIF -->\n<div class=\"modal no-print\" id=\"modalDetail\">\n  <div class=\"modal-content\">\n    <div style=\"display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid #e2e8f0; padding-bottom:12px;\">\n      <h3 style=\"color:#1a3a52; font-size:18px;\"><i class=\"fas fa-file-alt\"></i> Rincian Wajib Lapor Klien</h3>\n      <button type=\"button\" onclick=\"closeDetailModal()\" style=\"border:none; background:transparent; font-size:22px; cursor:pointer; color:#94a3b8;\">&times;</button>\n    </div>\n\n    <div id=\"modalLoading\" style=\"text-align:center; padding:30px; color:#64748b;\">\n      <i class=\"fas fa-spinner fa-spin\" style=\"font-size:28px;\"></i><br>Memuat data laporan...\n    </div>\n\n    <div id=\"modalDetailBody\" style=\"display:none;\">\n      <div style=\"display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-bottom:15px; background:#f8fafc; padding:15px; border-radius:6px;\">\n        <div>\n          <span style=\"font-size:12px; color:#64748b; font-weight:700;\">NAMA KLIEN:</span><br>\n          <strong id=\"dNama\" style=\"color:#1a3a52; font-size:15px;\"></strong>\n        </div>\n        <div>\n          <span style=\"font-size:12px; color:#64748b; font-weight:700;\">NO. REGISTER:</span><br>\n          <strong id=\"dRegister\" style=\"color:#1a3a52;\"></strong>\n        </div>\n        <div>\n          <span style=\"font-size:12px; color:#64748b; font-weight:700;\">PERIODE LAPOR:</span><br>\n          <span id=\"dPeriode\" style=\"font-weight:700; color:#0052a3;\"></span>\n        </div>\n        <div>\n          <span style=\"font-size:12px; color:#64748b; font-weight:700;\">TANGGAL SUBMIT:</span><br>\n          <span id=\"dSubmit\"></span>\n        </div>\n      </div>\n\n      <div style=\"margin-bottom:15px;\">\n        <span style=\"font-size:12px; color:#64748b; font-weight:700; display:block; margin-bottom:4px;\">AKTIVITAS HARIAN / PEKERJAAN:</span>\n        <div id=\"dAktivitas\" style=\"background:#fff; border:1px solid #e2e8f0; padding:12px; border-radius:6px; font-size:14px; color:#333;\"></div>\n      </div>\n\n      <div style=\"margin-bottom:15px;\">\n        <span style=\"font-size:12px; color:#64748b; font-weight:700; display:block; margin-bottom:4px;\">RENCANA KEGIATAN MENDATANG:</span>\n        <div id=\"dRencana\" style=\"background:#fff; border:1px solid #e2e8f0; padding:12px; border-radius:6px; font-size:14px; color:#333;\"></div>\n      </div>\n\n      <div id=\"dFotoBox\" style=\"margin-bottom:15px; text-align:center;\">\n        <span style=\"font-size:12px; color:#64748b; font-weight:700; display:block; text-align:left; margin-bottom:6px;\">FOTO BUKTI TERLAMPIR:</span>\n        <img id=\"dFotoImg\" src=\"\" alt=\"Bukti Foto\" style=\"max-width:100%; max-height:280px; border-radius:8px; border:1px solid #cbd5e1; box-shadow:0 4px 10px rgba(0,0,0,0.1); cursor:pointer;\" onclick=\"bukaModalFoto(this.src, document.getElementById('dNama').innerText, document.getElementById('dPeriode').innerText)\" onerror=\"this.onerror=null; this.src='/logo_pemasyarakatan-removebg-preview.png';\">\n        <div style=\"margin-top:8px;\">\n          <button type=\"button\" class=\"btn btn-sm\" style=\"font-size:12px; padding:5px 14px; background:#e8f0fe; color:#0052a3; border:1px solid #b3d1ff; cursor:pointer;\" onclick=\"bukaModalFoto(document.getElementById('dFotoImg').src, document.getElementById('dNama').innerText, document.getElementById('dPeriode').innerText)\">\n            <i class=\"fas fa-search-plus\"></i> Klik untuk Perbesar Layar Penuh\n          </button>\n        </div>\n      </div>\n\n      <div id=\"dCatatanBox\" style=\"margin-bottom:20px; padding:12px; background:#fff3cd; border-radius:6px; color:#856404; font-size:13px; display:none;\">\n        <strong>Catatan Petugas Verifikator:</strong><br>\n        <span id=\"dCatatan\"></span>\n      </div>\n\n      <div style=\"display:flex; justify-content:space-between; align-items:center; border-top:1px solid #e2e8f0; padding-top:15px;\">\n        <form id=\"formBatalkan\" action=\"/admin/lapor/batalkan\" method=\"POST\">\n          <input type=\"hidden\" name=\"lapor_id\" id=\"cancelLaporId\">\n          <input type=\"hidden\" name=\"catatan_admin\" value=\"Dibatalkan oleh administrator\">\n          <button type=\"button\" class=\"btn btn-outline\" style=\"color:#dc3545; border-color:#dc3545;\" onclick=\"konfirmasiBatalkanLapor(this.form)\"><i class=\"fas fa-ban\"></i> Batalkan Laporan</button>\n        </form>\n        <button type=\"button\" class=\"btn btn-secondary\" onclick=\"closeDetailModal()\">Tutup</button>\n      </div>\n    </div>\n  </div>\n</div>\n\n<script>\n  async function showDetailModal(laporId) {\n    const modal = document.getElementById('modalDetail');\n    const loading = document.getElementById('modalLoading');\n    const body = document.getElementById('modalDetailBody');\n\n    modal.classList.add('active');\n    loading.style.display = 'block';\n    body.style.display = 'none';\n\n    try {\n      const res = await fetch('/admin/lapor/detail/' + laporId);\n      const resJson = await res.json();\n      if (resJson.success) {\n        const item = resJson.data;\n        document.getElementById('dNama').innerText = item.nama_lengkap || '-';\n        document.getElementById('dRegister').innerText = item.no_register || '-';\n        document.getElementById('dPeriode').innerText = item.nama_bulan + ' ' + item.tahun;\n        document.getElementById('dSubmit').innerText = item.tanggal_submit_formatted || '-';\n        document.getElementById('dAktivitas').innerText = item.aktivitas_harian || '(Tidak ada keterangan)';\n        document.getElementById('dRencana').innerText = item.rencana_mendatang || '(Tidak ada keterangan)';\n        document.getElementById('cancelLaporId').value = item.id;\n\n        if (item.foto_bukti || item.foto_url) {\n          let fotoSrc = item.foto_url || item.foto_bukti;\n          if (!fotoSrc.startsWith('data:') && !fotoSrc.startsWith('http://') && !fotoSrc.startsWith('https://')) {\n            if (fotoSrc.startsWith('/uploads/')) {\n              // sudah ada prefix\n            } else if (fotoSrc.startsWith('uploads/')) {\n              fotoSrc = '/' + fotoSrc;\n            } else {\n              fotoSrc = '/uploads/wajib_lapor/' + fotoSrc.replace(/^\\/+/, '');\n            }\n          }\n          document.getElementById('dFotoImg').src = fotoSrc;\n          document.getElementById('dFotoBox').style.display = 'block';\n        } else {\n          document.getElementById('dFotoBox').style.display = 'none';\n        }\n\n        if (item.catatan_admin) {\n          document.getElementById('dCatatan').innerText = item.catatan_admin;\n          document.getElementById('dCatatanBox').style.display = 'block';\n        } else {\n          document.getElementById('dCatatanBox').style.display = 'none';\n        }\n\n        loading.style.display = 'none';\n        body.style.display = 'block';\n      } else {\n        if (typeof showToast === 'function') {\n          showToast('Gagal memuat rincian: ' + resJson.message, 'error');\n        } else if (typeof Swal !== 'undefined') {\n          Swal.fire('Gagal', resJson.message, 'error');\n        }\n        closeDetailModal();\n      }\n    } catch (err) {\n      if (typeof showToast === 'function') {\n        showToast('Kesalahan koneksi: ' + err.message, 'error');\n      } else if (typeof Swal !== 'undefined') {\n        Swal.fire('Kesalahan', err.message, 'error');\n      }\n      closeDetailModal();\n    }\n  }\n\n  function closeDetailModal() {\n    document.getElementById('modalDetail').classList.remove('active');\n  }\n\n  function konfirmasiBatalkanLapor(form) {\n    customConfirm({\n      title: 'Batalkan Status Laporan?',\n      text: 'Laporan ini akan dibatalkan status verifikasinya dan status akan kembali diproses. Anda yakin?',\n      icon: 'warning',\n      confirmColor: '#dc3545',\n      confirmText: '<i class=\"fas fa-ban\"></i> Ya, Batalkan Status',\n      cancelText: 'Kembali'\n    }).then((res) => {\n      if (res.isConfirmed) form.submit();\n    });\n  }\n</script>\n\n")
+    ; __append( include('../partials/modal_foto') )
+    ; __append("\n\n</body>\n</html>\n")
+  }
+  return __output;
+
+},
+  "admin/riwayat_lapor.ejs": function anonymous(locals, escapeFn, include, rethrow
+) {
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append("<!DOCTYPE html>\n<html lang=\"id\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>")
+    ; __append(escapeFn( pageTitle ))
+    ; __append("</title>\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n  <link href=\"https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700&display=swap\" rel=\"stylesheet\">\n  <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css\">\n  <link rel=\"stylesheet\" href=\"/css/responsive.css\">\n  <style>\n    * { margin:0; padding:0; box-sizing:border-box; }\n    body { font-family: 'Source Sans 3', sans-serif; background: #f5f7fa; color: #333; }\n    .navbar {\n      position: sticky; top: 0; left: 0; right: 0; width: 100%;\n      background: linear-gradient(135deg, #1a3a52 0%, #2d5f8d 100%);\n      color: white; padding: 15px 30px; z-index: 1000;\n      display: flex; justify-content: space-between; align-items: center;\n      box-shadow: 0 2px 10px rgba(0,0,0,0.15);\n    }\n    .navbar a { color: white; text-decoration: none; font-size: 14px; margin-left: 20px; }\n    .container { max-width: 1400px; margin: 25px auto 40px; padding: 0 20px; }\n    .header { margin-bottom: 25px; }\n    .header h1 { font-family: 'Playfair Display', serif; color: #1a3a52; font-size: 30px; margin-bottom: 4px; }\n    .card { background: white; border-radius: 8px; padding: 25px; margin-bottom: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }\n    .card-title { font-size: 18px; font-weight: 700; color: #1a3a52; margin-bottom: 18px; display: flex; align-items: center; gap: 10px; }\n\n    /* FILTER BOX STYLES */\n    .filter-panel {\n      background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px;\n      padding: 22px; margin-bottom: 25px;\n    }\n    .filter-grid {\n      display: grid;\n      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));\n      gap: 15px;\n      margin-bottom: 18px;\n    }\n    .filter-item { display: flex; flex-direction: column; }\n    .filter-item label { font-size: 12px; font-weight: 700; color: #475569; text-transform: uppercase; margin-bottom: 6px; }\n    .filter-item input, .filter-item select {\n      padding: 9px 12px; border: 1px solid #cbd5e1; border-radius: 6px;\n      font-family: inherit; font-size: 14px; background: #fff;\n    }\n    .filter-item input:focus, .filter-item select:focus {\n      outline: none; border-color: #1a3a52; box-shadow: 0 0 0 3px rgba(26,58,82,0.1);\n    }\n    .filter-actions {\n      display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap;\n      border-top: 1px solid #e2e8f0; padding-top: 15px;\n    }\n    .btn {\n      padding: 9px 18px; border: none; border-radius: 6px; font-size: 13px; font-weight: 700;\n      cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;\n    }\n    .btn-primary { background: #1a3a52; color: white; }\n    .btn-primary:hover { background: #2d5f8d; }\n    .btn-success { background: #28a745; color: white; }\n    .btn-success:hover { background: #218838; }\n    .btn-danger { background: #dc3545; color: white; }\n    .btn-danger:hover { background: #c82333; }\n    .btn-secondary { background: #64748b; color: white; }\n    .btn-secondary:hover { background: #475569; }\n    .btn-outline { background: white; border: 1px solid #cbd5e1; color: #475569; }\n    .btn-outline:hover { background: #f1f5f9; }\n\n    /* SUMMARY BADGE BAR */\n    .summary-bar {\n      display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 20px;\n      background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px; padding: 12px 18px; font-size: 13px; color: #1e40af;\n    }\n    .summary-chip {\n      background: #fff; padding: 4px 10px; border-radius: 12px; font-weight: 700; border: 1px solid #bfdbfe;\n    }\n\n    /* TABLE */\n    .table { width: 100%; border-collapse: collapse; margin-top: 10px; }\n    .table th { background: #f8fafc; padding: 12px 14px; text-align: left; font-size: 13px; font-weight: 700; color: #475569; border-bottom: 2px solid #e2e8f0; }\n    .table td { padding: 12px 14px; border-bottom: 1px solid #e2e8f0; font-size: 14px; }\n    .table tr:hover { background: #f8fafc; }\n    .badge { display: inline-block; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }\n    .badge-warning { background: #fff3cd; color: #856404; }\n    .badge-success { background: #d4edda; color: #155724; }\n    .badge-danger { background: #f8d7da; color: #721c24; }\n    .badge-secondary { background: #e2e8f0; color: #475569; }\n\n    /* MODAL */\n    .modal {\n      display: none; position: fixed; top:0; left:0; right:0; bottom:0;\n      background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center; padding: 20px;\n    }\n    .modal.active { display: flex; }\n    .modal-content { background: white; border-radius: 8px; padding: 28px; max-width: 650px; width: 100%; max-height: 90vh; overflow-y: auto; }\n\n    /* PRINT STYLES */\n    @media print {\n      .navbar, .filter-panel, .btn, .no-print { display: none !important; }\n      body { background: #fff !important; }\n      .container { margin: 0 !important; max-width: 100% !important; padding: 0 !important; }\n      .card { box-shadow: none !important; border: none !important; padding: 0 !important; }\n      .print-header { display: block !important; margin-bottom: 20px; text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; }\n    }\n    .print-header { display: none; }\n  </style>\n</head>\n<body>\n\n<!-- NAVBAR -->\n<div class=\"navbar no-print\">\n  <div style=\"font-weight:700; font-size:16px;\">\n    <i class=\"fas fa-gavel\"></i> BAPAS MEDAN - ADMIN\n  </div>\n  <div>\n    <a href=\"/admin/dashboard\"><i class=\"fas fa-tachometer-alt\"></i> Dashboard</a>\n    <a href=\"/admin/riwayat-lapor\" style=\"font-weight:700; border-bottom:2px solid #ffc107; padding-bottom:4px;\"><i class=\"fas fa-filter\"></i> Riwayat Lapor</a>\n    <a href=\"/admin/kelola-client\"><i class=\"fas fa-users-cog\"></i> Kelola Klien</a>\n    <a href=\"/logout\"><i class=\"fas fa-sign-out-alt\"></i> Logout</a>\n  </div>\n</div>\n\n<div class=\"container\">\n  <!-- PRINT ONLY HEADER -->\n  <div class=\"print-header\">\n    <h2 style=\"font-size:20px; text-transform:uppercase; margin-bottom:4px;\">KEMENTERIAN IMIGRASI DAN PEMASYARAKATAN REPUBLIK INDONESIA</h2>\n    <h3 style=\"font-size:18px; margin-bottom:4px;\">BALAI PEMASYARAKATAN (BAPAS) KELAS I MEDAN</h3>\n    <p style=\"font-size:13px;\">Jl. Lembaga Pemasyarakatan, Tanjung Gusta, Kec. Medan Helvetia, Kota Medan | Telp: (061) 4516516</p>\n    <h4 style=\"margin-top:15px; text-decoration:underline;\">REKAPITULASI PELAPORAN WAJIB LAPOR KLIEN</h4>\n    <p style=\"font-size:12px;\">Dicetak pada: ")
+    ; __append(escapeFn( new Date().toLocaleString('id-ID') ))
+    ; __append("</p>\n  </div>\n\n  <div class=\"header no-print\">\n    <h1>Riwayat & Filter Lengkap Wajib Lapor</h1>\n    <p style=\"color:#666;\">Filter data laporan berdasarkan Status, Nama/Register Klien, Bulan, Tahun, Rentang Tanggal, Bukti Foto, dan Urutan</p>\n  </div>\n\n  ")
+    ; __append( include('../partials/alerts') )
+    ; __append("\n\n  <!-- PANEL FILTER LENGKAP -->\n  <div class=\"filter-panel no-print\">\n    <form method=\"GET\" action=\"/admin/riwayat-lapor\" id=\"filterForm\">\n      <div class=\"filter-grid\">\n        <!-- 1. Filter Status -->\n        <div class=\"filter-item\">\n          <label for=\"status\"><i class=\"fas fa-traffic-light\"></i> Status Laporan</label>\n          <select name=\"status\" id=\"status\">\n            <option value=\"all\" ")
+    ; __append(escapeFn( filters.status === 'all' ? 'selected' : '' ))
+    ; __append(">Semua Status</option>\n            <option value=\"menunggu_verifikasi\" ")
+    ; __append(escapeFn( filters.status === 'menunggu_verifikasi' ? 'selected' : '' ))
+    ; __append(">Menunggu Verifikasi</option>\n            <option value=\"diterima\" ")
+    ; __append(escapeFn( filters.status === 'diterima' ? 'selected' : '' ))
+    ; __append(">Diterima</option>\n            <option value=\"ditolak\" ")
+    ; __append(escapeFn( filters.status === 'ditolak' ? 'selected' : '' ))
+    ; __append(">Ditolak</option>\n            <option value=\"dibatalkan\" ")
+    ; __append(escapeFn( filters.status === 'dibatalkan' ? 'selected' : '' ))
+    ; __append(">Dibatalkan</option>\n            <option value=\"draft\" ")
+    ; __append(escapeFn( filters.status === 'draft' ? 'selected' : '' ))
+    ; __append(">Draft</option>\n          </select>\n        </div>\n\n        <!-- 2. Filter Client Search -->\n        <div class=\"filter-item\">\n          <label for=\"client\"><i class=\"fas fa-search\"></i> Cari Klien / No. Register</label>\n          <input type=\"text\" name=\"client\" id=\"client\" placeholder=\"Nama, No. Reg, atau Username...\" value=\"")
+    ; __append(escapeFn( filters.client ))
+    ; __append("\">\n        </div>\n\n        <!-- 3. Filter Bulan -->\n        <div class=\"filter-item\">\n          <label for=\"bulan\"><i class=\"fas fa-calendar-alt\"></i> Periode Bulan</label>\n          <select name=\"bulan\" id=\"bulan\">\n            <option value=\"all\" ")
+    ; __append(escapeFn( filters.bulan === 'all' ? 'selected' : '' ))
+    ; __append(">Semua Bulan</option>\n            ")
+    ;  for (let i = 1; i <= 12; i++) { 
+    ; __append("\n              <option value=\"")
+    ; __append(escapeFn( i ))
+    ; __append("\" ")
+    ; __append(escapeFn( String(filters.bulan) === String(i) ? 'selected' : '' ))
+    ; __append(">")
+    ; __append(escapeFn( getNamaBulan(i) ))
+    ; __append("</option>\n            ")
+    ;  } 
+    ; __append("\n          </select>\n        </div>\n\n        <!-- 4. Filter Tahun -->\n        <div class=\"filter-item\">\n          <label for=\"tahun\"><i class=\"fas fa-calendar\"></i> Periode Tahun</label>\n          <select name=\"tahun\" id=\"tahun\">\n            <option value=\"all\" ")
+    ; __append(escapeFn( filters.tahun === 'all' ? 'selected' : '' ))
+    ; __append(">Semua Tahun</option>\n            ")
+    ;  availableYears.forEach(function(yr) { 
+    ; __append("\n              <option value=\"")
+    ; __append(escapeFn( yr ))
+    ; __append("\" ")
+    ; __append(escapeFn( String(filters.tahun) === String(yr) ? 'selected' : '' ))
+    ; __append(">")
+    ; __append(escapeFn( yr ))
+    ; __append("</option>\n            ")
+    ;  }); 
+    ; __append("\n          </select>\n        </div>\n\n        <!-- 5. Filter Rentang Tanggal Mulai -->\n        <div class=\"filter-item\">\n          <label for=\"date_start\"><i class=\"fas fa-calendar-day\"></i> Tanggal Submit (Dari)</label>\n          <input type=\"date\" name=\"date_start\" id=\"date_start\" value=\"")
+    ; __append(escapeFn( filters.date_start ))
+    ; __append("\">\n        </div>\n\n        <!-- 6. Filter Rentang Tanggal Akhir -->\n        <div class=\"filter-item\">\n          <label for=\"date_end\"><i class=\"fas fa-calendar-day\"></i> Tanggal Submit (Sampai)</label>\n          <input type=\"date\" name=\"date_end\" id=\"date_end\" value=\"")
+    ; __append(escapeFn( filters.date_end ))
+    ; __append("\">\n        </div>\n\n        <!-- 7. Filter Foto Bukti -->\n        <div class=\"filter-item\">\n          <label for=\"foto\"><i class=\"fas fa-camera\"></i> Foto Bukti</label>\n          <select name=\"foto\" id=\"foto\">\n            <option value=\"all\" ")
+    ; __append(escapeFn( filters.foto === 'all' ? 'selected' : '' ))
+    ; __append(">Semua (Ada/Tidak)</option>\n            <option value=\"ada\" ")
+    ; __append(escapeFn( filters.foto === 'ada' ? 'selected' : '' ))
+    ; __append(">Hanya yang Memiliki Foto</option>\n            <option value=\"tidak_ada\" ")
+    ; __append(escapeFn( filters.foto === 'tidak_ada' ? 'selected' : '' ))
+    ; __append(">Tanpa Foto</option>\n          </select>\n        </div>\n\n        <!-- 8. Pengurutan Data (Sorting) -->\n        <div class=\"filter-item\">\n          <label for=\"sort\"><i class=\"fas fa-sort\"></i> Urutkan Berdasarkan</label>\n          <select name=\"sort\" id=\"sort\">\n            <option value=\"tanggal_submit_desc\" ")
+    ; __append(escapeFn( filters.sort === 'tanggal_submit_desc' ? 'selected' : '' ))
+    ; __append(">Tanggal Submit (Terbaru)</option>\n            <option value=\"tanggal_submit_asc\" ")
+    ; __append(escapeFn( filters.sort === 'tanggal_submit_asc' ? 'selected' : '' ))
+    ; __append(">Tanggal Submit (Terlama)</option>\n            <option value=\"nama_asc\" ")
+    ; __append(escapeFn( filters.sort === 'nama_asc' ? 'selected' : '' ))
+    ; __append(">Nama Klien (A-Z)</option>\n            <option value=\"nama_desc\" ")
+    ; __append(escapeFn( filters.sort === 'nama_desc' ? 'selected' : '' ))
+    ; __append(">Nama Klien (Z-A)</option>\n            <option value=\"periode_desc\" ")
+    ; __append(escapeFn( filters.sort === 'periode_desc' ? 'selected' : '' ))
+    ; __append(">Periode Lapor (Terbaru)</option>\n            <option value=\"periode_asc\" ")
+    ; __append(escapeFn( filters.sort === 'periode_asc' ? 'selected' : '' ))
+    ; __append(">Periode Lapor (Terlama)</option>\n          </select>\n        </div>\n      </div>\n\n      <div class=\"filter-actions\">\n        <div style=\"display:flex; gap:10px; flex-wrap:wrap;\">\n          <button type=\"submit\" class=\"btn btn-primary\"><i class=\"fas fa-filter\"></i> Terapkan Filter</button>\n          <a href=\"/admin/riwayat-lapor\" class=\"btn btn-outline\"><i class=\"fas fa-undo\"></i> Reset Filter</a>\n        </div>\n        <div style=\"display:flex; gap:10px; flex-wrap:wrap;\">\n          <!-- Export to CSV with current filter queries -->\n          ")
+    ;  
+            const queryParams = new URLSearchParams(filters).toString();
+          
+    ; __append("\n          <a href=\"/admin/riwayat-lapor/export-csv?")
+    ; __append(escapeFn( queryParams ))
+    ; __append("\" class=\"btn btn-success\" title=\"Download Excel/CSV hasil filter ini\">\n            <i class=\"fas fa-file-excel\"></i> Ekspor ke CSV / Excel\n          </a>\n          <button type=\"button\" class=\"btn btn-secondary\" onclick=\"window.print()\" title=\"Cetak halaman hasil filter ini\">\n            <i class=\"fas fa-print\"></i> Cetak Laporan\n          </button>\n        </div>\n      </div>\n    </form>\n  </div>\n\n  <!-- SUMMARY BAR (Statistik Filter Aktif) -->\n  <div class=\"summary-bar no-print\">\n    <div><strong><i class=\"fas fa-info-circle\"></i> Hasil Filter:</strong> Ditemukan <strong>")
+    ; __append(escapeFn( filterStat.total ))
+    ; __append("</strong> laporan</div>\n    <div class=\"summary-chip\" style=\"color:#b7791f;\"><i class=\"fas fa-clock\"></i> ")
+    ; __append(escapeFn( filterStat.menunggu ))
+    ; __append(" Menunggu</div>\n    <div class=\"summary-chip\" style=\"color:#28a745;\"><i class=\"fas fa-check\"></i> ")
+    ; __append(escapeFn( filterStat.diterima ))
+    ; __append(" Diterima</div>\n    <div class=\"summary-chip\" style=\"color:#dc3545;\"><i class=\"fas fa-times\"></i> ")
+    ; __append(escapeFn( filterStat.ditolak ))
+    ; __append(" Ditolak</div>\n    <div class=\"summary-chip\" style=\"color:#0052a3;\"><i class=\"fas fa-camera\"></i> ")
+    ; __append(escapeFn( filterStat.adaFoto ))
+    ; __append(" Ada Foto</div>\n  </div>\n\n  <!-- TABEL RIWAYAT LAPOR -->\n  <div class=\"card\">\n    <div class=\"card-title\">\n      <i class=\"fas fa-list-alt\"></i> Tabel Data Wajib Lapor Klien\n    </div>\n\n    ")
+    ;  if (laporList && laporList.length > 0) { 
+    ; __append("\n      <div class=\"table-responsive\">\n        <table class=\"table\">\n        <thead>\n          <tr>\n            <th>No</th>\n            <th>Klien Pemasyarakatan</th>\n            <th>Periode Lapor</th>\n            <th>Tanggal Kirim</th>\n            <th>Status</th>\n            <th>Foto Bukti</th>\n            <th>Verifikator</th>\n            <th class=\"no-print\">Aksi</th>\n          </tr>\n        </thead>\n        <tbody>\n          ")
+    ;  laporList.forEach(function(lapor, idx) { 
+    ; __append("\n            <tr>\n              <td>")
+    ; __append(escapeFn( idx + 1 ))
+    ; __append("</td>\n              <td>\n                <strong>")
+    ; __append(escapeFn( lapor.nama_lengkap ))
+    ; __append("</strong><br>\n                <span style=\"font-size:12px; color:#64748b;\"><i class=\"fas fa-id-badge\"></i> ")
+    ; __append(escapeFn( lapor.no_register ))
+    ; __append("</span>\n              </td>\n              <td><strong>")
+    ; __append(escapeFn( getNamaBulan(lapor.bulan) ))
+    ; __append(" ")
+    ; __append(escapeFn( lapor.tahun ))
+    ; __append("</strong></td>\n              <td>")
+    ; __append(escapeFn( formatTanggalWaktu(lapor.tanggal_submit) ))
+    ; __append("</td>\n              <td>\n                ")
+    ;  if (lapor.status === 'diterima') { 
+    ; __append("\n                  <span class=\"badge badge-success\"><i class=\"fas fa-check\"></i> Diterima</span>\n                ")
+    ;  } else if (lapor.status === 'menunggu_verifikasi') { 
+    ; __append("\n                  <span class=\"badge badge-warning\"><i class=\"fas fa-clock\"></i> Menunggu</span>\n                ")
+    ;  } else if (lapor.status === 'ditolak') { 
+    ; __append("\n                  <span class=\"badge badge-danger\"><i class=\"fas fa-times\"></i> Ditolak</span>\n                ")
+    ;  } else if (lapor.status === 'dibatalkan') { 
+    ; __append("\n                  <span class=\"badge badge-danger\">Dibatalkan</span>\n                ")
+    ;  } else { 
+    ; __append("\n                  <span class=\"badge badge-secondary\">")
+    ; __append(escapeFn( lapor.status ))
+    ; __append("</span>\n                ")
+    ;  } 
+    ; __append("\n              </td>\n              <td>\n                ")
+    ;  if (lapor.foto_bukti) { 
+    ; __append("\n                  <button type=\"button\" class=\"btn btn-sm\" style=\"color:#0052a3; font-weight:700; background:#e8f0fe; border:1px solid #b3d1ff; cursor:pointer; padding:4px 8px; border-radius:4px; font-size:12px; display:inline-flex; align-items:center; gap:4px;\" onclick=\"bukaModalFoto('")
+    ; __append(escapeFn( getFileUrl(lapor.foto_bukti, 'wajib_lapor') ))
+    ; __append("', '")
+    ; __append(escapeFn( lapor.nama_lengkap ))
+    ; __append("', '")
+    ; __append(escapeFn( getNamaBulan(lapor.bulan) ))
+    ; __append(" ")
+    ; __append(escapeFn( lapor.tahun ))
+    ; __append("')\">\n                    <i class=\"fas fa-image\"></i> Ada Foto\n                  </button>\n                ")
+    ;  } else { 
+    ; __append("\n                  <span style=\"color:#94a3b8; font-size:13px;\">Tanpa Foto</span>\n                ")
+    ;  } 
+    ; __append("\n              </td>\n              <td style=\"font-size:13px; color:#475569;\">\n                ")
+    ; __append(escapeFn( lapor.admin_verifikasi || '-' ))
+    ; __append("\n              </td>\n              <td class=\"no-print\">\n                <button type=\"button\" class=\"btn btn-outline\" style=\"padding:5px 10px; font-size:12px;\" onclick=\"showDetailModal('")
+    ; __append(escapeFn( lapor.id ))
+    ; __append("')\">\n                  <i class=\"fas fa-eye\"></i> Detail\n                </button>\n              </td>\n            </tr>\n          ")
+    ;  }); 
+    ; __append("\n        </tbody>\n      </table>\n    </div>\n    ")
+    ;  } else { 
+    ; __append("\n      <div style=\"text-align:center; padding:60px 20px; color:#94a3b8;\">\n        <i class=\"fas fa-search\" style=\"font-size:48px; color:#cbd5e1; margin-bottom:15px;\"></i>\n        <h3 style=\"color:#334e68; font-size:18px; margin-bottom:6px;\">Tidak ada data yang cocok dengan kriteria filter</h3>\n        <p style=\"font-size:14px; margin-bottom:15px;\">Cobalah memperluas rentang tanggal atau mereset filter status dan pencarian klien.</p>\n        <a href=\"/admin/riwayat-lapor\" class=\"btn btn-outline\"><i class=\"fas fa-undo\"></i> Reset Semua Filter</a>\n      </div>\n    ")
+    ;  } 
+    ; __append("\n  </div>\n</div>\n\n<!-- MODAL DETAIL LAPORAN INTERAKTIF -->\n<div class=\"modal no-print\" id=\"modalDetail\">\n  <div class=\"modal-content\">\n    <div style=\"display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid #e2e8f0; padding-bottom:12px;\">\n      <h3 style=\"color:#1a3a52; font-size:18px;\"><i class=\"fas fa-file-alt\"></i> Rincian Wajib Lapor Klien</h3>\n      <button type=\"button\" onclick=\"closeDetailModal()\" style=\"border:none; background:transparent; font-size:22px; cursor:pointer; color:#94a3b8;\">&times;</button>\n    </div>\n\n    <div id=\"modalLoading\" style=\"text-align:center; padding:30px; color:#64748b;\">\n      <i class=\"fas fa-spinner fa-spin\" style=\"font-size:28px;\"></i><br>Memuat data laporan...\n    </div>\n\n    <div id=\"modalDetailBody\" style=\"display:none;\">\n      <div style=\"display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-bottom:15px; background:#f8fafc; padding:15px; border-radius:6px;\">\n        <div>\n          <span style=\"font-size:12px; color:#64748b; font-weight:700;\">NAMA KLIEN:</span><br>\n          <strong id=\"dNama\" style=\"color:#1a3a52; font-size:15px;\"></strong>\n        </div>\n        <div>\n          <span style=\"font-size:12px; color:#64748b; font-weight:700;\">NO. REGISTER:</span><br>\n          <strong id=\"dRegister\" style=\"color:#1a3a52;\"></strong>\n        </div>\n        <div>\n          <span style=\"font-size:12px; color:#64748b; font-weight:700;\">PERIODE LAPOR:</span><br>\n          <span id=\"dPeriode\" style=\"font-weight:700; color:#0052a3;\"></span>\n        </div>\n        <div>\n          <span style=\"font-size:12px; color:#64748b; font-weight:700;\">TANGGAL SUBMIT:</span><br>\n          <span id=\"dSubmit\"></span>\n        </div>\n      </div>\n\n      <div style=\"margin-bottom:15px;\">\n        <span style=\"font-size:12px; color:#64748b; font-weight:700; display:block; margin-bottom:4px;\">AKTIVITAS HARIAN / PEKERJAAN:</span>\n        <div id=\"dAktivitas\" style=\"background:#fff; border:1px solid #e2e8f0; padding:12px; border-radius:6px; font-size:14px; color:#333;\"></div>\n      </div>\n\n      <div style=\"margin-bottom:15px;\">\n        <span style=\"font-size:12px; color:#64748b; font-weight:700; display:block; margin-bottom:4px;\">RENCANA KEGIATAN MENDATANG:</span>\n        <div id=\"dRencana\" style=\"background:#fff; border:1px solid #e2e8f0; padding:12px; border-radius:6px; font-size:14px; color:#333;\"></div>\n      </div>\n\n      <div id=\"dFotoBox\" style=\"margin-bottom:15px; text-align:center;\">\n        <span style=\"font-size:12px; color:#64748b; font-weight:700; display:block; text-align:left; margin-bottom:6px;\">FOTO BUKTI TERLAMPIR:</span>\n        <img id=\"dFotoImg\" src=\"\" alt=\"Bukti Foto\" style=\"max-width:100%; max-height:280px; border-radius:8px; border:1px solid #cbd5e1; box-shadow:0 4px 10px rgba(0,0,0,0.1); cursor:pointer;\" onclick=\"bukaModalFoto(this.src, document.getElementById('dNama').innerText, document.getElementById('dPeriode').innerText)\" onerror=\"this.onerror=null; this.src='/logo_pemasyarakatan-removebg-preview.png';\">\n        <div style=\"margin-top:8px;\">\n          <button type=\"button\" class=\"btn btn-sm\" style=\"font-size:12px; padding:5px 14px; background:#e8f0fe; color:#0052a3; border:1px solid #b3d1ff; cursor:pointer;\" onclick=\"bukaModalFoto(document.getElementById('dFotoImg').src, document.getElementById('dNama').innerText, document.getElementById('dPeriode').innerText)\">\n            <i class=\"fas fa-search-plus\"></i> Klik untuk Perbesar Layar Penuh\n          </button>\n        </div>\n      </div>\n\n      <div id=\"dCatatanBox\" style=\"margin-bottom:20px; padding:12px; background:#fff3cd; border-radius:6px; color:#856404; font-size:13px; display:none;\">\n        <strong>Catatan Petugas Verifikator:</strong><br>\n        <span id=\"dCatatan\"></span>\n      </div>\n\n      <div style=\"display:flex; justify-content:space-between; align-items:center; border-top:1px solid #e2e8f0; padding-top:15px;\">\n        <form id=\"formBatalkan\" action=\"/admin/lapor/batalkan\" method=\"POST\">\n          <input type=\"hidden\" name=\"lapor_id\" id=\"cancelLaporId\">\n          <input type=\"hidden\" name=\"catatan_admin\" value=\"Dibatalkan oleh administrator\">\n          <button type=\"button\" class=\"btn btn-outline\" style=\"color:#dc3545; border-color:#dc3545;\" onclick=\"konfirmasiBatalkanLapor(this.form)\"><i class=\"fas fa-ban\"></i> Batalkan Laporan</button>\n        </form>\n        <button type=\"button\" class=\"btn btn-secondary\" onclick=\"closeDetailModal()\">Tutup</button>\n      </div>\n    </div>\n  </div>\n</div>\n\n<script>\n  async function showDetailModal(laporId) {\n    const modal = document.getElementById('modalDetail');\n    const loading = document.getElementById('modalLoading');\n    const body = document.getElementById('modalDetailBody');\n\n    modal.classList.add('active');\n    loading.style.display = 'block';\n    body.style.display = 'none';\n\n    try {\n      const res = await fetch('/admin/lapor/detail/' + laporId);\n      const resJson = await res.json();\n      if (resJson.success) {\n        const item = resJson.data;\n        document.getElementById('dNama').innerText = item.nama_lengkap || '-';\n        document.getElementById('dRegister').innerText = item.no_register || '-';\n        document.getElementById('dPeriode').innerText = item.nama_bulan + ' ' + item.tahun;\n        document.getElementById('dSubmit').innerText = item.tanggal_submit_formatted || '-';\n        document.getElementById('dAktivitas').innerText = item.aktivitas_harian || '(Tidak ada keterangan)';\n        document.getElementById('dRencana').innerText = item.rencana_mendatang || '(Tidak ada keterangan)';\n        document.getElementById('cancelLaporId').value = item.id;\n\n        if (item.foto_bukti || item.foto_url) {\n          let fotoSrc = item.foto_url || item.foto_bukti;\n          if (!fotoSrc.startsWith('data:') && !fotoSrc.startsWith('http://') && !fotoSrc.startsWith('https://')) {\n            if (fotoSrc.startsWith('/uploads/')) {\n              // sudah ada prefix\n            } else if (fotoSrc.startsWith('uploads/')) {\n              fotoSrc = '/' + fotoSrc;\n            } else {\n              fotoSrc = '/uploads/wajib_lapor/' + fotoSrc.replace(/^\\/+/, '');\n            }\n          }\n          document.getElementById('dFotoImg').src = fotoSrc;\n          document.getElementById('dFotoBox').style.display = 'block';\n        } else {\n          document.getElementById('dFotoBox').style.display = 'none';\n        }\n\n        if (item.catatan_admin) {\n          document.getElementById('dCatatan').innerText = item.catatan_admin;\n          document.getElementById('dCatatanBox').style.display = 'block';\n        } else {\n          document.getElementById('dCatatanBox').style.display = 'none';\n        }\n\n        loading.style.display = 'none';\n        body.style.display = 'block';\n      } else {\n        if (typeof showToast === 'function') {\n          showToast('Gagal memuat rincian: ' + resJson.message, 'error');\n        } else if (typeof Swal !== 'undefined') {\n          Swal.fire('Gagal', resJson.message, 'error');\n        }\n        closeDetailModal();\n      }\n    } catch (err) {\n      if (typeof showToast === 'function') {\n        showToast('Kesalahan koneksi: ' + err.message, 'error');\n      } else if (typeof Swal !== 'undefined') {\n        Swal.fire('Kesalahan', err.message, 'error');\n      }\n      closeDetailModal();\n    }\n  }\n\n  function closeDetailModal() {\n    document.getElementById('modalDetail').classList.remove('active');\n  }\n\n  function konfirmasiBatalkanLapor(form) {\n    customConfirm({\n      title: 'Batalkan Status Laporan?',\n      text: 'Laporan ini akan dibatalkan status verifikasinya dan status akan kembali diproses. Anda yakin?',\n      icon: 'warning',\n      confirmColor: '#dc3545',\n      confirmText: '<i class=\"fas fa-ban\"></i> Ya, Batalkan Status',\n      cancelText: 'Kembali'\n    }).then((res) => {\n      if (res.isConfirmed) form.submit();\n    });\n  }\n</script>\n\n")
+    ; __append( include('../partials/modal_foto') )
+    ; __append("\n\n</body>\n</html>\n")
+  }
+  return __output;
+
+},
+  "auth/login": function anonymous(locals, escapeFn, include, rethrow
+) {
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append("<!DOCTYPE html>\n<html lang=\"id\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=5.0\">\n  <title>")
+    ; __append(escapeFn( pageTitle || 'Login - Sistem Wajib Lapor BAPAS Medan' ))
+    ; __append("</title>\n  \n  <!-- SEO & Mobile Meta Tags -->\n  <meta name=\"description\" content=\"Halaman Login Portal Layanan Wajib Lapor Online & Administrasi Balai Pemasyarakatan (BAPAS) Kelas I Medan.\">\n  <meta name=\"keywords\" content=\"login bapas medan, wajib lapor online, login klien bapas, login admin bapas medan\">\n  <meta name=\"author\" content=\"Balai Pemasyarakatan Kelas I Medan\">\n  <meta name=\"robots\" content=\"noindex, nofollow\">\n  <meta name=\"theme-color\" content=\"#003580\">\n\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n  <link href=\"https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700&display=swap\" rel=\"stylesheet\">\n  <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css\">\n  \n  <style>\n    * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }\n    body {\n      font-family: 'Source Sans 3', sans-serif;\n      background: linear-gradient(135deg, #001e4d 0%, #003580 50%, #0052a3 100%);\n      min-height: 100vh;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      padding: 16px;\n    }\n    .login-card {\n      background: #ffffff;\n      border-radius: 14px;\n      box-shadow: 0 15px 40px rgba(0,0,0,0.35);\n      width: 100%;\n      max-width: 460px;\n      overflow: hidden;\n      transition: all 0.3s ease;\n    }\n    .login-header {\n      background: #002b66;\n      color: #ffffff;\n      padding: 26px 20px;\n      text-align: center;\n      border-bottom: 4px solid #ffc107;\n    }\n    .login-header img {\n      height: 55px;\n      margin-bottom: 10px;\n    }\n    .login-header h2 {\n      font-family: 'Playfair Display', serif;\n      font-size: 22px;\n      margin-bottom: 4px;\n      letter-spacing: 0.5px;\n    }\n    .login-header p {\n      font-size: 13px;\n      color: #bbdefb;\n    }\n    .tabs-nav {\n      display: flex;\n      background: #f0f4f8;\n      border-bottom: 1px solid #d9e2ec;\n    }\n    .tab-btn {\n      flex: 1;\n      padding: 15px 12px;\n      border: none;\n      background: transparent;\n      font-size: 14px;\n      font-weight: 700;\n      color: #627d98;\n      cursor: pointer;\n      transition: all 0.2s ease;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      gap: 8px;\n      min-height: 48px;\n    }\n    .tab-btn.active {\n      background: #ffffff;\n      color: #003580;\n      border-bottom: 3px solid #003580;\n    }\n    .login-body {\n      padding: 26px 22px;\n    }\n    .form-group {\n      margin-bottom: 20px;\n    }\n    .form-group label {\n      display: block;\n      font-weight: 700;\n      font-size: 13.5px;\n      color: #102a43;\n      margin-bottom: 8px;\n    }\n    .input-wrapper {\n      position: relative;\n      display: flex;\n      align-items: center;\n    }\n    .input-wrapper i.input-icon {\n      position: absolute;\n      left: 14px;\n      color: #627d98;\n      font-size: 16px;\n      pointer-events: none;\n    }\n    .input-wrapper input {\n      width: 100%;\n      padding: 13px 44px 13px 42px;\n      border: 1.5px solid #cbd5e1;\n      border-radius: 8px;\n      font-size: 15px;\n      font-family: inherit;\n      color: #1e293b;\n      background: #f8fafc;\n      transition: all 0.2s ease;\n      min-height: 48px;\n    }\n    .input-wrapper input:focus {\n      outline: none;\n      border-color: #003580;\n      background: #ffffff;\n      box-shadow: 0 0 0 3px rgba(0, 53, 128, 0.15);\n    }\n    .toggle-password {\n      position: absolute;\n      right: 12px;\n      background: none;\n      border: none;\n      color: #64748b;\n      cursor: pointer;\n      padding: 8px;\n      font-size: 15px;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n    }\n    .toggle-password:hover {\n      color: #003580;\n    }\n    .btn-submit {\n      width: 100%;\n      padding: 14px;\n      background: #003580;\n      color: #ffffff;\n      border: none;\n      border-radius: 8px;\n      font-size: 15px;\n      font-weight: 700;\n      cursor: pointer;\n      transition: all 0.2s ease;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      gap: 10px;\n      min-height: 48px;\n      box-shadow: 0 4px 12px rgba(0, 53, 128, 0.25);\n    }\n    .btn-submit:hover {\n      background: #002255;\n      transform: translateY(-1px);\n    }\n    .btn-submit:active {\n      transform: translateY(1px);\n    }\n    .alert-error {\n      background: #fee2e2;\n      color: #991b1b;\n      border: 1px solid #fecaca;\n      padding: 12px 14px;\n      border-radius: 8px;\n      font-size: 13.5px;\n      margin-bottom: 20px;\n      display: flex;\n      align-items: center;\n      gap: 10px;\n      line-height: 1.4;\n    }\n    .credential-hint {\n      margin-top: 18px;\n      padding: 14px;\n      background: #f0fdf4;\n      border: 1px dashed #86efac;\n      border-radius: 8px;\n      font-size: 12.5px;\n      color: #166534;\n      line-height: 1.5;\n    }\n    .credential-hint code {\n      background: #dcfce7;\n      padding: 2px 6px;\n      border-radius: 4px;\n      font-weight: 700;\n    }\n    .back-home {\n      display: inline-flex;\n      align-items: center;\n      justify-content: center;\n      gap: 8px;\n      width: 100%;\n      margin-top: 20px;\n      font-size: 13.5px;\n      font-weight: 600;\n      color: #475569;\n      text-decoration: none;\n      padding: 8px;\n      border-radius: 6px;\n      transition: color 0.2s;\n    }\n    .back-home:hover {\n      color: #003580;\n    }\n    \n    @media (max-width: 480px) {\n      .login-header { padding: 20px 16px; }\n      .login-header h2 { font-size: 20px; }\n      .login-body { padding: 20px 16px; }\n      .tab-btn { font-size: 13px; padding: 12px 8px; }\n    }\n  </style>\n</head>\n<body>\n\n<div class=\"login-card\">\n  <div class=\"login-header\">\n    <div style=\"display:flex; justify-content:center; gap:12px; margin-bottom:10px;\">\n      <img src=\"/logo_kemenimpas-removebg-preview.png\" alt=\"Logo Kemenimipas\" onerror=\"this.style.display='none'\">\n      <img src=\"/logo_pemasyarakatan-removebg-preview.png\" alt=\"Logo Pemasyarakatan\" onerror=\"this.style.display='none'\">\n    </div>\n    <h2>BAPAS KELAS I MEDAN</h2>\n    <p>Sistem Informasi Wajib Lapor Online</p>\n  </div>\n\n  <div class=\"tabs-nav\">\n    <button type=\"button\" class=\"tab-btn ")
+    ; __append(escapeFn( tipe === 'client' ? 'active' : '' ))
+    ; __append("\" id=\"tabClientBtn\" onclick=\"selectTab('client')\">\n      <i class=\"fas fa-user\"></i> Login Klien\n    </button>\n    <button type=\"button\" class=\"tab-btn ")
+    ; __append(escapeFn( tipe === 'admin' ? 'active' : '' ))
+    ; __append("\" id=\"tabAdminBtn\" onclick=\"selectTab('admin')\">\n      <i class=\"fas fa-user-shield\"></i> Login Admin\n    </button>\n  </div>\n\n  <div class=\"login-body\">\n    ")
+    ;  if (error) { 
+    ; __append("\n      <div class=\"alert-error\">\n        <i class=\"fas fa-exclamation-circle\" style=\"font-size:18px; flex-shrink:0;\"></i>\n        <div>")
+    ; __append(escapeFn( error ))
+    ; __append("</div>\n      </div>\n    ")
+    ;  } 
+    ; __append("\n\n    <form action=\"/login\" method=\"POST\" id=\"loginForm\">\n      <input type=\"hidden\" name=\"tipe\" id=\"tipeInput\" value=\"")
+    ; __append(escapeFn( tipe === 'admin' ? '1' : '2' ))
+    ; __append("\">\n\n      <div class=\"form-group\">\n        <label for=\"username\" id=\"userLabel\">\n          ")
+    ; __append(escapeFn( tipe === 'admin' ? 'Email / Username Admin' : 'Nomor WhatsApp' ))
+    ; __append("\n        </label>\n        <div class=\"input-wrapper\">\n          <i class=\"fas fa-")
+    ; __append(escapeFn( tipe === 'admin' ? 'user-shield' : 'phone' ))
+    ; __append(" input-icon\" id=\"userIcon\"></i>\n          <input \n            type=\"text\" \n            name=\"username\" \n            id=\"username\" \n            placeholder=\"")
+    ; __append(escapeFn( tipe === 'admin' ? 'Masukkan email atau username admin' : 'Masukkan nomor WhatsApp Anda' ))
+    ; __append("\" \n            value=\"")
+    ; __append(escapeFn( username || '' ))
+    ; __append("\" \n            required \n            autocomplete=\"username\"\n          >\n        </div>\n      </div>\n\n      <div class=\"form-group\">\n        <label for=\"password\">Kata Sandi (Password)</label>\n        <div class=\"input-wrapper\">\n          <i class=\"fas fa-lock input-icon\"></i>\n          <input \n            type=\"password\" \n            name=\"password\" \n            id=\"password\" \n            placeholder=\"Masukkan kata sandi Anda\" \n            required \n            autocomplete=\"current-password\"\n          >\n          <button type=\"button\" class=\"toggle-password\" id=\"togglePasswordBtn\" onclick=\"togglePasswordVisibility()\" aria-label=\"Lihat kata sandi\">\n            <i class=\"fas fa-eye\" id=\"eyeIcon\"></i>\n          </button>\n        </div>\n      </div>\n\n      <button type=\"submit\" class=\"btn-submit\" id=\"submitBtn\">\n        <i class=\"fas fa-sign-in-alt\"></i> Masuk Sekarang\n      </button>\n    </form>\n\n    <!-- HINT LOGIN KLIEN -->\n    <div class=\"credential-hint\" id=\"clientHint\" style=\"")
+    ; __append(escapeFn( tipe === 'client' ? '' : 'display:none;' ))
+    ; __append("\">\n      <strong><i class=\"fas fa-info-circle\"></i> Info Akun Klien:</strong><br>\n      Gunakan <strong>Nomor WhatsApp</strong> dan kata sandi yang telah didaftarkan oleh petugas BAPAS.<br>\n      • Contoh Akun: WhatsApp: <code>08xxxxxxxxxx</code> (atau <code>xxxxx</code>) | Sandi: <code>xxxxx</code>\n    </div>\n\n    <a href=\"/\" class=\"back-home\"><i class=\"fas fa-arrow-left\"></i> Kembali ke Beranda Utama</a>\n  </div>\n</div>\n\n<script src=\"https://cdn.jsdelivr.net/npm/sweetalert2@11\"></script>\n<script>\n  ")
+    ;  if (error) { 
+    ; __append("\n    document.addEventListener('DOMContentLoaded', function() {\n      if (typeof Swal !== 'undefined') {\n        const Toast = Swal.mixin({\n          toast: true,\n          position: 'top-end',\n          showConfirmButton: false,\n          timer: 4000,\n          timerProgressBar: true\n        });\n        Toast.fire({\n          icon: 'error',\n          title: '")
+    ; __append(escapeFn( error ))
+    ; __append("'\n        });\n      }\n    });\n  ")
+    ;  } 
+    ; __append("\n\n  function selectTab(type) {\n    const clientBtn = document.getElementById('tabClientBtn');\n    const adminBtn = document.getElementById('tabAdminBtn');\n    const tipeInput = document.getElementById('tipeInput');\n    const clientHint = document.getElementById('clientHint');\n    const userLabel = document.getElementById('userLabel');\n    const userInput = document.getElementById('username');\n    const userIcon = document.getElementById('userIcon');\n\n    if (type === 'admin') {\n      adminBtn.classList.add('active');\n      clientBtn.classList.remove('active');\n      tipeInput.value = '1';\n      if (clientHint) clientHint.style.display = 'none';\n      userLabel.innerText = 'Email / Username Admin';\n      userInput.placeholder = 'Masukkan email atau username admin';\n      userIcon.className = 'fas fa-user-shield input-icon';\n    } else {\n      clientBtn.classList.add('active');\n      adminBtn.classList.remove('active');\n      tipeInput.value = '2';\n      if (clientHint) clientHint.style.display = 'block';\n      userLabel.innerText = 'Nomor WhatsApp';\n      userInput.placeholder = 'Masukkan nomor WhatsApp Anda';\n      userIcon.className = 'fas fa-phone input-icon';\n    }\n  }\n\n  function togglePasswordVisibility() {\n    const passwordInput = document.getElementById('password');\n    const eyeIcon = document.getElementById('eyeIcon');\n    if (passwordInput.type === 'password') {\n      passwordInput.type = 'text';\n      eyeIcon.className = 'fas fa-eye-slash';\n    } else {\n      passwordInput.type = 'password';\n      eyeIcon.className = 'fas fa-eye';\n    }\n  }\n</script>\n\n</body>\n</html>\n")
+  }
+  return __output;
+
+},
+  "auth/login.ejs": function anonymous(locals, escapeFn, include, rethrow
+) {
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append("<!DOCTYPE html>\n<html lang=\"id\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=5.0\">\n  <title>")
+    ; __append(escapeFn( pageTitle || 'Login - Sistem Wajib Lapor BAPAS Medan' ))
+    ; __append("</title>\n  \n  <!-- SEO & Mobile Meta Tags -->\n  <meta name=\"description\" content=\"Halaman Login Portal Layanan Wajib Lapor Online & Administrasi Balai Pemasyarakatan (BAPAS) Kelas I Medan.\">\n  <meta name=\"keywords\" content=\"login bapas medan, wajib lapor online, login klien bapas, login admin bapas medan\">\n  <meta name=\"author\" content=\"Balai Pemasyarakatan Kelas I Medan\">\n  <meta name=\"robots\" content=\"noindex, nofollow\">\n  <meta name=\"theme-color\" content=\"#003580\">\n\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n  <link href=\"https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700&display=swap\" rel=\"stylesheet\">\n  <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css\">\n  \n  <style>\n    * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }\n    body {\n      font-family: 'Source Sans 3', sans-serif;\n      background: linear-gradient(135deg, #001e4d 0%, #003580 50%, #0052a3 100%);\n      min-height: 100vh;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      padding: 16px;\n    }\n    .login-card {\n      background: #ffffff;\n      border-radius: 14px;\n      box-shadow: 0 15px 40px rgba(0,0,0,0.35);\n      width: 100%;\n      max-width: 460px;\n      overflow: hidden;\n      transition: all 0.3s ease;\n    }\n    .login-header {\n      background: #002b66;\n      color: #ffffff;\n      padding: 26px 20px;\n      text-align: center;\n      border-bottom: 4px solid #ffc107;\n    }\n    .login-header img {\n      height: 55px;\n      margin-bottom: 10px;\n    }\n    .login-header h2 {\n      font-family: 'Playfair Display', serif;\n      font-size: 22px;\n      margin-bottom: 4px;\n      letter-spacing: 0.5px;\n    }\n    .login-header p {\n      font-size: 13px;\n      color: #bbdefb;\n    }\n    .tabs-nav {\n      display: flex;\n      background: #f0f4f8;\n      border-bottom: 1px solid #d9e2ec;\n    }\n    .tab-btn {\n      flex: 1;\n      padding: 15px 12px;\n      border: none;\n      background: transparent;\n      font-size: 14px;\n      font-weight: 700;\n      color: #627d98;\n      cursor: pointer;\n      transition: all 0.2s ease;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      gap: 8px;\n      min-height: 48px;\n    }\n    .tab-btn.active {\n      background: #ffffff;\n      color: #003580;\n      border-bottom: 3px solid #003580;\n    }\n    .login-body {\n      padding: 26px 22px;\n    }\n    .form-group {\n      margin-bottom: 20px;\n    }\n    .form-group label {\n      display: block;\n      font-weight: 700;\n      font-size: 13.5px;\n      color: #102a43;\n      margin-bottom: 8px;\n    }\n    .input-wrapper {\n      position: relative;\n      display: flex;\n      align-items: center;\n    }\n    .input-wrapper i.input-icon {\n      position: absolute;\n      left: 14px;\n      color: #627d98;\n      font-size: 16px;\n      pointer-events: none;\n    }\n    .input-wrapper input {\n      width: 100%;\n      padding: 13px 44px 13px 42px;\n      border: 1.5px solid #cbd5e1;\n      border-radius: 8px;\n      font-size: 15px;\n      font-family: inherit;\n      color: #1e293b;\n      background: #f8fafc;\n      transition: all 0.2s ease;\n      min-height: 48px;\n    }\n    .input-wrapper input:focus {\n      outline: none;\n      border-color: #003580;\n      background: #ffffff;\n      box-shadow: 0 0 0 3px rgba(0, 53, 128, 0.15);\n    }\n    .toggle-password {\n      position: absolute;\n      right: 12px;\n      background: none;\n      border: none;\n      color: #64748b;\n      cursor: pointer;\n      padding: 8px;\n      font-size: 15px;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n    }\n    .toggle-password:hover {\n      color: #003580;\n    }\n    .btn-submit {\n      width: 100%;\n      padding: 14px;\n      background: #003580;\n      color: #ffffff;\n      border: none;\n      border-radius: 8px;\n      font-size: 15px;\n      font-weight: 700;\n      cursor: pointer;\n      transition: all 0.2s ease;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      gap: 10px;\n      min-height: 48px;\n      box-shadow: 0 4px 12px rgba(0, 53, 128, 0.25);\n    }\n    .btn-submit:hover {\n      background: #002255;\n      transform: translateY(-1px);\n    }\n    .btn-submit:active {\n      transform: translateY(1px);\n    }\n    .alert-error {\n      background: #fee2e2;\n      color: #991b1b;\n      border: 1px solid #fecaca;\n      padding: 12px 14px;\n      border-radius: 8px;\n      font-size: 13.5px;\n      margin-bottom: 20px;\n      display: flex;\n      align-items: center;\n      gap: 10px;\n      line-height: 1.4;\n    }\n    .credential-hint {\n      margin-top: 18px;\n      padding: 14px;\n      background: #f0fdf4;\n      border: 1px dashed #86efac;\n      border-radius: 8px;\n      font-size: 12.5px;\n      color: #166534;\n      line-height: 1.5;\n    }\n    .credential-hint code {\n      background: #dcfce7;\n      padding: 2px 6px;\n      border-radius: 4px;\n      font-weight: 700;\n    }\n    .back-home {\n      display: inline-flex;\n      align-items: center;\n      justify-content: center;\n      gap: 8px;\n      width: 100%;\n      margin-top: 20px;\n      font-size: 13.5px;\n      font-weight: 600;\n      color: #475569;\n      text-decoration: none;\n      padding: 8px;\n      border-radius: 6px;\n      transition: color 0.2s;\n    }\n    .back-home:hover {\n      color: #003580;\n    }\n    \n    @media (max-width: 480px) {\n      .login-header { padding: 20px 16px; }\n      .login-header h2 { font-size: 20px; }\n      .login-body { padding: 20px 16px; }\n      .tab-btn { font-size: 13px; padding: 12px 8px; }\n    }\n  </style>\n</head>\n<body>\n\n<div class=\"login-card\">\n  <div class=\"login-header\">\n    <div style=\"display:flex; justify-content:center; gap:12px; margin-bottom:10px;\">\n      <img src=\"/logo_kemenimpas-removebg-preview.png\" alt=\"Logo Kemenimipas\" onerror=\"this.style.display='none'\">\n      <img src=\"/logo_pemasyarakatan-removebg-preview.png\" alt=\"Logo Pemasyarakatan\" onerror=\"this.style.display='none'\">\n    </div>\n    <h2>BAPAS KELAS I MEDAN</h2>\n    <p>Sistem Informasi Wajib Lapor Online</p>\n  </div>\n\n  <div class=\"tabs-nav\">\n    <button type=\"button\" class=\"tab-btn ")
+    ; __append(escapeFn( tipe === 'client' ? 'active' : '' ))
+    ; __append("\" id=\"tabClientBtn\" onclick=\"selectTab('client')\">\n      <i class=\"fas fa-user\"></i> Login Klien\n    </button>\n    <button type=\"button\" class=\"tab-btn ")
+    ; __append(escapeFn( tipe === 'admin' ? 'active' : '' ))
+    ; __append("\" id=\"tabAdminBtn\" onclick=\"selectTab('admin')\">\n      <i class=\"fas fa-user-shield\"></i> Login Admin\n    </button>\n  </div>\n\n  <div class=\"login-body\">\n    ")
+    ;  if (error) { 
+    ; __append("\n      <div class=\"alert-error\">\n        <i class=\"fas fa-exclamation-circle\" style=\"font-size:18px; flex-shrink:0;\"></i>\n        <div>")
+    ; __append(escapeFn( error ))
+    ; __append("</div>\n      </div>\n    ")
+    ;  } 
+    ; __append("\n\n    <form action=\"/login\" method=\"POST\" id=\"loginForm\">\n      <input type=\"hidden\" name=\"tipe\" id=\"tipeInput\" value=\"")
+    ; __append(escapeFn( tipe === 'admin' ? '1' : '2' ))
+    ; __append("\">\n\n      <div class=\"form-group\">\n        <label for=\"username\" id=\"userLabel\">\n          ")
+    ; __append(escapeFn( tipe === 'admin' ? 'Email / Username Admin' : 'Nomor WhatsApp' ))
+    ; __append("\n        </label>\n        <div class=\"input-wrapper\">\n          <i class=\"fas fa-")
+    ; __append(escapeFn( tipe === 'admin' ? 'user-shield' : 'phone' ))
+    ; __append(" input-icon\" id=\"userIcon\"></i>\n          <input \n            type=\"text\" \n            name=\"username\" \n            id=\"username\" \n            placeholder=\"")
+    ; __append(escapeFn( tipe === 'admin' ? 'Masukkan email atau username admin' : 'Masukkan nomor WhatsApp Anda' ))
+    ; __append("\" \n            value=\"")
+    ; __append(escapeFn( username || '' ))
+    ; __append("\" \n            required \n            autocomplete=\"username\"\n          >\n        </div>\n      </div>\n\n      <div class=\"form-group\">\n        <label for=\"password\">Kata Sandi (Password)</label>\n        <div class=\"input-wrapper\">\n          <i class=\"fas fa-lock input-icon\"></i>\n          <input \n            type=\"password\" \n            name=\"password\" \n            id=\"password\" \n            placeholder=\"Masukkan kata sandi Anda\" \n            required \n            autocomplete=\"current-password\"\n          >\n          <button type=\"button\" class=\"toggle-password\" id=\"togglePasswordBtn\" onclick=\"togglePasswordVisibility()\" aria-label=\"Lihat kata sandi\">\n            <i class=\"fas fa-eye\" id=\"eyeIcon\"></i>\n          </button>\n        </div>\n      </div>\n\n      <button type=\"submit\" class=\"btn-submit\" id=\"submitBtn\">\n        <i class=\"fas fa-sign-in-alt\"></i> Masuk Sekarang\n      </button>\n    </form>\n\n    <!-- HINT LOGIN KLIEN -->\n    <div class=\"credential-hint\" id=\"clientHint\" style=\"")
+    ; __append(escapeFn( tipe === 'client' ? '' : 'display:none;' ))
+    ; __append("\">\n      <strong><i class=\"fas fa-info-circle\"></i> Info Akun Klien:</strong><br>\n      Gunakan <strong>Nomor WhatsApp</strong> dan kata sandi yang telah didaftarkan oleh petugas BAPAS.<br>\n      • Contoh Akun: WhatsApp: <code>08xxxxxxxxxx</code> (atau <code>xxxxx</code>) | Sandi: <code>xxxxx</code>\n    </div>\n\n    <a href=\"/\" class=\"back-home\"><i class=\"fas fa-arrow-left\"></i> Kembali ke Beranda Utama</a>\n  </div>\n</div>\n\n<script src=\"https://cdn.jsdelivr.net/npm/sweetalert2@11\"></script>\n<script>\n  ")
+    ;  if (error) { 
+    ; __append("\n    document.addEventListener('DOMContentLoaded', function() {\n      if (typeof Swal !== 'undefined') {\n        const Toast = Swal.mixin({\n          toast: true,\n          position: 'top-end',\n          showConfirmButton: false,\n          timer: 4000,\n          timerProgressBar: true\n        });\n        Toast.fire({\n          icon: 'error',\n          title: '")
+    ; __append(escapeFn( error ))
+    ; __append("'\n        });\n      }\n    });\n  ")
+    ;  } 
+    ; __append("\n\n  function selectTab(type) {\n    const clientBtn = document.getElementById('tabClientBtn');\n    const adminBtn = document.getElementById('tabAdminBtn');\n    const tipeInput = document.getElementById('tipeInput');\n    const clientHint = document.getElementById('clientHint');\n    const userLabel = document.getElementById('userLabel');\n    const userInput = document.getElementById('username');\n    const userIcon = document.getElementById('userIcon');\n\n    if (type === 'admin') {\n      adminBtn.classList.add('active');\n      clientBtn.classList.remove('active');\n      tipeInput.value = '1';\n      if (clientHint) clientHint.style.display = 'none';\n      userLabel.innerText = 'Email / Username Admin';\n      userInput.placeholder = 'Masukkan email atau username admin';\n      userIcon.className = 'fas fa-user-shield input-icon';\n    } else {\n      clientBtn.classList.add('active');\n      adminBtn.classList.remove('active');\n      tipeInput.value = '2';\n      if (clientHint) clientHint.style.display = 'block';\n      userLabel.innerText = 'Nomor WhatsApp';\n      userInput.placeholder = 'Masukkan nomor WhatsApp Anda';\n      userIcon.className = 'fas fa-phone input-icon';\n    }\n  }\n\n  function togglePasswordVisibility() {\n    const passwordInput = document.getElementById('password');\n    const eyeIcon = document.getElementById('eyeIcon');\n    if (passwordInput.type === 'password') {\n      passwordInput.type = 'text';\n      eyeIcon.className = 'fas fa-eye-slash';\n    } else {\n      passwordInput.type = 'password';\n      eyeIcon.className = 'fas fa-eye';\n    }\n  }\n</script>\n\n</body>\n</html>\n")
+  }
+  return __output;
+
+},
+  "client/dashboard": function anonymous(locals, escapeFn, include, rethrow
+) {
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append("<!DOCTYPE html>\n<html lang=\"id\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>")
+    ; __append(escapeFn( pageTitle ))
+    ; __append("</title>\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n  <link href=\"https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700&display=swap\" rel=\"stylesheet\">\n  <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css\">\n  <link rel=\"stylesheet\" href=\"/css/responsive.css\">\n  <style>\n    * { margin:0; padding:0; box-sizing:border-box; }\n    body { font-family: 'Source Sans 3', sans-serif; background: #f5f7fa; color: #333; }\n    .navbar {\n      position: sticky; top: 0; left: 0; right: 0; width: 100%;\n      background: linear-gradient(135deg, #003580 0%, #0052a3 100%);\n      color: white; padding: 15px 30px; z-index: 1000;\n      display: flex; justify-content: space-between; align-items: center;\n      box-shadow: 0 2px 10px rgba(0,0,0,0.15);\n    }\n    .navbar a { color: white; text-decoration: none; font-size: 14px; }\n    .container { max-width: 1200px; margin: 25px auto 40px; padding: 0 20px; }\n    .header { margin-bottom: 25px; }\n    .header h1 { font-family: 'Playfair Display', serif; color: #003580; font-size: 30px; margin-bottom: 4px; }\n    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 25px; }\n    .stat-card {\n      background: white; padding: 22px; border-radius: 8px;\n      box-shadow: 0 2px 8px rgba(0,0,0,0.06); border-left: 4px solid #0052a3;\n    }\n    .stat-label { color: #666; font-size: 12px; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; }\n    .stat-number { font-size: 28px; font-weight: 700; color: #003580; }\n    .card {\n      background: white; border-radius: 8px; padding: 25px;\n      margin-bottom: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);\n    }\n    .card-title {\n      font-size: 18px; font-weight: 700; color: #002255;\n      margin-bottom: 18px; display: flex; align-items: center; gap: 10px;\n    }\n    .alert { padding: 15px; border-radius: 6px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }\n    .alert-info { background: #e3f2fd; color: #0052a3; border: 1px solid #90caf9; }\n    .alert-warning { background: #fff3e0; color: #e65100; border: 1px solid #ffb74d; }\n    .alert-success { background: #e8f5e9; color: #2e7d32; border: 1px solid #81c784; }\n    .alert-danger { background: #ffebee; color: #c62828; border: 1px solid #ef5350; }\n    .btn {\n      padding: 10px 20px; border: none; border-radius: 6px;\n      font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s;\n      text-decoration: none; display: inline-flex; align-items: center; gap: 8px;\n    }\n    .btn-primary { background: #003580; color: white; }\n    .btn-primary:hover { background: #002255; }\n    .btn-secondary { background: #6c757d; color: white; }\n    .btn-secondary:hover { background: #5a6268; }\n    .btn-success { background: #28a745; color: white; }\n    .btn-success:hover { background: #218838; }\n    .form-group { margin-bottom: 20px; }\n    .form-group label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; color: #333; }\n    textarea {\n      width: 100%; padding: 12px 14px; border: 1px solid #d9e2ec;\n      border-radius: 6px; font-family: inherit; font-size: 14px;\n    }\n    textarea:focus { outline: none; border-color: #003580; box-shadow: 0 0 0 3px rgba(0,53,128,0.1); }\n    .foto-section {\n      background: #f8fafc; padding: 20px; border-radius: 8px;\n      margin-bottom: 20px; border: 2px dashed #0052a3;\n    }\n    .foto-tabs { display: flex; gap: 10px; margin-bottom: 15px; border-bottom: 2px solid #e2e8f0; }\n    .foto-tab {\n      padding: 10px 18px; cursor: pointer; background: none; border: none;\n      font-size: 14px; font-weight: 600; color: #64748b; border-bottom: 3px solid transparent;\n    }\n    .foto-tab.active { color: #003580; border-bottom-color: #003580; }\n    .foto-content { display: none; }\n    .foto-content.active { display: block; }\n    .video-container { max-width: 420px; margin: 15px 0; border-radius: 8px; overflow: hidden; background: #000; }\n    #videoElement { width: 100%; height: 280px; object-fit: cover; display: none; }\n    .table { width: 100%; border-collapse: collapse; margin-top: 15px; }\n    .table th { background: #f8f9fa; padding: 12px 15px; text-align: left; font-size: 13px; font-weight: 600; border-bottom: 2px solid #e0e0e0; }\n    .table td { padding: 12px 15px; border-bottom: 1px solid #e0e0e0; font-size: 14px; }\n    .badge { display: inline-block; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }\n    .badge-warning { background: #fff3cd; color: #856404; }\n    .badge-success { background: #d4edda; color: #155724; }\n    .badge-danger { background: #f8d7da; color: #721c24; }\n    .badge-secondary { background: #e2e8f0; color: #475569; }\n  </style>\n</head>\n<body>\n\n<!-- NAVBAR -->\n<div class=\"navbar\">\n  <div style=\"display:flex; align-items:center; gap:10px; font-weight:700; font-size:15px;\">\n    <i class=\"fas fa-gavel\"></i> BAPAS MEDAN - CLIENT PORTAL\n  </div>\n  <div style=\"display:flex; align-items:center; gap:12px;\">\n    <a href=\"/client/profil\" style=\"display:flex; align-items:center; gap:8px;\">\n      ")
+    ;  if (client && client.foto_profil) { 
+    ; __append("\n        <img src=\"")
+    ; __append(escapeFn( getFileUrl(client.foto_profil, 'profil') ))
+    ; __append("\" alt=\"Profil\" style=\"width:28px; height:28px; border-radius:50%; object-fit:cover; border:2px solid #fff;\" onerror=\"this.onerror=null; this.src='/logo_pemasyarakatan-removebg-preview.png';\">\n      ")
+    ;  } else { 
+    ; __append("\n        <span style=\"width:26px; height:26px; border-radius:50%; background:rgba(255,255,255,0.2); display:inline-flex; align-items:center; justify-content:center; font-size:13px;\"><i class=\"fas fa-user\"></i></span>\n      ")
+    ;  } 
+    ; __append("\n      <span>")
+    ; __append(escapeFn( client ? client.nama_lengkap : 'Profil' ))
+    ; __append("</span>\n    </a>\n    <a href=\"/client/riwayat\"><i class=\"fas fa-history\"></i> <span>Riwayat</span></a>\n    <a href=\"/client/jadwal\"><i class=\"fas fa-calendar-alt\"></i> <span>Jadwal</span></a>\n    <a href=\"/logout\" style=\"background:rgba(255,255,255,0.2); padding:6px 12px; border-radius:4px;\"><i class=\"fas fa-sign-out-alt\"></i> <span>Keluar</span></a>\n  </div>\n</div>\n\n<div class=\"container\">\n  <div class=\"header\">\n    <h1>Dashboard Klien</h1>\n    <p style=\"color:#666;\">Selamat datang di Sistem Informasi Wajib Lapor Online Balai Pemasyarakatan Kelas I Medan</p>\n  </div>\n\n  ")
+    ; __append( include('../partials/alerts') )
+    ; __append("\n\n  <!-- STATISTIK -->\n  <div class=\"stat-grid\">\n    <div class=\"stat-card\" style=\"border-left-color: #ffc107;\">\n      <div class=\"stat-label\">Lapor Menunggu Verifikasi</div>\n      <div class=\"stat-number\" style=\"color:#b7791f;\">")
+    ; __append(escapeFn( stat.lapor_menunggu ))
+    ; __append("</div>\n    </div>\n    <div class=\"stat-card\" style=\"border-left-color: #28a745;\">\n      <div class=\"stat-label\">Lapor Diterima</div>\n      <div class=\"stat-number\" style=\"color:#28a745;\">")
+    ; __append(escapeFn( stat.lapor_diterima ))
+    ; __append("</div>\n    </div>\n    <div class=\"stat-card\" style=\"border-left-color: #dc3545;\">\n      <div class=\"stat-label\">Lapor Ditolak</div>\n      <div class=\"stat-number\" style=\"color:#dc3545;\">")
+    ; __append(escapeFn( stat.lapor_ditolak ))
+    ; __append("</div>\n    </div>\n    <div class=\"stat-card\" style=\"border-left-color: #003580;\">\n      <div class=\"stat-label\">Sisa Wajib Lapor</div>\n      <div class=\"stat-number\">")
+    ; __append(escapeFn( infoWajib ? infoWajib.sisa_lapor : 0 ))
+    ; __append(" Bulan</div>\n    </div>\n  </div>\n\n  <!-- NOTIFIKASI PERIODE INPUT -->\n  ")
+    ;  if (!periodeAktif) { 
+    ; __append("\n    <div class=\"alert alert-warning\">\n      <i class=\"fas fa-exclamation-triangle\" style=\"font-size:22px;\"></i>\n      <div>\n        <strong>⏱️ Periode Pengisian Wajib Lapor Online Ditutup</strong><br>\n        ")
+    ; __append(escapeFn( config.notifikasi_tertutup || 'Pengisian online hanya dibuka pada tanggal 1 s/d 15 setiap bulannya.' ))
+    ; __append("\n      </div>\n    </div>\n  ")
+    ;  } else { 
+    ; __append("\n    <div class=\"alert alert-info\">\n      <i class=\"fas fa-calendar-check\" style=\"font-size:22px;\"></i>\n      <div>\n        <strong>Periode Pengisian Bulan ")
+    ; __append(escapeFn( namaBulanIni ))
+    ; __append(" ")
+    ; __append(escapeFn( tahunIni ))
+    ; __append(" Sedang Dibuka!</strong><br>\n        Batas pengisian tanggal ")
+    ; __append(escapeFn( config.tanggal_mulai_input ))
+    ; __append(" s/d ")
+    ; __append(escapeFn( config.tanggal_akhir_input ))
+    ; __append(" ")
+    ; __append(escapeFn( namaBulanIni ))
+    ; __append(" ")
+    ; __append(escapeFn( tahunIni ))
+    ; __append(".\n      </div>\n    </div>\n  ")
+    ;  } 
+    ; __append("\n\n  <!-- FORM WAJIB LAPOR BULANAN -->\n  <div class=\"card\">\n    <div class=\"card-title\">\n      <i class=\"fas fa-edit\" style=\"color:#003580;\"></i>\n      Form Wajib Lapor Periode: ")
+    ; __append(escapeFn( namaBulanIni ))
+    ; __append(" ")
+    ; __append(escapeFn( tahunIni ))
+    ; __append("\n      ")
+    ;  if (laporBulanIni) { 
+    ; __append("\n        ")
+    ;  if (laporBulanIni.status === 'draft') { 
+    ; __append("\n          <span class=\"badge badge-secondary\" style=\"margin-left:auto;\">Status: Draft</span>\n        ")
+    ;  } else if (laporBulanIni.status === 'menunggu_verifikasi') { 
+    ; __append("\n          <span class=\"badge badge-warning\" style=\"margin-left:auto;\">Status: Menunggu Verifikasi Admin</span>\n        ")
+    ;  } else if (laporBulanIni.status === 'diterima') { 
+    ; __append("\n          <span class=\"badge badge-success\" style=\"margin-left:auto;\">Status: Laporan Diterima</span>\n        ")
+    ;  } else if (laporBulanIni.status === 'ditolak') { 
+    ; __append("\n          <span class=\"badge badge-danger\" style=\"margin-left:auto;\">Status: Laporan Ditolak</span>\n        ")
+    ;  } 
+    ; __append("\n      ")
+    ;  } else { 
+    ; __append("\n        <span class=\"badge badge-secondary\" style=\"margin-left:auto;\">Belum Diisi</span>\n      ")
+    ;  } 
+    ; __append("\n    </div>\n\n    ")
+    ;  if (laporBulanIni && (laporBulanIni.status === 'menunggu_verifikasi' || laporBulanIni.status === 'diterima')) { 
+    ; __append("\n      <div style=\"background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:18px 16px; box-sizing:border-box; width:100%;\">\n        <h4 style=\"color:#003580; margin-bottom:12px; font-size:16px;\"><i class=\"fas fa-check-circle\" style=\"color:#28a745;\"></i> Laporan Bulan Ini Sudah Terkirim</h4>\n        <p style=\"color:#555; margin-bottom:15px; font-size:14px; line-height:1.5;\">\n          Laporan Anda untuk periode <strong>")
+    ; __append(escapeFn( namaBulanIni ))
+    ; __append(" ")
+    ; __append(escapeFn( tahunIni ))
+    ; __append("</strong> telah berhasil disubmit pada ")
+    ; __append(escapeFn( formatTanggal(laporBulanIni.tanggal_submit) ))
+    ; __append(".\n        </p>\n        <div style=\"background:#fff; padding:14px; border-radius:6px; border:1px solid #e0e0e0; margin-bottom:15px; box-sizing:border-box; width:100%;\">\n          <strong style=\"color:#002255; font-size:14px;\">Aktivitas yang dilaporkan:</strong>\n          <p style=\"color:#444; margin-top:5px; font-size:14px; word-break:break-word;\">")
+    ; __append(escapeFn( laporBulanIni.aktivitas_harian || '-' ))
+    ; __append("</p>\n          <strong style=\"margin-top:12px; display:block; color:#002255; font-size:14px;\">Rencana ke depan:</strong>\n          <p style=\"color:#444; margin-top:5px; font-size:14px; word-break:break-word;\">")
+    ; __append(escapeFn( laporBulanIni.rencana_mendatang || '-' ))
+    ; __append("</p>\n          ")
+    ;  if (laporBulanIni.foto_bukti) { 
+    ; __append("\n            <div style=\"margin-top:15px;\">\n              <strong style=\"color:#002255; font-size:14px;\">Foto Bukti Terlampir:</strong><br>\n              <div style=\"margin-top:8px;\">\n                <img src=\"")
+    ; __append(escapeFn( getFileUrl(laporBulanIni.foto_bukti, 'wajib_lapor') ))
+    ; __append("\" alt=\"Foto Bukti\" style=\"max-width:100%; width:240px; height:auto; border-radius:8px; border:1px solid #cbd5e1; box-shadow:0 2px 8px rgba(0,0,0,0.08); cursor:pointer;\" onclick=\"bukaModalFoto('")
+    ; __append(escapeFn( getFileUrl(laporBulanIni.foto_bukti, 'wajib_lapor') ))
+    ; __append("', '")
+    ; __append(escapeFn( client ? client.nama_lengkap : 'Klien' ))
+    ; __append("', '")
+    ; __append(escapeFn( namaBulanIni ))
+    ; __append(" ")
+    ; __append(escapeFn( tahunIni ))
+    ; __append("')\" onerror=\"this.onerror=null; this.src='/logo_pemasyarakatan-removebg-preview.png';\">\n                <br>\n                <button type=\"button\" class=\"btn btn-sm\" style=\"margin-top:8px; font-size:12px; padding:6px 14px; background:#e8f0fe; color:#0052a3; border:1px solid #b3d1ff;\" onclick=\"bukaModalFoto('")
+    ; __append(escapeFn( getFileUrl(laporBulanIni.foto_bukti, 'wajib_lapor') ))
+    ; __append("', '")
+    ; __append(escapeFn( client ? client.nama_lengkap : 'Klien' ))
+    ; __append("', '")
+    ; __append(escapeFn( namaBulanIni ))
+    ; __append(" ")
+    ; __append(escapeFn( tahunIni ))
+    ; __append("')\">\n                  <i class=\"fas fa-search-plus\"></i> Klik untuk Perbesar Foto\n                </button>\n              </div>\n            </div>\n          ")
+    ;  } 
+    ; __append("\n          ")
+    ;  if (laporBulanIni.catatan_admin) { 
+    ; __append("\n            <div style=\"margin-top:15px; padding:12px; background:#fff3cd; border-radius:6px; color:#856404; font-size:13px; line-height:1.5;\">\n              <strong><i class=\"fas fa-comment-dots\"></i> Catatan dari Admin / PK:</strong><br>\n              ")
+    ; __append(escapeFn( laporBulanIni.catatan_admin ))
+    ; __append("\n            </div>\n          ")
+    ;  } 
+    ; __append("\n        </div>\n        <a href=\"/client/riwayat\" class=\"btn btn-primary\" style=\"font-size:13px;\"><i class=\"fas fa-history\"></i> Buka Riwayat Laporan Lengkap</a>\n      </div>\n    ")
+    ;  } else { 
+    ; __append("\n      <!-- FORM INPUT LAPORAN (DRAFT / BARU) -->\n      <form action=\"/client/lapor\" method=\"POST\" id=\"formLapor\">\n        <input type=\"hidden\" name=\"bulan\" value=\"")
+    ; __append(escapeFn( bulanIni ))
+    ; __append("\">\n        <input type=\"hidden\" name=\"tahun\" value=\"")
+    ; __append(escapeFn( tahunIni ))
+    ; __append("\">\n\n        <div class=\"form-group\">\n          <label for=\"aktivitas_harian\"><i class=\"fas fa-briefcase\"></i> Aktivitas / Pekerjaan Harian Bulan Ini *</label>\n          <textarea name=\"aktivitas_harian\" id=\"aktivitas_harian\" rows=\"4\" placeholder=\"Jelaskan secara singkat kegiatan rutin, pekerjaan, atau usaha yang Anda jalani saat ini...\" required>")
+    ; __append(escapeFn( laporBulanIni ? laporBulanIni.aktivitas_harian : '' ))
+    ; __append("</textarea>\n        </div>\n\n        <div class=\"form-group\">\n          <label for=\"rencana_mendatang\"><i class=\"fas fa-bullseye\"></i> Rencana Kegiatan Bulan Mendatang</label>\n          <textarea name=\"rencana_mendatang\" id=\"rencana_mendatang\" rows=\"3\" placeholder=\"Rencana pekerjaan, pelatihan, atau rencana positif lainnya ke depan...\">")
+    ; __append(escapeFn( laporBulanIni ? laporBulanIni.rencana_mendatang : '' ))
+    ; __append("</textarea>\n        </div>\n\n        <!-- SEKSI UPLOAD & KAMERA FOTO -->\n        <div class=\"foto-section\">\n          <label style=\"font-weight:700; color:#003580; display:flex; align-items:center; gap:8px; margin-bottom:12px;\">\n            <i class=\"fas fa-camera\"></i> Foto Bukti Lapor Diri (Wajib Selfie / Foto Terkini)\n          </label>\n\n          <div class=\"foto-tabs\">\n            <button type=\"button\" class=\"foto-tab active\" id=\"tabCamBtn\" onclick=\"switchFotoTab('camera')\">\n              <i class=\"fas fa-video\"></i> Ambil Foto dengan Kamera\n            </button>\n            <button type=\"button\" class=\"foto-tab\" id=\"tabUploadBtn\" onclick=\"switchFotoTab('upload')\">\n              <i class=\"fas fa-file-upload\"></i> Unggah File Foto\n            </button>\n          </div>\n\n          <!-- TAB KAMERA -->\n          <div class=\"foto-content active\" id=\"camContent\">\n            <div style=\"display:flex; gap:10px; margin-bottom:12px; flex-wrap:wrap;\">\n              <button type=\"button\" class=\"btn btn-primary\" id=\"startCamBtn\" onclick=\"startCamera()\"><i class=\"fas fa-power-off\"></i> Buka Kamera</button>\n              <button type=\"button\" class=\"btn btn-success\" id=\"snapBtn\" onclick=\"takeSnapshot()\" style=\"display:none;\"><i class=\"fas fa-camera\"></i> Ambil Gambar</button>\n              <button type=\"button\" class=\"btn btn-secondary\" id=\"stopCamBtn\" onclick=\"stopCamera()\" style=\"display:none;\"><i class=\"fas fa-times\"></i> Tutup Kamera</button>\n            </div>\n            <div class=\"video-container\" id=\"videoBox\" style=\"display:none;\">\n              <video id=\"videoElement\" autoplay playsinline></video>\n            </div>\n            <canvas id=\"photoCanvas\" style=\"display:none;\"></canvas>\n          </div>\n\n          <!-- TAB UPLOAD FILE -->\n          <div class=\"foto-content\" id=\"uploadContent\">\n            <p style=\"font-size:13px; color:#666; margin-bottom:10px;\">Pilih file gambar dari komputer atau HP Anda (JPG, PNG, WebP maks 5MB):</p>\n            <input type=\"file\" id=\"fotoFileInput\" accept=\"image/jpeg,image/png,image/webp\" onchange=\"handleFileUpload(event)\">\n          </div>\n\n          <!-- PREVIEW FOTO AKTIF -->\n          <div id=\"fotoPreviewContainer\" style=\"margin-top:15px; ")
+    ; __append(escapeFn( (laporBulanIni && laporBulanIni.foto_bukti) ? '' : 'display:none;' ))
+    ; __append("\">\n            <span style=\"font-size:13px; font-weight:700; color:#28a745;\"><i class=\"fas fa-check-circle\"></i> Foto Terpasang:</span><br>\n            <img id=\"imgPreview\" src=\"")
+    ; __append(escapeFn( (laporBulanIni && laporBulanIni.foto_bukti) ? getFileUrl(laporBulanIni.foto_bukti, 'wajib_lapor') : '' ))
+    ; __append("\" alt=\"Preview Foto\" style=\"max-width:240px; border-radius:6px; margin-top:8px; border:2px solid #28a745; box-shadow:0 2px 6px rgba(0,0,0,0.1);\" onerror=\"this.onerror=null; this.src='/logo_pemasyarakatan-removebg-preview.png';\">\n          </div>\n          <div id=\"uploadStatusText\" style=\"margin-top:10px; font-size:13px; color:#0052a3;\"></div>\n        </div>\n\n        <div style=\"display:flex; gap:12px; flex-wrap:wrap;\">\n          <button type=\"submit\" name=\"action\" value=\"draft\" class=\"btn btn-secondary\">\n            <i class=\"fas fa-save\"></i> Simpan Sebagai Draft\n          </button>\n          <button type=\"button\" class=\"btn btn-success\" onclick=\"confirmSubmitLapor()\">\n            <i class=\"fas fa-paper-plane\"></i> Kirim Lapor Sekarang\n          </button>\n        </div>\n      </form>\n    ")
+    ;  } 
+    ; __append("\n  </div>\n\n  <!-- RIWAYAT 5 BULAN TERAKHIR -->\n  <div class=\"card\">\n    <div class=\"card-title\">\n      <i class=\"fas fa-history\" style=\"color:#003580;\"></i> Riwayat Lapor Terakhir Anda\n      <a href=\"/client/riwayat\" style=\"font-size:13px; color:#0052a3; margin-left:auto; text-decoration:none;\">Lihat Semua <i class=\"fas fa-arrow-right\"></i></a>\n    </div>\n\n    ")
+    ;  if (riwayat && riwayat.length > 0) { 
+    ; __append("\n      <div class=\"table-responsive\">\n        <table class=\"table\">\n          <thead>\n            <tr>\n              <th>Periode</th>\n              <th>Tanggal Submit</th>\n              <th>Status</th>\n              <th>Foto Bukti</th>\n              <th>Catatan Petugas</th>\n            </tr>\n          </thead>\n          <tbody>\n            ")
+    ;  riwayat.forEach(function(r) { 
+    ; __append("\n              <tr>\n                <td><strong>")
+    ; __append(escapeFn( getNamaBulan(r.bulan) ))
+    ; __append(" ")
+    ; __append(escapeFn( r.tahun ))
+    ; __append("</strong></td>\n                <td>")
+    ; __append(escapeFn( formatTanggal(r.tanggal_submit) ))
+    ; __append("</td>\n                <td>\n                  ")
+    ;  if (r.status === 'diterima') { 
+    ; __append("\n                    <span class=\"badge badge-success\">Diterima</span>\n                  ")
+    ;  } else if (r.status === 'menunggu_verifikasi') { 
+    ; __append("\n                    <span class=\"badge badge-warning\">Menunggu</span>\n                  ")
+    ;  } else if (r.status === 'ditolak') { 
+    ; __append("\n                    <span class=\"badge badge-danger\">Ditolak</span>\n                  ")
+    ;  } else { 
+    ; __append("\n                    <span class=\"badge badge-secondary\">")
+    ; __append(escapeFn( r.status ))
+    ; __append("</span>\n                  ")
+    ;  } 
+    ; __append("\n                </td>\n                <td>\n                  ")
+    ;  if (r.foto_bukti) { 
+    ; __append("\n                    <button type=\"button\" class=\"btn btn-sm\" style=\"color:#0052a3; font-size:12px; padding:3px 8px; background:#e8f0fe; border:1px solid #b3d1ff; cursor:pointer;\" onclick=\"bukaModalFoto('")
+    ; __append(escapeFn( getFileUrl(r.foto_bukti, 'wajib_lapor') ))
+    ; __append("', '")
+    ; __append(escapeFn( client ? client.nama_lengkap : 'Klien' ))
+    ; __append("', '")
+    ; __append(escapeFn( getNamaBulan(r.bulan) ))
+    ; __append(" ")
+    ; __append(escapeFn( r.tahun ))
+    ; __append("')\">\n                      <i class=\"fas fa-image\"></i> Lihat Foto\n                    </button>\n                  ")
+    ;  } else { 
+    ; __append("\n                    <span style=\"color:#999;\">-</span>\n                  ")
+    ;  } 
+    ; __append("\n                </td>\n                <td>")
+    ; __append(escapeFn( r.catatan_admin || '-' ))
+    ; __append("</td>\n              </tr>\n            ")
+    ;  }); 
+    ; __append("\n          </tbody>\n        </table>\n      </div>\n    ")
+    ;  } else { 
+    ; __append("\n      <div style=\"text-align:center; padding:30px; color:#999;\">Belum ada riwayat laporan wajib lapor.</div>\n    ")
+    ;  } 
+    ; __append("\n  </div>\n</div>\n\n<script>\n  let videoStream = null;\n\n  function switchFotoTab(tab) {\n    const camBtn = document.getElementById('tabCamBtn');\n    const uploadBtn = document.getElementById('tabUploadBtn');\n    const camContent = document.getElementById('camContent');\n    const uploadContent = document.getElementById('uploadContent');\n\n    if (tab === 'camera') {\n      camBtn.classList.add('active');\n      uploadBtn.classList.remove('active');\n      camContent.classList.add('active');\n      uploadContent.classList.remove('active');\n    } else {\n      uploadBtn.classList.add('active');\n      camBtn.classList.remove('active');\n      uploadContent.classList.add('active');\n      camContent.classList.remove('active');\n      stopCamera();\n    }\n  }\n\n  async function startCamera() {\n    const video = document.getElementById('videoElement');\n    const videoBox = document.getElementById('videoBox');\n    const startBtn = document.getElementById('startCamBtn');\n    const snapBtn = document.getElementById('snapBtn');\n    const stopBtn = document.getElementById('stopCamBtn');\n\n    try {\n      videoStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });\n      video.srcObject = videoStream;\n      video.style.display = 'block';\n      videoBox.style.display = 'block';\n      startBtn.style.display = 'none';\n      snapBtn.style.display = 'inline-flex';\n      stopBtn.style.display = 'inline-flex';\n    } catch (err) {\n      if (typeof Swal !== 'undefined') {\n        Swal.fire({\n          title: 'Akses Kamera Gagal',\n          text: 'Tidak dapat mengakses kamera: ' + err.message + '. Silakan gunakan opsi \"Unggah File Foto\".',\n          icon: 'warning',\n          confirmButtonColor: '#003580'\n        });\n      } else {\n        alert('Tidak dapat mengakses kamera: ' + err.message + '\\nSilakan gunakan opsi \"Unggah File Foto\".');\n      }\n    }\n  }\n\n  function stopCamera() {\n    if (videoStream) {\n      videoStream.getTracks().forEach(track => track.stop());\n      videoStream = null;\n    }\n    const video = document.getElementById('videoElement');\n    const videoBox = document.getElementById('videoBox');\n    const startBtn = document.getElementById('startCamBtn');\n    const snapBtn = document.getElementById('snapBtn');\n    const stopBtn = document.getElementById('stopCamBtn');\n\n    if (video) video.style.display = 'none';\n    if (videoBox) videoBox.style.display = 'none';\n    if (startBtn) startBtn.style.display = 'inline-flex';\n    if (snapBtn) snapBtn.style.display = 'none';\n    if (stopBtn) stopBtn.style.display = 'none';\n  }\n\n  async function takeSnapshot() {\n    const video = document.getElementById('videoElement');\n    const canvas = document.getElementById('photoCanvas');\n    const context = canvas.getContext('2d');\n\n    canvas.width = video.videoWidth || 640;\n    canvas.height = video.videoHeight || 480;\n    context.drawImage(video, 0, 0, canvas.width, canvas.height);\n\n    const base64Data = canvas.toDataURL('image/jpeg', 0.85);\n\n    stopCamera();\n\n    // Upload via AJAX\n    document.getElementById('uploadStatusText').innerText = 'Mengunggah foto...';\n    try {\n      const res = await fetch('/client/upload-foto', {\n        method: 'POST',\n        headers: { 'Content-Type': 'application/json' },\n        body: JSON.stringify({\n          action: 'capture',\n          foto_base64: base64Data,\n          bulan: '")
+    ; __append(escapeFn( bulanIni ))
+    ; __append("',\n          tahun: '")
+    ; __append(escapeFn( tahunIni ))
+    ; __append("'\n        })\n      });\n      const data = await res.json();\n      if (data.success) {\n        document.getElementById('imgPreview').src = data.foto_url;\n        document.getElementById('fotoPreviewContainer').style.display = 'block';\n        document.getElementById('uploadStatusText').innerText = '';\n        showToast('Foto webcam berhasil diunggah!', 'success');\n      } else {\n        if (typeof Swal !== 'undefined') {\n          Swal.fire('Gagal Unggah Foto', data.message || 'Gagal memproses foto webcam.', 'error');\n        } else {\n          alert('Gagal mengunggah foto: ' + data.message);\n        }\n        document.getElementById('uploadStatusText').innerText = '';\n      }\n    } catch (err) {\n      if (typeof Swal !== 'undefined') {\n        Swal.fire('Kesalahan Koneksi', 'Gagal terhubung ke server saat upload foto: ' + err.message, 'error');\n      } else {\n        alert('Terjadi kesalahan koneksi saat upload foto: ' + err.message);\n      }\n      document.getElementById('uploadStatusText').innerText = '';\n    }\n  }\n\n  async function handleFileUpload(e) {\n    const file = e.target.files[0];\n    if (!file) return;\n\n    const formData = new FormData();\n    formData.append('foto', file);\n    formData.append('action', 'upload');\n    formData.append('bulan', '")
+    ; __append(escapeFn( bulanIni ))
+    ; __append("');\n    formData.append('tahun', '")
+    ; __append(escapeFn( tahunIni ))
+    ; __append("');\n\n    document.getElementById('uploadStatusText').innerText = 'Mengunggah file foto...';\n    try {\n      const res = await fetch('/client/upload-foto', {\n        method: 'POST',\n        body: formData\n      });\n      const data = await res.json();\n      if (data.success) {\n        document.getElementById('imgPreview').src = data.foto_url;\n        document.getElementById('fotoPreviewContainer').style.display = 'block';\n        document.getElementById('uploadStatusText').innerText = '';\n        showToast('File foto berhasil diunggah!', 'success');\n      } else {\n        if (typeof Swal !== 'undefined') {\n          Swal.fire('Gagal Unggah File', data.message || 'File foto ditolak sistem.', 'error');\n        } else {\n          alert('Gagal upload: ' + data.message);\n        }\n        document.getElementById('uploadStatusText').innerText = '';\n      }\n    } catch (err) {\n      if (typeof Swal !== 'undefined') {\n        Swal.fire('Kesalahan Jaringan', 'Terjadi kesalahan saat mengunggah file: ' + err.message, 'error');\n      } else {\n        alert('Gagal upload: ' + err.message);\n      }\n      document.getElementById('uploadStatusText').innerText = '';\n    }\n  }\n\n  function confirmSubmitLapor() {\n    const form = document.getElementById('formLapor');\n    const aktivitas = document.getElementById('aktivitas_harian');\n    if (aktivitas && !aktivitas.value.trim()) {\n      Swal.fire({\n        title: 'Formulir Belum Lengkap',\n        text: 'Harap isi aktivitas / pekerjaan harian Anda bulan ini terlebih dahulu.',\n        icon: 'warning',\n        confirmButtonColor: '#003580',\n        confirmButtonText: 'OK'\n      });\n      aktivitas.focus();\n      return;\n    }\n\n    customConfirm({\n      title: 'Kirim Laporan Wajib Lapor?',\n      text: 'Apakah Anda yakin seluruh data dan foto bukti sudah benar? Laporan akan segera diverifikasi oleh petugas pembimbing BAPAS.',\n      icon: 'question',\n      confirmColor: '#28a745',\n      confirmText: '<i class=\"fas fa-paper-plane\"></i> Ya, Kirim Sekarang',\n      cancelText: 'Periksa Kembali'\n    }).then((res) => {\n      if (res.isConfirmed) {\n        let inputAction = document.getElementById('hiddenActionInput');\n        if (!inputAction) {\n          inputAction = document.createElement('input');\n          inputAction.type = 'hidden';\n          inputAction.id = 'hiddenActionInput';\n          inputAction.name = 'action';\n          form.appendChild(inputAction);\n        }\n        inputAction.value = 'submit';\n        form.submit();\n      }\n    });\n  }\n</script>\n\n")
+    ; __append( include('../partials/modal_foto') )
+    ; __append("\n\n</body>\n</html>\n")
+  }
+  return __output;
+
+},
+  "client/dashboard.ejs": function anonymous(locals, escapeFn, include, rethrow
+) {
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append("<!DOCTYPE html>\n<html lang=\"id\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>")
+    ; __append(escapeFn( pageTitle ))
+    ; __append("</title>\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n  <link href=\"https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700&display=swap\" rel=\"stylesheet\">\n  <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css\">\n  <link rel=\"stylesheet\" href=\"/css/responsive.css\">\n  <style>\n    * { margin:0; padding:0; box-sizing:border-box; }\n    body { font-family: 'Source Sans 3', sans-serif; background: #f5f7fa; color: #333; }\n    .navbar {\n      position: sticky; top: 0; left: 0; right: 0; width: 100%;\n      background: linear-gradient(135deg, #003580 0%, #0052a3 100%);\n      color: white; padding: 15px 30px; z-index: 1000;\n      display: flex; justify-content: space-between; align-items: center;\n      box-shadow: 0 2px 10px rgba(0,0,0,0.15);\n    }\n    .navbar a { color: white; text-decoration: none; font-size: 14px; }\n    .container { max-width: 1200px; margin: 25px auto 40px; padding: 0 20px; }\n    .header { margin-bottom: 25px; }\n    .header h1 { font-family: 'Playfair Display', serif; color: #003580; font-size: 30px; margin-bottom: 4px; }\n    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 25px; }\n    .stat-card {\n      background: white; padding: 22px; border-radius: 8px;\n      box-shadow: 0 2px 8px rgba(0,0,0,0.06); border-left: 4px solid #0052a3;\n    }\n    .stat-label { color: #666; font-size: 12px; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; }\n    .stat-number { font-size: 28px; font-weight: 700; color: #003580; }\n    .card {\n      background: white; border-radius: 8px; padding: 25px;\n      margin-bottom: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);\n    }\n    .card-title {\n      font-size: 18px; font-weight: 700; color: #002255;\n      margin-bottom: 18px; display: flex; align-items: center; gap: 10px;\n    }\n    .alert { padding: 15px; border-radius: 6px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }\n    .alert-info { background: #e3f2fd; color: #0052a3; border: 1px solid #90caf9; }\n    .alert-warning { background: #fff3e0; color: #e65100; border: 1px solid #ffb74d; }\n    .alert-success { background: #e8f5e9; color: #2e7d32; border: 1px solid #81c784; }\n    .alert-danger { background: #ffebee; color: #c62828; border: 1px solid #ef5350; }\n    .btn {\n      padding: 10px 20px; border: none; border-radius: 6px;\n      font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s;\n      text-decoration: none; display: inline-flex; align-items: center; gap: 8px;\n    }\n    .btn-primary { background: #003580; color: white; }\n    .btn-primary:hover { background: #002255; }\n    .btn-secondary { background: #6c757d; color: white; }\n    .btn-secondary:hover { background: #5a6268; }\n    .btn-success { background: #28a745; color: white; }\n    .btn-success:hover { background: #218838; }\n    .form-group { margin-bottom: 20px; }\n    .form-group label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; color: #333; }\n    textarea {\n      width: 100%; padding: 12px 14px; border: 1px solid #d9e2ec;\n      border-radius: 6px; font-family: inherit; font-size: 14px;\n    }\n    textarea:focus { outline: none; border-color: #003580; box-shadow: 0 0 0 3px rgba(0,53,128,0.1); }\n    .foto-section {\n      background: #f8fafc; padding: 20px; border-radius: 8px;\n      margin-bottom: 20px; border: 2px dashed #0052a3;\n    }\n    .foto-tabs { display: flex; gap: 10px; margin-bottom: 15px; border-bottom: 2px solid #e2e8f0; }\n    .foto-tab {\n      padding: 10px 18px; cursor: pointer; background: none; border: none;\n      font-size: 14px; font-weight: 600; color: #64748b; border-bottom: 3px solid transparent;\n    }\n    .foto-tab.active { color: #003580; border-bottom-color: #003580; }\n    .foto-content { display: none; }\n    .foto-content.active { display: block; }\n    .video-container { max-width: 420px; margin: 15px 0; border-radius: 8px; overflow: hidden; background: #000; }\n    #videoElement { width: 100%; height: 280px; object-fit: cover; display: none; }\n    .table { width: 100%; border-collapse: collapse; margin-top: 15px; }\n    .table th { background: #f8f9fa; padding: 12px 15px; text-align: left; font-size: 13px; font-weight: 600; border-bottom: 2px solid #e0e0e0; }\n    .table td { padding: 12px 15px; border-bottom: 1px solid #e0e0e0; font-size: 14px; }\n    .badge { display: inline-block; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }\n    .badge-warning { background: #fff3cd; color: #856404; }\n    .badge-success { background: #d4edda; color: #155724; }\n    .badge-danger { background: #f8d7da; color: #721c24; }\n    .badge-secondary { background: #e2e8f0; color: #475569; }\n  </style>\n</head>\n<body>\n\n<!-- NAVBAR -->\n<div class=\"navbar\">\n  <div style=\"display:flex; align-items:center; gap:10px; font-weight:700; font-size:15px;\">\n    <i class=\"fas fa-gavel\"></i> BAPAS MEDAN - CLIENT PORTAL\n  </div>\n  <div style=\"display:flex; align-items:center; gap:12px;\">\n    <a href=\"/client/profil\" style=\"display:flex; align-items:center; gap:8px;\">\n      ")
+    ;  if (client && client.foto_profil) { 
+    ; __append("\n        <img src=\"")
+    ; __append(escapeFn( getFileUrl(client.foto_profil, 'profil') ))
+    ; __append("\" alt=\"Profil\" style=\"width:28px; height:28px; border-radius:50%; object-fit:cover; border:2px solid #fff;\" onerror=\"this.onerror=null; this.src='/logo_pemasyarakatan-removebg-preview.png';\">\n      ")
+    ;  } else { 
+    ; __append("\n        <span style=\"width:26px; height:26px; border-radius:50%; background:rgba(255,255,255,0.2); display:inline-flex; align-items:center; justify-content:center; font-size:13px;\"><i class=\"fas fa-user\"></i></span>\n      ")
+    ;  } 
+    ; __append("\n      <span>")
+    ; __append(escapeFn( client ? client.nama_lengkap : 'Profil' ))
+    ; __append("</span>\n    </a>\n    <a href=\"/client/riwayat\"><i class=\"fas fa-history\"></i> <span>Riwayat</span></a>\n    <a href=\"/client/jadwal\"><i class=\"fas fa-calendar-alt\"></i> <span>Jadwal</span></a>\n    <a href=\"/logout\" style=\"background:rgba(255,255,255,0.2); padding:6px 12px; border-radius:4px;\"><i class=\"fas fa-sign-out-alt\"></i> <span>Keluar</span></a>\n  </div>\n</div>\n\n<div class=\"container\">\n  <div class=\"header\">\n    <h1>Dashboard Klien</h1>\n    <p style=\"color:#666;\">Selamat datang di Sistem Informasi Wajib Lapor Online Balai Pemasyarakatan Kelas I Medan</p>\n  </div>\n\n  ")
+    ; __append( include('../partials/alerts') )
+    ; __append("\n\n  <!-- STATISTIK -->\n  <div class=\"stat-grid\">\n    <div class=\"stat-card\" style=\"border-left-color: #ffc107;\">\n      <div class=\"stat-label\">Lapor Menunggu Verifikasi</div>\n      <div class=\"stat-number\" style=\"color:#b7791f;\">")
+    ; __append(escapeFn( stat.lapor_menunggu ))
+    ; __append("</div>\n    </div>\n    <div class=\"stat-card\" style=\"border-left-color: #28a745;\">\n      <div class=\"stat-label\">Lapor Diterima</div>\n      <div class=\"stat-number\" style=\"color:#28a745;\">")
+    ; __append(escapeFn( stat.lapor_diterima ))
+    ; __append("</div>\n    </div>\n    <div class=\"stat-card\" style=\"border-left-color: #dc3545;\">\n      <div class=\"stat-label\">Lapor Ditolak</div>\n      <div class=\"stat-number\" style=\"color:#dc3545;\">")
+    ; __append(escapeFn( stat.lapor_ditolak ))
+    ; __append("</div>\n    </div>\n    <div class=\"stat-card\" style=\"border-left-color: #003580;\">\n      <div class=\"stat-label\">Sisa Wajib Lapor</div>\n      <div class=\"stat-number\">")
+    ; __append(escapeFn( infoWajib ? infoWajib.sisa_lapor : 0 ))
+    ; __append(" Bulan</div>\n    </div>\n  </div>\n\n  <!-- NOTIFIKASI PERIODE INPUT -->\n  ")
+    ;  if (!periodeAktif) { 
+    ; __append("\n    <div class=\"alert alert-warning\">\n      <i class=\"fas fa-exclamation-triangle\" style=\"font-size:22px;\"></i>\n      <div>\n        <strong>⏱️ Periode Pengisian Wajib Lapor Online Ditutup</strong><br>\n        ")
+    ; __append(escapeFn( config.notifikasi_tertutup || 'Pengisian online hanya dibuka pada tanggal 1 s/d 15 setiap bulannya.' ))
+    ; __append("\n      </div>\n    </div>\n  ")
+    ;  } else { 
+    ; __append("\n    <div class=\"alert alert-info\">\n      <i class=\"fas fa-calendar-check\" style=\"font-size:22px;\"></i>\n      <div>\n        <strong>Periode Pengisian Bulan ")
+    ; __append(escapeFn( namaBulanIni ))
+    ; __append(" ")
+    ; __append(escapeFn( tahunIni ))
+    ; __append(" Sedang Dibuka!</strong><br>\n        Batas pengisian tanggal ")
+    ; __append(escapeFn( config.tanggal_mulai_input ))
+    ; __append(" s/d ")
+    ; __append(escapeFn( config.tanggal_akhir_input ))
+    ; __append(" ")
+    ; __append(escapeFn( namaBulanIni ))
+    ; __append(" ")
+    ; __append(escapeFn( tahunIni ))
+    ; __append(".\n      </div>\n    </div>\n  ")
+    ;  } 
+    ; __append("\n\n  <!-- FORM WAJIB LAPOR BULANAN -->\n  <div class=\"card\">\n    <div class=\"card-title\">\n      <i class=\"fas fa-edit\" style=\"color:#003580;\"></i>\n      Form Wajib Lapor Periode: ")
+    ; __append(escapeFn( namaBulanIni ))
+    ; __append(" ")
+    ; __append(escapeFn( tahunIni ))
+    ; __append("\n      ")
+    ;  if (laporBulanIni) { 
+    ; __append("\n        ")
+    ;  if (laporBulanIni.status === 'draft') { 
+    ; __append("\n          <span class=\"badge badge-secondary\" style=\"margin-left:auto;\">Status: Draft</span>\n        ")
+    ;  } else if (laporBulanIni.status === 'menunggu_verifikasi') { 
+    ; __append("\n          <span class=\"badge badge-warning\" style=\"margin-left:auto;\">Status: Menunggu Verifikasi Admin</span>\n        ")
+    ;  } else if (laporBulanIni.status === 'diterima') { 
+    ; __append("\n          <span class=\"badge badge-success\" style=\"margin-left:auto;\">Status: Laporan Diterima</span>\n        ")
+    ;  } else if (laporBulanIni.status === 'ditolak') { 
+    ; __append("\n          <span class=\"badge badge-danger\" style=\"margin-left:auto;\">Status: Laporan Ditolak</span>\n        ")
+    ;  } 
+    ; __append("\n      ")
+    ;  } else { 
+    ; __append("\n        <span class=\"badge badge-secondary\" style=\"margin-left:auto;\">Belum Diisi</span>\n      ")
+    ;  } 
+    ; __append("\n    </div>\n\n    ")
+    ;  if (laporBulanIni && (laporBulanIni.status === 'menunggu_verifikasi' || laporBulanIni.status === 'diterima')) { 
+    ; __append("\n      <div style=\"background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:18px 16px; box-sizing:border-box; width:100%;\">\n        <h4 style=\"color:#003580; margin-bottom:12px; font-size:16px;\"><i class=\"fas fa-check-circle\" style=\"color:#28a745;\"></i> Laporan Bulan Ini Sudah Terkirim</h4>\n        <p style=\"color:#555; margin-bottom:15px; font-size:14px; line-height:1.5;\">\n          Laporan Anda untuk periode <strong>")
+    ; __append(escapeFn( namaBulanIni ))
+    ; __append(" ")
+    ; __append(escapeFn( tahunIni ))
+    ; __append("</strong> telah berhasil disubmit pada ")
+    ; __append(escapeFn( formatTanggal(laporBulanIni.tanggal_submit) ))
+    ; __append(".\n        </p>\n        <div style=\"background:#fff; padding:14px; border-radius:6px; border:1px solid #e0e0e0; margin-bottom:15px; box-sizing:border-box; width:100%;\">\n          <strong style=\"color:#002255; font-size:14px;\">Aktivitas yang dilaporkan:</strong>\n          <p style=\"color:#444; margin-top:5px; font-size:14px; word-break:break-word;\">")
+    ; __append(escapeFn( laporBulanIni.aktivitas_harian || '-' ))
+    ; __append("</p>\n          <strong style=\"margin-top:12px; display:block; color:#002255; font-size:14px;\">Rencana ke depan:</strong>\n          <p style=\"color:#444; margin-top:5px; font-size:14px; word-break:break-word;\">")
+    ; __append(escapeFn( laporBulanIni.rencana_mendatang || '-' ))
+    ; __append("</p>\n          ")
+    ;  if (laporBulanIni.foto_bukti) { 
+    ; __append("\n            <div style=\"margin-top:15px;\">\n              <strong style=\"color:#002255; font-size:14px;\">Foto Bukti Terlampir:</strong><br>\n              <div style=\"margin-top:8px;\">\n                <img src=\"")
+    ; __append(escapeFn( getFileUrl(laporBulanIni.foto_bukti, 'wajib_lapor') ))
+    ; __append("\" alt=\"Foto Bukti\" style=\"max-width:100%; width:240px; height:auto; border-radius:8px; border:1px solid #cbd5e1; box-shadow:0 2px 8px rgba(0,0,0,0.08); cursor:pointer;\" onclick=\"bukaModalFoto('")
+    ; __append(escapeFn( getFileUrl(laporBulanIni.foto_bukti, 'wajib_lapor') ))
+    ; __append("', '")
+    ; __append(escapeFn( client ? client.nama_lengkap : 'Klien' ))
+    ; __append("', '")
+    ; __append(escapeFn( namaBulanIni ))
+    ; __append(" ")
+    ; __append(escapeFn( tahunIni ))
+    ; __append("')\" onerror=\"this.onerror=null; this.src='/logo_pemasyarakatan-removebg-preview.png';\">\n                <br>\n                <button type=\"button\" class=\"btn btn-sm\" style=\"margin-top:8px; font-size:12px; padding:6px 14px; background:#e8f0fe; color:#0052a3; border:1px solid #b3d1ff;\" onclick=\"bukaModalFoto('")
+    ; __append(escapeFn( getFileUrl(laporBulanIni.foto_bukti, 'wajib_lapor') ))
+    ; __append("', '")
+    ; __append(escapeFn( client ? client.nama_lengkap : 'Klien' ))
+    ; __append("', '")
+    ; __append(escapeFn( namaBulanIni ))
+    ; __append(" ")
+    ; __append(escapeFn( tahunIni ))
+    ; __append("')\">\n                  <i class=\"fas fa-search-plus\"></i> Klik untuk Perbesar Foto\n                </button>\n              </div>\n            </div>\n          ")
+    ;  } 
+    ; __append("\n          ")
+    ;  if (laporBulanIni.catatan_admin) { 
+    ; __append("\n            <div style=\"margin-top:15px; padding:12px; background:#fff3cd; border-radius:6px; color:#856404; font-size:13px; line-height:1.5;\">\n              <strong><i class=\"fas fa-comment-dots\"></i> Catatan dari Admin / PK:</strong><br>\n              ")
+    ; __append(escapeFn( laporBulanIni.catatan_admin ))
+    ; __append("\n            </div>\n          ")
+    ;  } 
+    ; __append("\n        </div>\n        <a href=\"/client/riwayat\" class=\"btn btn-primary\" style=\"font-size:13px;\"><i class=\"fas fa-history\"></i> Buka Riwayat Laporan Lengkap</a>\n      </div>\n    ")
+    ;  } else { 
+    ; __append("\n      <!-- FORM INPUT LAPORAN (DRAFT / BARU) -->\n      <form action=\"/client/lapor\" method=\"POST\" id=\"formLapor\">\n        <input type=\"hidden\" name=\"bulan\" value=\"")
+    ; __append(escapeFn( bulanIni ))
+    ; __append("\">\n        <input type=\"hidden\" name=\"tahun\" value=\"")
+    ; __append(escapeFn( tahunIni ))
+    ; __append("\">\n\n        <div class=\"form-group\">\n          <label for=\"aktivitas_harian\"><i class=\"fas fa-briefcase\"></i> Aktivitas / Pekerjaan Harian Bulan Ini *</label>\n          <textarea name=\"aktivitas_harian\" id=\"aktivitas_harian\" rows=\"4\" placeholder=\"Jelaskan secara singkat kegiatan rutin, pekerjaan, atau usaha yang Anda jalani saat ini...\" required>")
+    ; __append(escapeFn( laporBulanIni ? laporBulanIni.aktivitas_harian : '' ))
+    ; __append("</textarea>\n        </div>\n\n        <div class=\"form-group\">\n          <label for=\"rencana_mendatang\"><i class=\"fas fa-bullseye\"></i> Rencana Kegiatan Bulan Mendatang</label>\n          <textarea name=\"rencana_mendatang\" id=\"rencana_mendatang\" rows=\"3\" placeholder=\"Rencana pekerjaan, pelatihan, atau rencana positif lainnya ke depan...\">")
+    ; __append(escapeFn( laporBulanIni ? laporBulanIni.rencana_mendatang : '' ))
+    ; __append("</textarea>\n        </div>\n\n        <!-- SEKSI UPLOAD & KAMERA FOTO -->\n        <div class=\"foto-section\">\n          <label style=\"font-weight:700; color:#003580; display:flex; align-items:center; gap:8px; margin-bottom:12px;\">\n            <i class=\"fas fa-camera\"></i> Foto Bukti Lapor Diri (Wajib Selfie / Foto Terkini)\n          </label>\n\n          <div class=\"foto-tabs\">\n            <button type=\"button\" class=\"foto-tab active\" id=\"tabCamBtn\" onclick=\"switchFotoTab('camera')\">\n              <i class=\"fas fa-video\"></i> Ambil Foto dengan Kamera\n            </button>\n            <button type=\"button\" class=\"foto-tab\" id=\"tabUploadBtn\" onclick=\"switchFotoTab('upload')\">\n              <i class=\"fas fa-file-upload\"></i> Unggah File Foto\n            </button>\n          </div>\n\n          <!-- TAB KAMERA -->\n          <div class=\"foto-content active\" id=\"camContent\">\n            <div style=\"display:flex; gap:10px; margin-bottom:12px; flex-wrap:wrap;\">\n              <button type=\"button\" class=\"btn btn-primary\" id=\"startCamBtn\" onclick=\"startCamera()\"><i class=\"fas fa-power-off\"></i> Buka Kamera</button>\n              <button type=\"button\" class=\"btn btn-success\" id=\"snapBtn\" onclick=\"takeSnapshot()\" style=\"display:none;\"><i class=\"fas fa-camera\"></i> Ambil Gambar</button>\n              <button type=\"button\" class=\"btn btn-secondary\" id=\"stopCamBtn\" onclick=\"stopCamera()\" style=\"display:none;\"><i class=\"fas fa-times\"></i> Tutup Kamera</button>\n            </div>\n            <div class=\"video-container\" id=\"videoBox\" style=\"display:none;\">\n              <video id=\"videoElement\" autoplay playsinline></video>\n            </div>\n            <canvas id=\"photoCanvas\" style=\"display:none;\"></canvas>\n          </div>\n\n          <!-- TAB UPLOAD FILE -->\n          <div class=\"foto-content\" id=\"uploadContent\">\n            <p style=\"font-size:13px; color:#666; margin-bottom:10px;\">Pilih file gambar dari komputer atau HP Anda (JPG, PNG, WebP maks 5MB):</p>\n            <input type=\"file\" id=\"fotoFileInput\" accept=\"image/jpeg,image/png,image/webp\" onchange=\"handleFileUpload(event)\">\n          </div>\n\n          <!-- PREVIEW FOTO AKTIF -->\n          <div id=\"fotoPreviewContainer\" style=\"margin-top:15px; ")
+    ; __append(escapeFn( (laporBulanIni && laporBulanIni.foto_bukti) ? '' : 'display:none;' ))
+    ; __append("\">\n            <span style=\"font-size:13px; font-weight:700; color:#28a745;\"><i class=\"fas fa-check-circle\"></i> Foto Terpasang:</span><br>\n            <img id=\"imgPreview\" src=\"")
+    ; __append(escapeFn( (laporBulanIni && laporBulanIni.foto_bukti) ? getFileUrl(laporBulanIni.foto_bukti, 'wajib_lapor') : '' ))
+    ; __append("\" alt=\"Preview Foto\" style=\"max-width:240px; border-radius:6px; margin-top:8px; border:2px solid #28a745; box-shadow:0 2px 6px rgba(0,0,0,0.1);\" onerror=\"this.onerror=null; this.src='/logo_pemasyarakatan-removebg-preview.png';\">\n          </div>\n          <div id=\"uploadStatusText\" style=\"margin-top:10px; font-size:13px; color:#0052a3;\"></div>\n        </div>\n\n        <div style=\"display:flex; gap:12px; flex-wrap:wrap;\">\n          <button type=\"submit\" name=\"action\" value=\"draft\" class=\"btn btn-secondary\">\n            <i class=\"fas fa-save\"></i> Simpan Sebagai Draft\n          </button>\n          <button type=\"button\" class=\"btn btn-success\" onclick=\"confirmSubmitLapor()\">\n            <i class=\"fas fa-paper-plane\"></i> Kirim Lapor Sekarang\n          </button>\n        </div>\n      </form>\n    ")
+    ;  } 
+    ; __append("\n  </div>\n\n  <!-- RIWAYAT 5 BULAN TERAKHIR -->\n  <div class=\"card\">\n    <div class=\"card-title\">\n      <i class=\"fas fa-history\" style=\"color:#003580;\"></i> Riwayat Lapor Terakhir Anda\n      <a href=\"/client/riwayat\" style=\"font-size:13px; color:#0052a3; margin-left:auto; text-decoration:none;\">Lihat Semua <i class=\"fas fa-arrow-right\"></i></a>\n    </div>\n\n    ")
+    ;  if (riwayat && riwayat.length > 0) { 
+    ; __append("\n      <div class=\"table-responsive\">\n        <table class=\"table\">\n          <thead>\n            <tr>\n              <th>Periode</th>\n              <th>Tanggal Submit</th>\n              <th>Status</th>\n              <th>Foto Bukti</th>\n              <th>Catatan Petugas</th>\n            </tr>\n          </thead>\n          <tbody>\n            ")
+    ;  riwayat.forEach(function(r) { 
+    ; __append("\n              <tr>\n                <td><strong>")
+    ; __append(escapeFn( getNamaBulan(r.bulan) ))
+    ; __append(" ")
+    ; __append(escapeFn( r.tahun ))
+    ; __append("</strong></td>\n                <td>")
+    ; __append(escapeFn( formatTanggal(r.tanggal_submit) ))
+    ; __append("</td>\n                <td>\n                  ")
+    ;  if (r.status === 'diterima') { 
+    ; __append("\n                    <span class=\"badge badge-success\">Diterima</span>\n                  ")
+    ;  } else if (r.status === 'menunggu_verifikasi') { 
+    ; __append("\n                    <span class=\"badge badge-warning\">Menunggu</span>\n                  ")
+    ;  } else if (r.status === 'ditolak') { 
+    ; __append("\n                    <span class=\"badge badge-danger\">Ditolak</span>\n                  ")
+    ;  } else { 
+    ; __append("\n                    <span class=\"badge badge-secondary\">")
+    ; __append(escapeFn( r.status ))
+    ; __append("</span>\n                  ")
+    ;  } 
+    ; __append("\n                </td>\n                <td>\n                  ")
+    ;  if (r.foto_bukti) { 
+    ; __append("\n                    <button type=\"button\" class=\"btn btn-sm\" style=\"color:#0052a3; font-size:12px; padding:3px 8px; background:#e8f0fe; border:1px solid #b3d1ff; cursor:pointer;\" onclick=\"bukaModalFoto('")
+    ; __append(escapeFn( getFileUrl(r.foto_bukti, 'wajib_lapor') ))
+    ; __append("', '")
+    ; __append(escapeFn( client ? client.nama_lengkap : 'Klien' ))
+    ; __append("', '")
+    ; __append(escapeFn( getNamaBulan(r.bulan) ))
+    ; __append(" ")
+    ; __append(escapeFn( r.tahun ))
+    ; __append("')\">\n                      <i class=\"fas fa-image\"></i> Lihat Foto\n                    </button>\n                  ")
+    ;  } else { 
+    ; __append("\n                    <span style=\"color:#999;\">-</span>\n                  ")
+    ;  } 
+    ; __append("\n                </td>\n                <td>")
+    ; __append(escapeFn( r.catatan_admin || '-' ))
+    ; __append("</td>\n              </tr>\n            ")
+    ;  }); 
+    ; __append("\n          </tbody>\n        </table>\n      </div>\n    ")
+    ;  } else { 
+    ; __append("\n      <div style=\"text-align:center; padding:30px; color:#999;\">Belum ada riwayat laporan wajib lapor.</div>\n    ")
+    ;  } 
+    ; __append("\n  </div>\n</div>\n\n<script>\n  let videoStream = null;\n\n  function switchFotoTab(tab) {\n    const camBtn = document.getElementById('tabCamBtn');\n    const uploadBtn = document.getElementById('tabUploadBtn');\n    const camContent = document.getElementById('camContent');\n    const uploadContent = document.getElementById('uploadContent');\n\n    if (tab === 'camera') {\n      camBtn.classList.add('active');\n      uploadBtn.classList.remove('active');\n      camContent.classList.add('active');\n      uploadContent.classList.remove('active');\n    } else {\n      uploadBtn.classList.add('active');\n      camBtn.classList.remove('active');\n      uploadContent.classList.add('active');\n      camContent.classList.remove('active');\n      stopCamera();\n    }\n  }\n\n  async function startCamera() {\n    const video = document.getElementById('videoElement');\n    const videoBox = document.getElementById('videoBox');\n    const startBtn = document.getElementById('startCamBtn');\n    const snapBtn = document.getElementById('snapBtn');\n    const stopBtn = document.getElementById('stopCamBtn');\n\n    try {\n      videoStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });\n      video.srcObject = videoStream;\n      video.style.display = 'block';\n      videoBox.style.display = 'block';\n      startBtn.style.display = 'none';\n      snapBtn.style.display = 'inline-flex';\n      stopBtn.style.display = 'inline-flex';\n    } catch (err) {\n      if (typeof Swal !== 'undefined') {\n        Swal.fire({\n          title: 'Akses Kamera Gagal',\n          text: 'Tidak dapat mengakses kamera: ' + err.message + '. Silakan gunakan opsi \"Unggah File Foto\".',\n          icon: 'warning',\n          confirmButtonColor: '#003580'\n        });\n      } else {\n        alert('Tidak dapat mengakses kamera: ' + err.message + '\\nSilakan gunakan opsi \"Unggah File Foto\".');\n      }\n    }\n  }\n\n  function stopCamera() {\n    if (videoStream) {\n      videoStream.getTracks().forEach(track => track.stop());\n      videoStream = null;\n    }\n    const video = document.getElementById('videoElement');\n    const videoBox = document.getElementById('videoBox');\n    const startBtn = document.getElementById('startCamBtn');\n    const snapBtn = document.getElementById('snapBtn');\n    const stopBtn = document.getElementById('stopCamBtn');\n\n    if (video) video.style.display = 'none';\n    if (videoBox) videoBox.style.display = 'none';\n    if (startBtn) startBtn.style.display = 'inline-flex';\n    if (snapBtn) snapBtn.style.display = 'none';\n    if (stopBtn) stopBtn.style.display = 'none';\n  }\n\n  async function takeSnapshot() {\n    const video = document.getElementById('videoElement');\n    const canvas = document.getElementById('photoCanvas');\n    const context = canvas.getContext('2d');\n\n    canvas.width = video.videoWidth || 640;\n    canvas.height = video.videoHeight || 480;\n    context.drawImage(video, 0, 0, canvas.width, canvas.height);\n\n    const base64Data = canvas.toDataURL('image/jpeg', 0.85);\n\n    stopCamera();\n\n    // Upload via AJAX\n    document.getElementById('uploadStatusText').innerText = 'Mengunggah foto...';\n    try {\n      const res = await fetch('/client/upload-foto', {\n        method: 'POST',\n        headers: { 'Content-Type': 'application/json' },\n        body: JSON.stringify({\n          action: 'capture',\n          foto_base64: base64Data,\n          bulan: '")
+    ; __append(escapeFn( bulanIni ))
+    ; __append("',\n          tahun: '")
+    ; __append(escapeFn( tahunIni ))
+    ; __append("'\n        })\n      });\n      const data = await res.json();\n      if (data.success) {\n        document.getElementById('imgPreview').src = data.foto_url;\n        document.getElementById('fotoPreviewContainer').style.display = 'block';\n        document.getElementById('uploadStatusText').innerText = '';\n        showToast('Foto webcam berhasil diunggah!', 'success');\n      } else {\n        if (typeof Swal !== 'undefined') {\n          Swal.fire('Gagal Unggah Foto', data.message || 'Gagal memproses foto webcam.', 'error');\n        } else {\n          alert('Gagal mengunggah foto: ' + data.message);\n        }\n        document.getElementById('uploadStatusText').innerText = '';\n      }\n    } catch (err) {\n      if (typeof Swal !== 'undefined') {\n        Swal.fire('Kesalahan Koneksi', 'Gagal terhubung ke server saat upload foto: ' + err.message, 'error');\n      } else {\n        alert('Terjadi kesalahan koneksi saat upload foto: ' + err.message);\n      }\n      document.getElementById('uploadStatusText').innerText = '';\n    }\n  }\n\n  async function handleFileUpload(e) {\n    const file = e.target.files[0];\n    if (!file) return;\n\n    const formData = new FormData();\n    formData.append('foto', file);\n    formData.append('action', 'upload');\n    formData.append('bulan', '")
+    ; __append(escapeFn( bulanIni ))
+    ; __append("');\n    formData.append('tahun', '")
+    ; __append(escapeFn( tahunIni ))
+    ; __append("');\n\n    document.getElementById('uploadStatusText').innerText = 'Mengunggah file foto...';\n    try {\n      const res = await fetch('/client/upload-foto', {\n        method: 'POST',\n        body: formData\n      });\n      const data = await res.json();\n      if (data.success) {\n        document.getElementById('imgPreview').src = data.foto_url;\n        document.getElementById('fotoPreviewContainer').style.display = 'block';\n        document.getElementById('uploadStatusText').innerText = '';\n        showToast('File foto berhasil diunggah!', 'success');\n      } else {\n        if (typeof Swal !== 'undefined') {\n          Swal.fire('Gagal Unggah File', data.message || 'File foto ditolak sistem.', 'error');\n        } else {\n          alert('Gagal upload: ' + data.message);\n        }\n        document.getElementById('uploadStatusText').innerText = '';\n      }\n    } catch (err) {\n      if (typeof Swal !== 'undefined') {\n        Swal.fire('Kesalahan Jaringan', 'Terjadi kesalahan saat mengunggah file: ' + err.message, 'error');\n      } else {\n        alert('Gagal upload: ' + err.message);\n      }\n      document.getElementById('uploadStatusText').innerText = '';\n    }\n  }\n\n  function confirmSubmitLapor() {\n    const form = document.getElementById('formLapor');\n    const aktivitas = document.getElementById('aktivitas_harian');\n    if (aktivitas && !aktivitas.value.trim()) {\n      Swal.fire({\n        title: 'Formulir Belum Lengkap',\n        text: 'Harap isi aktivitas / pekerjaan harian Anda bulan ini terlebih dahulu.',\n        icon: 'warning',\n        confirmButtonColor: '#003580',\n        confirmButtonText: 'OK'\n      });\n      aktivitas.focus();\n      return;\n    }\n\n    customConfirm({\n      title: 'Kirim Laporan Wajib Lapor?',\n      text: 'Apakah Anda yakin seluruh data dan foto bukti sudah benar? Laporan akan segera diverifikasi oleh petugas pembimbing BAPAS.',\n      icon: 'question',\n      confirmColor: '#28a745',\n      confirmText: '<i class=\"fas fa-paper-plane\"></i> Ya, Kirim Sekarang',\n      cancelText: 'Periksa Kembali'\n    }).then((res) => {\n      if (res.isConfirmed) {\n        let inputAction = document.getElementById('hiddenActionInput');\n        if (!inputAction) {\n          inputAction = document.createElement('input');\n          inputAction.type = 'hidden';\n          inputAction.id = 'hiddenActionInput';\n          inputAction.name = 'action';\n          form.appendChild(inputAction);\n        }\n        inputAction.value = 'submit';\n        form.submit();\n      }\n    });\n  }\n</script>\n\n")
+    ; __append( include('../partials/modal_foto') )
+    ; __append("\n\n</body>\n</html>\n")
+  }
+  return __output;
+
+},
+  "client/jadwal_lapor": function anonymous(locals, escapeFn, include, rethrow
+) {
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append("<!DOCTYPE html>\n<html lang=\"id\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>")
+    ; __append(escapeFn( pageTitle ))
+    ; __append("</title>\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n  <link href=\"https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700&display=swap\" rel=\"stylesheet\">\n  <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css\">\n  <link rel=\"stylesheet\" href=\"/css/responsive.css\">\n  <style>\n    * { margin:0; padding:0; box-sizing:border-box; }\n    body { font-family: 'Source Sans 3', sans-serif; background: #f5f7fa; color: #333; }\n    .navbar {\n      position: sticky; top: 0; left: 0; right: 0; width: 100%;\n      background: linear-gradient(135deg, #003580 0%, #0052a3 100%);\n      color: white; padding: 15px 30px; z-index: 1000;\n      display: flex; justify-content: space-between; align-items: center;\n    }\n    .navbar a { color: white; text-decoration: none; font-size: 14px; margin-left: 20px; }\n    .container { max-width: 950px; margin: 25px auto 40px; padding: 0 20px; }\n    .header { margin-bottom: 25px; }\n    .header h1 { font-family: 'Playfair Display', serif; color: #003580; font-size: 30px; margin-bottom: 4px; }\n    .card { background: white; border-radius: 8px; padding: 30px; margin-bottom: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }\n    .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; margin-bottom: 25px; }\n    .info-box { background: #f0f7ff; border-left: 4px solid #003580; padding: 18px; border-radius: 6px; }\n    .info-label { font-size: 12px; color: #64748b; text-transform: uppercase; font-weight: 700; margin-bottom: 4px; }\n    .info-val { font-size: 18px; font-weight: 700; color: #002255; }\n    .progress-bar { width: 100%; height: 26px; background: #e2e8f0; border-radius: 13px; overflow: hidden; margin: 15px 0; }\n    .progress-fill { height: 100%; background: linear-gradient(90deg, #28a745, #20c997); display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: 700; }\n  </style>\n</head>\n<body>\n\n<div class=\"navbar\">\n  <div style=\"font-weight:700;\"><i class=\"fas fa-gavel\"></i> BAPAS MEDAN - CLIENT</div>\n  <div>\n    <a href=\"/client/dashboard\"><i class=\"fas fa-tachometer-alt\"></i> <span>Dashboard</span></a>\n    <a href=\"/client/riwayat\"><i class=\"fas fa-history\"></i> <span>Riwayat</span></a>\n    <a href=\"/client/profil\"><i class=\"fas fa-user\"></i> <span>Profil</span></a>\n    <a href=\"/logout\"><i class=\"fas fa-sign-out-alt\"></i> <span>Keluar</span></a>\n  </div>\n</div>\n\n<div class=\"container\">\n  <div class=\"header\">\n    <h1>Jadwal & Durasi Wajib Lapor</h1>\n    <p style=\"color:#666;\">Pantau progres dan masa kewajiban pelaporan bulanan Anda di BAPAS Kelas I Medan</p>\n  </div>\n\n  ")
+    ; __append( include('../partials/alerts') )
+    ; __append("\n\n  <div class=\"card\">\n    <div class=\"info-grid\">\n      <div class=\"info-box\">\n        <div class=\"info-label\">Masa Wajib Lapor Mulai</div>\n        <div class=\"info-val\">")
+    ; __append(escapeFn( getNamaBulan(client.bulan_wajib_lapor_mulai) ))
+    ; __append(" ")
+    ; __append(escapeFn( client.tahun_wajib_lapor_mulai ))
+    ; __append("</div>\n      </div>\n      <div class=\"info-box\">\n        <div class=\"info-label\">Masa Wajib Lapor Selesai</div>\n        <div class=\"info-val\">")
+    ; __append(escapeFn( getNamaBulan(client.bulan_wajib_lapor_akhir) ))
+    ; __append(" ")
+    ; __append(escapeFn( client.tahun_wajib_lapor_akhir ))
+    ; __append("</div>\n      </div>\n      <div class=\"info-box\">\n        <div class=\"info-label\">Total Kewajiban Lapor</div>\n        <div class=\"info-val\">")
+    ; __append(escapeFn( infoWajib ? infoWajib.total_bulan_harus : 12 ))
+    ; __append(" Bulan</div>\n      </div>\n      <div class=\"info-box\">\n        <div class=\"info-label\">Laporan Sudah Dibuat</div>\n        <div class=\"info-val\" style=\"color:#28a745;\">")
+    ; __append(escapeFn( infoWajib ? infoWajib.total_sudah_lapor : 0 ))
+    ; __append(" Bulan</div>\n      </div>\n    </div>\n\n    <!-- PROGRESS BAR -->\n    ")
+    ;  
+      const totalHarus = infoWajib ? infoWajib.total_bulan_harus : 12;
+      const sudah = infoWajib ? infoWajib.total_sudah_lapor : 0;
+      const persentase = Math.min(100, Math.round((sudah / (totalHarus || 1)) * 100));
+    
+    ; __append("\n    <div style=\"margin:25px 0;\">\n      <div style=\"display:flex; justify-content:space-between; font-weight:700; font-size:14px; margin-bottom:6px;\">\n        <span>Progress Penyelesaian Kewajiban Wajib Lapor</span>\n        <span>")
+    ; __append(escapeFn( persentase ))
+    ; __append("% (")
+    ; __append(escapeFn( sudah ))
+    ; __append(" dari ")
+    ; __append(escapeFn( totalHarus ))
+    ; __append(" Bulan)</span>\n      </div>\n      <div class=\"progress-bar\">\n        <div class=\"progress-fill\" style=\"width: ")
+    ; __append(escapeFn( persentase ))
+    ; __append("%;\">\n          ")
+    ; __append(escapeFn( persentase ))
+    ; __append("%\n        </div>\n      </div>\n    </div>\n\n    <div style=\"background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:20px; margin-top:25px;\">\n      <h3 style=\"color:#003580; font-size:16px; margin-bottom:10px;\"><i class=\"fas fa-info-circle\"></i> Ketentuan Wajib Lapor Online:</h3>\n      <ol style=\"padding-left:20px; font-size:14px; color:#555; line-height:1.8;\">\n        <li>Jadwal pelaporan dibuka secara online pada tanggal <strong>")
+    ; __append(escapeFn( config.tanggal_mulai_input ))
+    ; __append(" s/d ")
+    ; __append(escapeFn( config.tanggal_akhir_input ))
+    ; __append("</strong> setiap bulannya.</li>\n        <li>Klien wajib menyertakan foto selfie / dokumentasi terkini sebagai verifikasi kehadiran.</li>\n        <li>Jika melewati tanggal ")
+    ; __append(escapeFn( config.tanggal_akhir_input ))
+    ; __append(", sistem online otomatis ditutup dan klien diwajibkan melapor secara tatap muka (offline) ke kantor BAPAS Kelas I Medan.</li>\n        <li>Kepatuhan melapor menjadi salah satu syarat mutlak keberhasilan masa bimbingan kemasyarakatan.</li>\n      </ol>\n    </div>\n  </div>\n</div>\n\n</body>\n</html>\n")
+  }
+  return __output;
+
+},
+  "client/jadwal_lapor.ejs": function anonymous(locals, escapeFn, include, rethrow
+) {
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append("<!DOCTYPE html>\n<html lang=\"id\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>")
+    ; __append(escapeFn( pageTitle ))
+    ; __append("</title>\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n  <link href=\"https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700&display=swap\" rel=\"stylesheet\">\n  <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css\">\n  <link rel=\"stylesheet\" href=\"/css/responsive.css\">\n  <style>\n    * { margin:0; padding:0; box-sizing:border-box; }\n    body { font-family: 'Source Sans 3', sans-serif; background: #f5f7fa; color: #333; }\n    .navbar {\n      position: sticky; top: 0; left: 0; right: 0; width: 100%;\n      background: linear-gradient(135deg, #003580 0%, #0052a3 100%);\n      color: white; padding: 15px 30px; z-index: 1000;\n      display: flex; justify-content: space-between; align-items: center;\n    }\n    .navbar a { color: white; text-decoration: none; font-size: 14px; margin-left: 20px; }\n    .container { max-width: 950px; margin: 25px auto 40px; padding: 0 20px; }\n    .header { margin-bottom: 25px; }\n    .header h1 { font-family: 'Playfair Display', serif; color: #003580; font-size: 30px; margin-bottom: 4px; }\n    .card { background: white; border-radius: 8px; padding: 30px; margin-bottom: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }\n    .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; margin-bottom: 25px; }\n    .info-box { background: #f0f7ff; border-left: 4px solid #003580; padding: 18px; border-radius: 6px; }\n    .info-label { font-size: 12px; color: #64748b; text-transform: uppercase; font-weight: 700; margin-bottom: 4px; }\n    .info-val { font-size: 18px; font-weight: 700; color: #002255; }\n    .progress-bar { width: 100%; height: 26px; background: #e2e8f0; border-radius: 13px; overflow: hidden; margin: 15px 0; }\n    .progress-fill { height: 100%; background: linear-gradient(90deg, #28a745, #20c997); display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: 700; }\n  </style>\n</head>\n<body>\n\n<div class=\"navbar\">\n  <div style=\"font-weight:700;\"><i class=\"fas fa-gavel\"></i> BAPAS MEDAN - CLIENT</div>\n  <div>\n    <a href=\"/client/dashboard\"><i class=\"fas fa-tachometer-alt\"></i> <span>Dashboard</span></a>\n    <a href=\"/client/riwayat\"><i class=\"fas fa-history\"></i> <span>Riwayat</span></a>\n    <a href=\"/client/profil\"><i class=\"fas fa-user\"></i> <span>Profil</span></a>\n    <a href=\"/logout\"><i class=\"fas fa-sign-out-alt\"></i> <span>Keluar</span></a>\n  </div>\n</div>\n\n<div class=\"container\">\n  <div class=\"header\">\n    <h1>Jadwal & Durasi Wajib Lapor</h1>\n    <p style=\"color:#666;\">Pantau progres dan masa kewajiban pelaporan bulanan Anda di BAPAS Kelas I Medan</p>\n  </div>\n\n  ")
+    ; __append( include('../partials/alerts') )
+    ; __append("\n\n  <div class=\"card\">\n    <div class=\"info-grid\">\n      <div class=\"info-box\">\n        <div class=\"info-label\">Masa Wajib Lapor Mulai</div>\n        <div class=\"info-val\">")
+    ; __append(escapeFn( getNamaBulan(client.bulan_wajib_lapor_mulai) ))
+    ; __append(" ")
+    ; __append(escapeFn( client.tahun_wajib_lapor_mulai ))
+    ; __append("</div>\n      </div>\n      <div class=\"info-box\">\n        <div class=\"info-label\">Masa Wajib Lapor Selesai</div>\n        <div class=\"info-val\">")
+    ; __append(escapeFn( getNamaBulan(client.bulan_wajib_lapor_akhir) ))
+    ; __append(" ")
+    ; __append(escapeFn( client.tahun_wajib_lapor_akhir ))
+    ; __append("</div>\n      </div>\n      <div class=\"info-box\">\n        <div class=\"info-label\">Total Kewajiban Lapor</div>\n        <div class=\"info-val\">")
+    ; __append(escapeFn( infoWajib ? infoWajib.total_bulan_harus : 12 ))
+    ; __append(" Bulan</div>\n      </div>\n      <div class=\"info-box\">\n        <div class=\"info-label\">Laporan Sudah Dibuat</div>\n        <div class=\"info-val\" style=\"color:#28a745;\">")
+    ; __append(escapeFn( infoWajib ? infoWajib.total_sudah_lapor : 0 ))
+    ; __append(" Bulan</div>\n      </div>\n    </div>\n\n    <!-- PROGRESS BAR -->\n    ")
+    ;  
+      const totalHarus = infoWajib ? infoWajib.total_bulan_harus : 12;
+      const sudah = infoWajib ? infoWajib.total_sudah_lapor : 0;
+      const persentase = Math.min(100, Math.round((sudah / (totalHarus || 1)) * 100));
+    
+    ; __append("\n    <div style=\"margin:25px 0;\">\n      <div style=\"display:flex; justify-content:space-between; font-weight:700; font-size:14px; margin-bottom:6px;\">\n        <span>Progress Penyelesaian Kewajiban Wajib Lapor</span>\n        <span>")
+    ; __append(escapeFn( persentase ))
+    ; __append("% (")
+    ; __append(escapeFn( sudah ))
+    ; __append(" dari ")
+    ; __append(escapeFn( totalHarus ))
+    ; __append(" Bulan)</span>\n      </div>\n      <div class=\"progress-bar\">\n        <div class=\"progress-fill\" style=\"width: ")
+    ; __append(escapeFn( persentase ))
+    ; __append("%;\">\n          ")
+    ; __append(escapeFn( persentase ))
+    ; __append("%\n        </div>\n      </div>\n    </div>\n\n    <div style=\"background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:20px; margin-top:25px;\">\n      <h3 style=\"color:#003580; font-size:16px; margin-bottom:10px;\"><i class=\"fas fa-info-circle\"></i> Ketentuan Wajib Lapor Online:</h3>\n      <ol style=\"padding-left:20px; font-size:14px; color:#555; line-height:1.8;\">\n        <li>Jadwal pelaporan dibuka secara online pada tanggal <strong>")
+    ; __append(escapeFn( config.tanggal_mulai_input ))
+    ; __append(" s/d ")
+    ; __append(escapeFn( config.tanggal_akhir_input ))
+    ; __append("</strong> setiap bulannya.</li>\n        <li>Klien wajib menyertakan foto selfie / dokumentasi terkini sebagai verifikasi kehadiran.</li>\n        <li>Jika melewati tanggal ")
+    ; __append(escapeFn( config.tanggal_akhir_input ))
+    ; __append(", sistem online otomatis ditutup dan klien diwajibkan melapor secara tatap muka (offline) ke kantor BAPAS Kelas I Medan.</li>\n        <li>Kepatuhan melapor menjadi salah satu syarat mutlak keberhasilan masa bimbingan kemasyarakatan.</li>\n      </ol>\n    </div>\n  </div>\n</div>\n\n</body>\n</html>\n")
+  }
+  return __output;
+
+},
+  "client/profil": function anonymous(locals, escapeFn, include, rethrow
+) {
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append("<!DOCTYPE html>\n<html lang=\"id\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>")
+    ; __append(escapeFn( pageTitle ))
+    ; __append("</title>\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n  <link href=\"https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700&display=swap\" rel=\"stylesheet\">\n  <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css\">\n  <link rel=\"stylesheet\" href=\"/css/responsive.css\">\n  <style>\n    * { margin:0; padding:0; box-sizing:border-box; }\n    body { font-family: 'Source Sans 3', sans-serif; background: #f5f7fa; color: #333; }\n    .navbar {\n      position: sticky; top: 0; left: 0; right: 0; width: 100%;\n      background: linear-gradient(135deg, #003580 0%, #0052a3 100%);\n      color: white; padding: 15px 30px; z-index: 1000;\n      display: flex; justify-content: space-between; align-items: center;\n    }\n    .navbar a { color: white; text-decoration: none; font-size: 14px; }\n    .container { max-width: 900px; margin: 25px auto 40px; padding: 0 20px; }\n    .card { background: white; border-radius: 8px; padding: 30px; margin-bottom: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }\n    .card-title { font-size: 20px; font-weight: 700; color: #002255; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }\n    .form-group { margin-bottom: 20px; }\n    .form-group label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px; }\n    .form-group input, .form-group textarea {\n      width: 100%; padding: 10px 14px; border: 1px solid #d9e2ec; border-radius: 6px; font-family: inherit; font-size: 14px;\n    }\n    .form-group input:focus, .form-group textarea:focus {\n      outline: none; border-color: #003580; box-shadow: 0 0 0 3px rgba(0,53,128,0.1);\n    }\n    .btn {\n      padding: 12px 24px; border: none; border-radius: 6px; font-size: 14px; font-weight: 700;\n      cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;\n    }\n    .btn-primary { background: #003580; color: white; }\n    .btn-primary:hover { background: #002255; }\n    .btn-secondary { background: #6c757d; color: white; }\n  </style>\n</head>\n<body>\n\n<div class=\"navbar\">\n  <div style=\"font-weight:700;\"><i class=\"fas fa-gavel\"></i> BAPAS MEDAN - CLIENT</div>\n  <div style=\"display:flex; align-items:center; gap:15px;\">\n    ")
+    ;  if (client && client.profil_lengkap) { 
+    ; __append("\n      <a href=\"/client/dashboard\"><i class=\"fas fa-tachometer-alt\"></i> <span>Dashboard</span></a>\n    ")
+    ;  } 
+    ; __append("\n    <a href=\"/logout\"><i class=\"fas fa-sign-out-alt\"></i> <span>Keluar</span></a>\n  </div>\n</div>\n\n<div class=\"container\">\n  ")
+    ; __append( include('../partials/alerts') )
+    ; __append("\n\n  ")
+    ;  if (belumLengkap) { 
+    ; __append("\n    <div style=\"background:#fff3cd; color:#856404; padding:18px 20px; border-radius:8px; border:1px solid #ffeeba; margin-bottom:25px; display:flex; align-items:center; gap:15px;\">\n      <i class=\"fas fa-exclamation-triangle\" style=\"font-size:26px;\"></i>\n      <div>\n        <strong style=\"font-size:16px;\">Perhatian: Lengkapi Profil Klien Anda!</strong><br>\n        Sebelum dapat mengakses form wajib lapor dan fitur lainnya, Anda diwajibkan melengkapi identitas domisili, nomor HP aktif, masa wajib lapor, dan mengunggah foto profil terbaru.\n      </div>\n    </div>\n  ")
+    ;  } 
+    ; __append("\n\n  <div class=\"card\">\n    <div class=\"card-title\">\n      <i class=\"fas fa-id-card\" style=\"color:#003580;\"></i> Profil Klien Pemasyarakatan\n    </div>\n\n    <form action=\"/client/profil\" method=\"POST\" enctype=\"multipart/form-data\">\n      <div style=\"display:flex; gap:30px; margin-bottom:25px; flex-wrap:wrap; align-items:center;\">\n        <div>\n          ")
+    ;  if (client && client.foto_profil) { 
+    ; __append("\n            <img id=\"previewFotoProfil\" src=\"")
+    ; __append(escapeFn( getFileUrl(client.foto_profil, 'profil') ))
+    ; __append("\" alt=\"Foto Profil\" style=\"width:120px; height:120px; border-radius:50%; object-fit:cover; border:3px solid #003580; box-shadow:0 4px 10px rgba(0,0,0,0.15);\" onerror=\"this.onerror=null; this.src='/logo_pemasyarakatan-removebg-preview.png';\">\n          ")
+    ;  } else { 
+    ; __append("\n            <img id=\"previewFotoProfil\" src=\"/logo_pemasyarakatan-removebg-preview.png\" alt=\"Foto Profil\" style=\"width:120px; height:120px; border-radius:50%; object-fit:cover; border:3px solid #003580; box-shadow:0 4px 10px rgba(0,0,0,0.15); display:none;\" onerror=\"this.onerror=null; this.src='/logo_pemasyarakatan-removebg-preview.png';\">\n            <div id=\"placeholderFotoProfil\" style=\"width:120px; height:120px; border-radius:50%; background:#e2e8f0; color:#64748b; display:flex; align-items:center; justify-content:center; font-size:48px; border:3px dashed #94a3b8;\">\n              <i class=\"fas fa-user\"></i>\n            </div>\n          ")
+    ;  } 
+    ; __append("\n        </div>\n        <div style=\"flex:1; min-width:260px;\">\n          <label style=\"font-weight:700; margin-bottom:6px; display:block;\">Unggah / Ganti Foto Profil *</label>\n          <input type=\"file\" name=\"foto_profil\" id=\"inputFotoProfil\" onchange=\"previewImage(this)\" accept=\"image/jpeg,image/png,image/webp\" style=\"margin-bottom:6px;\">\n          <input type=\"hidden\" name=\"foto_profil_base64\" id=\"foto_profil_base64\">\n          <span style=\"font-size:12px; color:#64748b; display:block;\">Format: JPG, PNG, atau WebP. Maksimal 5MB. Foto wajah sopan dan jelas.</span>\n        </div>\n      </div>\n\n      <div style=\"display:grid; grid-template-columns:1fr 1fr; gap:20px;\">\n        <div class=\"form-group\">\n          <label>Nomor Register Klien</label>\n          <input type=\"text\" value=\"")
+    ; __append(escapeFn( client ? client.no_register : '' ))
+    ; __append("\" readonly style=\"background:#f1f5f9; color:#64748b;\">\n        </div>\n\n        <div class=\"form-group\">\n          <label>Username</label>\n          <input type=\"text\" value=\"")
+    ; __append(escapeFn( client ? client.username : '' ))
+    ; __append("\" readonly style=\"background:#f1f5f9; color:#64748b;\">\n        </div>\n      </div>\n\n      <div class=\"form-group\">\n        <label for=\"nama_lengkap\">Nama Lengkap Sesuai KTP *</label>\n        <input type=\"text\" name=\"nama_lengkap\" id=\"nama_lengkap\" value=\"")
+    ; __append(escapeFn( client ? client.nama_lengkap : '' ))
+    ; __append("\" required>\n      </div>\n\n      <div class=\"form-group\">\n        <label for=\"no_hp_gmail\">Nomor HP Aktif / WhatsApp / Email *</label>\n        <input type=\"text\" name=\"no_hp_gmail\" id=\"no_hp_gmail\" placeholder=\"Contoh: 08123456789 / nama@gmail.com\" value=\"")
+    ; __append(escapeFn( client ? (client.no_hp_gmail || client.no_telepon || '') : '' ))
+    ; __append("\" required>\n      </div>\n\n      <div class=\"form-group\">\n        <label for=\"alamat_sekarang\">Alamat Tempat Tinggal / Domisili Saat Ini *</label>\n        <textarea name=\"alamat_sekarang\" id=\"alamat_sekarang\" rows=\"3\" placeholder=\"Masukkan alamat lengkap RT/RW, Kelurahan, Kecamatan, Kota tempat Anda tinggal sekarang...\" required>")
+    ; __append(escapeFn( client ? (client.alamat_sekarang || client.alamat || '') : '' ))
+    ; __append("</textarea>\n      </div>\n\n      <div class=\"form-group\">\n        <label for=\"masa_wajib_lapor\">Masa / Periode Wajib Lapor *</label>\n        <input type=\"text\" name=\"masa_wajib_lapor\" id=\"masa_wajib_lapor\" placeholder=\"Contoh: Januari 2025 s/d Desember 2025\" value=\"")
+    ; __append(escapeFn( client ? (client.masa_wajib_lapor || '') : '' ))
+    ; __append("\" required>\n      </div>\n\n      <div style=\"display:flex; gap:12px; margin-top:30px;\">\n        <button type=\"submit\" class=\"btn btn-primary\"><i class=\"fas fa-save\"></i> Simpan & Perbarui Profil</button>\n        ")
+    ;  if (client && client.profil_lengkap) { 
+    ; __append("\n          <a href=\"/client/dashboard\" class=\"btn btn-secondary\">Kembali ke Dashboard</a>\n        ")
+    ;  } 
+    ; __append("\n      </div>\n    </form>\n  </div>\n</div>\n\n<script>\nfunction previewImage(input) {\n  if (input.files && input.files[0]) {\n    const file = input.files[0];\n    const reader = new FileReader();\n    reader.onload = function(e) {\n      const img = new Image();\n      img.onload = function() {\n        // Otomatis resize & kompres ke max 800px agar aman di Firestore & Netlify Serverless\n        const canvas = document.createElement('canvas');\n        let width = img.width;\n        let height = img.height;\n        const maxDim = 800;\n        if (width > height && width > maxDim) {\n          height = Math.round((height * maxDim) / width);\n          width = maxDim;\n        } else if (height > maxDim) {\n          width = Math.round((width * maxDim) / height);\n          height = maxDim;\n        }\n        canvas.width = width;\n        canvas.height = height;\n        const ctx = canvas.getContext('2d');\n        ctx.drawImage(img, 0, 0, width, height);\n\n        const dataUrl = canvas.toDataURL('image/jpeg', 0.82);\n\n        // Update preview gambar secara instan\n        const previewEl = document.getElementById('previewFotoProfil');\n        const placeholderEl = document.getElementById('placeholderFotoProfil');\n        if (previewEl) {\n          previewEl.src = dataUrl;\n          previewEl.style.display = 'block';\n        }\n        if (placeholderEl) {\n          placeholderEl.style.display = 'none';\n        }\n\n        // Masukkan data Base64 ke hidden field agar tersimpan utuh ke serverless\n        const hiddenEl = document.getElementById('foto_profil_base64');\n        if (hiddenEl) {\n          hiddenEl.value = dataUrl;\n        }\n      };\n      img.src = e.target.result;\n    };\n    reader.readAsDataURL(file);\n  }\n}\n</script>\n\n</body>\n</html>\n")
+  }
+  return __output;
+
+},
+  "client/profil.ejs": function anonymous(locals, escapeFn, include, rethrow
+) {
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append("<!DOCTYPE html>\n<html lang=\"id\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>")
+    ; __append(escapeFn( pageTitle ))
+    ; __append("</title>\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n  <link href=\"https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700&display=swap\" rel=\"stylesheet\">\n  <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css\">\n  <link rel=\"stylesheet\" href=\"/css/responsive.css\">\n  <style>\n    * { margin:0; padding:0; box-sizing:border-box; }\n    body { font-family: 'Source Sans 3', sans-serif; background: #f5f7fa; color: #333; }\n    .navbar {\n      position: sticky; top: 0; left: 0; right: 0; width: 100%;\n      background: linear-gradient(135deg, #003580 0%, #0052a3 100%);\n      color: white; padding: 15px 30px; z-index: 1000;\n      display: flex; justify-content: space-between; align-items: center;\n    }\n    .navbar a { color: white; text-decoration: none; font-size: 14px; }\n    .container { max-width: 900px; margin: 25px auto 40px; padding: 0 20px; }\n    .card { background: white; border-radius: 8px; padding: 30px; margin-bottom: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }\n    .card-title { font-size: 20px; font-weight: 700; color: #002255; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }\n    .form-group { margin-bottom: 20px; }\n    .form-group label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px; }\n    .form-group input, .form-group textarea {\n      width: 100%; padding: 10px 14px; border: 1px solid #d9e2ec; border-radius: 6px; font-family: inherit; font-size: 14px;\n    }\n    .form-group input:focus, .form-group textarea:focus {\n      outline: none; border-color: #003580; box-shadow: 0 0 0 3px rgba(0,53,128,0.1);\n    }\n    .btn {\n      padding: 12px 24px; border: none; border-radius: 6px; font-size: 14px; font-weight: 700;\n      cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;\n    }\n    .btn-primary { background: #003580; color: white; }\n    .btn-primary:hover { background: #002255; }\n    .btn-secondary { background: #6c757d; color: white; }\n  </style>\n</head>\n<body>\n\n<div class=\"navbar\">\n  <div style=\"font-weight:700;\"><i class=\"fas fa-gavel\"></i> BAPAS MEDAN - CLIENT</div>\n  <div style=\"display:flex; align-items:center; gap:15px;\">\n    ")
+    ;  if (client && client.profil_lengkap) { 
+    ; __append("\n      <a href=\"/client/dashboard\"><i class=\"fas fa-tachometer-alt\"></i> <span>Dashboard</span></a>\n    ")
+    ;  } 
+    ; __append("\n    <a href=\"/logout\"><i class=\"fas fa-sign-out-alt\"></i> <span>Keluar</span></a>\n  </div>\n</div>\n\n<div class=\"container\">\n  ")
+    ; __append( include('../partials/alerts') )
+    ; __append("\n\n  ")
+    ;  if (belumLengkap) { 
+    ; __append("\n    <div style=\"background:#fff3cd; color:#856404; padding:18px 20px; border-radius:8px; border:1px solid #ffeeba; margin-bottom:25px; display:flex; align-items:center; gap:15px;\">\n      <i class=\"fas fa-exclamation-triangle\" style=\"font-size:26px;\"></i>\n      <div>\n        <strong style=\"font-size:16px;\">Perhatian: Lengkapi Profil Klien Anda!</strong><br>\n        Sebelum dapat mengakses form wajib lapor dan fitur lainnya, Anda diwajibkan melengkapi identitas domisili, nomor HP aktif, masa wajib lapor, dan mengunggah foto profil terbaru.\n      </div>\n    </div>\n  ")
+    ;  } 
+    ; __append("\n\n  <div class=\"card\">\n    <div class=\"card-title\">\n      <i class=\"fas fa-id-card\" style=\"color:#003580;\"></i> Profil Klien Pemasyarakatan\n    </div>\n\n    <form action=\"/client/profil\" method=\"POST\" enctype=\"multipart/form-data\">\n      <div style=\"display:flex; gap:30px; margin-bottom:25px; flex-wrap:wrap; align-items:center;\">\n        <div>\n          ")
+    ;  if (client && client.foto_profil) { 
+    ; __append("\n            <img id=\"previewFotoProfil\" src=\"")
+    ; __append(escapeFn( getFileUrl(client.foto_profil, 'profil') ))
+    ; __append("\" alt=\"Foto Profil\" style=\"width:120px; height:120px; border-radius:50%; object-fit:cover; border:3px solid #003580; box-shadow:0 4px 10px rgba(0,0,0,0.15);\" onerror=\"this.onerror=null; this.src='/logo_pemasyarakatan-removebg-preview.png';\">\n          ")
+    ;  } else { 
+    ; __append("\n            <img id=\"previewFotoProfil\" src=\"/logo_pemasyarakatan-removebg-preview.png\" alt=\"Foto Profil\" style=\"width:120px; height:120px; border-radius:50%; object-fit:cover; border:3px solid #003580; box-shadow:0 4px 10px rgba(0,0,0,0.15); display:none;\" onerror=\"this.onerror=null; this.src='/logo_pemasyarakatan-removebg-preview.png';\">\n            <div id=\"placeholderFotoProfil\" style=\"width:120px; height:120px; border-radius:50%; background:#e2e8f0; color:#64748b; display:flex; align-items:center; justify-content:center; font-size:48px; border:3px dashed #94a3b8;\">\n              <i class=\"fas fa-user\"></i>\n            </div>\n          ")
+    ;  } 
+    ; __append("\n        </div>\n        <div style=\"flex:1; min-width:260px;\">\n          <label style=\"font-weight:700; margin-bottom:6px; display:block;\">Unggah / Ganti Foto Profil *</label>\n          <input type=\"file\" name=\"foto_profil\" id=\"inputFotoProfil\" onchange=\"previewImage(this)\" accept=\"image/jpeg,image/png,image/webp\" style=\"margin-bottom:6px;\">\n          <input type=\"hidden\" name=\"foto_profil_base64\" id=\"foto_profil_base64\">\n          <span style=\"font-size:12px; color:#64748b; display:block;\">Format: JPG, PNG, atau WebP. Maksimal 5MB. Foto wajah sopan dan jelas.</span>\n        </div>\n      </div>\n\n      <div style=\"display:grid; grid-template-columns:1fr 1fr; gap:20px;\">\n        <div class=\"form-group\">\n          <label>Nomor Register Klien</label>\n          <input type=\"text\" value=\"")
+    ; __append(escapeFn( client ? client.no_register : '' ))
+    ; __append("\" readonly style=\"background:#f1f5f9; color:#64748b;\">\n        </div>\n\n        <div class=\"form-group\">\n          <label>Username</label>\n          <input type=\"text\" value=\"")
+    ; __append(escapeFn( client ? client.username : '' ))
+    ; __append("\" readonly style=\"background:#f1f5f9; color:#64748b;\">\n        </div>\n      </div>\n\n      <div class=\"form-group\">\n        <label for=\"nama_lengkap\">Nama Lengkap Sesuai KTP *</label>\n        <input type=\"text\" name=\"nama_lengkap\" id=\"nama_lengkap\" value=\"")
+    ; __append(escapeFn( client ? client.nama_lengkap : '' ))
+    ; __append("\" required>\n      </div>\n\n      <div class=\"form-group\">\n        <label for=\"no_hp_gmail\">Nomor HP Aktif / WhatsApp / Email *</label>\n        <input type=\"text\" name=\"no_hp_gmail\" id=\"no_hp_gmail\" placeholder=\"Contoh: 08123456789 / nama@gmail.com\" value=\"")
+    ; __append(escapeFn( client ? (client.no_hp_gmail || client.no_telepon || '') : '' ))
+    ; __append("\" required>\n      </div>\n\n      <div class=\"form-group\">\n        <label for=\"alamat_sekarang\">Alamat Tempat Tinggal / Domisili Saat Ini *</label>\n        <textarea name=\"alamat_sekarang\" id=\"alamat_sekarang\" rows=\"3\" placeholder=\"Masukkan alamat lengkap RT/RW, Kelurahan, Kecamatan, Kota tempat Anda tinggal sekarang...\" required>")
+    ; __append(escapeFn( client ? (client.alamat_sekarang || client.alamat || '') : '' ))
+    ; __append("</textarea>\n      </div>\n\n      <div class=\"form-group\">\n        <label for=\"masa_wajib_lapor\">Masa / Periode Wajib Lapor *</label>\n        <input type=\"text\" name=\"masa_wajib_lapor\" id=\"masa_wajib_lapor\" placeholder=\"Contoh: Januari 2025 s/d Desember 2025\" value=\"")
+    ; __append(escapeFn( client ? (client.masa_wajib_lapor || '') : '' ))
+    ; __append("\" required>\n      </div>\n\n      <div style=\"display:flex; gap:12px; margin-top:30px;\">\n        <button type=\"submit\" class=\"btn btn-primary\"><i class=\"fas fa-save\"></i> Simpan & Perbarui Profil</button>\n        ")
+    ;  if (client && client.profil_lengkap) { 
+    ; __append("\n          <a href=\"/client/dashboard\" class=\"btn btn-secondary\">Kembali ke Dashboard</a>\n        ")
+    ;  } 
+    ; __append("\n      </div>\n    </form>\n  </div>\n</div>\n\n<script>\nfunction previewImage(input) {\n  if (input.files && input.files[0]) {\n    const file = input.files[0];\n    const reader = new FileReader();\n    reader.onload = function(e) {\n      const img = new Image();\n      img.onload = function() {\n        // Otomatis resize & kompres ke max 800px agar aman di Firestore & Netlify Serverless\n        const canvas = document.createElement('canvas');\n        let width = img.width;\n        let height = img.height;\n        const maxDim = 800;\n        if (width > height && width > maxDim) {\n          height = Math.round((height * maxDim) / width);\n          width = maxDim;\n        } else if (height > maxDim) {\n          width = Math.round((width * maxDim) / height);\n          height = maxDim;\n        }\n        canvas.width = width;\n        canvas.height = height;\n        const ctx = canvas.getContext('2d');\n        ctx.drawImage(img, 0, 0, width, height);\n\n        const dataUrl = canvas.toDataURL('image/jpeg', 0.82);\n\n        // Update preview gambar secara instan\n        const previewEl = document.getElementById('previewFotoProfil');\n        const placeholderEl = document.getElementById('placeholderFotoProfil');\n        if (previewEl) {\n          previewEl.src = dataUrl;\n          previewEl.style.display = 'block';\n        }\n        if (placeholderEl) {\n          placeholderEl.style.display = 'none';\n        }\n\n        // Masukkan data Base64 ke hidden field agar tersimpan utuh ke serverless\n        const hiddenEl = document.getElementById('foto_profil_base64');\n        if (hiddenEl) {\n          hiddenEl.value = dataUrl;\n        }\n      };\n      img.src = e.target.result;\n    };\n    reader.readAsDataURL(file);\n  }\n}\n</script>\n\n</body>\n</html>\n")
+  }
+  return __output;
+
+},
+  "client/riwayat_lapor": function anonymous(locals, escapeFn, include, rethrow
+) {
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append("<!DOCTYPE html>\n<html lang=\"id\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>")
+    ; __append(escapeFn( pageTitle ))
+    ; __append("</title>\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n  <link href=\"https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700&display=swap\" rel=\"stylesheet\">\n  <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css\">\n  <link rel=\"stylesheet\" href=\"/css/responsive.css\">\n  <style>\n    * { margin:0; padding:0; box-sizing:border-box; }\n    body { font-family: 'Source Sans 3', sans-serif; background: #f5f7fa; color: #333; }\n    .navbar {\n      position: sticky; top: 0; left: 0; right: 0; width: 100%;\n      background: linear-gradient(135deg, #003580 0%, #0052a3 100%);\n      color: white; padding: 15px 30px; z-index: 1000;\n      display: flex; justify-content: space-between; align-items: center;\n    }\n    .navbar a { color: white; text-decoration: none; font-size: 14px; margin-left: 20px; }\n    .container { max-width: 1050px; margin: 25px auto 40px; padding: 0 20px; }\n    .header { margin-bottom: 25px; }\n    .header h1 { font-family: 'Playfair Display', serif; color: #003580; font-size: 30px; margin-bottom: 4px; }\n    .card { background: white; border-radius: 8px; padding: 25px; margin-bottom: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }\n    .filter-box { background: #f8fafc; padding: 16px 20px; border-radius: 8px; margin-bottom: 20px; display: flex; gap: 15px; align-items: center; flex-wrap: wrap; }\n    .filter-box select { padding: 8px 14px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: inherit; font-size: 14px; }\n    .table { width: 100%; border-collapse: collapse; margin-top: 10px; }\n    .table th { background: #f8f9fa; padding: 12px 15px; text-align: left; font-size: 13px; font-weight: 600; border-bottom: 2px solid #e0e0e0; }\n    .table td { padding: 12px 15px; border-bottom: 1px solid #e0e0e0; font-size: 14px; }\n    .badge { display: inline-block; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }\n    .badge-warning { background: #fff3cd; color: #856404; }\n    .badge-success { background: #d4edda; color: #155724; }\n    .badge-danger { background: #f8d7da; color: #721c24; }\n    .badge-secondary { background: #e2e8f0; color: #475569; }\n    .btn { padding: 8px 14px; border-radius: 6px; font-size: 13px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }\n    .btn-primary { background: #003580; color: white; border: none; }\n  </style>\n</head>\n<body>\n\n<div class=\"navbar\">\n  <div style=\"font-weight:700;\"><i class=\"fas fa-gavel\"></i> BAPAS MEDAN - CLIENT</div>\n  <div>\n    <a href=\"/client/dashboard\"><i class=\"fas fa-tachometer-alt\"></i> <span>Dashboard</span></a>\n    <a href=\"/client/jadwal\"><i class=\"fas fa-calendar-alt\"></i> <span>Jadwal</span></a>\n    <a href=\"/client/profil\"><i class=\"fas fa-user\"></i> <span>Profil</span></a>\n    <a href=\"/logout\"><i class=\"fas fa-sign-out-alt\"></i> <span>Keluar</span></a>\n  </div>\n</div>\n\n<div class=\"container\">\n  <div class=\"header\">\n    <h1>Riwayat Wajib Lapor</h1>\n    <p style=\"color:#666;\">Daftar seluruh laporan bulanan yang telah Anda simpan dan kirimkan ke BAPAS Kelas I Medan</p>\n  </div>\n\n  ")
+    ; __append( include('../partials/alerts') )
+    ; __append("\n\n  <div class=\"card\">\n    <!-- FORM FILTER RIWAYAT -->\n    <form method=\"GET\" action=\"/client/riwayat\" class=\"filter-box\">\n      <label style=\"font-weight:600; font-size:14px;\"><i class=\"fas fa-filter\"></i> Filter Riwayat:</label>\n      <select name=\"status\" onchange=\"this.form.submit()\">\n        <option value=\"all\" ")
+    ; __append(escapeFn( filterStatus === 'all' ? 'selected' : '' ))
+    ; __append(">Semua Status</option>\n        <option value=\"diterima\" ")
+    ; __append(escapeFn( filterStatus === 'diterima' ? 'selected' : '' ))
+    ; __append(">Diterima</option>\n        <option value=\"menunggu_verifikasi\" ")
+    ; __append(escapeFn( filterStatus === 'menunggu_verifikasi' ? 'selected' : '' ))
+    ; __append(">Menunggu Verifikasi</option>\n        <option value=\"ditolak\" ")
+    ; __append(escapeFn( filterStatus === 'ditolak' ? 'selected' : '' ))
+    ; __append(">Ditolak</option>\n        <option value=\"draft\" ")
+    ; __append(escapeFn( filterStatus === 'draft' ? 'selected' : '' ))
+    ; __append(">Draft</option>\n      </select>\n\n      <select name=\"tahun\" onchange=\"this.form.submit()\">\n        <option value=\"all\" ")
+    ; __append(escapeFn( filterTahun === 'all' ? 'selected' : '' ))
+    ; __append(">Semua Tahun</option>\n        <option value=\"2026\" ")
+    ; __append(escapeFn( filterTahun === '2026' ? 'selected' : '' ))
+    ; __append(">2026</option>\n        <option value=\"2025\" ")
+    ; __append(escapeFn( filterTahun === '2025' ? 'selected' : '' ))
+    ; __append(">2025</option>\n        <option value=\"2024\" ")
+    ; __append(escapeFn( filterTahun === '2024' ? 'selected' : '' ))
+    ; __append(">2024</option>\n      </select>\n\n      ")
+    ;  if (filterStatus !== 'all' || filterTahun !== 'all') { 
+    ; __append("\n        <a href=\"/client/riwayat\" style=\"color:#dc3545; font-size:13px; text-decoration:none;\"><i class=\"fas fa-times\"></i> Reset Filter</a>\n      ")
+    ;  } 
+    ; __append("\n    </form>\n\n    ")
+    ;  if (riwayat && riwayat.length > 0) { 
+    ; __append("\n      <div class=\"table-responsive\">\n        <table class=\"table\">\n          <thead>\n            <tr>\n              <th>No</th>\n              <th>Periode Lapor</th>\n              <th>Tanggal Submit</th>\n              <th>Status</th>\n              <th>Foto Bukti</th>\n              <th>Aktivitas</th>\n              <th>Catatan Petugas</th>\n            </tr>\n          </thead>\n          <tbody>\n            ")
+    ;  riwayat.forEach(function(r, idx) { 
+    ; __append("\n              <tr>\n                <td>")
+    ; __append(escapeFn( idx + 1 ))
+    ; __append("</td>\n                <td><strong>")
+    ; __append(escapeFn( getNamaBulan(r.bulan) ))
+    ; __append(" ")
+    ; __append(escapeFn( r.tahun ))
+    ; __append("</strong></td>\n                <td>")
+    ; __append(escapeFn( formatTanggal(r.tanggal_submit) ))
+    ; __append("</td>\n                <td>\n                  ")
+    ;  if (r.status === 'diterima') { 
+    ; __append("\n                    <span class=\"badge badge-success\"><i class=\"fas fa-check\"></i> Diterima</span>\n                  ")
+    ;  } else if (r.status === 'menunggu_verifikasi') { 
+    ; __append("\n                    <span class=\"badge badge-warning\"><i class=\"fas fa-clock\"></i> Menunggu</span>\n                  ")
+    ;  } else if (r.status === 'ditolak') { 
+    ; __append("\n                    <span class=\"badge badge-danger\"><i class=\"fas fa-times\"></i> Ditolak</span>\n                  ")
+    ;  } else { 
+    ; __append("\n                    <span class=\"badge badge-secondary\">")
+    ; __append(escapeFn( r.status ))
+    ; __append("</span>\n                  ")
+    ;  } 
+    ; __append("\n                </td>\n                <td>\n                  ")
+    ;  if (r.foto_bukti) { 
+    ; __append("\n                    <button type=\"button\" class=\"btn btn-sm\" style=\"color:#0052a3; font-size:12px; padding:3px 8px; background:#e8f0fe; border:1px solid #b3d1ff; cursor:pointer;\" onclick=\"bukaModalFoto('")
+    ; __append(escapeFn( getFileUrl(r.foto_bukti, 'wajib_lapor') ))
+    ; __append("', '")
+    ; __append(escapeFn( client ? client.nama_lengkap : 'Klien' ))
+    ; __append("', '")
+    ; __append(escapeFn( getNamaBulan(r.bulan) ))
+    ; __append(" ")
+    ; __append(escapeFn( r.tahun ))
+    ; __append("')\">\n                      <i class=\"fas fa-image\"></i> Lihat Foto\n                    </button>\n                  ")
+    ;  } else { 
+    ; __append("\n                    <span style=\"color:#999;\">-</span>\n                  ")
+    ;  } 
+    ; __append("\n                </td>\n                <td style=\"max-width:260px; font-size:13px; color:#555;\">")
+    ; __append(escapeFn( r.aktivitas_harian || '-' ))
+    ; __append("</td>\n                <td style=\"font-size:13px; color:#856404;\">")
+    ; __append(escapeFn( r.catatan_admin || '-' ))
+    ; __append("</td>\n              </tr>\n            ")
+    ;  }); 
+    ; __append("\n          </tbody>\n        </table>\n      </div>\n    ")
+    ;  } else { 
+    ; __append("\n      <div style=\"text-align:center; padding:50px 20px; color:#999;\">\n        <i class=\"fas fa-folder-open\" style=\"font-size:42px; margin-bottom:12px; color:#cbd5e1;\"></i>\n        <p>Tidak ada riwayat laporan yang cocok dengan filter yang dipilih.</p>\n      </div>\n    ")
+    ;  } 
+    ; __append("\n  </div>\n</div>\n\n")
+    ; __append( include('../partials/modal_foto') )
+    ; __append("\n\n</body>\n</html>\n")
+  }
+  return __output;
+
+},
+  "client/riwayat_lapor.ejs": function anonymous(locals, escapeFn, include, rethrow
+) {
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append("<!DOCTYPE html>\n<html lang=\"id\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>")
+    ; __append(escapeFn( pageTitle ))
+    ; __append("</title>\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n  <link href=\"https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700&display=swap\" rel=\"stylesheet\">\n  <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css\">\n  <link rel=\"stylesheet\" href=\"/css/responsive.css\">\n  <style>\n    * { margin:0; padding:0; box-sizing:border-box; }\n    body { font-family: 'Source Sans 3', sans-serif; background: #f5f7fa; color: #333; }\n    .navbar {\n      position: sticky; top: 0; left: 0; right: 0; width: 100%;\n      background: linear-gradient(135deg, #003580 0%, #0052a3 100%);\n      color: white; padding: 15px 30px; z-index: 1000;\n      display: flex; justify-content: space-between; align-items: center;\n    }\n    .navbar a { color: white; text-decoration: none; font-size: 14px; margin-left: 20px; }\n    .container { max-width: 1050px; margin: 25px auto 40px; padding: 0 20px; }\n    .header { margin-bottom: 25px; }\n    .header h1 { font-family: 'Playfair Display', serif; color: #003580; font-size: 30px; margin-bottom: 4px; }\n    .card { background: white; border-radius: 8px; padding: 25px; margin-bottom: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }\n    .filter-box { background: #f8fafc; padding: 16px 20px; border-radius: 8px; margin-bottom: 20px; display: flex; gap: 15px; align-items: center; flex-wrap: wrap; }\n    .filter-box select { padding: 8px 14px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: inherit; font-size: 14px; }\n    .table { width: 100%; border-collapse: collapse; margin-top: 10px; }\n    .table th { background: #f8f9fa; padding: 12px 15px; text-align: left; font-size: 13px; font-weight: 600; border-bottom: 2px solid #e0e0e0; }\n    .table td { padding: 12px 15px; border-bottom: 1px solid #e0e0e0; font-size: 14px; }\n    .badge { display: inline-block; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }\n    .badge-warning { background: #fff3cd; color: #856404; }\n    .badge-success { background: #d4edda; color: #155724; }\n    .badge-danger { background: #f8d7da; color: #721c24; }\n    .badge-secondary { background: #e2e8f0; color: #475569; }\n    .btn { padding: 8px 14px; border-radius: 6px; font-size: 13px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }\n    .btn-primary { background: #003580; color: white; border: none; }\n  </style>\n</head>\n<body>\n\n<div class=\"navbar\">\n  <div style=\"font-weight:700;\"><i class=\"fas fa-gavel\"></i> BAPAS MEDAN - CLIENT</div>\n  <div>\n    <a href=\"/client/dashboard\"><i class=\"fas fa-tachometer-alt\"></i> <span>Dashboard</span></a>\n    <a href=\"/client/jadwal\"><i class=\"fas fa-calendar-alt\"></i> <span>Jadwal</span></a>\n    <a href=\"/client/profil\"><i class=\"fas fa-user\"></i> <span>Profil</span></a>\n    <a href=\"/logout\"><i class=\"fas fa-sign-out-alt\"></i> <span>Keluar</span></a>\n  </div>\n</div>\n\n<div class=\"container\">\n  <div class=\"header\">\n    <h1>Riwayat Wajib Lapor</h1>\n    <p style=\"color:#666;\">Daftar seluruh laporan bulanan yang telah Anda simpan dan kirimkan ke BAPAS Kelas I Medan</p>\n  </div>\n\n  ")
+    ; __append( include('../partials/alerts') )
+    ; __append("\n\n  <div class=\"card\">\n    <!-- FORM FILTER RIWAYAT -->\n    <form method=\"GET\" action=\"/client/riwayat\" class=\"filter-box\">\n      <label style=\"font-weight:600; font-size:14px;\"><i class=\"fas fa-filter\"></i> Filter Riwayat:</label>\n      <select name=\"status\" onchange=\"this.form.submit()\">\n        <option value=\"all\" ")
+    ; __append(escapeFn( filterStatus === 'all' ? 'selected' : '' ))
+    ; __append(">Semua Status</option>\n        <option value=\"diterima\" ")
+    ; __append(escapeFn( filterStatus === 'diterima' ? 'selected' : '' ))
+    ; __append(">Diterima</option>\n        <option value=\"menunggu_verifikasi\" ")
+    ; __append(escapeFn( filterStatus === 'menunggu_verifikasi' ? 'selected' : '' ))
+    ; __append(">Menunggu Verifikasi</option>\n        <option value=\"ditolak\" ")
+    ; __append(escapeFn( filterStatus === 'ditolak' ? 'selected' : '' ))
+    ; __append(">Ditolak</option>\n        <option value=\"draft\" ")
+    ; __append(escapeFn( filterStatus === 'draft' ? 'selected' : '' ))
+    ; __append(">Draft</option>\n      </select>\n\n      <select name=\"tahun\" onchange=\"this.form.submit()\">\n        <option value=\"all\" ")
+    ; __append(escapeFn( filterTahun === 'all' ? 'selected' : '' ))
+    ; __append(">Semua Tahun</option>\n        <option value=\"2026\" ")
+    ; __append(escapeFn( filterTahun === '2026' ? 'selected' : '' ))
+    ; __append(">2026</option>\n        <option value=\"2025\" ")
+    ; __append(escapeFn( filterTahun === '2025' ? 'selected' : '' ))
+    ; __append(">2025</option>\n        <option value=\"2024\" ")
+    ; __append(escapeFn( filterTahun === '2024' ? 'selected' : '' ))
+    ; __append(">2024</option>\n      </select>\n\n      ")
+    ;  if (filterStatus !== 'all' || filterTahun !== 'all') { 
+    ; __append("\n        <a href=\"/client/riwayat\" style=\"color:#dc3545; font-size:13px; text-decoration:none;\"><i class=\"fas fa-times\"></i> Reset Filter</a>\n      ")
+    ;  } 
+    ; __append("\n    </form>\n\n    ")
+    ;  if (riwayat && riwayat.length > 0) { 
+    ; __append("\n      <div class=\"table-responsive\">\n        <table class=\"table\">\n          <thead>\n            <tr>\n              <th>No</th>\n              <th>Periode Lapor</th>\n              <th>Tanggal Submit</th>\n              <th>Status</th>\n              <th>Foto Bukti</th>\n              <th>Aktivitas</th>\n              <th>Catatan Petugas</th>\n            </tr>\n          </thead>\n          <tbody>\n            ")
+    ;  riwayat.forEach(function(r, idx) { 
+    ; __append("\n              <tr>\n                <td>")
+    ; __append(escapeFn( idx + 1 ))
+    ; __append("</td>\n                <td><strong>")
+    ; __append(escapeFn( getNamaBulan(r.bulan) ))
+    ; __append(" ")
+    ; __append(escapeFn( r.tahun ))
+    ; __append("</strong></td>\n                <td>")
+    ; __append(escapeFn( formatTanggal(r.tanggal_submit) ))
+    ; __append("</td>\n                <td>\n                  ")
+    ;  if (r.status === 'diterima') { 
+    ; __append("\n                    <span class=\"badge badge-success\"><i class=\"fas fa-check\"></i> Diterima</span>\n                  ")
+    ;  } else if (r.status === 'menunggu_verifikasi') { 
+    ; __append("\n                    <span class=\"badge badge-warning\"><i class=\"fas fa-clock\"></i> Menunggu</span>\n                  ")
+    ;  } else if (r.status === 'ditolak') { 
+    ; __append("\n                    <span class=\"badge badge-danger\"><i class=\"fas fa-times\"></i> Ditolak</span>\n                  ")
+    ;  } else { 
+    ; __append("\n                    <span class=\"badge badge-secondary\">")
+    ; __append(escapeFn( r.status ))
+    ; __append("</span>\n                  ")
+    ;  } 
+    ; __append("\n                </td>\n                <td>\n                  ")
+    ;  if (r.foto_bukti) { 
+    ; __append("\n                    <button type=\"button\" class=\"btn btn-sm\" style=\"color:#0052a3; font-size:12px; padding:3px 8px; background:#e8f0fe; border:1px solid #b3d1ff; cursor:pointer;\" onclick=\"bukaModalFoto('")
+    ; __append(escapeFn( getFileUrl(r.foto_bukti, 'wajib_lapor') ))
+    ; __append("', '")
+    ; __append(escapeFn( client ? client.nama_lengkap : 'Klien' ))
+    ; __append("', '")
+    ; __append(escapeFn( getNamaBulan(r.bulan) ))
+    ; __append(" ")
+    ; __append(escapeFn( r.tahun ))
+    ; __append("')\">\n                      <i class=\"fas fa-image\"></i> Lihat Foto\n                    </button>\n                  ")
+    ;  } else { 
+    ; __append("\n                    <span style=\"color:#999;\">-</span>\n                  ")
+    ;  } 
+    ; __append("\n                </td>\n                <td style=\"max-width:260px; font-size:13px; color:#555;\">")
+    ; __append(escapeFn( r.aktivitas_harian || '-' ))
+    ; __append("</td>\n                <td style=\"font-size:13px; color:#856404;\">")
+    ; __append(escapeFn( r.catatan_admin || '-' ))
+    ; __append("</td>\n              </tr>\n            ")
+    ;  }); 
+    ; __append("\n          </tbody>\n        </table>\n      </div>\n    ")
+    ;  } else { 
+    ; __append("\n      <div style=\"text-align:center; padding:50px 20px; color:#999;\">\n        <i class=\"fas fa-folder-open\" style=\"font-size:42px; margin-bottom:12px; color:#cbd5e1;\"></i>\n        <p>Tidak ada riwayat laporan yang cocok dengan filter yang dipilih.</p>\n      </div>\n    ")
+    ;  } 
+    ; __append("\n  </div>\n</div>\n\n")
+    ; __append( include('../partials/modal_foto') )
+    ; __append("\n\n</body>\n</html>\n")
+  }
+  return __output;
+
+},
+  "partials/alerts": function anonymous(locals, escapeFn, include, rethrow
+) {
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append("<!-- SWEETALERT2 & CUSTOM NOTIFIKASI SYSTEM BAPAS MEDAN -->\n<script src=\"https://cdn.jsdelivr.net/npm/sweetalert2@11\"></script>\n<style>\n  .bapas-swal-popup {\n    border-radius: 14px !important;\n    font-family: 'Source Sans 3', sans-serif !important;\n    padding: 24px !important;\n    box-shadow: 0 15px 35px rgba(0,0,0,0.2) !important;\n  }\n  .bapas-swal-popup .swal2-title {\n    font-size: 20px !important;\n    font-weight: 700 !important;\n    color: #002255 !important;\n  }\n  .bapas-swal-popup .swal2-html-container {\n    font-size: 14.5px !important;\n    color: #475569 !important;\n    line-height: 1.5 !important;\n  }\n  .bapas-swal-popup .swal2-styled {\n    font-size: 13.5px !important;\n    font-weight: 700 !important;\n    padding: 10px 22px !important;\n    border-radius: 6px !important;\n  }\n  .swal2-toast {\n    box-shadow: 0 4px 16px rgba(0,0,0,0.15) !important;\n    border-radius: 8px !important;\n  }\n</style>\n\n<script>\n// Override window.alert default browser menjadi Custom SweetAlert2\nwindow.alert = function(msg) {\n  if (typeof Swal !== 'undefined') {\n    Swal.fire({\n      title: 'Pemberitahuan Sistem',\n      html: String(msg).replace(/\\n/g, '<br>'),\n      icon: 'info',\n      confirmButtonColor: '#003580',\n      confirmButtonText: '<i class=\"fas fa-check\"></i> Mengerti',\n      customClass: { popup: 'bapas-swal-popup' }\n    });\n  }\n};\n\n// Helper Toast Notifikasi Cepat\nwindow.showToast = function(title, icon = 'success') {\n  if (typeof Swal !== 'undefined') {\n    const Toast = Swal.mixin({\n      toast: true,\n      position: 'top-end',\n      showConfirmButton: false,\n      timer: 3500,\n      timerProgressBar: true,\n      didOpen: (toast) => {\n        toast.addEventListener('mouseenter', Swal.stopTimer);\n        toast.addEventListener('mouseleave', Swal.resumeTimer);\n      }\n    });\n    Toast.fire({ icon: icon, title: title });\n  }\n};\n\n// Helper Konfirmasi Aksi Custom\nwindow.customConfirm = function(options) {\n  return Swal.fire({\n    title: options.title || 'Konfirmasi',\n    html: options.html || options.text || 'Apakah Anda yakin ingin melanjutkan tindakan ini?',\n    icon: options.icon || 'question',\n    showCancelButton: true,\n    confirmButtonColor: options.confirmColor || '#003580',\n    cancelButtonColor: '#64748b',\n    confirmButtonText: options.confirmText || '<i class=\"fas fa-check\"></i> Ya, Lanjutkan',\n    cancelButtonText: options.cancelText || 'Batal',\n    reverseButtons: true,\n    customClass: { popup: 'bapas-swal-popup' }\n  });\n};\n\ndocument.addEventListener('DOMContentLoaded', function() {\n  ")
+    ;  if (typeof successMessage !== 'undefined' && successMessage) { 
+    ; __append("\n    window.showToast('")
+    ; __append(escapeFn( successMessage ))
+    ; __append("', 'success');\n  ")
+    ;  } 
+    ; __append("\n  ")
+    ;  if (typeof errorMessage !== 'undefined' && errorMessage) { 
+    ; __append("\n    window.showToast('")
+    ; __append(escapeFn( errorMessage ))
+    ; __append("', 'error');\n  ")
+    ;  } 
+    ; __append("\n  ")
+    ;  if (typeof warningMessage !== 'undefined' && warningMessage) { 
+    ; __append("\n    window.showToast('")
+    ; __append(escapeFn( warningMessage ))
+    ; __append("', 'warning');\n  ")
+    ;  } 
+    ; __append("\n});\n</script>\n\n")
+    ;  if (typeof successMessage !== 'undefined' && successMessage) { 
+    ; __append("\n  <div class=\"alert alert-success\" style=\"background:#d4edda; color:#155724; padding:14px 18px; border-radius:6px; margin-bottom:20px; border:1px solid #c3e6cb; display:flex; align-items:center; gap:12px;\">\n    <i class=\"fas fa-check-circle\" style=\"font-size:18px;\"></i>\n    <div>")
+    ; __append(escapeFn( successMessage ))
+    ; __append("</div>\n  </div>\n")
+    ;  } 
+    ; __append("\n\n")
+    ;  if (typeof errorMessage !== 'undefined' && errorMessage) { 
+    ; __append("\n  <div class=\"alert alert-danger\" style=\"background:#f8d7da; color:#721c24; padding:14px 18px; border-radius:6px; margin-bottom:20px; border:1px solid #f5c6cb; display:flex; align-items:center; gap:12px;\">\n    <i class=\"fas fa-exclamation-circle\" style=\"font-size:18px;\"></i>\n    <div>")
+    ; __append(escapeFn( errorMessage ))
+    ; __append("</div>\n  </div>\n")
+    ;  } 
+    ; __append("\n\n")
+    ;  if (typeof warningMessage !== 'undefined' && warningMessage) { 
+    ; __append("\n  <div class=\"alert alert-warning\" style=\"background:#fff3cd; color:#856404; padding:14px 18px; border-radius:6px; margin-bottom:20px; border:1px solid #ffeeba; display:flex; align-items:center; gap:12px;\">\n    <i class=\"fas fa-exclamation-triangle\" style=\"font-size:18px;\"></i>\n    <div>")
+    ; __append(escapeFn( warningMessage ))
+    ; __append("</div>\n  </div>\n")
+    ;  } 
+    ; __append("\n")
+  }
+  return __output;
+
+},
+  "partials/alerts.ejs": function anonymous(locals, escapeFn, include, rethrow
+) {
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append("<!-- SWEETALERT2 & CUSTOM NOTIFIKASI SYSTEM BAPAS MEDAN -->\n<script src=\"https://cdn.jsdelivr.net/npm/sweetalert2@11\"></script>\n<style>\n  .bapas-swal-popup {\n    border-radius: 14px !important;\n    font-family: 'Source Sans 3', sans-serif !important;\n    padding: 24px !important;\n    box-shadow: 0 15px 35px rgba(0,0,0,0.2) !important;\n  }\n  .bapas-swal-popup .swal2-title {\n    font-size: 20px !important;\n    font-weight: 700 !important;\n    color: #002255 !important;\n  }\n  .bapas-swal-popup .swal2-html-container {\n    font-size: 14.5px !important;\n    color: #475569 !important;\n    line-height: 1.5 !important;\n  }\n  .bapas-swal-popup .swal2-styled {\n    font-size: 13.5px !important;\n    font-weight: 700 !important;\n    padding: 10px 22px !important;\n    border-radius: 6px !important;\n  }\n  .swal2-toast {\n    box-shadow: 0 4px 16px rgba(0,0,0,0.15) !important;\n    border-radius: 8px !important;\n  }\n</style>\n\n<script>\n// Override window.alert default browser menjadi Custom SweetAlert2\nwindow.alert = function(msg) {\n  if (typeof Swal !== 'undefined') {\n    Swal.fire({\n      title: 'Pemberitahuan Sistem',\n      html: String(msg).replace(/\\n/g, '<br>'),\n      icon: 'info',\n      confirmButtonColor: '#003580',\n      confirmButtonText: '<i class=\"fas fa-check\"></i> Mengerti',\n      customClass: { popup: 'bapas-swal-popup' }\n    });\n  }\n};\n\n// Helper Toast Notifikasi Cepat\nwindow.showToast = function(title, icon = 'success') {\n  if (typeof Swal !== 'undefined') {\n    const Toast = Swal.mixin({\n      toast: true,\n      position: 'top-end',\n      showConfirmButton: false,\n      timer: 3500,\n      timerProgressBar: true,\n      didOpen: (toast) => {\n        toast.addEventListener('mouseenter', Swal.stopTimer);\n        toast.addEventListener('mouseleave', Swal.resumeTimer);\n      }\n    });\n    Toast.fire({ icon: icon, title: title });\n  }\n};\n\n// Helper Konfirmasi Aksi Custom\nwindow.customConfirm = function(options) {\n  return Swal.fire({\n    title: options.title || 'Konfirmasi',\n    html: options.html || options.text || 'Apakah Anda yakin ingin melanjutkan tindakan ini?',\n    icon: options.icon || 'question',\n    showCancelButton: true,\n    confirmButtonColor: options.confirmColor || '#003580',\n    cancelButtonColor: '#64748b',\n    confirmButtonText: options.confirmText || '<i class=\"fas fa-check\"></i> Ya, Lanjutkan',\n    cancelButtonText: options.cancelText || 'Batal',\n    reverseButtons: true,\n    customClass: { popup: 'bapas-swal-popup' }\n  });\n};\n\ndocument.addEventListener('DOMContentLoaded', function() {\n  ")
+    ;  if (typeof successMessage !== 'undefined' && successMessage) { 
+    ; __append("\n    window.showToast('")
+    ; __append(escapeFn( successMessage ))
+    ; __append("', 'success');\n  ")
+    ;  } 
+    ; __append("\n  ")
+    ;  if (typeof errorMessage !== 'undefined' && errorMessage) { 
+    ; __append("\n    window.showToast('")
+    ; __append(escapeFn( errorMessage ))
+    ; __append("', 'error');\n  ")
+    ;  } 
+    ; __append("\n  ")
+    ;  if (typeof warningMessage !== 'undefined' && warningMessage) { 
+    ; __append("\n    window.showToast('")
+    ; __append(escapeFn( warningMessage ))
+    ; __append("', 'warning');\n  ")
+    ;  } 
+    ; __append("\n});\n</script>\n\n")
+    ;  if (typeof successMessage !== 'undefined' && successMessage) { 
+    ; __append("\n  <div class=\"alert alert-success\" style=\"background:#d4edda; color:#155724; padding:14px 18px; border-radius:6px; margin-bottom:20px; border:1px solid #c3e6cb; display:flex; align-items:center; gap:12px;\">\n    <i class=\"fas fa-check-circle\" style=\"font-size:18px;\"></i>\n    <div>")
+    ; __append(escapeFn( successMessage ))
+    ; __append("</div>\n  </div>\n")
+    ;  } 
+    ; __append("\n\n")
+    ;  if (typeof errorMessage !== 'undefined' && errorMessage) { 
+    ; __append("\n  <div class=\"alert alert-danger\" style=\"background:#f8d7da; color:#721c24; padding:14px 18px; border-radius:6px; margin-bottom:20px; border:1px solid #f5c6cb; display:flex; align-items:center; gap:12px;\">\n    <i class=\"fas fa-exclamation-circle\" style=\"font-size:18px;\"></i>\n    <div>")
+    ; __append(escapeFn( errorMessage ))
+    ; __append("</div>\n  </div>\n")
+    ;  } 
+    ; __append("\n\n")
+    ;  if (typeof warningMessage !== 'undefined' && warningMessage) { 
+    ; __append("\n  <div class=\"alert alert-warning\" style=\"background:#fff3cd; color:#856404; padding:14px 18px; border-radius:6px; margin-bottom:20px; border:1px solid #ffeeba; display:flex; align-items:center; gap:12px;\">\n    <i class=\"fas fa-exclamation-triangle\" style=\"font-size:18px;\"></i>\n    <div>")
+    ; __append(escapeFn( warningMessage ))
+    ; __append("</div>\n  </div>\n")
+    ;  } 
+    ; __append("\n")
+  }
+  return __output;
+
+},
+  "partials/footer": function anonymous(locals, escapeFn, include, rethrow
+) {
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append("<!-- FOOTER -->\n<footer class=\"footer\" role=\"contentinfo\" style=\"background:#001e4d; color:#e0e0e0; padding:45px 0 20px; margin-top:40px; width:100%;\">\n  <div class=\"container\" style=\"display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:25px; margin-bottom:25px;\">\n    <div>\n      <h3 style=\"color:#ffffff; font-size:18px; margin-bottom:15px; font-family:'Playfair Display', serif;\">BAPAS Kelas I Medan</h3>\n      <p style=\"font-size:14px; line-height:1.7; color:#cbd5e1; margin-bottom:20px;\">\n        Balai Pemasyarakatan Kelas I Medan berkomitmen memberikan layanan pembimbingan kemasyarakatan, pengawasan, pendampingan, dan penelitian kemasyarakatan (Litmas) yang profesional, akuntabel, dan transparan.\n      </p>\n      <div style=\"display:flex; gap:10px; align-items:center;\">\n        <a href=\"https://facebook.com\" target=\"_blank\" rel=\"noopener noreferrer\" aria-label=\"Facebook\" style=\"width:36px; height:36px; border-radius:50%; background:rgba(255,255,255,0.1); color:#ffffff; display:inline-flex; align-items:center; justify-content:center; text-decoration:none; transition:all 0.3s;\"><i class=\"fab fa-facebook-f\"></i></a>\n        <a href=\"https://instagram.com\" target=\"_blank\" rel=\"noopener noreferrer\" aria-label=\"Instagram\" style=\"width:36px; height:36px; border-radius:50%; background:rgba(255,255,255,0.1); color:#ffffff; display:inline-flex; align-items:center; justify-content:center; text-decoration:none; transition:all 0.3s;\"><i class=\"fab fa-instagram\"></i></a>\n        <a href=\"https://youtube.com\" target=\"_blank\" rel=\"noopener noreferrer\" aria-label=\"YouTube\" style=\"width:36px; height:36px; border-radius:50%; background:rgba(255,255,255,0.1); color:#ffffff; display:inline-flex; align-items:center; justify-content:center; text-decoration:none; transition:all 0.3s;\"><i class=\"fab fa-youtube\"></i></a>\n        <a href=\"https://twitter.com\" target=\"_blank\" rel=\"noopener noreferrer\" aria-label=\"Twitter\" style=\"width:36px; height:36px; border-radius:50%; background:rgba(255,255,255,0.1); color:#ffffff; display:inline-flex; align-items:center; justify-content:center; text-decoration:none; transition:all 0.3s;\"><i class=\"fab fa-twitter\"></i></a>\n      </div>\n    </div>\n    <div>\n      <h3 style=\"color:#ffffff; font-size:18px; margin-bottom:15px;\">Layanan & Tautan</h3>\n      <ul style=\"list-style:none; padding:0; margin:0; font-size:14px; line-height:2.2;\">\n        <li><a href=\"/\" style=\"color:#94a3b8; text-decoration:none;\"><i class=\"fas fa-chevron-right\" style=\"font-size:10px; color:#ffc107;\"></i> Beranda Utama</a></li>\n        <li><a href=\"/profil\" style=\"color:#94a3b8; text-decoration:none;\"><i class=\"fas fa-chevron-right\" style=\"font-size:10px; color:#ffc107;\"></i> Profil Pejabat & Instansi</a></li>\n        <li><a href=\"/informasi?sub=alur-wajib-lapor\" style=\"color:#94a3b8; text-decoration:none;\"><i class=\"fas fa-chevron-right\" style=\"font-size:10px; color:#ffc107;\"></i> Alur & Panduan Wajib Lapor</a></li>\n        <li><a href=\"/informasi?sub=layanan-integrasi\" style=\"color:#94a3b8; text-decoration:none;\"><i class=\"fas fa-chevron-right\" style=\"font-size:10px; color:#ffc107;\"></i> Layanan Integrasi (PB/CB/CMB)</a></li>\n        <li><a href=\"/login\" style=\"color:#94a3b8; text-decoration:none;\"><i class=\"fas fa-chevron-right\" style=\"font-size:10px; color:#ffc107;\"></i> Wajib Lapor Online</a></li>\n      </ul>\n    </div>\n    <div>\n      <h3 style=\"color:#ffffff; font-size:18px; margin-bottom:15px;\">Kontak & Jam Kerja</h3>\n      <address style=\"font-style:normal; font-size:14px; line-height:1.9; color:#cbd5e1;\">\n        <i class=\"fas fa-map-marker-alt\" style=\"color:#ffc107; margin-right:8px;\"></i> Jl. Lembaga Pemasyarakatan, Tj. Gusta, Medan Helvetia, Kota Medan<br>\n        <i class=\"fas fa-phone\" style=\"color:#ffc107; margin-right:8px;\"></i> <a href=\"tel:0614516516\" style=\"color:#cbd5e1; text-decoration:none;\">(061) 4516516</a><br>\n        <i class=\"fas fa-envelope\" style=\"color:#ffc107; margin-right:8px;\"></i> <a href=\"mailto:bapasmedan@kemenkumham.go.id\" style=\"color:#cbd5e1; text-decoration:none;\">bapasmedan@kemenkumham.go.id</a><br>\n        <i class=\"fas fa-clock\" style=\"color:#ffc107; margin-right:8px;\"></i> Senin - Jumat: 08:00 - 16:00 WIB\n      </address>\n    </div>\n  </div>\n  <div style=\"border-top:1px solid rgba(255,255,255,0.1); padding-top:20px; text-align:center; font-size:13px; color:#94a3b8;\">\n    <div class=\"container\">\n      &copy; ")
+    ; __append(escapeFn( new Date().getFullYear() ))
+    ; __append(" <strong>Balai Pemasyarakatan Kelas I Medan</strong> - Kementerian Imigrasi dan Pemasyarakatan RI. All Rights Reserved.\n    </div>\n  </div>\n</footer>\n\n<script src=\"/js/main.js\"></script>\n</body>\n</html>\n")
+  }
+  return __output;
+
+},
+  "partials/footer.ejs": function anonymous(locals, escapeFn, include, rethrow
+) {
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append("<!-- FOOTER -->\n<footer class=\"footer\" role=\"contentinfo\" style=\"background:#001e4d; color:#e0e0e0; padding:45px 0 20px; margin-top:40px; width:100%;\">\n  <div class=\"container\" style=\"display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:25px; margin-bottom:25px;\">\n    <div>\n      <h3 style=\"color:#ffffff; font-size:18px; margin-bottom:15px; font-family:'Playfair Display', serif;\">BAPAS Kelas I Medan</h3>\n      <p style=\"font-size:14px; line-height:1.7; color:#cbd5e1; margin-bottom:20px;\">\n        Balai Pemasyarakatan Kelas I Medan berkomitmen memberikan layanan pembimbingan kemasyarakatan, pengawasan, pendampingan, dan penelitian kemasyarakatan (Litmas) yang profesional, akuntabel, dan transparan.\n      </p>\n      <div style=\"display:flex; gap:10px; align-items:center;\">\n        <a href=\"https://facebook.com\" target=\"_blank\" rel=\"noopener noreferrer\" aria-label=\"Facebook\" style=\"width:36px; height:36px; border-radius:50%; background:rgba(255,255,255,0.1); color:#ffffff; display:inline-flex; align-items:center; justify-content:center; text-decoration:none; transition:all 0.3s;\"><i class=\"fab fa-facebook-f\"></i></a>\n        <a href=\"https://instagram.com\" target=\"_blank\" rel=\"noopener noreferrer\" aria-label=\"Instagram\" style=\"width:36px; height:36px; border-radius:50%; background:rgba(255,255,255,0.1); color:#ffffff; display:inline-flex; align-items:center; justify-content:center; text-decoration:none; transition:all 0.3s;\"><i class=\"fab fa-instagram\"></i></a>\n        <a href=\"https://youtube.com\" target=\"_blank\" rel=\"noopener noreferrer\" aria-label=\"YouTube\" style=\"width:36px; height:36px; border-radius:50%; background:rgba(255,255,255,0.1); color:#ffffff; display:inline-flex; align-items:center; justify-content:center; text-decoration:none; transition:all 0.3s;\"><i class=\"fab fa-youtube\"></i></a>\n        <a href=\"https://twitter.com\" target=\"_blank\" rel=\"noopener noreferrer\" aria-label=\"Twitter\" style=\"width:36px; height:36px; border-radius:50%; background:rgba(255,255,255,0.1); color:#ffffff; display:inline-flex; align-items:center; justify-content:center; text-decoration:none; transition:all 0.3s;\"><i class=\"fab fa-twitter\"></i></a>\n      </div>\n    </div>\n    <div>\n      <h3 style=\"color:#ffffff; font-size:18px; margin-bottom:15px;\">Layanan & Tautan</h3>\n      <ul style=\"list-style:none; padding:0; margin:0; font-size:14px; line-height:2.2;\">\n        <li><a href=\"/\" style=\"color:#94a3b8; text-decoration:none;\"><i class=\"fas fa-chevron-right\" style=\"font-size:10px; color:#ffc107;\"></i> Beranda Utama</a></li>\n        <li><a href=\"/profil\" style=\"color:#94a3b8; text-decoration:none;\"><i class=\"fas fa-chevron-right\" style=\"font-size:10px; color:#ffc107;\"></i> Profil Pejabat & Instansi</a></li>\n        <li><a href=\"/informasi?sub=alur-wajib-lapor\" style=\"color:#94a3b8; text-decoration:none;\"><i class=\"fas fa-chevron-right\" style=\"font-size:10px; color:#ffc107;\"></i> Alur & Panduan Wajib Lapor</a></li>\n        <li><a href=\"/informasi?sub=layanan-integrasi\" style=\"color:#94a3b8; text-decoration:none;\"><i class=\"fas fa-chevron-right\" style=\"font-size:10px; color:#ffc107;\"></i> Layanan Integrasi (PB/CB/CMB)</a></li>\n        <li><a href=\"/login\" style=\"color:#94a3b8; text-decoration:none;\"><i class=\"fas fa-chevron-right\" style=\"font-size:10px; color:#ffc107;\"></i> Wajib Lapor Online</a></li>\n      </ul>\n    </div>\n    <div>\n      <h3 style=\"color:#ffffff; font-size:18px; margin-bottom:15px;\">Kontak & Jam Kerja</h3>\n      <address style=\"font-style:normal; font-size:14px; line-height:1.9; color:#cbd5e1;\">\n        <i class=\"fas fa-map-marker-alt\" style=\"color:#ffc107; margin-right:8px;\"></i> Jl. Lembaga Pemasyarakatan, Tj. Gusta, Medan Helvetia, Kota Medan<br>\n        <i class=\"fas fa-phone\" style=\"color:#ffc107; margin-right:8px;\"></i> <a href=\"tel:0614516516\" style=\"color:#cbd5e1; text-decoration:none;\">(061) 4516516</a><br>\n        <i class=\"fas fa-envelope\" style=\"color:#ffc107; margin-right:8px;\"></i> <a href=\"mailto:bapasmedan@kemenkumham.go.id\" style=\"color:#cbd5e1; text-decoration:none;\">bapasmedan@kemenkumham.go.id</a><br>\n        <i class=\"fas fa-clock\" style=\"color:#ffc107; margin-right:8px;\"></i> Senin - Jumat: 08:00 - 16:00 WIB\n      </address>\n    </div>\n  </div>\n  <div style=\"border-top:1px solid rgba(255,255,255,0.1); padding-top:20px; text-align:center; font-size:13px; color:#94a3b8;\">\n    <div class=\"container\">\n      &copy; ")
+    ; __append(escapeFn( new Date().getFullYear() ))
+    ; __append(" <strong>Balai Pemasyarakatan Kelas I Medan</strong> - Kementerian Imigrasi dan Pemasyarakatan RI. All Rights Reserved.\n    </div>\n  </div>\n</footer>\n\n<script src=\"/js/main.js\"></script>\n</body>\n</html>\n")
+  }
+  return __output;
+
+},
+  "partials/header": function anonymous(locals, escapeFn, include, rethrow
+) {
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append("<!DOCTYPE html>\n<html lang=\"id\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=5.0\">\n  \n  <!-- Primary SEO Meta Tags -->\n  <title>")
+    ; __append(escapeFn( pageTitle || 'BAPAS Kelas I Medan - Sistem Informasi & Wajib Lapor Online' ))
+    ; __append("</title>\n  <meta name=\"title\" content=\"")
+    ; __append(escapeFn( pageTitle || 'BAPAS Kelas I Medan - Sistem Informasi & Wajib Lapor Online' ))
+    ; __append("\">\n  <meta name=\"description\" content=\"")
+    ; __append(escapeFn( typeof pageDescription !== 'undefined' && pageDescription ? pageDescription : 'Situs Resmi Balai Pemasyarakatan (BAPAS) Kelas I Medan, Kementerian Imigrasi dan Pemasyarakatan RI. Layanan Wajib Lapor Online Klien Pemasyarakatan, Pembimbingan Kemasyarakatan, dan Layanan Integrasi Sosial.' ))
+    ; __append("\">\n  <meta name=\"keywords\" content=\"")
+    ; __append(escapeFn( typeof pageKeywords !== 'undefined' && pageKeywords ? pageKeywords : 'BAPAS Medan, Balai Pemasyarakatan Kelas I Medan, Wajib Lapor Online, Klien Pemasyarakatan, Pembimbing Kemasyarakatan, Kemenimipas, Litmas, Pembebasan Bersyarat, CB, CMB, PB' ))
+    ; __append("\">\n  <meta name=\"author\" content=\"Balai Pemasyarakatan Kelas I Medan\">\n  <meta name=\"robots\" content=\"index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1\">\n  <meta name=\"theme-color\" content=\"#003580\">\n  <meta name=\"apple-mobile-web-app-capable\" content=\"yes\">\n  <meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black-translucent\">\n  \n  <!-- Canonical Link -->\n  <link rel=\"canonical\" href=\"http://localhost:3000")
+    ; __append(escapeFn( typeof canonicalUrl !== 'undefined' ? canonicalUrl : '' ))
+    ; __append("\">\n\n  <!-- Open Graph / Facebook / WhatsApp -->\n  <meta property=\"og:type\" content=\"website\">\n  <meta property=\"og:locale\" content=\"id_ID\">\n  <meta property=\"og:site_name\" content=\"BAPAS Kelas I Medan\">\n  <meta property=\"og:title\" content=\"")
+    ; __append(escapeFn( pageTitle || 'BAPAS Kelas I Medan - Sistem Wajib Lapor' ))
+    ; __append("\">\n  <meta property=\"og:description\" content=\"")
+    ; __append(escapeFn( typeof pageDescription !== 'undefined' && pageDescription ? pageDescription : 'Situs Resmi Balai Pemasyarakatan Kelas I Medan - Layanan Wajib Lapor Online dan Informasi Pemasyarakatan.' ))
+    ; __append("\">\n  <meta property=\"og:url\" content=\"http://localhost:3000")
+    ; __append(escapeFn( typeof canonicalUrl !== 'undefined' ? canonicalUrl : '' ))
+    ; __append("\">\n  <meta property=\"og:image\" content=\"/logo_kemenimpas-removebg-preview.png\">\n  <meta property=\"og:image:width\" content=\"512\">\n  <meta property=\"og:image:height\" content=\"512\">\n\n  <!-- Twitter Card -->\n  <meta name=\"twitter:card\" content=\"summary_large_image\">\n  <meta name=\"twitter:title\" content=\"")
+    ; __append(escapeFn( pageTitle || 'BAPAS Kelas I Medan - Sistem Wajib Lapor' ))
+    ; __append("\">\n  <meta name=\"twitter:description\" content=\"")
+    ; __append(escapeFn( typeof pageDescription !== 'undefined' && pageDescription ? pageDescription : 'Situs Resmi Balai Pemasyarakatan Kelas I Medan.' ))
+    ; __append("\">\n  <meta name=\"twitter:image\" content=\"/logo_kemenimpas-removebg-preview.png\">\n\n  <!-- Schema.org JSON-LD Structured Data -->\n  <script type=\"application/ld+json\">\n  {\n    \"@context\": \"https://schema.org\",\n    \"@type\": \"GovernmentOrganization\",\n    \"name\": \"Balai Pemasyarakatan Kelas I Medan\",\n    \"alternateName\": [\"BAPAS Medan\", \"Bapas Kelas 1 Medan\"],\n    \"url\": \"http://localhost:3000\",\n    \"logo\": \"http://localhost:3000/logo_kemenimpas-removebg-preview.png\",\n    \"description\": \"Balai Pemasyarakatan Kelas I Medan adalah Unit Pelaksana Teknis Kementerian Imigrasi dan Pemasyarakatan yang menyelenggarakan penelitian kemasyarakatan, pembimbingan, pengawasan, dan pendampingan klien pemasyarakatan.\",\n    \"telephone\": \"(061) 4516516\",\n    \"email\": \"bapasmedan@kemenkumham.go.id\",\n    \"address\": {\n      \"@type\": \"PostalAddress\",\n      \"streetAddress\": \"Jl. Lembaga Pemasyarakatan, Tj. Gusta, Kec. Medan Helvetia\",\n      \"addressLocality\": \"Medan\",\n      \"addressRegion\": \"Sumatera Utara\",\n      \"postalCode\": \"20125\",\n      \"addressCountry\": \"ID\"\n    },\n    \"openingHoursSpecification\": {\n      \"@type\": \"OpeningHoursSpecification\",\n      \"dayOfWeek\": [\"Monday\", \"Tuesday\", \"Wednesday\", \"Thursday\", \"Friday\"],\n      \"opens\": \"08:00\",\n      \"closes\": \"16:00\"\n    }\n  }\n  </script>\n\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n  <link href=\"https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700&display=swap\" rel=\"stylesheet\">\n  <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css\">\n  <link rel=\"stylesheet\" href=\"/css/style.css\">\n  <link rel=\"stylesheet\" href=\"/css/responsive.css\">\n</head>\n<body>\n\n<!-- HEADER UTAMA -->\n<header class=\"header\">\n  <div class=\"container header-inner\">\n    <div class=\"header-logo\">\n      <div style=\"display:flex; align-items:center; gap:12px; flex-shrink:0;\">\n        <img src=\"/logo_kemenimpas-removebg-preview.png\" alt=\"Logo Kemenimipas\" style=\"height:60px;\" onerror=\"this.style.display='none'\">\n        <img src=\"/logo_pemasyarakatan-removebg-preview.png\" alt=\"Logo Pemasyarakatan\" style=\"height:60px;\" onerror=\"this.style.display='none'\">\n      </div>\n      <div>\n        <span class=\"header-sub\">\n          KEMENTERIAN IMIGRASI DAN PEMASYARAKATAN REPUBLIK INDONESIA\n        </span>\n        <h1 class=\"header-main\">\n          BALAI PEMASYARAKATAN KELAS I MEDAN\n        </h1>\n        <span class=\"header-tagline\">\n          Kantor Wilayah Sumatera Utara &bull; Menuju Wilayah Bebas dari Korupsi (WBK)\n        </span>\n      </div>\n    </div>\n    <div class=\"header-contact\">\n      <i class=\"fas fa-envelope\"></i>\n      <div>\n        <span class=\"contact-label\">Email Resmi</span>\n        <span class=\"contact-value\">bapasmedan@kemenkumham.go.id</span>\n      </div>\n    </div>\n  </div>\n</header>\n\n<!-- NAVIGATION BAR -->\n<nav class=\"navbar\" role=\"navigation\" aria-label=\"Navigasi Utama\">\n  <div class=\"container nav-container\">\n    <ul class=\"nav-menu\" id=\"navMenu\">\n      <li class=\"nav-item ")
+    ; __append(escapeFn( activePage === 'beranda' ? 'active' : '' ))
+    ; __append("\">\n        <a href=\"/\"><i class=\"fas fa-home\"></i> Beranda</a>\n      </li>\n      <li class=\"nav-item has-dropdown ")
+    ; __append(escapeFn( activePage === 'profil' ? 'active' : '' ))
+    ; __append("\">\n        <a href=\"/profil\"><i class=\"fas fa-building\"></i> Profil <i class=\"fas fa-chevron-down arrow\"></i></a>\n        <ul class=\"dropdown\">\n          <li><a href=\"/profil?sub=profil-pejabat\"><i class=\"fas fa-user-tie\"></i> Profil Pejabat</a></li>\n          <li><a href=\"/profil?sub=sejarah-bapas\"><i class=\"fas fa-history\"></i> Sejarah Singkat</a></li>\n          <li><a href=\"/profil?sub=tugas-fungsi\"><i class=\"fas fa-tasks\"></i> Tugas & Fungsi</a></li>\n          <li><a href=\"/profil?sub=visi-misi\"><i class=\"fas fa-bullseye\"></i> Visi & Misi</a></li>\n          <li><a href=\"/profil?sub=struktur-organisasi\"><i class=\"fas fa-sitemap\"></i> Struktur Organisasi</a></li>\n        </ul>\n      </li>\n      <li class=\"nav-item has-dropdown ")
+    ; __append(escapeFn( activePage === 'informasi' ? 'active' : '' ))
+    ; __append("\">\n        <a href=\"/informasi\"><i class=\"fas fa-info-circle\"></i> Informasi Publik <i class=\"fas fa-chevron-down arrow\"></i></a>\n        <ul class=\"dropdown\">\n          <li><a href=\"/informasi?sub=layanan-integrasi\"><i class=\"fas fa-hands-helping\"></i> Layanan Integrasi</a></li>\n          <li><a href=\"/informasi?sub=alur-serah-terima\"><i class=\"fas fa-exchange-alt\"></i> Alur Serah Terima</a></li>\n          <li><a href=\"/informasi?sub=alur-wajib-lapor\"><i class=\"fas fa-clipboard-list\"></i> Alur Wajib Lapor</a></li>\n          <li><a href=\"/informasi?sub=informasi-lkip\"><i class=\"fas fa-file-alt\"></i> Laporan Kinerja (LKIP)</a></li>\n          <li><a href=\"/informasi?sub=laporan-keuangan\"><i class=\"fas fa-chart-line\"></i> Laporan Keuangan</a></li>\n        </ul>\n      </li>\n      <li class=\"nav-item has-dropdown ")
+    ; __append(escapeFn( activePage === 'berita' ? 'active' : '' ))
+    ; __append("\">\n        <a href=\"/berita\"><i class=\"fas fa-newspaper\"></i> Berita <i class=\"fas fa-chevron-down arrow\"></i></a>\n        <ul class=\"dropdown\">\n          <li><a href=\"/berita?sub=berita-utama\"><i class=\"fas fa-star\"></i> Berita Utama</a></li>\n          <li><a href=\"/berita?sub=berita-terkini\"><i class=\"fas fa-clock\"></i> Berita Terkini</a></li>\n        </ul>\n      </li>\n      <li class=\"nav-item ")
+    ; __append(escapeFn( activePage === 'login' ? 'active' : '' ))
+    ; __append("\">\n        <a href=\"/login\"><i class=\"fas fa-clipboard-check\"></i> Wajib Lapor Online</a>\n      </li>\n      ")
+    ;  if (isLoggedIn) { 
+    ; __append("\n        <li class=\"nav-item\">\n          ")
+    ;  if (userType === 'admin') { 
+    ; __append("\n            <a href=\"/admin/dashboard\" style=\"background:var(--primary-dark); color:var(--gold);\"><i class=\"fas fa-tachometer-alt\"></i> Panel Admin</a>\n          ")
+    ;  } else { 
+    ; __append("\n            <a href=\"/client/dashboard\" style=\"background:var(--primary-dark); color:var(--gold);\"><i class=\"fas fa-user-circle\"></i> Dashboard Klien</a>\n          ")
+    ;  } 
+    ; __append("\n        </li>\n        <li class=\"nav-item\">\n          <a href=\"/logout\" style=\"color:#ffebee;\"><i class=\"fas fa-sign-out-alt\"></i> Logout</a>\n        </li>\n      ")
+    ;  } 
+    ; __append("\n    </ul>\n    <button class=\"hamburger\" id=\"hamburger\" aria-label=\"Buka Menu Navigasi\"><i class=\"fas fa-bars\"></i></button>\n  </div>\n</nav>\n")
+  }
+  return __output;
+
+},
+  "partials/header.ejs": function anonymous(locals, escapeFn, include, rethrow
+) {
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append("<!DOCTYPE html>\n<html lang=\"id\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=5.0\">\n  \n  <!-- Primary SEO Meta Tags -->\n  <title>")
+    ; __append(escapeFn( pageTitle || 'BAPAS Kelas I Medan - Sistem Informasi & Wajib Lapor Online' ))
+    ; __append("</title>\n  <meta name=\"title\" content=\"")
+    ; __append(escapeFn( pageTitle || 'BAPAS Kelas I Medan - Sistem Informasi & Wajib Lapor Online' ))
+    ; __append("\">\n  <meta name=\"description\" content=\"")
+    ; __append(escapeFn( typeof pageDescription !== 'undefined' && pageDescription ? pageDescription : 'Situs Resmi Balai Pemasyarakatan (BAPAS) Kelas I Medan, Kementerian Imigrasi dan Pemasyarakatan RI. Layanan Wajib Lapor Online Klien Pemasyarakatan, Pembimbingan Kemasyarakatan, dan Layanan Integrasi Sosial.' ))
+    ; __append("\">\n  <meta name=\"keywords\" content=\"")
+    ; __append(escapeFn( typeof pageKeywords !== 'undefined' && pageKeywords ? pageKeywords : 'BAPAS Medan, Balai Pemasyarakatan Kelas I Medan, Wajib Lapor Online, Klien Pemasyarakatan, Pembimbing Kemasyarakatan, Kemenimipas, Litmas, Pembebasan Bersyarat, CB, CMB, PB' ))
+    ; __append("\">\n  <meta name=\"author\" content=\"Balai Pemasyarakatan Kelas I Medan\">\n  <meta name=\"robots\" content=\"index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1\">\n  <meta name=\"theme-color\" content=\"#003580\">\n  <meta name=\"apple-mobile-web-app-capable\" content=\"yes\">\n  <meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black-translucent\">\n  \n  <!-- Canonical Link -->\n  <link rel=\"canonical\" href=\"http://localhost:3000")
+    ; __append(escapeFn( typeof canonicalUrl !== 'undefined' ? canonicalUrl : '' ))
+    ; __append("\">\n\n  <!-- Open Graph / Facebook / WhatsApp -->\n  <meta property=\"og:type\" content=\"website\">\n  <meta property=\"og:locale\" content=\"id_ID\">\n  <meta property=\"og:site_name\" content=\"BAPAS Kelas I Medan\">\n  <meta property=\"og:title\" content=\"")
+    ; __append(escapeFn( pageTitle || 'BAPAS Kelas I Medan - Sistem Wajib Lapor' ))
+    ; __append("\">\n  <meta property=\"og:description\" content=\"")
+    ; __append(escapeFn( typeof pageDescription !== 'undefined' && pageDescription ? pageDescription : 'Situs Resmi Balai Pemasyarakatan Kelas I Medan - Layanan Wajib Lapor Online dan Informasi Pemasyarakatan.' ))
+    ; __append("\">\n  <meta property=\"og:url\" content=\"http://localhost:3000")
+    ; __append(escapeFn( typeof canonicalUrl !== 'undefined' ? canonicalUrl : '' ))
+    ; __append("\">\n  <meta property=\"og:image\" content=\"/logo_kemenimpas-removebg-preview.png\">\n  <meta property=\"og:image:width\" content=\"512\">\n  <meta property=\"og:image:height\" content=\"512\">\n\n  <!-- Twitter Card -->\n  <meta name=\"twitter:card\" content=\"summary_large_image\">\n  <meta name=\"twitter:title\" content=\"")
+    ; __append(escapeFn( pageTitle || 'BAPAS Kelas I Medan - Sistem Wajib Lapor' ))
+    ; __append("\">\n  <meta name=\"twitter:description\" content=\"")
+    ; __append(escapeFn( typeof pageDescription !== 'undefined' && pageDescription ? pageDescription : 'Situs Resmi Balai Pemasyarakatan Kelas I Medan.' ))
+    ; __append("\">\n  <meta name=\"twitter:image\" content=\"/logo_kemenimpas-removebg-preview.png\">\n\n  <!-- Schema.org JSON-LD Structured Data -->\n  <script type=\"application/ld+json\">\n  {\n    \"@context\": \"https://schema.org\",\n    \"@type\": \"GovernmentOrganization\",\n    \"name\": \"Balai Pemasyarakatan Kelas I Medan\",\n    \"alternateName\": [\"BAPAS Medan\", \"Bapas Kelas 1 Medan\"],\n    \"url\": \"http://localhost:3000\",\n    \"logo\": \"http://localhost:3000/logo_kemenimpas-removebg-preview.png\",\n    \"description\": \"Balai Pemasyarakatan Kelas I Medan adalah Unit Pelaksana Teknis Kementerian Imigrasi dan Pemasyarakatan yang menyelenggarakan penelitian kemasyarakatan, pembimbingan, pengawasan, dan pendampingan klien pemasyarakatan.\",\n    \"telephone\": \"(061) 4516516\",\n    \"email\": \"bapasmedan@kemenkumham.go.id\",\n    \"address\": {\n      \"@type\": \"PostalAddress\",\n      \"streetAddress\": \"Jl. Lembaga Pemasyarakatan, Tj. Gusta, Kec. Medan Helvetia\",\n      \"addressLocality\": \"Medan\",\n      \"addressRegion\": \"Sumatera Utara\",\n      \"postalCode\": \"20125\",\n      \"addressCountry\": \"ID\"\n    },\n    \"openingHoursSpecification\": {\n      \"@type\": \"OpeningHoursSpecification\",\n      \"dayOfWeek\": [\"Monday\", \"Tuesday\", \"Wednesday\", \"Thursday\", \"Friday\"],\n      \"opens\": \"08:00\",\n      \"closes\": \"16:00\"\n    }\n  }\n  </script>\n\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n  <link href=\"https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700&display=swap\" rel=\"stylesheet\">\n  <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css\">\n  <link rel=\"stylesheet\" href=\"/css/style.css\">\n  <link rel=\"stylesheet\" href=\"/css/responsive.css\">\n</head>\n<body>\n\n<!-- HEADER UTAMA -->\n<header class=\"header\">\n  <div class=\"container header-inner\">\n    <div class=\"header-logo\">\n      <div style=\"display:flex; align-items:center; gap:12px; flex-shrink:0;\">\n        <img src=\"/logo_kemenimpas-removebg-preview.png\" alt=\"Logo Kemenimipas\" style=\"height:60px;\" onerror=\"this.style.display='none'\">\n        <img src=\"/logo_pemasyarakatan-removebg-preview.png\" alt=\"Logo Pemasyarakatan\" style=\"height:60px;\" onerror=\"this.style.display='none'\">\n      </div>\n      <div>\n        <span class=\"header-sub\">\n          KEMENTERIAN IMIGRASI DAN PEMASYARAKATAN REPUBLIK INDONESIA\n        </span>\n        <h1 class=\"header-main\">\n          BALAI PEMASYARAKATAN KELAS I MEDAN\n        </h1>\n        <span class=\"header-tagline\">\n          Kantor Wilayah Sumatera Utara &bull; Menuju Wilayah Bebas dari Korupsi (WBK)\n        </span>\n      </div>\n    </div>\n    <div class=\"header-contact\">\n      <i class=\"fas fa-envelope\"></i>\n      <div>\n        <span class=\"contact-label\">Email Resmi</span>\n        <span class=\"contact-value\">bapasmedan@kemenkumham.go.id</span>\n      </div>\n    </div>\n  </div>\n</header>\n\n<!-- NAVIGATION BAR -->\n<nav class=\"navbar\" role=\"navigation\" aria-label=\"Navigasi Utama\">\n  <div class=\"container nav-container\">\n    <ul class=\"nav-menu\" id=\"navMenu\">\n      <li class=\"nav-item ")
+    ; __append(escapeFn( activePage === 'beranda' ? 'active' : '' ))
+    ; __append("\">\n        <a href=\"/\"><i class=\"fas fa-home\"></i> Beranda</a>\n      </li>\n      <li class=\"nav-item has-dropdown ")
+    ; __append(escapeFn( activePage === 'profil' ? 'active' : '' ))
+    ; __append("\">\n        <a href=\"/profil\"><i class=\"fas fa-building\"></i> Profil <i class=\"fas fa-chevron-down arrow\"></i></a>\n        <ul class=\"dropdown\">\n          <li><a href=\"/profil?sub=profil-pejabat\"><i class=\"fas fa-user-tie\"></i> Profil Pejabat</a></li>\n          <li><a href=\"/profil?sub=sejarah-bapas\"><i class=\"fas fa-history\"></i> Sejarah Singkat</a></li>\n          <li><a href=\"/profil?sub=tugas-fungsi\"><i class=\"fas fa-tasks\"></i> Tugas & Fungsi</a></li>\n          <li><a href=\"/profil?sub=visi-misi\"><i class=\"fas fa-bullseye\"></i> Visi & Misi</a></li>\n          <li><a href=\"/profil?sub=struktur-organisasi\"><i class=\"fas fa-sitemap\"></i> Struktur Organisasi</a></li>\n        </ul>\n      </li>\n      <li class=\"nav-item has-dropdown ")
+    ; __append(escapeFn( activePage === 'informasi' ? 'active' : '' ))
+    ; __append("\">\n        <a href=\"/informasi\"><i class=\"fas fa-info-circle\"></i> Informasi Publik <i class=\"fas fa-chevron-down arrow\"></i></a>\n        <ul class=\"dropdown\">\n          <li><a href=\"/informasi?sub=layanan-integrasi\"><i class=\"fas fa-hands-helping\"></i> Layanan Integrasi</a></li>\n          <li><a href=\"/informasi?sub=alur-serah-terima\"><i class=\"fas fa-exchange-alt\"></i> Alur Serah Terima</a></li>\n          <li><a href=\"/informasi?sub=alur-wajib-lapor\"><i class=\"fas fa-clipboard-list\"></i> Alur Wajib Lapor</a></li>\n          <li><a href=\"/informasi?sub=informasi-lkip\"><i class=\"fas fa-file-alt\"></i> Laporan Kinerja (LKIP)</a></li>\n          <li><a href=\"/informasi?sub=laporan-keuangan\"><i class=\"fas fa-chart-line\"></i> Laporan Keuangan</a></li>\n        </ul>\n      </li>\n      <li class=\"nav-item has-dropdown ")
+    ; __append(escapeFn( activePage === 'berita' ? 'active' : '' ))
+    ; __append("\">\n        <a href=\"/berita\"><i class=\"fas fa-newspaper\"></i> Berita <i class=\"fas fa-chevron-down arrow\"></i></a>\n        <ul class=\"dropdown\">\n          <li><a href=\"/berita?sub=berita-utama\"><i class=\"fas fa-star\"></i> Berita Utama</a></li>\n          <li><a href=\"/berita?sub=berita-terkini\"><i class=\"fas fa-clock\"></i> Berita Terkini</a></li>\n        </ul>\n      </li>\n      <li class=\"nav-item ")
+    ; __append(escapeFn( activePage === 'login' ? 'active' : '' ))
+    ; __append("\">\n        <a href=\"/login\"><i class=\"fas fa-clipboard-check\"></i> Wajib Lapor Online</a>\n      </li>\n      ")
+    ;  if (isLoggedIn) { 
+    ; __append("\n        <li class=\"nav-item\">\n          ")
+    ;  if (userType === 'admin') { 
+    ; __append("\n            <a href=\"/admin/dashboard\" style=\"background:var(--primary-dark); color:var(--gold);\"><i class=\"fas fa-tachometer-alt\"></i> Panel Admin</a>\n          ")
+    ;  } else { 
+    ; __append("\n            <a href=\"/client/dashboard\" style=\"background:var(--primary-dark); color:var(--gold);\"><i class=\"fas fa-user-circle\"></i> Dashboard Klien</a>\n          ")
+    ;  } 
+    ; __append("\n        </li>\n        <li class=\"nav-item\">\n          <a href=\"/logout\" style=\"color:#ffebee;\"><i class=\"fas fa-sign-out-alt\"></i> Logout</a>\n        </li>\n      ")
+    ;  } 
+    ; __append("\n    </ul>\n    <button class=\"hamburger\" id=\"hamburger\" aria-label=\"Buka Menu Navigasi\"><i class=\"fas fa-bars\"></i></button>\n  </div>\n</nav>\n")
+  }
+  return __output;
+
+},
+  "partials/modal_foto": function anonymous(locals, escapeFn, include, rethrow
+) {
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append("<!-- MODAL POPUP LIHAT FOTO (LIGHTBOX TERPADU) -->\n<div id=\"modalLihatFoto\" style=\"display:none; position:fixed; z-index:99999; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.82); align-items:center; justify-content:center; padding:15px; box-sizing:border-box;\">\n  <div style=\"background:white; border-radius:12px; max-width:620px; width:100%; overflow:hidden; box-shadow:0 20px 40px rgba(0,0,0,0.4); display:flex; flex-direction:column; max-height:92vh; animation:fadeInModal 0.2s ease;\">\n    <!-- Modal Header -->\n    <div style=\"display:flex; justify-content:space-between; align-items:center; padding:14px 18px; border-bottom:1px solid #e2e8f0; background:#f8fafc;\">\n      <strong id=\"modalFotoJudul\" style=\"font-size:15px; color:#002255; display:flex; align-items:center; gap:8px;\">\n        <i class=\"fas fa-image\" style=\"color:#003580;\"></i> Bukti Foto Wajib Lapor\n      </strong>\n      <button type=\"button\" onclick=\"tutupModalFoto()\" style=\"background:none; border:none; font-size:24px; cursor:pointer; color:#64748b; line-height:1; padding:0 4px;\">&times;</button>\n    </div>\n    \n    <!-- Modal Body (Foto) -->\n    <div style=\"padding:15px; text-align:center; overflow-y:auto; background:#0f172a; display:flex; align-items:center; justify-content:center; min-height:220px;\">\n      <img id=\"modalFotoSrc\" src=\"\" alt=\"Bukti Foto\" style=\"max-width:100%; max-height:65vh; object-fit:contain; border-radius:6px; box-shadow:0 4px 14px rgba(0,0,0,0.35);\" onerror=\"this.onerror=null; this.src='/logo_pemasyarakatan-removebg-preview.png';\">\n    </div>\n\n    <!-- Modal Footer -->\n    <div style=\"padding:12px 18px; border-top:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center; gap:10px; background:#f8fafc; flex-wrap:wrap;\">\n      <button type=\"button\" class=\"btn btn-primary\" onclick=\"bukaLayarPenuh()\" style=\"padding:8px 16px; font-size:13px; display:inline-flex; align-items:center; gap:6px; cursor:pointer;\">\n        <i class=\"fas fa-external-link-alt\"></i> Buka Layar Penuh\n      </button>\n      <button type=\"button\" class=\"btn btn-secondary\" onclick=\"tutupModalFoto()\" style=\"padding:8px 18px; font-size:13px; cursor:pointer;\">\n        <i class=\"fas fa-times\"></i> Tutup\n      </button>\n    </div>\n  </div>\n</div>\n\n<style>\n@keyframes fadeInModal {\n  from { opacity: 0; transform: scale(0.96); }\n  to { opacity: 1; transform: scale(1); }\n}\n</style>\n\n<script>\nfunction bukaModalFoto(srcUrl, namaKlien, periode) {\n  const modal = document.getElementById('modalLihatFoto');\n  const img = document.getElementById('modalFotoSrc');\n  const judul = document.getElementById('modalFotoJudul');\n  if (!modal || !img) return;\n\n  if (!srcUrl) {\n    srcUrl = '/logo_pemasyarakatan-removebg-preview.png';\n  }\n\n  img.src = srcUrl;\n  if (judul) {\n    judul.innerHTML = '<i class=\"fas fa-image\" style=\"color:#003580;\"></i> Foto Bukti: ' + (namaKlien || 'Klien') + (periode ? ' &bull; ' + periode : '');\n  }\n  modal.style.display = 'flex';\n  document.body.style.overflow = 'hidden';\n}\n\nfunction bukaLayarPenuh() {\n  const img = document.getElementById('modalFotoSrc');\n  if (!img || !img.src) return;\n  const src = img.src;\n  if (src.startsWith('data:')) {\n    const w = window.open('');\n    if (w) {\n      w.document.write('<!DOCTYPE html><html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Foto Bukti - BAPAS Medan</title><style>html,body{margin:0;padding:0;height:100%;background:#0b1120;display:flex;align-items:center;justify-content:center;}img{max-width:98vw;max-height:98vh;object-fit:contain;box-shadow:0 8px 30px rgba(0,0,0,0.5);border-radius:6px;}</style></head><body><img src=\"' + src + '\"></body></html>');\n      w.document.close();\n    }\n  } else {\n    window.open(src, '_blank');\n  }\n}\n\nfunction tutupModalFoto() {\n  const modal = document.getElementById('modalLihatFoto');\n  if (modal) {\n    modal.style.display = 'none';\n    document.body.style.overflow = '';\n  }\n}\n\nwindow.addEventListener('click', function(e) {\n  const modal = document.getElementById('modalLihatFoto');\n  if (modal && e.target === modal) {\n    tutupModalFoto();\n  }\n});\n\ndocument.addEventListener('keydown', function(e) {\n  if (e.key === 'Escape') {\n    tutupModalFoto();\n  }\n});\n</script>\n")
+  }
+  return __output;
+
+},
+  "partials/modal_foto.ejs": function anonymous(locals, escapeFn, include, rethrow
+) {
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append("<!-- MODAL POPUP LIHAT FOTO (LIGHTBOX TERPADU) -->\n<div id=\"modalLihatFoto\" style=\"display:none; position:fixed; z-index:99999; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.82); align-items:center; justify-content:center; padding:15px; box-sizing:border-box;\">\n  <div style=\"background:white; border-radius:12px; max-width:620px; width:100%; overflow:hidden; box-shadow:0 20px 40px rgba(0,0,0,0.4); display:flex; flex-direction:column; max-height:92vh; animation:fadeInModal 0.2s ease;\">\n    <!-- Modal Header -->\n    <div style=\"display:flex; justify-content:space-between; align-items:center; padding:14px 18px; border-bottom:1px solid #e2e8f0; background:#f8fafc;\">\n      <strong id=\"modalFotoJudul\" style=\"font-size:15px; color:#002255; display:flex; align-items:center; gap:8px;\">\n        <i class=\"fas fa-image\" style=\"color:#003580;\"></i> Bukti Foto Wajib Lapor\n      </strong>\n      <button type=\"button\" onclick=\"tutupModalFoto()\" style=\"background:none; border:none; font-size:24px; cursor:pointer; color:#64748b; line-height:1; padding:0 4px;\">&times;</button>\n    </div>\n    \n    <!-- Modal Body (Foto) -->\n    <div style=\"padding:15px; text-align:center; overflow-y:auto; background:#0f172a; display:flex; align-items:center; justify-content:center; min-height:220px;\">\n      <img id=\"modalFotoSrc\" src=\"\" alt=\"Bukti Foto\" style=\"max-width:100%; max-height:65vh; object-fit:contain; border-radius:6px; box-shadow:0 4px 14px rgba(0,0,0,0.35);\" onerror=\"this.onerror=null; this.src='/logo_pemasyarakatan-removebg-preview.png';\">\n    </div>\n\n    <!-- Modal Footer -->\n    <div style=\"padding:12px 18px; border-top:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center; gap:10px; background:#f8fafc; flex-wrap:wrap;\">\n      <button type=\"button\" class=\"btn btn-primary\" onclick=\"bukaLayarPenuh()\" style=\"padding:8px 16px; font-size:13px; display:inline-flex; align-items:center; gap:6px; cursor:pointer;\">\n        <i class=\"fas fa-external-link-alt\"></i> Buka Layar Penuh\n      </button>\n      <button type=\"button\" class=\"btn btn-secondary\" onclick=\"tutupModalFoto()\" style=\"padding:8px 18px; font-size:13px; cursor:pointer;\">\n        <i class=\"fas fa-times\"></i> Tutup\n      </button>\n    </div>\n  </div>\n</div>\n\n<style>\n@keyframes fadeInModal {\n  from { opacity: 0; transform: scale(0.96); }\n  to { opacity: 1; transform: scale(1); }\n}\n</style>\n\n<script>\nfunction bukaModalFoto(srcUrl, namaKlien, periode) {\n  const modal = document.getElementById('modalLihatFoto');\n  const img = document.getElementById('modalFotoSrc');\n  const judul = document.getElementById('modalFotoJudul');\n  if (!modal || !img) return;\n\n  if (!srcUrl) {\n    srcUrl = '/logo_pemasyarakatan-removebg-preview.png';\n  }\n\n  img.src = srcUrl;\n  if (judul) {\n    judul.innerHTML = '<i class=\"fas fa-image\" style=\"color:#003580;\"></i> Foto Bukti: ' + (namaKlien || 'Klien') + (periode ? ' &bull; ' + periode : '');\n  }\n  modal.style.display = 'flex';\n  document.body.style.overflow = 'hidden';\n}\n\nfunction bukaLayarPenuh() {\n  const img = document.getElementById('modalFotoSrc');\n  if (!img || !img.src) return;\n  const src = img.src;\n  if (src.startsWith('data:')) {\n    const w = window.open('');\n    if (w) {\n      w.document.write('<!DOCTYPE html><html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Foto Bukti - BAPAS Medan</title><style>html,body{margin:0;padding:0;height:100%;background:#0b1120;display:flex;align-items:center;justify-content:center;}img{max-width:98vw;max-height:98vh;object-fit:contain;box-shadow:0 8px 30px rgba(0,0,0,0.5);border-radius:6px;}</style></head><body><img src=\"' + src + '\"></body></html>');\n      w.document.close();\n    }\n  } else {\n    window.open(src, '_blank');\n  }\n}\n\nfunction tutupModalFoto() {\n  const modal = document.getElementById('modalLihatFoto');\n  if (modal) {\n    modal.style.display = 'none';\n    document.body.style.overflow = '';\n  }\n}\n\nwindow.addEventListener('click', function(e) {\n  const modal = document.getElementById('modalLihatFoto');\n  if (modal && e.target === modal) {\n    tutupModalFoto();\n  }\n});\n\ndocument.addEventListener('keydown', function(e) {\n  if (e.key === 'Escape') {\n    tutupModalFoto();\n  }\n});\n</script>\n")
+  }
+  return __output;
+
+},
+  "public/404": function anonymous(locals, escapeFn, include, rethrow
+) {
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append( include('../partials/header') )
+    ; __append("\n<div class=\"container\" style=\"padding:100px 20px; text-align:center;\">\n  <div style=\"font-size:72px; font-weight:900; color:#003580; margin-bottom:15px;\">404</div>\n  <h2 style=\"font-family:'Playfair Display', serif; color:#002255; font-size:28px; margin-bottom:15px;\">Halaman Tidak Ditemukan</h2>\n  <p style=\"color:#666; font-size:16px; max-width:500px; margin:0 auto 30px;\">\n    Maaf, halaman yang Anda tuju tidak ditemukan atau telah dipindahkan.\n  </p>\n  <a href=\"/\" class=\"btn\" style=\"background:#003580; color:#fff; padding:12px 28px; border-radius:6px; text-decoration:none; font-weight:700;\"><i class=\"fas fa-home\"></i> Kembali ke Beranda</a>\n</div>\n")
+    ; __append( include('../partials/footer') )
+    ; __append("\n")
+  }
+  return __output;
+
+},
+  "public/404.ejs": function anonymous(locals, escapeFn, include, rethrow
+) {
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append( include('../partials/header') )
+    ; __append("\n<div class=\"container\" style=\"padding:100px 20px; text-align:center;\">\n  <div style=\"font-size:72px; font-weight:900; color:#003580; margin-bottom:15px;\">404</div>\n  <h2 style=\"font-family:'Playfair Display', serif; color:#002255; font-size:28px; margin-bottom:15px;\">Halaman Tidak Ditemukan</h2>\n  <p style=\"color:#666; font-size:16px; max-width:500px; margin:0 auto 30px;\">\n    Maaf, halaman yang Anda tuju tidak ditemukan atau telah dipindahkan.\n  </p>\n  <a href=\"/\" class=\"btn\" style=\"background:#003580; color:#fff; padding:12px 28px; border-radius:6px; text-decoration:none; font-weight:700;\"><i class=\"fas fa-home\"></i> Kembali ke Beranda</a>\n</div>\n")
+    ; __append( include('../partials/footer') )
+    ; __append("\n")
+  }
+  return __output;
+
+},
+  "public/500": function anonymous(locals, escapeFn, include, rethrow
+) {
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append( include('../partials/header') )
+    ; __append("\n<div class=\"container\" style=\"padding:100px 20px; text-align:center;\">\n  <div style=\"font-size:72px; font-weight:900; color:#dc3545; margin-bottom:15px;\">500</div>\n  <h2 style=\"font-family:'Playfair Display', serif; color:#002255; font-size:28px; margin-bottom:15px;\">Terjadi Kesalahan Server</h2>\n  <p style=\"color:#666; font-size:16px; max-width:550px; margin:0 auto 30px;\">\n    ")
+    ; __append(escapeFn( typeof error !== 'undefined' ? error : 'Terjadi kendala teknis saat memproses permintaan Anda.' ))
+    ; __append("\n  </p>\n  <a href=\"/\" class=\"btn\" style=\"background:#003580; color:#fff; padding:12px 28px; border-radius:6px; text-decoration:none; font-weight:700;\"><i class=\"fas fa-home\"></i> Kembali ke Beranda</a>\n</div>\n")
+    ; __append( include('../partials/footer') )
+    ; __append("\n")
+  }
+  return __output;
+
+},
+  "public/500.ejs": function anonymous(locals, escapeFn, include, rethrow
+) {
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append( include('../partials/header') )
+    ; __append("\n<div class=\"container\" style=\"padding:100px 20px; text-align:center;\">\n  <div style=\"font-size:72px; font-weight:900; color:#dc3545; margin-bottom:15px;\">500</div>\n  <h2 style=\"font-family:'Playfair Display', serif; color:#002255; font-size:28px; margin-bottom:15px;\">Terjadi Kesalahan Server</h2>\n  <p style=\"color:#666; font-size:16px; max-width:550px; margin:0 auto 30px;\">\n    ")
+    ; __append(escapeFn( typeof error !== 'undefined' ? error : 'Terjadi kendala teknis saat memproses permintaan Anda.' ))
+    ; __append("\n  </p>\n  <a href=\"/\" class=\"btn\" style=\"background:#003580; color:#fff; padding:12px 28px; border-radius:6px; text-decoration:none; font-weight:700;\"><i class=\"fas fa-home\"></i> Kembali ke Beranda</a>\n</div>\n")
+    ; __append( include('../partials/footer') )
+    ; __append("\n")
+  }
+  return __output;
+
+},
+  "public/beranda": function anonymous(locals, escapeFn, include, rethrow
+) {
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append( include('../partials/header') )
+    ; __append("\n")
+    ; __append( include('../partials/alerts') )
+    ; __append("\n\n<!-- HERO SLIDER SECTION -->\n<section class=\"slider-section\" style=\"position:relative; background:#001e4d; color:white; overflow:hidden;\">\n  <div class=\"slider-track\">\n    <div class=\"slide\" style=\"padding:100px 0; background:linear-gradient(135deg, rgba(0,30,77,0.95) 0%, rgba(0,53,128,0.85) 100%);\">\n      <div class=\"container\" style=\"max-width:900px; text-align:center; margin:0 auto;\">\n        <span style=\"background:#ffc107; color:#002255; font-size:12px; font-weight:700; padding:6px 14px; border-radius:20px; text-transform:uppercase; letter-spacing:1px; display:inline-block; margin-bottom:15px;\">Selamat Datang</span>\n        <h2 style=\"font-family:'Playfair Display', serif; font-size:38px; line-height:1.2; margin-bottom:15px; color:#ffffff;\">Balai Pemasyarakatan Kelas I Medan</h2>\n        <p style=\"font-size:16px; line-height:1.6; color:#d9e2ec; margin-bottom:30px;\">\n          Membangun kemandirian klien pemasyarakatan menuju kehidupan yang lebih baik, tertib, dan bermartabat melalui sistem pembimbingan modern dan terintegrasi.\n        </p>\n        <div style=\"display:flex; justify-content:center; gap:15px; flex-wrap:wrap;\">\n          <a href=\"/login\" class=\"btn\" style=\"background:#ffc107; color:#002255; font-weight:700; padding:12px 28px; border-radius:6px; text-decoration:none;\"><i class=\"fas fa-clipboard-check\"></i> Wajib Lapor Online</a>\n          <a href=\"/profil?sub=profil-pejabat\" class=\"btn\" style=\"background:rgba(255,255,255,0.2); color:#ffffff; font-weight:600; padding:12px 28px; border-radius:6px; text-decoration:none; border:1px solid rgba(255,255,255,0.4);\"><i class=\"fas fa-building\"></i> Profil BAPAS</a>\n        </div>\n      </div>\n    </div>\n  </div>\n</section>\n\n<!-- QUICK STATS -->\n<div class=\"quick-stats\" style=\"background:#ffffff; padding:40px 0; border-bottom:1px solid #e0e0e0; box-shadow:0 4px 12px rgba(0,0,0,0.05);\">\n  <div class=\"container\">\n    <div style=\"display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:20px; text-align:center;\">\n      <div style=\"padding:20px; border-right:1px solid #eee;\">\n        <div style=\"font-size:36px; font-weight:800; color:#003580;\">1.250+</div>\n        <div style=\"font-size:14px; color:#666; font-weight:600; text-transform:uppercase;\">Klien Aktif</div>\n      </div>\n      <div style=\"padding:20px; border-right:1px solid #eee;\">\n        <div style=\"font-size:36px; font-weight:800; color:#28a745;\">98.4%</div>\n        <div style=\"font-size:14px; color:#666; font-weight:600; text-transform:uppercase;\">Kepatuhan Lapor</div>\n      </div>\n      <div style=\"padding:20px; border-right:1px solid #eee;\">\n        <div style=\"font-size:36px; font-weight:800; color:#ffc107;\">45+</div>\n        <div style=\"font-size:14px; color:#666; font-weight:600; text-transform:uppercase;\">Pembimbing Kemasyarakatan</div>\n      </div>\n      <div style=\"padding:20px;\">\n        <div style=\"font-size:36px; font-weight:800; color:#0052a3;\">24/7</div>\n        <div style=\"font-size:14px; color:#666; font-weight:600; text-transform:uppercase;\">Sistem Lapor Online</div>\n      </div>\n    </div>\n  </div>\n</div>\n\n<!-- FITUR UTAMA & ALUR -->\n<section style=\"padding:60px 0; background:#f8f9fa;\">\n  <div class=\"container\">\n    <div style=\"text-align:center; margin-bottom:45px;\">\n      <span style=\"color:#003580; font-weight:700; text-transform:uppercase; font-size:13px; letter-spacing:1px;\">Layanan Unggulan</span>\n      <h2 style=\"font-family:'Playfair Display', serif; font-size:32px; color:#002255; margin-top:5px;\">Sistem Wajib Lapor Digital</h2>\n      <div style=\"width:60px; height:3px; background:#003580; margin:15px auto;\"></div>\n    </div>\n\n    <div style=\"display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:25px;\">\n      <div style=\"background:#fff; padding:30px; border-radius:8px; box-shadow:0 4px 15px rgba(0,0,0,0.06); text-align:center; border-top:4px solid #003580;\">\n        <div style=\"width:60px; height:60px; border-radius:50%; background:#e3f2fd; color:#003580; display:flex; align-items:center; justify-content:center; margin:0 auto 20px; font-size:24px;\">\n          <i class=\"fas fa-camera\"></i>\n        </div>\n        <h3 style=\"font-size:18px; color:#002255; margin-bottom:12px;\">Foto Bukti & Kamera</h3>\n        <p style=\"font-size:14px; color:#666; line-height:1.6;\">\n          Dilengkapi integrasi kamera web langsung dan upload foto sebagai bukti pelaporan wajib lapor yang terverifikasi keasliannya.\n        </p>\n      </div>\n\n      <div style=\"background:#fff; padding:30px; border-radius:8px; box-shadow:0 4px 15px rgba(0,0,0,0.06); text-align:center; border-top:4px solid #28a745;\">\n        <div style=\"width:60px; height:60px; border-radius:50%; background:#e8f5e9; color:#28a745; display:flex; align-items:center; justify-content:center; margin:0 auto 20px; font-size:24px;\">\n          <i class=\"fas fa-clock\"></i>\n        </div>\n        <h3 style=\"font-size:18px; color:#002255; margin-bottom:12px;\">Periode Terjadwal</h3>\n        <p style=\"font-size:14px; color:#666; line-height:1.6;\">\n          Pengisian dibuka setiap tanggal 1 hingga 15 setiap bulannya. Notifikasi otomatis memberi tahu batas waktu pengisian.\n        </p>\n      </div>\n\n      <div style=\"background:#fff; padding:30px; border-radius:8px; box-shadow:0 4px 15px rgba(0,0,0,0.06); text-align:center; border-top:4px solid #ffc107;\">\n        <div style=\"width:60px; height:60px; border-radius:50%; background:#fff9db; color:#e67e22; display:flex; align-items:center; justify-content:center; margin:0 auto 20px; font-size:24px;\">\n          <i class=\"fas fa-database\"></i>\n        </div>\n        <h3 style=\"font-size:18px; color:#002255; margin-bottom:12px;\">Database Cloud Terpadu</h3>\n        <p style=\"font-size:14px; color:#666; line-height:1.6;\">\n          Data tersimpan dengan aman, real-time, dan tersinkronisasi secara modern dengan pencarian dan filter laporan lengkap.\n        </p>\n      </div>\n    </div>\n  </div>\n</section>\n\n")
+    ; __append( include('../partials/footer') )
+    ; __append("\n")
+  }
+  return __output;
+
+},
+  "public/beranda.ejs": function anonymous(locals, escapeFn, include, rethrow
+) {
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append( include('../partials/header') )
+    ; __append("\n")
+    ; __append( include('../partials/alerts') )
+    ; __append("\n\n<!-- HERO SLIDER SECTION -->\n<section class=\"slider-section\" style=\"position:relative; background:#001e4d; color:white; overflow:hidden;\">\n  <div class=\"slider-track\">\n    <div class=\"slide\" style=\"padding:100px 0; background:linear-gradient(135deg, rgba(0,30,77,0.95) 0%, rgba(0,53,128,0.85) 100%);\">\n      <div class=\"container\" style=\"max-width:900px; text-align:center; margin:0 auto;\">\n        <span style=\"background:#ffc107; color:#002255; font-size:12px; font-weight:700; padding:6px 14px; border-radius:20px; text-transform:uppercase; letter-spacing:1px; display:inline-block; margin-bottom:15px;\">Selamat Datang</span>\n        <h2 style=\"font-family:'Playfair Display', serif; font-size:38px; line-height:1.2; margin-bottom:15px; color:#ffffff;\">Balai Pemasyarakatan Kelas I Medan</h2>\n        <p style=\"font-size:16px; line-height:1.6; color:#d9e2ec; margin-bottom:30px;\">\n          Membangun kemandirian klien pemasyarakatan menuju kehidupan yang lebih baik, tertib, dan bermartabat melalui sistem pembimbingan modern dan terintegrasi.\n        </p>\n        <div style=\"display:flex; justify-content:center; gap:15px; flex-wrap:wrap;\">\n          <a href=\"/login\" class=\"btn\" style=\"background:#ffc107; color:#002255; font-weight:700; padding:12px 28px; border-radius:6px; text-decoration:none;\"><i class=\"fas fa-clipboard-check\"></i> Wajib Lapor Online</a>\n          <a href=\"/profil?sub=profil-pejabat\" class=\"btn\" style=\"background:rgba(255,255,255,0.2); color:#ffffff; font-weight:600; padding:12px 28px; border-radius:6px; text-decoration:none; border:1px solid rgba(255,255,255,0.4);\"><i class=\"fas fa-building\"></i> Profil BAPAS</a>\n        </div>\n      </div>\n    </div>\n  </div>\n</section>\n\n<!-- QUICK STATS -->\n<div class=\"quick-stats\" style=\"background:#ffffff; padding:40px 0; border-bottom:1px solid #e0e0e0; box-shadow:0 4px 12px rgba(0,0,0,0.05);\">\n  <div class=\"container\">\n    <div style=\"display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:20px; text-align:center;\">\n      <div style=\"padding:20px; border-right:1px solid #eee;\">\n        <div style=\"font-size:36px; font-weight:800; color:#003580;\">1.250+</div>\n        <div style=\"font-size:14px; color:#666; font-weight:600; text-transform:uppercase;\">Klien Aktif</div>\n      </div>\n      <div style=\"padding:20px; border-right:1px solid #eee;\">\n        <div style=\"font-size:36px; font-weight:800; color:#28a745;\">98.4%</div>\n        <div style=\"font-size:14px; color:#666; font-weight:600; text-transform:uppercase;\">Kepatuhan Lapor</div>\n      </div>\n      <div style=\"padding:20px; border-right:1px solid #eee;\">\n        <div style=\"font-size:36px; font-weight:800; color:#ffc107;\">45+</div>\n        <div style=\"font-size:14px; color:#666; font-weight:600; text-transform:uppercase;\">Pembimbing Kemasyarakatan</div>\n      </div>\n      <div style=\"padding:20px;\">\n        <div style=\"font-size:36px; font-weight:800; color:#0052a3;\">24/7</div>\n        <div style=\"font-size:14px; color:#666; font-weight:600; text-transform:uppercase;\">Sistem Lapor Online</div>\n      </div>\n    </div>\n  </div>\n</div>\n\n<!-- FITUR UTAMA & ALUR -->\n<section style=\"padding:60px 0; background:#f8f9fa;\">\n  <div class=\"container\">\n    <div style=\"text-align:center; margin-bottom:45px;\">\n      <span style=\"color:#003580; font-weight:700; text-transform:uppercase; font-size:13px; letter-spacing:1px;\">Layanan Unggulan</span>\n      <h2 style=\"font-family:'Playfair Display', serif; font-size:32px; color:#002255; margin-top:5px;\">Sistem Wajib Lapor Digital</h2>\n      <div style=\"width:60px; height:3px; background:#003580; margin:15px auto;\"></div>\n    </div>\n\n    <div style=\"display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:25px;\">\n      <div style=\"background:#fff; padding:30px; border-radius:8px; box-shadow:0 4px 15px rgba(0,0,0,0.06); text-align:center; border-top:4px solid #003580;\">\n        <div style=\"width:60px; height:60px; border-radius:50%; background:#e3f2fd; color:#003580; display:flex; align-items:center; justify-content:center; margin:0 auto 20px; font-size:24px;\">\n          <i class=\"fas fa-camera\"></i>\n        </div>\n        <h3 style=\"font-size:18px; color:#002255; margin-bottom:12px;\">Foto Bukti & Kamera</h3>\n        <p style=\"font-size:14px; color:#666; line-height:1.6;\">\n          Dilengkapi integrasi kamera web langsung dan upload foto sebagai bukti pelaporan wajib lapor yang terverifikasi keasliannya.\n        </p>\n      </div>\n\n      <div style=\"background:#fff; padding:30px; border-radius:8px; box-shadow:0 4px 15px rgba(0,0,0,0.06); text-align:center; border-top:4px solid #28a745;\">\n        <div style=\"width:60px; height:60px; border-radius:50%; background:#e8f5e9; color:#28a745; display:flex; align-items:center; justify-content:center; margin:0 auto 20px; font-size:24px;\">\n          <i class=\"fas fa-clock\"></i>\n        </div>\n        <h3 style=\"font-size:18px; color:#002255; margin-bottom:12px;\">Periode Terjadwal</h3>\n        <p style=\"font-size:14px; color:#666; line-height:1.6;\">\n          Pengisian dibuka setiap tanggal 1 hingga 15 setiap bulannya. Notifikasi otomatis memberi tahu batas waktu pengisian.\n        </p>\n      </div>\n\n      <div style=\"background:#fff; padding:30px; border-radius:8px; box-shadow:0 4px 15px rgba(0,0,0,0.06); text-align:center; border-top:4px solid #ffc107;\">\n        <div style=\"width:60px; height:60px; border-radius:50%; background:#fff9db; color:#e67e22; display:flex; align-items:center; justify-content:center; margin:0 auto 20px; font-size:24px;\">\n          <i class=\"fas fa-database\"></i>\n        </div>\n        <h3 style=\"font-size:18px; color:#002255; margin-bottom:12px;\">Database Cloud Terpadu</h3>\n        <p style=\"font-size:14px; color:#666; line-height:1.6;\">\n          Data tersimpan dengan aman, real-time, dan tersinkronisasi secara modern dengan pencarian dan filter laporan lengkap.\n        </p>\n      </div>\n    </div>\n  </div>\n</section>\n\n")
+    ; __append( include('../partials/footer') )
+    ; __append("\n")
+  }
+  return __output;
+
+},
+  "public/berita": function anonymous(locals, escapeFn, include, rethrow
+) {
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append( include('../partials/header') )
+    ; __append("\n\n<div class=\"content-breadcrumb\" style=\"background:#f0f4f8; padding:12px 0; border-bottom:1px solid #d9e2ec;\">\n  <div class=\"container breadcrumb-container\" style=\"display:flex; align-items:center; gap:8px; font-size:13px; color:#627d98; flex-wrap:wrap;\">\n    <a href=\"/\" style=\"color:#003580; text-decoration:none;\"><i class=\"fas fa-home\"></i> Beranda</a>\n    <i class=\"fas fa-chevron-right\" style=\"font-size:9px; color:#94a3b8;\"></i>\n    <span>Berita</span>\n    <i class=\"fas fa-chevron-right\" style=\"font-size:9px; color:#94a3b8;\"></i>\n    <span style=\"font-weight:700; color:#002255;\">")
+    ; __append(escapeFn( sub === 'berita-utama' ? 'Berita Utama' : 'Berita Terkini' ))
+    ; __append("</span>\n  </div>\n</div>\n\n<div class=\"content-page\" style=\"padding:30px 0;\">\n  <div class=\"container page-layout\">\n    <!-- SIDEBAR -->\n    <div class=\"sidebar\">\n      <div style=\"background:#003580; color:#fff; padding:14px 18px; border-radius:8px 8px 0 0; font-weight:700; font-size:14px; display:flex; align-items:center; gap:8px;\">\n        <i class=\"fas fa-newspaper\" style=\"color:#ffc107;\"></i> Kategori Berita\n      </div>\n      <ul style=\"list-style:none; padding:0; margin:0; border:1px solid #d9e2ec; border-top:none; border-radius:0 0 8px 8px; background:#fff; overflow:hidden;\">\n        <li style=\"border-bottom:1px solid #f0f4f8;\">\n          <a href=\"/berita?sub=berita-utama\" style=\"display:flex; align-items:center; gap:10px; padding:14px 18px; text-decoration:none; color:")
+    ; __append(escapeFn( sub === 'berita-utama' ? '#003580' : '#486581' ))
+    ; __append("; font-weight:")
+    ; __append(escapeFn( sub === 'berita-utama' ? '700' : '500' ))
+    ; __append("; background:")
+    ; __append(escapeFn( sub === 'berita-utama' ? '#e3f2fd' : 'transparent' ))
+    ; __append("; min-height:44px;\">\n            <i class=\"fas fa-star\" style=\"color:")
+    ; __append(escapeFn( sub === 'berita-utama' ? '#003580' : '#94a3b8' ))
+    ; __append(";\"></i> Berita Utama\n          </a>\n        </li>\n        <li>\n          <a href=\"/berita?sub=berita-terkini\" style=\"display:flex; align-items:center; gap:10px; padding:14px 18px; text-decoration:none; color:")
+    ; __append(escapeFn( sub === 'berita-terkini' ? '#003580' : '#486581' ))
+    ; __append("; font-weight:")
+    ; __append(escapeFn( sub === 'berita-terkini' ? '700' : '500' ))
+    ; __append("; background:")
+    ; __append(escapeFn( sub === 'berita-terkini' ? '#e3f2fd' : 'transparent' ))
+    ; __append("; min-height:44px;\">\n            <i class=\"fab fa-instagram\" style=\"color:")
+    ; __append(escapeFn( sub === 'berita-terkini' ? '#003580' : '#94a3b8' ))
+    ; __append(";\"></i> Berita Terkini\n          </a>\n        </li>\n      </ul>\n    </div>\n\n    <!-- MAIN CONTENT -->\n    <div class=\"content-main\" style=\"background:#fff; padding:32px; border-radius:8px; box-shadow:0 2px 12px rgba(0,0,0,0.06);\">\n      <h2 style=\"font-family:'Playfair Display', serif; color:#002255; font-size:24px; margin-bottom:8px;\">\n        ")
+    ; __append(escapeFn( sub === 'berita-utama' ? 'Berita Utama BAPAS Kelas I Medan' : 'Berita & Informasi Terkini' ))
+    ; __append("\n      </h2>\n      <div style=\"width:50px; height:3px; background:#003580; margin-bottom:25px;\"></div>\n\n      <div style=\"display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:20px;\">\n        <div style=\"border:1px solid #e2e8f0; border-radius:8px; overflow:hidden; transition:transform 0.2s; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,0.05);\">\n          <div style=\"background:#003580; color:white; padding:30px 20px; text-align:center;\">\n            <i class=\"fas fa-users\" style=\"font-size:36px; color:#ffc107;\"></i>\n          </div>\n          <div style=\"padding:20px;\">\n            <span style=\"font-size:11px; background:#e3f2fd; color:#0052a3; font-weight:700; padding:4px 8px; border-radius:4px; text-transform:uppercase;\">Kegiatan</span>\n            <span style=\"font-size:12px; color:#888; margin-left:8px;\"><i class=\"fas fa-calendar-alt\"></i> 22 Jan 2025</span>\n            <h3 style=\"font-size:16px; margin:10px 0; color:#002255; line-height:1.4;\">Bapas Kelas I Medan Sukses Selenggarakan Rapat Koordinasi Pembimbingan Klien 2025</h3>\n            <p style=\"font-size:13px; color:#666; line-height:1.6;\">Balai Pemasyarakatan Kelas I Medan menyelenggarakan rapat koordinasi yang melibatkan seluruh pembimbing kemasyarakatan dalam rangka meningkatkan kualitas layanan pembimbingan.</p>\n          </div>\n        </div>\n\n        <div style=\"border:1px solid #e2e8f0; border-radius:8px; overflow:hidden; transition:transform 0.2s; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,0.05);\">\n          <div style=\"background:#1a3a52; color:white; padding:30px 20px; text-align:center;\">\n            <i class=\"fas fa-chalkboard-teacher\" style=\"font-size:36px; color:#ffc107;\"></i>\n          </div>\n          <div style=\"padding:20px;\">\n            <span style=\"font-size:11px; background:#e3f2fd; color:#0052a3; font-weight:700; padding:4px 8px; border-radius:4px; text-transform:uppercase;\">SDM</span>\n            <span style=\"font-size:12px; color:#888; margin-left:8px;\"><i class=\"fas fa-calendar-alt\"></i> 20 Jan 2025</span>\n            <h3 style=\"font-size:16px; margin:10px 0; color:#002255; line-height:1.4;\">Peningkatan Kapasitas SDM Pembimbing Kemasyarakatan Bapas Medan</h3>\n            <p style=\"font-size:13px; color:#666; line-height:1.6;\">Program pelatihan dan peningkatan kapasitas SDM dilaksanakan untuk meningkatkan profesionalisme para pembimbing kemasyarakatan Bapas Medan.</p>\n          </div>\n        </div>\n\n        <div style=\"border:1px solid #e2e8f0; border-radius:8px; overflow:hidden; transition:transform 0.2s; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,0.05);\">\n          <div style=\"background:#2d5f8d; color:white; padding:30px 20px; text-align:center;\">\n            <i class=\"fas fa-file-signature\" style=\"font-size:36px; color:#ffc107;\"></i>\n          </div>\n          <div style=\"padding:20px;\">\n            <span style=\"font-size:11px; background:#e3f2fd; color:#0052a3; font-weight:700; padding:4px 8px; border-radius:4px; text-transform:uppercase;\">Kerjasama</span>\n            <span style=\"font-size:12px; color:#888; margin-left:8px;\"><i class=\"fas fa-calendar-alt\"></i> 18 Jan 2025</span>\n            <h3 style=\"font-size:16px; margin:10px 0; color:#002255; line-height:1.4;\">Penandatanganan MOU dengan Instansi Terkait dalam Program Reintegrasi</h3>\n            <p style=\"font-size:13px; color:#666; line-height:1.6;\">Bapas Kelas I Medan menandatangani nota kesepahaman bersama beberapa instansi pemerintah dan swasta dalam mendukung program reintegrasi sosial klien.</p>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n\n")
+    ; __append( include('../partials/footer') )
+    ; __append("\n")
+  }
+  return __output;
+
+},
+  "public/berita.ejs": function anonymous(locals, escapeFn, include, rethrow
+) {
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append( include('../partials/header') )
+    ; __append("\n\n<div class=\"content-breadcrumb\" style=\"background:#f0f4f8; padding:12px 0; border-bottom:1px solid #d9e2ec;\">\n  <div class=\"container breadcrumb-container\" style=\"display:flex; align-items:center; gap:8px; font-size:13px; color:#627d98; flex-wrap:wrap;\">\n    <a href=\"/\" style=\"color:#003580; text-decoration:none;\"><i class=\"fas fa-home\"></i> Beranda</a>\n    <i class=\"fas fa-chevron-right\" style=\"font-size:9px; color:#94a3b8;\"></i>\n    <span>Berita</span>\n    <i class=\"fas fa-chevron-right\" style=\"font-size:9px; color:#94a3b8;\"></i>\n    <span style=\"font-weight:700; color:#002255;\">")
+    ; __append(escapeFn( sub === 'berita-utama' ? 'Berita Utama' : 'Berita Terkini' ))
+    ; __append("</span>\n  </div>\n</div>\n\n<div class=\"content-page\" style=\"padding:30px 0;\">\n  <div class=\"container page-layout\">\n    <!-- SIDEBAR -->\n    <div class=\"sidebar\">\n      <div style=\"background:#003580; color:#fff; padding:14px 18px; border-radius:8px 8px 0 0; font-weight:700; font-size:14px; display:flex; align-items:center; gap:8px;\">\n        <i class=\"fas fa-newspaper\" style=\"color:#ffc107;\"></i> Kategori Berita\n      </div>\n      <ul style=\"list-style:none; padding:0; margin:0; border:1px solid #d9e2ec; border-top:none; border-radius:0 0 8px 8px; background:#fff; overflow:hidden;\">\n        <li style=\"border-bottom:1px solid #f0f4f8;\">\n          <a href=\"/berita?sub=berita-utama\" style=\"display:flex; align-items:center; gap:10px; padding:14px 18px; text-decoration:none; color:")
+    ; __append(escapeFn( sub === 'berita-utama' ? '#003580' : '#486581' ))
+    ; __append("; font-weight:")
+    ; __append(escapeFn( sub === 'berita-utama' ? '700' : '500' ))
+    ; __append("; background:")
+    ; __append(escapeFn( sub === 'berita-utama' ? '#e3f2fd' : 'transparent' ))
+    ; __append("; min-height:44px;\">\n            <i class=\"fas fa-star\" style=\"color:")
+    ; __append(escapeFn( sub === 'berita-utama' ? '#003580' : '#94a3b8' ))
+    ; __append(";\"></i> Berita Utama\n          </a>\n        </li>\n        <li>\n          <a href=\"/berita?sub=berita-terkini\" style=\"display:flex; align-items:center; gap:10px; padding:14px 18px; text-decoration:none; color:")
+    ; __append(escapeFn( sub === 'berita-terkini' ? '#003580' : '#486581' ))
+    ; __append("; font-weight:")
+    ; __append(escapeFn( sub === 'berita-terkini' ? '700' : '500' ))
+    ; __append("; background:")
+    ; __append(escapeFn( sub === 'berita-terkini' ? '#e3f2fd' : 'transparent' ))
+    ; __append("; min-height:44px;\">\n            <i class=\"fab fa-instagram\" style=\"color:")
+    ; __append(escapeFn( sub === 'berita-terkini' ? '#003580' : '#94a3b8' ))
+    ; __append(";\"></i> Berita Terkini\n          </a>\n        </li>\n      </ul>\n    </div>\n\n    <!-- MAIN CONTENT -->\n    <div class=\"content-main\" style=\"background:#fff; padding:32px; border-radius:8px; box-shadow:0 2px 12px rgba(0,0,0,0.06);\">\n      <h2 style=\"font-family:'Playfair Display', serif; color:#002255; font-size:24px; margin-bottom:8px;\">\n        ")
+    ; __append(escapeFn( sub === 'berita-utama' ? 'Berita Utama BAPAS Kelas I Medan' : 'Berita & Informasi Terkini' ))
+    ; __append("\n      </h2>\n      <div style=\"width:50px; height:3px; background:#003580; margin-bottom:25px;\"></div>\n\n      <div style=\"display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:20px;\">\n        <div style=\"border:1px solid #e2e8f0; border-radius:8px; overflow:hidden; transition:transform 0.2s; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,0.05);\">\n          <div style=\"background:#003580; color:white; padding:30px 20px; text-align:center;\">\n            <i class=\"fas fa-users\" style=\"font-size:36px; color:#ffc107;\"></i>\n          </div>\n          <div style=\"padding:20px;\">\n            <span style=\"font-size:11px; background:#e3f2fd; color:#0052a3; font-weight:700; padding:4px 8px; border-radius:4px; text-transform:uppercase;\">Kegiatan</span>\n            <span style=\"font-size:12px; color:#888; margin-left:8px;\"><i class=\"fas fa-calendar-alt\"></i> 22 Jan 2025</span>\n            <h3 style=\"font-size:16px; margin:10px 0; color:#002255; line-height:1.4;\">Bapas Kelas I Medan Sukses Selenggarakan Rapat Koordinasi Pembimbingan Klien 2025</h3>\n            <p style=\"font-size:13px; color:#666; line-height:1.6;\">Balai Pemasyarakatan Kelas I Medan menyelenggarakan rapat koordinasi yang melibatkan seluruh pembimbing kemasyarakatan dalam rangka meningkatkan kualitas layanan pembimbingan.</p>\n          </div>\n        </div>\n\n        <div style=\"border:1px solid #e2e8f0; border-radius:8px; overflow:hidden; transition:transform 0.2s; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,0.05);\">\n          <div style=\"background:#1a3a52; color:white; padding:30px 20px; text-align:center;\">\n            <i class=\"fas fa-chalkboard-teacher\" style=\"font-size:36px; color:#ffc107;\"></i>\n          </div>\n          <div style=\"padding:20px;\">\n            <span style=\"font-size:11px; background:#e3f2fd; color:#0052a3; font-weight:700; padding:4px 8px; border-radius:4px; text-transform:uppercase;\">SDM</span>\n            <span style=\"font-size:12px; color:#888; margin-left:8px;\"><i class=\"fas fa-calendar-alt\"></i> 20 Jan 2025</span>\n            <h3 style=\"font-size:16px; margin:10px 0; color:#002255; line-height:1.4;\">Peningkatan Kapasitas SDM Pembimbing Kemasyarakatan Bapas Medan</h3>\n            <p style=\"font-size:13px; color:#666; line-height:1.6;\">Program pelatihan dan peningkatan kapasitas SDM dilaksanakan untuk meningkatkan profesionalisme para pembimbing kemasyarakatan Bapas Medan.</p>\n          </div>\n        </div>\n\n        <div style=\"border:1px solid #e2e8f0; border-radius:8px; overflow:hidden; transition:transform 0.2s; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,0.05);\">\n          <div style=\"background:#2d5f8d; color:white; padding:30px 20px; text-align:center;\">\n            <i class=\"fas fa-file-signature\" style=\"font-size:36px; color:#ffc107;\"></i>\n          </div>\n          <div style=\"padding:20px;\">\n            <span style=\"font-size:11px; background:#e3f2fd; color:#0052a3; font-weight:700; padding:4px 8px; border-radius:4px; text-transform:uppercase;\">Kerjasama</span>\n            <span style=\"font-size:12px; color:#888; margin-left:8px;\"><i class=\"fas fa-calendar-alt\"></i> 18 Jan 2025</span>\n            <h3 style=\"font-size:16px; margin:10px 0; color:#002255; line-height:1.4;\">Penandatanganan MOU dengan Instansi Terkait dalam Program Reintegrasi</h3>\n            <p style=\"font-size:13px; color:#666; line-height:1.6;\">Bapas Kelas I Medan menandatangani nota kesepahaman bersama beberapa instansi pemerintah dan swasta dalam mendukung program reintegrasi sosial klien.</p>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n\n")
+    ; __append( include('../partials/footer') )
+    ; __append("\n")
+  }
+  return __output;
+
+},
+  "public/informasi": function anonymous(locals, escapeFn, include, rethrow
+) {
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append( include('../partials/header') )
+    ; __append("\n\n<div class=\"content-breadcrumb\" style=\"background:#f0f4f8; padding:12px 0; border-bottom:1px solid #d9e2ec;\">\n  <div class=\"container breadcrumb-container\" style=\"display:flex; align-items:center; gap:8px; font-size:13px; color:#627d98; flex-wrap:wrap;\">\n    <a href=\"/\" style=\"color:#003580; text-decoration:none;\"><i class=\"fas fa-home\"></i> Beranda</a>\n    <i class=\"fas fa-chevron-right\" style=\"font-size:9px; color:#94a3b8;\"></i>\n    <span>Informasi Publik</span>\n    <i class=\"fas fa-chevron-right\" style=\"font-size:9px; color:#94a3b8;\"></i>\n    <span style=\"font-weight:700; color:#002255;\">\n      ")
+    ;  if (sub === 'layanan-integrasi') { 
+    ; __append("Layanan Integrasi\n      ")
+    ;  } else if (sub === 'alur-wajib-lapor') { 
+    ; __append("Alur Wajib Lapor Online\n      ")
+    ;  } else if (sub === 'alur-serah-terima') { 
+    ; __append("Alur Serah Terima Klien\n      ")
+    ;  } else if (sub === 'laporan-keuangan') { 
+    ; __append("Laporan Keuangan\n      ")
+    ;  } else { 
+    ; __append("Laporan Kinerja (LKIP)")
+    ;  } 
+    ; __append("\n    </span>\n  </div>\n</div>\n\n<div class=\"content-page\" style=\"padding:30px 0;\">\n  <div class=\"container page-layout\">\n    <!-- SIDEBAR -->\n    <div class=\"sidebar\">\n      <div style=\"background:#003580; color:#fff; padding:14px 18px; border-radius:8px 8px 0 0; font-weight:700; font-size:14px; display:flex; align-items:center; gap:8px;\">\n        <i class=\"fas fa-info-circle\" style=\"color:#ffc107;\"></i> Menu Informasi\n      </div>\n      <ul style=\"list-style:none; padding:0; margin:0; border:1px solid #d9e2ec; border-top:none; border-radius:0 0 8px 8px; background:#fff; overflow:hidden;\">\n        <li style=\"border-bottom:1px solid #f0f4f8;\">\n          <a href=\"/informasi?sub=layanan-integrasi\" style=\"display:flex; align-items:center; gap:10px; padding:12px 18px; text-decoration:none; color:")
+    ; __append(escapeFn( sub === 'layanan-integrasi' ? '#003580' : '#486581' ))
+    ; __append("; font-weight:")
+    ; __append(escapeFn( sub === 'layanan-integrasi' ? '700' : '500' ))
+    ; __append("; background:")
+    ; __append(escapeFn( sub === 'layanan-integrasi' ? '#e3f2fd' : 'transparent' ))
+    ; __append("; min-height:44px;\">\n            <i class=\"fas fa-handshake\" style=\"color:")
+    ; __append(escapeFn( sub === 'layanan-integrasi' ? '#003580' : '#94a3b8' ))
+    ; __append(";\"></i> Layanan Integrasi\n          </a>\n        </li>\n        <li style=\"border-bottom:1px solid #f0f4f8;\">\n          <a href=\"/informasi?sub=alur-wajib-lapor\" style=\"display:flex; align-items:center; gap:10px; padding:12px 18px; text-decoration:none; color:")
+    ; __append(escapeFn( sub === 'alur-wajib-lapor' ? '#003580' : '#486581' ))
+    ; __append("; font-weight:")
+    ; __append(escapeFn( sub === 'alur-wajib-lapor' ? '700' : '500' ))
+    ; __append("; background:")
+    ; __append(escapeFn( sub === 'alur-wajib-lapor' ? '#e3f2fd' : 'transparent' ))
+    ; __append("; min-height:44px;\">\n            <i class=\"fas fa-clipboard-list\" style=\"color:")
+    ; __append(escapeFn( sub === 'alur-wajib-lapor' ? '#003580' : '#94a3b8' ))
+    ; __append(";\"></i> Alur Wajib Lapor\n          </a>\n        </li>\n        <li style=\"border-bottom:1px solid #f0f4f8;\">\n          <a href=\"/informasi?sub=alur-serah-terima\" style=\"display:flex; align-items:center; gap:10px; padding:12px 18px; text-decoration:none; color:")
+    ; __append(escapeFn( sub === 'alur-serah-terima' ? '#003580' : '#486581' ))
+    ; __append("; font-weight:")
+    ; __append(escapeFn( sub === 'alur-serah-terima' ? '700' : '500' ))
+    ; __append("; background:")
+    ; __append(escapeFn( sub === 'alur-serah-terima' ? '#e3f2fd' : 'transparent' ))
+    ; __append("; min-height:44px;\">\n            <i class=\"fas fa-exchange-alt\" style=\"color:")
+    ; __append(escapeFn( sub === 'alur-serah-terima' ? '#003580' : '#94a3b8' ))
+    ; __append(";\"></i> Alur Serah Terima\n          </a>\n        </li>\n        <li style=\"border-bottom:1px solid #f0f4f8;\">\n          <a href=\"/informasi?sub=informasi-lkip\" style=\"display:flex; align-items:center; gap:10px; padding:12px 18px; text-decoration:none; color:")
+    ; __append(escapeFn( sub === 'informasi-lkip' ? '#003580' : '#486581' ))
+    ; __append("; font-weight:")
+    ; __append(escapeFn( sub === 'informasi-lkip' ? '700' : '500' ))
+    ; __append("; background:")
+    ; __append(escapeFn( sub === 'informasi-lkip' ? '#e3f2fd' : 'transparent' ))
+    ; __append("; min-height:44px;\">\n            <i class=\"fas fa-file-alt\" style=\"color:")
+    ; __append(escapeFn( sub === 'informasi-lkip' ? '#003580' : '#94a3b8' ))
+    ; __append(";\"></i> Informasi LKIP\n          </a>\n        </li>\n        <li>\n          <a href=\"/informasi?sub=laporan-keuangan\" style=\"display:flex; align-items:center; gap:10px; padding:12px 18px; text-decoration:none; color:")
+    ; __append(escapeFn( sub === 'laporan-keuangan' ? '#003580' : '#486581' ))
+    ; __append("; font-weight:")
+    ; __append(escapeFn( sub === 'laporan-keuangan' ? '700' : '500' ))
+    ; __append("; background:")
+    ; __append(escapeFn( sub === 'laporan-keuangan' ? '#e3f2fd' : 'transparent' ))
+    ; __append("; min-height:44px;\">\n            <i class=\"fas fa-chart-line\" style=\"color:")
+    ; __append(escapeFn( sub === 'laporan-keuangan' ? '#003580' : '#94a3b8' ))
+    ; __append(";\"></i> Laporan Keuangan\n          </a>\n        </li>\n      </ul>\n    </div>\n\n    <!-- MAIN CONTENT -->\n    <div class=\"content-main\" style=\"background:#fff; padding:30px; border-radius:8px; box-shadow:0 2px 12px rgba(0,0,0,0.06); line-height:1.8;\">\n      ")
+    ;  if (sub === 'alur-wajib-lapor') { 
+    ; __append("\n        <h2 style=\"font-family:'Playfair Display', serif; color:#002255; font-size:24px;\">Alur dan Petunjuk Wajib Lapor Online</h2>\n        <div style=\"width:50px; height:3px; background:#003580; margin:10px 0 25px;\"></div>\n        <p style=\"color:#475569; margin-bottom:20px;\">Klien pemasyarakatan BAPAS Kelas I Medan dapat melakukan wajib lapor rutin bulanan secara digital melalui panduan berikut:</p>\n        \n        <div style=\"display:flex; flex-direction:column; gap:16px;\">\n          <div style=\"display:flex; gap:14px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:16px;\">\n            <div style=\"width:36px; height:36px; border-radius:50%; background:#003580; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0;\">1</div>\n            <div>\n              <h4 style=\"color:#002255; margin-bottom:4px; font-size:15px;\">Login ke Portal Klien</h4>\n              <p style=\"color:#64748b; font-size:13.5px; margin:0;\">Gunakan <strong>Nomor WhatsApp</strong> dan kata sandi yang telah didaftarkan oleh petugas BAPAS Medan.</p>\n            </div>\n          </div>\n          <div style=\"display:flex; gap:14px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:16px;\">\n            <div style=\"width:36px; height:36px; border-radius:50%; background:#003580; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0;\">2</div>\n            <div>\n              <h4 style=\"color:#002255; margin-bottom:4px; font-size:15px;\">Lengkapi Profil (Login Pertama Kali)</h4>\n              <p style=\"color:#64748b; font-size:13.5px; margin:0;\">Pastikan alamat domisili terkini, nomor kontak aktif, dan foto wajah telah terverifikasi lengkap.</p>\n            </div>\n          </div>\n          <div style=\"display:flex; gap:14px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:16px;\">\n            <div style=\"width:36px; height:36px; border-radius:50%; background:#003580; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0;\">3</div>\n            <div>\n              <h4 style=\"color:#002255; margin-bottom:4px; font-size:15px;\">Kirim Laporan & Foto Bukti</h4>\n              <p style=\"color:#64748b; font-size:13.5px; margin:0;\">Pengisian dibuka setiap tanggal 1 hingga 15 setiap bulan. Tulis aktivitas bulanan dan ambil foto selfie.</p>\n            </div>\n          </div>\n          <div style=\"display:flex; gap:14px; background:#f0fdf4; border:1px solid #bbf7d0; border-radius:8px; padding:16px;\">\n            <div style=\"width:36px; height:36px; border-radius:50%; background:#16a34a; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0;\">4</div>\n            <div>\n              <h4 style=\"color:#166534; margin-bottom:4px; font-size:15px;\">Verifikasi Pembimbing Kemasyarakatan</h4>\n              <p style=\"color:#15803d; font-size:13.5px; margin:0;\">Petugas BAPAS memeriksa laporan. Status pelaporan (Diterima / Perlu Revisi) dapat dipantau di riwayat lapor.</p>\n            </div>\n          </div>\n        </div>\n\n      ")
+    ;  } else if (sub === 'alur-serah-terima') { 
+    ; __append("\n        <h2 style=\"font-family:'Playfair Display', serif; color:#002255; font-size:24px;\">Alur Serah Terima Klien Pemasyarakatan</h2>\n        <div style=\"width:50px; height:3px; background:#003580; margin:10px 0 25px;\"></div>\n        <p style=\"color:#475569; margin-bottom:15px;\">Proses serah terima klien pemasyarakatan dari Lapas/Rutan kepada Balai Pemasyarakatan Kelas I Medan meliputi tahapan:</p>\n        <ol style=\"padding-left:20px; color:#334155; line-height:2;\">\n          <li>Penerimaan berkas Surat Keputusan (SK) Integrasi dari Lapas/Rutan asal.</li>\n          <li>Pemeriksaan kelengkapan dokumen administratif dan identitas klien.</li>\n          <li>Pencatatan buku registrasi dan pembuatan kartu bimbingan klien.</li>\n          <li>Penetapan Pembimbing Kemasyarakatan (PK) yang bertanggung jawab mendampingi klien.</li>\n          <li>Pengarahan hak dan kewajiban klien selama menjalani masa integrasi sosial.</li>\n        </ol>\n\n      ")
+    ;  } else if (sub === 'informasi-lkip') { 
+    ; __append("\n        <h2 style=\"font-family:'Playfair Display', serif; color:#002255; font-size:24px;\">Laporan Kinerja Instansi Pemerintah (LKIP)</h2>\n        <div style=\"width:50px; height:3px; background:#003580; margin:10px 0 25px;\"></div>\n        <p style=\"color:#475569; margin-bottom:15px;\">LKIP merupakan bentuk pertanggungjawaban pelaksanaan tugas dan fungsi BAPAS Kelas I Medan dalam mencapai sasaran strategis instansi secara transparan dan akuntabel.</p>\n        <div style=\"background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:20px;\">\n          <h4 style=\"color:#003580; margin-bottom:10px;\"><i class=\"fas fa-file-pdf\" style=\"color:#dc2626;\"></i> Dokumen LKIP Terbaru</h4>\n          <p style=\"color:#64748b; font-size:13.5px; margin-bottom:12px;\">Laporan capaian kinerja tahunan BAPAS Kelas I Medan memuat indikator kinerja utama, realisasi target Litmas, pembimbingan, dan pengawasan.</p>\n          <span style=\"font-size:12.5px; background:#e0f2fe; color:#0369a1; padding:4px 10px; border-radius:4px; font-weight:700;\"><i class=\"fas fa-check-circle\"></i> Status: Terpublikasi Resmi</span>\n        </div>\n\n      ")
+    ;  } else if (sub === 'laporan-keuangan') { 
+    ; __append("\n        <h2 style=\"font-family:'Playfair Display', serif; color:#002255; font-size:24px;\">Laporan Keuangan & Realisasi Anggaran</h2>\n        <div style=\"width:50px; height:3px; background:#003580; margin:10px 0 25px;\"></div>\n        <p style=\"color:#475569; margin-bottom:15px;\">Transparansi pengelolaan anggaran negara di lingkungan Balai Pemasyarakatan Kelas I Medan:</p>\n        <div style=\"display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:15px; margin-top:20px;\">\n          <div style=\"background:#f0fdf4; border:1px solid #bbf7d0; padding:18px; border-radius:8px; text-align:center;\">\n            <div style=\"font-size:26px; font-weight:800; color:#16a34a;\">98.7%</div>\n            <div style=\"font-size:12.5px; font-weight:700; color:#15803d; margin-top:4px;\">Realisasi Anggaran TA Terakhir</div>\n          </div>\n          <div style=\"background:#eff6ff; border:1px solid #bfdbfe; padding:18px; border-radius:8px; text-align:center;\">\n            <div style=\"font-size:26px; font-weight:800; color:#1d4ed8;\">WTP</div>\n            <div style=\"font-size:12.5px; font-weight:700; color:#1e40af; margin-top:4px;\">Opini Laporan Keuangan</div>\n          </div>\n        </div>\n\n      ")
+    ;  } else { 
+    ; __append("\n        <h2 style=\"font-family:'Playfair Display', serif; color:#002255; font-size:24px;\">Layanan Integrasi Pemasyarakatan</h2>\n        <div style=\"width:50px; height:3px; background:#003580; margin:10px 0 25px;\"></div>\n        <p style=\"color:#475569; margin-bottom:18px;\">Layanan integrasi mencakup pembimbingan, pengawasan, dan pendampingan bagi klien Pembebasan Bersyarat (PB), Cuti Bersyarat (CB), Cuti Menjelang Bebas (CMB), dan Asimilasi di rumah.</p>\n        <div style=\"display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:15px;\">\n          <div style=\"border:1px solid #e2e8f0; border-radius:8px; padding:18px; background:#f8fafc;\">\n            <h4 style=\"color:#003580; font-size:15px; margin-bottom:6px;\"><i class=\"fas fa-user-check\" style=\"color:#16a34a;\"></i> Pembebasan Bersyarat (PB)</h4>\n            <p style=\"color:#64748b; font-size:13px; margin:0;\">Bimbingan bagi narapidana yang telah menjalani sekurang-kurangnya 2/3 masa pidana.</p>\n          </div>\n          <div style=\"border:1px solid #e2e8f0; border-radius:8px; padding:18px; background:#f8fafc;\">\n            <h4 style=\"color:#003580; font-size:15px; margin-bottom:6px;\"><i class=\"fas fa-file-signature\" style=\"color:#d97706;\"></i> Cuti Bersyarat (CB)</h4>\n            <p style=\"color:#64748b; font-size:13px; margin:0;\">Bimbingan pembinaan bagi narapidana dengan pidana singkat yang berkelakuan baik.</p>\n          </div>\n          <div style=\"border:1px solid #e2e8f0; border-radius:8px; padding:18px; background:#f8fafc;\">\n            <h4 style=\"color:#003580; font-size:15px; margin-bottom:6px;\"><i class=\"fas fa-home\" style=\"color:#2563eb;\"></i> Asimilasi di Rumah</h4>\n            <p style=\"color:#64748b; font-size:13px; margin:0;\">Program membaurkan narapidana ke dalam kehidupan masyarakat secara bertahap.</p>\n          </div>\n        </div>\n      ")
+    ;  } 
+    ; __append("\n    </div>\n  </div>\n</div>\n\n")
+    ; __append( include('../partials/footer') )
+    ; __append("\n")
+  }
+  return __output;
+
+},
+  "public/informasi.ejs": function anonymous(locals, escapeFn, include, rethrow
+) {
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append( include('../partials/header') )
+    ; __append("\n\n<div class=\"content-breadcrumb\" style=\"background:#f0f4f8; padding:12px 0; border-bottom:1px solid #d9e2ec;\">\n  <div class=\"container breadcrumb-container\" style=\"display:flex; align-items:center; gap:8px; font-size:13px; color:#627d98; flex-wrap:wrap;\">\n    <a href=\"/\" style=\"color:#003580; text-decoration:none;\"><i class=\"fas fa-home\"></i> Beranda</a>\n    <i class=\"fas fa-chevron-right\" style=\"font-size:9px; color:#94a3b8;\"></i>\n    <span>Informasi Publik</span>\n    <i class=\"fas fa-chevron-right\" style=\"font-size:9px; color:#94a3b8;\"></i>\n    <span style=\"font-weight:700; color:#002255;\">\n      ")
+    ;  if (sub === 'layanan-integrasi') { 
+    ; __append("Layanan Integrasi\n      ")
+    ;  } else if (sub === 'alur-wajib-lapor') { 
+    ; __append("Alur Wajib Lapor Online\n      ")
+    ;  } else if (sub === 'alur-serah-terima') { 
+    ; __append("Alur Serah Terima Klien\n      ")
+    ;  } else if (sub === 'laporan-keuangan') { 
+    ; __append("Laporan Keuangan\n      ")
+    ;  } else { 
+    ; __append("Laporan Kinerja (LKIP)")
+    ;  } 
+    ; __append("\n    </span>\n  </div>\n</div>\n\n<div class=\"content-page\" style=\"padding:30px 0;\">\n  <div class=\"container page-layout\">\n    <!-- SIDEBAR -->\n    <div class=\"sidebar\">\n      <div style=\"background:#003580; color:#fff; padding:14px 18px; border-radius:8px 8px 0 0; font-weight:700; font-size:14px; display:flex; align-items:center; gap:8px;\">\n        <i class=\"fas fa-info-circle\" style=\"color:#ffc107;\"></i> Menu Informasi\n      </div>\n      <ul style=\"list-style:none; padding:0; margin:0; border:1px solid #d9e2ec; border-top:none; border-radius:0 0 8px 8px; background:#fff; overflow:hidden;\">\n        <li style=\"border-bottom:1px solid #f0f4f8;\">\n          <a href=\"/informasi?sub=layanan-integrasi\" style=\"display:flex; align-items:center; gap:10px; padding:12px 18px; text-decoration:none; color:")
+    ; __append(escapeFn( sub === 'layanan-integrasi' ? '#003580' : '#486581' ))
+    ; __append("; font-weight:")
+    ; __append(escapeFn( sub === 'layanan-integrasi' ? '700' : '500' ))
+    ; __append("; background:")
+    ; __append(escapeFn( sub === 'layanan-integrasi' ? '#e3f2fd' : 'transparent' ))
+    ; __append("; min-height:44px;\">\n            <i class=\"fas fa-handshake\" style=\"color:")
+    ; __append(escapeFn( sub === 'layanan-integrasi' ? '#003580' : '#94a3b8' ))
+    ; __append(";\"></i> Layanan Integrasi\n          </a>\n        </li>\n        <li style=\"border-bottom:1px solid #f0f4f8;\">\n          <a href=\"/informasi?sub=alur-wajib-lapor\" style=\"display:flex; align-items:center; gap:10px; padding:12px 18px; text-decoration:none; color:")
+    ; __append(escapeFn( sub === 'alur-wajib-lapor' ? '#003580' : '#486581' ))
+    ; __append("; font-weight:")
+    ; __append(escapeFn( sub === 'alur-wajib-lapor' ? '700' : '500' ))
+    ; __append("; background:")
+    ; __append(escapeFn( sub === 'alur-wajib-lapor' ? '#e3f2fd' : 'transparent' ))
+    ; __append("; min-height:44px;\">\n            <i class=\"fas fa-clipboard-list\" style=\"color:")
+    ; __append(escapeFn( sub === 'alur-wajib-lapor' ? '#003580' : '#94a3b8' ))
+    ; __append(";\"></i> Alur Wajib Lapor\n          </a>\n        </li>\n        <li style=\"border-bottom:1px solid #f0f4f8;\">\n          <a href=\"/informasi?sub=alur-serah-terima\" style=\"display:flex; align-items:center; gap:10px; padding:12px 18px; text-decoration:none; color:")
+    ; __append(escapeFn( sub === 'alur-serah-terima' ? '#003580' : '#486581' ))
+    ; __append("; font-weight:")
+    ; __append(escapeFn( sub === 'alur-serah-terima' ? '700' : '500' ))
+    ; __append("; background:")
+    ; __append(escapeFn( sub === 'alur-serah-terima' ? '#e3f2fd' : 'transparent' ))
+    ; __append("; min-height:44px;\">\n            <i class=\"fas fa-exchange-alt\" style=\"color:")
+    ; __append(escapeFn( sub === 'alur-serah-terima' ? '#003580' : '#94a3b8' ))
+    ; __append(";\"></i> Alur Serah Terima\n          </a>\n        </li>\n        <li style=\"border-bottom:1px solid #f0f4f8;\">\n          <a href=\"/informasi?sub=informasi-lkip\" style=\"display:flex; align-items:center; gap:10px; padding:12px 18px; text-decoration:none; color:")
+    ; __append(escapeFn( sub === 'informasi-lkip' ? '#003580' : '#486581' ))
+    ; __append("; font-weight:")
+    ; __append(escapeFn( sub === 'informasi-lkip' ? '700' : '500' ))
+    ; __append("; background:")
+    ; __append(escapeFn( sub === 'informasi-lkip' ? '#e3f2fd' : 'transparent' ))
+    ; __append("; min-height:44px;\">\n            <i class=\"fas fa-file-alt\" style=\"color:")
+    ; __append(escapeFn( sub === 'informasi-lkip' ? '#003580' : '#94a3b8' ))
+    ; __append(";\"></i> Informasi LKIP\n          </a>\n        </li>\n        <li>\n          <a href=\"/informasi?sub=laporan-keuangan\" style=\"display:flex; align-items:center; gap:10px; padding:12px 18px; text-decoration:none; color:")
+    ; __append(escapeFn( sub === 'laporan-keuangan' ? '#003580' : '#486581' ))
+    ; __append("; font-weight:")
+    ; __append(escapeFn( sub === 'laporan-keuangan' ? '700' : '500' ))
+    ; __append("; background:")
+    ; __append(escapeFn( sub === 'laporan-keuangan' ? '#e3f2fd' : 'transparent' ))
+    ; __append("; min-height:44px;\">\n            <i class=\"fas fa-chart-line\" style=\"color:")
+    ; __append(escapeFn( sub === 'laporan-keuangan' ? '#003580' : '#94a3b8' ))
+    ; __append(";\"></i> Laporan Keuangan\n          </a>\n        </li>\n      </ul>\n    </div>\n\n    <!-- MAIN CONTENT -->\n    <div class=\"content-main\" style=\"background:#fff; padding:30px; border-radius:8px; box-shadow:0 2px 12px rgba(0,0,0,0.06); line-height:1.8;\">\n      ")
+    ;  if (sub === 'alur-wajib-lapor') { 
+    ; __append("\n        <h2 style=\"font-family:'Playfair Display', serif; color:#002255; font-size:24px;\">Alur dan Petunjuk Wajib Lapor Online</h2>\n        <div style=\"width:50px; height:3px; background:#003580; margin:10px 0 25px;\"></div>\n        <p style=\"color:#475569; margin-bottom:20px;\">Klien pemasyarakatan BAPAS Kelas I Medan dapat melakukan wajib lapor rutin bulanan secara digital melalui panduan berikut:</p>\n        \n        <div style=\"display:flex; flex-direction:column; gap:16px;\">\n          <div style=\"display:flex; gap:14px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:16px;\">\n            <div style=\"width:36px; height:36px; border-radius:50%; background:#003580; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0;\">1</div>\n            <div>\n              <h4 style=\"color:#002255; margin-bottom:4px; font-size:15px;\">Login ke Portal Klien</h4>\n              <p style=\"color:#64748b; font-size:13.5px; margin:0;\">Gunakan <strong>Nomor WhatsApp</strong> dan kata sandi yang telah didaftarkan oleh petugas BAPAS Medan.</p>\n            </div>\n          </div>\n          <div style=\"display:flex; gap:14px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:16px;\">\n            <div style=\"width:36px; height:36px; border-radius:50%; background:#003580; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0;\">2</div>\n            <div>\n              <h4 style=\"color:#002255; margin-bottom:4px; font-size:15px;\">Lengkapi Profil (Login Pertama Kali)</h4>\n              <p style=\"color:#64748b; font-size:13.5px; margin:0;\">Pastikan alamat domisili terkini, nomor kontak aktif, dan foto wajah telah terverifikasi lengkap.</p>\n            </div>\n          </div>\n          <div style=\"display:flex; gap:14px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:16px;\">\n            <div style=\"width:36px; height:36px; border-radius:50%; background:#003580; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0;\">3</div>\n            <div>\n              <h4 style=\"color:#002255; margin-bottom:4px; font-size:15px;\">Kirim Laporan & Foto Bukti</h4>\n              <p style=\"color:#64748b; font-size:13.5px; margin:0;\">Pengisian dibuka setiap tanggal 1 hingga 15 setiap bulan. Tulis aktivitas bulanan dan ambil foto selfie.</p>\n            </div>\n          </div>\n          <div style=\"display:flex; gap:14px; background:#f0fdf4; border:1px solid #bbf7d0; border-radius:8px; padding:16px;\">\n            <div style=\"width:36px; height:36px; border-radius:50%; background:#16a34a; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0;\">4</div>\n            <div>\n              <h4 style=\"color:#166534; margin-bottom:4px; font-size:15px;\">Verifikasi Pembimbing Kemasyarakatan</h4>\n              <p style=\"color:#15803d; font-size:13.5px; margin:0;\">Petugas BAPAS memeriksa laporan. Status pelaporan (Diterima / Perlu Revisi) dapat dipantau di riwayat lapor.</p>\n            </div>\n          </div>\n        </div>\n\n      ")
+    ;  } else if (sub === 'alur-serah-terima') { 
+    ; __append("\n        <h2 style=\"font-family:'Playfair Display', serif; color:#002255; font-size:24px;\">Alur Serah Terima Klien Pemasyarakatan</h2>\n        <div style=\"width:50px; height:3px; background:#003580; margin:10px 0 25px;\"></div>\n        <p style=\"color:#475569; margin-bottom:15px;\">Proses serah terima klien pemasyarakatan dari Lapas/Rutan kepada Balai Pemasyarakatan Kelas I Medan meliputi tahapan:</p>\n        <ol style=\"padding-left:20px; color:#334155; line-height:2;\">\n          <li>Penerimaan berkas Surat Keputusan (SK) Integrasi dari Lapas/Rutan asal.</li>\n          <li>Pemeriksaan kelengkapan dokumen administratif dan identitas klien.</li>\n          <li>Pencatatan buku registrasi dan pembuatan kartu bimbingan klien.</li>\n          <li>Penetapan Pembimbing Kemasyarakatan (PK) yang bertanggung jawab mendampingi klien.</li>\n          <li>Pengarahan hak dan kewajiban klien selama menjalani masa integrasi sosial.</li>\n        </ol>\n\n      ")
+    ;  } else if (sub === 'informasi-lkip') { 
+    ; __append("\n        <h2 style=\"font-family:'Playfair Display', serif; color:#002255; font-size:24px;\">Laporan Kinerja Instansi Pemerintah (LKIP)</h2>\n        <div style=\"width:50px; height:3px; background:#003580; margin:10px 0 25px;\"></div>\n        <p style=\"color:#475569; margin-bottom:15px;\">LKIP merupakan bentuk pertanggungjawaban pelaksanaan tugas dan fungsi BAPAS Kelas I Medan dalam mencapai sasaran strategis instansi secara transparan dan akuntabel.</p>\n        <div style=\"background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:20px;\">\n          <h4 style=\"color:#003580; margin-bottom:10px;\"><i class=\"fas fa-file-pdf\" style=\"color:#dc2626;\"></i> Dokumen LKIP Terbaru</h4>\n          <p style=\"color:#64748b; font-size:13.5px; margin-bottom:12px;\">Laporan capaian kinerja tahunan BAPAS Kelas I Medan memuat indikator kinerja utama, realisasi target Litmas, pembimbingan, dan pengawasan.</p>\n          <span style=\"font-size:12.5px; background:#e0f2fe; color:#0369a1; padding:4px 10px; border-radius:4px; font-weight:700;\"><i class=\"fas fa-check-circle\"></i> Status: Terpublikasi Resmi</span>\n        </div>\n\n      ")
+    ;  } else if (sub === 'laporan-keuangan') { 
+    ; __append("\n        <h2 style=\"font-family:'Playfair Display', serif; color:#002255; font-size:24px;\">Laporan Keuangan & Realisasi Anggaran</h2>\n        <div style=\"width:50px; height:3px; background:#003580; margin:10px 0 25px;\"></div>\n        <p style=\"color:#475569; margin-bottom:15px;\">Transparansi pengelolaan anggaran negara di lingkungan Balai Pemasyarakatan Kelas I Medan:</p>\n        <div style=\"display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:15px; margin-top:20px;\">\n          <div style=\"background:#f0fdf4; border:1px solid #bbf7d0; padding:18px; border-radius:8px; text-align:center;\">\n            <div style=\"font-size:26px; font-weight:800; color:#16a34a;\">98.7%</div>\n            <div style=\"font-size:12.5px; font-weight:700; color:#15803d; margin-top:4px;\">Realisasi Anggaran TA Terakhir</div>\n          </div>\n          <div style=\"background:#eff6ff; border:1px solid #bfdbfe; padding:18px; border-radius:8px; text-align:center;\">\n            <div style=\"font-size:26px; font-weight:800; color:#1d4ed8;\">WTP</div>\n            <div style=\"font-size:12.5px; font-weight:700; color:#1e40af; margin-top:4px;\">Opini Laporan Keuangan</div>\n          </div>\n        </div>\n\n      ")
+    ;  } else { 
+    ; __append("\n        <h2 style=\"font-family:'Playfair Display', serif; color:#002255; font-size:24px;\">Layanan Integrasi Pemasyarakatan</h2>\n        <div style=\"width:50px; height:3px; background:#003580; margin:10px 0 25px;\"></div>\n        <p style=\"color:#475569; margin-bottom:18px;\">Layanan integrasi mencakup pembimbingan, pengawasan, dan pendampingan bagi klien Pembebasan Bersyarat (PB), Cuti Bersyarat (CB), Cuti Menjelang Bebas (CMB), dan Asimilasi di rumah.</p>\n        <div style=\"display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:15px;\">\n          <div style=\"border:1px solid #e2e8f0; border-radius:8px; padding:18px; background:#f8fafc;\">\n            <h4 style=\"color:#003580; font-size:15px; margin-bottom:6px;\"><i class=\"fas fa-user-check\" style=\"color:#16a34a;\"></i> Pembebasan Bersyarat (PB)</h4>\n            <p style=\"color:#64748b; font-size:13px; margin:0;\">Bimbingan bagi narapidana yang telah menjalani sekurang-kurangnya 2/3 masa pidana.</p>\n          </div>\n          <div style=\"border:1px solid #e2e8f0; border-radius:8px; padding:18px; background:#f8fafc;\">\n            <h4 style=\"color:#003580; font-size:15px; margin-bottom:6px;\"><i class=\"fas fa-file-signature\" style=\"color:#d97706;\"></i> Cuti Bersyarat (CB)</h4>\n            <p style=\"color:#64748b; font-size:13px; margin:0;\">Bimbingan pembinaan bagi narapidana dengan pidana singkat yang berkelakuan baik.</p>\n          </div>\n          <div style=\"border:1px solid #e2e8f0; border-radius:8px; padding:18px; background:#f8fafc;\">\n            <h4 style=\"color:#003580; font-size:15px; margin-bottom:6px;\"><i class=\"fas fa-home\" style=\"color:#2563eb;\"></i> Asimilasi di Rumah</h4>\n            <p style=\"color:#64748b; font-size:13px; margin:0;\">Program membaurkan narapidana ke dalam kehidupan masyarakat secara bertahap.</p>\n          </div>\n        </div>\n      ")
+    ;  } 
+    ; __append("\n    </div>\n  </div>\n</div>\n\n")
+    ; __append( include('../partials/footer') )
+    ; __append("\n")
+  }
+  return __output;
+
+},
+  "public/profil": function anonymous(locals, escapeFn, include, rethrow
+) {
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append( include('../partials/header') )
+    ; __append("\n\n<div class=\"content-breadcrumb\" style=\"background:#f0f4f8; padding:12px 0; border-bottom:1px solid #d9e2ec;\">\n  <div class=\"container breadcrumb-container\" style=\"display:flex; align-items:center; gap:8px; font-size:13px; color:#627d98; flex-wrap:wrap;\">\n    <a href=\"/\" style=\"color:#003580; text-decoration:none;\"><i class=\"fas fa-home\"></i> Beranda</a>\n    <i class=\"fas fa-chevron-right\" style=\"font-size:9px; color:#94a3b8;\"></i>\n    <span>Profil</span>\n    <i class=\"fas fa-chevron-right\" style=\"font-size:9px; color:#94a3b8;\"></i>\n    <span style=\"font-weight:700; color:#002255;\">\n      ")
+    ;  if (sub === 'profil-pejabat') { 
+    ; __append("Profil Pejabat\n      ")
+    ;  } else if (sub === 'sejarah-bapas') { 
+    ; __append("Sejarah BAPAS Medan\n      ")
+    ;  } else if (sub === 'tugas-fungsi') { 
+    ; __append("Tugas dan Fungsi\n      ")
+    ;  } else if (sub === 'visi-misi') { 
+    ; __append("Visi dan Misi\n      ")
+    ;  } else { 
+    ; __append("Struktur Organisasi")
+    ;  } 
+    ; __append("\n    </span>\n  </div>\n</div>\n\n<div class=\"content-page\" style=\"padding:30px 0;\">\n  <div class=\"container page-layout\">\n    <!-- SIDEBAR -->\n    <div class=\"sidebar\">\n      <div style=\"background:#003580; color:#fff; padding:14px 18px; border-radius:8px 8px 0 0; font-weight:700; font-size:14px; display:flex; align-items:center; gap:8px;\">\n        <i class=\"fas fa-building\" style=\"color:#ffc107;\"></i> Menu Profil\n      </div>\n      <ul style=\"list-style:none; padding:0; margin:0; border:1px solid #d9e2ec; border-top:none; border-radius:0 0 8px 8px; background:#fff; overflow:hidden;\">\n        <li style=\"border-bottom:1px solid #f0f4f8;\">\n          <a href=\"/profil?sub=profil-pejabat\" style=\"display:flex; align-items:center; gap:10px; padding:12px 18px; text-decoration:none; color:")
+    ; __append(escapeFn( sub === 'profil-pejabat' ? '#003580' : '#486581' ))
+    ; __append("; font-weight:")
+    ; __append(escapeFn( sub === 'profil-pejabat' ? '700' : '500' ))
+    ; __append("; background:")
+    ; __append(escapeFn( sub === 'profil-pejabat' ? '#e3f2fd' : 'transparent' ))
+    ; __append("; min-height:44px;\">\n            <i class=\"fas fa-user-tie\" style=\"color:")
+    ; __append(escapeFn( sub === 'profil-pejabat' ? '#003580' : '#94a3b8' ))
+    ; __append(";\"></i> Profil Pejabat\n          </a>\n        </li>\n        <li style=\"border-bottom:1px solid #f0f4f8;\">\n          <a href=\"/profil?sub=sejarah-bapas\" style=\"display:flex; align-items:center; gap:10px; padding:12px 18px; text-decoration:none; color:")
+    ; __append(escapeFn( sub === 'sejarah-bapas' ? '#003580' : '#486581' ))
+    ; __append("; font-weight:")
+    ; __append(escapeFn( sub === 'sejarah-bapas' ? '700' : '500' ))
+    ; __append("; background:")
+    ; __append(escapeFn( sub === 'sejarah-bapas' ? '#e3f2fd' : 'transparent' ))
+    ; __append("; min-height:44px;\">\n            <i class=\"fas fa-history\" style=\"color:")
+    ; __append(escapeFn( sub === 'sejarah-bapas' ? '#003580' : '#94a3b8' ))
+    ; __append(";\"></i> Sejarah BAPAS Medan\n          </a>\n        </li>\n        <li style=\"border-bottom:1px solid #f0f4f8;\">\n          <a href=\"/profil?sub=tugas-fungsi\" style=\"display:flex; align-items:center; gap:10px; padding:12px 18px; text-decoration:none; color:")
+    ; __append(escapeFn( sub === 'tugas-fungsi' ? '#003580' : '#486581' ))
+    ; __append("; font-weight:")
+    ; __append(escapeFn( sub === 'tugas-fungsi' ? '700' : '500' ))
+    ; __append("; background:")
+    ; __append(escapeFn( sub === 'tugas-fungsi' ? '#e3f2fd' : 'transparent' ))
+    ; __append("; min-height:44px;\">\n            <i class=\"fas fa-tasks\" style=\"color:")
+    ; __append(escapeFn( sub === 'tugas-fungsi' ? '#003580' : '#94a3b8' ))
+    ; __append(";\"></i> Tugas dan Fungsi\n          </a>\n        </li>\n        <li style=\"border-bottom:1px solid #f0f4f8;\">\n          <a href=\"/profil?sub=visi-misi\" style=\"display:flex; align-items:center; gap:10px; padding:12px 18px; text-decoration:none; color:")
+    ; __append(escapeFn( sub === 'visi-misi' ? '#003580' : '#486581' ))
+    ; __append("; font-weight:")
+    ; __append(escapeFn( sub === 'visi-misi' ? '700' : '500' ))
+    ; __append("; background:")
+    ; __append(escapeFn( sub === 'visi-misi' ? '#e3f2fd' : 'transparent' ))
+    ; __append("; min-height:44px;\">\n            <i class=\"fas fa-eye\" style=\"color:")
+    ; __append(escapeFn( sub === 'visi-misi' ? '#003580' : '#94a3b8' ))
+    ; __append(";\"></i> Visi dan Misi\n          </a>\n        </li>\n        <li>\n          <a href=\"/profil?sub=struktur-organisasi\" style=\"display:flex; align-items:center; gap:10px; padding:12px 18px; text-decoration:none; color:")
+    ; __append(escapeFn( sub === 'struktur-organisasi' ? '#003580' : '#486581' ))
+    ; __append("; font-weight:")
+    ; __append(escapeFn( sub === 'struktur-organisasi' ? '700' : '500' ))
+    ; __append("; background:")
+    ; __append(escapeFn( sub === 'struktur-organisasi' ? '#e3f2fd' : 'transparent' ))
+    ; __append("; min-height:44px;\">\n            <i class=\"fas fa-sitemap\" style=\"color:")
+    ; __append(escapeFn( sub === 'struktur-organisasi' ? '#003580' : '#94a3b8' ))
+    ; __append(";\"></i> Struktur Organisasi\n          </a>\n        </li>\n      </ul>\n    </div>\n\n    <!-- MAIN CONTENT -->\n    <div class=\"content-main\" style=\"background:#fff; padding:32px; border-radius:8px; box-shadow:0 2px 12px rgba(0,0,0,0.06); line-height:1.8;\">\n      ")
+    ;  if (sub === 'profil-pejabat') { 
+    ; __append("\n        <h2 style=\"font-family:'Playfair Display', serif; color:#002255; font-size:24px;\">Profil Pejabat Struktural</h2>\n        <div style=\"width:50px; height:3px; background:#003580; margin:10px 0 25px;\"></div>\n        <p style=\"color:#555; margin-bottom:25px;\">Berikut adalah daftar pejabat struktural Balai Pemasyarakatan Kelas I Medan yang bertugas memberikan pelayanan terbaik kepada masyarakat dan klien pemasyarakatan.</p>\n        <div style=\"display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:20px;\">\n          <div style=\"border:1px solid #e2e8f0; border-radius:8px; padding:20px; text-align:center; background:#f8fafc;\">\n            <div style=\"width:80px; height:80px; border-radius:50%; background:#e3f2fd; color:#003580; display:flex; align-items:center; justify-content:center; margin:0 auto 15px; font-size:32px;\"><i class=\"fas fa-user-tie\"></i></div>\n            <h4 style=\"color:#002255; font-size:16px;\">Wahyu Prasetyo, Bc.IP., S.Sos.</h4>\n            <p style=\"color:#0052a3; font-weight:600; font-size:13px; margin:4px 0;\">Kepala BAPAS Kelas I Medan</p>\n            <span style=\"font-size:12px; color:#888;\">NIP. 19720412 199403 1 001</span>\n          </div>\n          <div style=\"border:1px solid #e2e8f0; border-radius:8px; padding:20px; text-align:center; background:#f8fafc;\">\n            <div style=\"width:80px; height:80px; border-radius:50%; background:#e3f2fd; color:#003580; display:flex; align-items:center; justify-content:center; margin:0 auto 15px; font-size:32px;\"><i class=\"fas fa-user-tie\"></i></div>\n            <h4 style=\"color:#002255; font-size:16px;\">Ir. Siti Rahmawati, S.Sos., M.Si.</h4>\n            <p style=\"color:#0052a3; font-weight:600; font-size:13px; margin:4px 0;\">Kepala Sub Bagian Tata Usaha</p>\n            <span style=\"font-size:12px; color:#888;\">NIP. 19800415 200212 2 001</span>\n          </div>\n          <div style=\"border:1px solid #e2e8f0; border-radius:8px; padding:20px; text-align:center; background:#f8fafc;\">\n            <div style=\"width:80px; height:80px; border-radius:50%; background:#e3f2fd; color:#003580; display:flex; align-items:center; justify-content:center; margin:0 auto 15px; font-size:32px;\"><i class=\"fas fa-user-tie\"></i></div>\n            <h4 style=\"color:#002255; font-size:16px;\">Drs. Hendra Gunawan, S.H.</h4>\n            <p style=\"color:#0052a3; font-weight:600; font-size:13px; margin:4px 0;\">Kasi Bimbingan Klien Dewasa</p>\n            <span style=\"font-size:12px; color:#888;\">NIP. 19780911 200103 1 002</span>\n          </div>\n        </div>\n\n      ")
+    ;  } else if (sub === 'visi-misi') { 
+    ; __append("\n        <h2 style=\"font-family:'Playfair Display', serif; color:#002255; font-size:24px;\">Visi dan Misi</h2>\n        <div style=\"width:50px; height:3px; background:#003580; margin:10px 0 25px;\"></div>\n        <div style=\"background:#e3f2fd; border-left:4px solid #003580; padding:20px; border-radius:6px; margin-bottom:25px;\">\n          <h3 style=\"color:#003580; font-size:17px; margin-bottom:8px;\"><i class=\"fas fa-bullseye\"></i> Visi</h3>\n          <p style=\"color:#222; font-size:14.5px; font-style:italic; line-height:1.7;\">\"Mewujudkan Pemasyarakatan yang Maju, Humanis, dan Berkeadilan Melalui Pembimbingan Kemasyarakatan yang Berkualitas.\"</p>\n        </div>\n        <h3 style=\"color:#002255; font-size:17px; margin-bottom:12px;\"><i class=\"fas fa-check-circle\" style=\"color:#003580;\"></i> Misi</h3>\n        <ol style=\"padding-left:20px; color:#444;\">\n          <li style=\"margin-bottom:8px;\">Melaksanakan penelitian kemasyarakatan yang objektif, akurat, dan dapat dipertanggungjawabkan.</li>\n          <li style=\"margin-bottom:8px;\">Melaksanakan pembimbingan kemasyarakatan yang berbasis kompetensi dan kemandirian klien.</li>\n          <li style=\"margin-bottom:8px;\">Melaksanakan pengawasan secara konsisten, terukur, dan berbasis teknologi informasi.</li>\n          <li style=\"margin-bottom:8px;\">Membangun kemitraan dan sinergi dengan instansi terkait serta kelompok masyarakat peduli pemasyarakatan.</li>\n        </ol>\n\n      ")
+    ;  } else if (sub === 'tugas-fungsi') { 
+    ; __append("\n        <h2 style=\"font-family:'Playfair Display', serif; color:#002255; font-size:24px;\">Tugas dan Fungsi</h2>\n        <div style=\"width:50px; height:3px; background:#003580; margin:10px 0 25px;\"></div>\n        <p style=\"color:#475569; margin-bottom:15px;\">Balai Pemasyarakatan Kelas I Medan mempunyai tugas pokok dan fungsi dalam menyelenggarakan pembimbingan dan pengawasan klien kemasyarakatan sesuai peraturan perundang-undangan:</p>\n        <div style=\"display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:15px; margin-top:20px;\">\n          <div style=\"border:1px solid #e2e8f0; border-radius:8px; padding:18px; background:#f8fafc;\">\n            <h4 style=\"color:#003580; font-size:15px; margin-bottom:6px;\"><i class=\"fas fa-search\" style=\"color:#2563eb;\"></i> Litmas</h4>\n            <p style=\"color:#64748b; font-size:13px; margin:0;\">Penelitian Kemasyarakatan untuk keperluan peradilan pidana, diversi, dan program reintegrasi sosial.</p>\n          </div>\n          <div style=\"border:1px solid #e2e8f0; border-radius:8px; padding:18px; background:#f8fafc;\">\n            <h4 style=\"color:#003580; font-size:15px; margin-bottom:6px;\"><i class=\"fas fa-user-graduate\" style=\"color:#16a34a;\"></i> Pembimbingan</h4>\n            <p style=\"color:#64748b; font-size:13px; margin:0;\">Bimbingan kepribadian dan kemandirian agar klien siap berintegrasi kembali dengan masyarakat.</p>\n          </div>\n          <div style=\"border:1px solid #e2e8f0; border-radius:8px; padding:18px; background:#f8fafc;\">\n            <h4 style=\"color:#003580; font-size:15px; margin-bottom:6px;\"><i class=\"fas fa-shield-alt\" style=\"color:#d97706;\"></i> Pengawasan</h4>\n            <p style=\"color:#64748b; font-size:13px; margin:0;\">Pengawasan pelaksanaan syarat umum dan khusus selama klien menjalani masa bimbingan pemasyarakatan.</p>\n          </div>\n          <div style=\"border:1px solid #e2e8f0; border-radius:8px; padding:18px; background:#f8fafc;\">\n            <h4 style=\"color:#003580; font-size:15px; margin-bottom:6px;\"><i class=\"fas fa-child\" style=\"color:#7c3aed;\"></i> Pendampingan ABH</h4>\n            <p style=\"color:#64748b; font-size:13px; margin:0;\">Pendampingan bagi Anak yang Berhadapan dengan Hukum dari tingkat penyidikan hingga peradilan.</p>\n          </div>\n        </div>\n\n      ")
+    ;  } else if (sub === 'struktur-organisasi') { 
+    ; __append("\n        <h2 style=\"font-family:'Playfair Display', serif; color:#002255; font-size:24px;\">Struktur Organisasi</h2>\n        <div style=\"width:50px; height:3px; background:#003580; margin:10px 0 25px;\"></div>\n        <p style=\"color:#475569; margin-bottom:20px;\">BAPAS Kelas I Medan dipimpin oleh Kepala Balai Pemasyarakatan yang membawahi Sub Bagian Tata Usaha, Seksi Bimbingan Klien Dewasa, Seksi Bimbingan Klien Anak, dan Kelompok Jabatan Fungsional Pembimbing Kemasyarakatan (PK).</p>\n        <div style=\"background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:20px; text-align:center;\">\n          <i class=\"fas fa-sitemap\" style=\"font-size:48px; color:#003580; margin-bottom:12px;\"></i>\n          <h4 style=\"color:#002255; margin-bottom:8px;\">Bagan Struktur Organisasi Resmi</h4>\n          <p style=\"color:#64748b; font-size:13.5px; max-width:600px; margin:0 auto 15px;\">Struktur tata kelola Balai Pemasyarakatan Kelas I Medan disusun berdasarkan Permenkumham untuk menjamin efektivitas pembinaan dan layanan publik.</p>\n          <span style=\"font-size:12.5px; background:#e0f2fe; color:#0369a1; padding:6px 14px; border-radius:20px; font-weight:700;\"><i class=\"fas fa-check-circle\"></i> Sesuai Ketetapan Kementerian</span>\n        </div>\n\n      ")
+    ;  } else { 
+    ; __append("\n        <h2 style=\"font-family:'Playfair Display', serif; color:#002255; font-size:24px;\">Sejarah BAPAS Kelas I Medan</h2>\n        <div style=\"width:50px; height:3px; background:#003580; margin:10px 0 25px;\"></div>\n        <p style=\"color:#475569; margin-bottom:15px; font-size:15px; line-height:1.8;\">\n          Balai Pemasyarakatan (BAPAS) Kelas I Medan didirikan sebagai salah satu Unit Pelaksana Teknis di bawah naungan Kementerian Hukum dan HAM RI (kini Kementerian Imigrasi dan Pemasyarakatan RI). BAPAS Medan memiliki mandat penting dalam sistem peradilan pidana terpadu di Indonesia.\n        </p>\n        <p style=\"color:#475569; margin-bottom:15px; font-size:15px; line-height:1.8;\">\n          Sebagai garda terdepan pelaksanaan keadilan restoratif dan reintegrasi sosial di wilayah Sumatera Utara, BAPAS Kelas I Medan membimbing ribuan klien pemasyarakatan dewasa maupun anak, memastikan hak-hak mereka terpenuhi serta membantu mereka pulih dan diterima kembali dengan baik oleh masyarakat luas.\n        </p>\n      ")
+    ;  } 
+    ; __append("\n    </div>\n  </div>\n</div>\n\n")
+    ; __append( include('../partials/footer') )
+    ; __append("\n")
+  }
+  return __output;
+
+},
+  "public/profil.ejs": function anonymous(locals, escapeFn, include, rethrow
+) {
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append( include('../partials/header') )
+    ; __append("\n\n<div class=\"content-breadcrumb\" style=\"background:#f0f4f8; padding:12px 0; border-bottom:1px solid #d9e2ec;\">\n  <div class=\"container breadcrumb-container\" style=\"display:flex; align-items:center; gap:8px; font-size:13px; color:#627d98; flex-wrap:wrap;\">\n    <a href=\"/\" style=\"color:#003580; text-decoration:none;\"><i class=\"fas fa-home\"></i> Beranda</a>\n    <i class=\"fas fa-chevron-right\" style=\"font-size:9px; color:#94a3b8;\"></i>\n    <span>Profil</span>\n    <i class=\"fas fa-chevron-right\" style=\"font-size:9px; color:#94a3b8;\"></i>\n    <span style=\"font-weight:700; color:#002255;\">\n      ")
+    ;  if (sub === 'profil-pejabat') { 
+    ; __append("Profil Pejabat\n      ")
+    ;  } else if (sub === 'sejarah-bapas') { 
+    ; __append("Sejarah BAPAS Medan\n      ")
+    ;  } else if (sub === 'tugas-fungsi') { 
+    ; __append("Tugas dan Fungsi\n      ")
+    ;  } else if (sub === 'visi-misi') { 
+    ; __append("Visi dan Misi\n      ")
+    ;  } else { 
+    ; __append("Struktur Organisasi")
+    ;  } 
+    ; __append("\n    </span>\n  </div>\n</div>\n\n<div class=\"content-page\" style=\"padding:30px 0;\">\n  <div class=\"container page-layout\">\n    <!-- SIDEBAR -->\n    <div class=\"sidebar\">\n      <div style=\"background:#003580; color:#fff; padding:14px 18px; border-radius:8px 8px 0 0; font-weight:700; font-size:14px; display:flex; align-items:center; gap:8px;\">\n        <i class=\"fas fa-building\" style=\"color:#ffc107;\"></i> Menu Profil\n      </div>\n      <ul style=\"list-style:none; padding:0; margin:0; border:1px solid #d9e2ec; border-top:none; border-radius:0 0 8px 8px; background:#fff; overflow:hidden;\">\n        <li style=\"border-bottom:1px solid #f0f4f8;\">\n          <a href=\"/profil?sub=profil-pejabat\" style=\"display:flex; align-items:center; gap:10px; padding:12px 18px; text-decoration:none; color:")
+    ; __append(escapeFn( sub === 'profil-pejabat' ? '#003580' : '#486581' ))
+    ; __append("; font-weight:")
+    ; __append(escapeFn( sub === 'profil-pejabat' ? '700' : '500' ))
+    ; __append("; background:")
+    ; __append(escapeFn( sub === 'profil-pejabat' ? '#e3f2fd' : 'transparent' ))
+    ; __append("; min-height:44px;\">\n            <i class=\"fas fa-user-tie\" style=\"color:")
+    ; __append(escapeFn( sub === 'profil-pejabat' ? '#003580' : '#94a3b8' ))
+    ; __append(";\"></i> Profil Pejabat\n          </a>\n        </li>\n        <li style=\"border-bottom:1px solid #f0f4f8;\">\n          <a href=\"/profil?sub=sejarah-bapas\" style=\"display:flex; align-items:center; gap:10px; padding:12px 18px; text-decoration:none; color:")
+    ; __append(escapeFn( sub === 'sejarah-bapas' ? '#003580' : '#486581' ))
+    ; __append("; font-weight:")
+    ; __append(escapeFn( sub === 'sejarah-bapas' ? '700' : '500' ))
+    ; __append("; background:")
+    ; __append(escapeFn( sub === 'sejarah-bapas' ? '#e3f2fd' : 'transparent' ))
+    ; __append("; min-height:44px;\">\n            <i class=\"fas fa-history\" style=\"color:")
+    ; __append(escapeFn( sub === 'sejarah-bapas' ? '#003580' : '#94a3b8' ))
+    ; __append(";\"></i> Sejarah BAPAS Medan\n          </a>\n        </li>\n        <li style=\"border-bottom:1px solid #f0f4f8;\">\n          <a href=\"/profil?sub=tugas-fungsi\" style=\"display:flex; align-items:center; gap:10px; padding:12px 18px; text-decoration:none; color:")
+    ; __append(escapeFn( sub === 'tugas-fungsi' ? '#003580' : '#486581' ))
+    ; __append("; font-weight:")
+    ; __append(escapeFn( sub === 'tugas-fungsi' ? '700' : '500' ))
+    ; __append("; background:")
+    ; __append(escapeFn( sub === 'tugas-fungsi' ? '#e3f2fd' : 'transparent' ))
+    ; __append("; min-height:44px;\">\n            <i class=\"fas fa-tasks\" style=\"color:")
+    ; __append(escapeFn( sub === 'tugas-fungsi' ? '#003580' : '#94a3b8' ))
+    ; __append(";\"></i> Tugas dan Fungsi\n          </a>\n        </li>\n        <li style=\"border-bottom:1px solid #f0f4f8;\">\n          <a href=\"/profil?sub=visi-misi\" style=\"display:flex; align-items:center; gap:10px; padding:12px 18px; text-decoration:none; color:")
+    ; __append(escapeFn( sub === 'visi-misi' ? '#003580' : '#486581' ))
+    ; __append("; font-weight:")
+    ; __append(escapeFn( sub === 'visi-misi' ? '700' : '500' ))
+    ; __append("; background:")
+    ; __append(escapeFn( sub === 'visi-misi' ? '#e3f2fd' : 'transparent' ))
+    ; __append("; min-height:44px;\">\n            <i class=\"fas fa-eye\" style=\"color:")
+    ; __append(escapeFn( sub === 'visi-misi' ? '#003580' : '#94a3b8' ))
+    ; __append(";\"></i> Visi dan Misi\n          </a>\n        </li>\n        <li>\n          <a href=\"/profil?sub=struktur-organisasi\" style=\"display:flex; align-items:center; gap:10px; padding:12px 18px; text-decoration:none; color:")
+    ; __append(escapeFn( sub === 'struktur-organisasi' ? '#003580' : '#486581' ))
+    ; __append("; font-weight:")
+    ; __append(escapeFn( sub === 'struktur-organisasi' ? '700' : '500' ))
+    ; __append("; background:")
+    ; __append(escapeFn( sub === 'struktur-organisasi' ? '#e3f2fd' : 'transparent' ))
+    ; __append("; min-height:44px;\">\n            <i class=\"fas fa-sitemap\" style=\"color:")
+    ; __append(escapeFn( sub === 'struktur-organisasi' ? '#003580' : '#94a3b8' ))
+    ; __append(";\"></i> Struktur Organisasi\n          </a>\n        </li>\n      </ul>\n    </div>\n\n    <!-- MAIN CONTENT -->\n    <div class=\"content-main\" style=\"background:#fff; padding:32px; border-radius:8px; box-shadow:0 2px 12px rgba(0,0,0,0.06); line-height:1.8;\">\n      ")
+    ;  if (sub === 'profil-pejabat') { 
+    ; __append("\n        <h2 style=\"font-family:'Playfair Display', serif; color:#002255; font-size:24px;\">Profil Pejabat Struktural</h2>\n        <div style=\"width:50px; height:3px; background:#003580; margin:10px 0 25px;\"></div>\n        <p style=\"color:#555; margin-bottom:25px;\">Berikut adalah daftar pejabat struktural Balai Pemasyarakatan Kelas I Medan yang bertugas memberikan pelayanan terbaik kepada masyarakat dan klien pemasyarakatan.</p>\n        <div style=\"display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:20px;\">\n          <div style=\"border:1px solid #e2e8f0; border-radius:8px; padding:20px; text-align:center; background:#f8fafc;\">\n            <div style=\"width:80px; height:80px; border-radius:50%; background:#e3f2fd; color:#003580; display:flex; align-items:center; justify-content:center; margin:0 auto 15px; font-size:32px;\"><i class=\"fas fa-user-tie\"></i></div>\n            <h4 style=\"color:#002255; font-size:16px;\">Wahyu Prasetyo, Bc.IP., S.Sos.</h4>\n            <p style=\"color:#0052a3; font-weight:600; font-size:13px; margin:4px 0;\">Kepala BAPAS Kelas I Medan</p>\n            <span style=\"font-size:12px; color:#888;\">NIP. 19720412 199403 1 001</span>\n          </div>\n          <div style=\"border:1px solid #e2e8f0; border-radius:8px; padding:20px; text-align:center; background:#f8fafc;\">\n            <div style=\"width:80px; height:80px; border-radius:50%; background:#e3f2fd; color:#003580; display:flex; align-items:center; justify-content:center; margin:0 auto 15px; font-size:32px;\"><i class=\"fas fa-user-tie\"></i></div>\n            <h4 style=\"color:#002255; font-size:16px;\">Ir. Siti Rahmawati, S.Sos., M.Si.</h4>\n            <p style=\"color:#0052a3; font-weight:600; font-size:13px; margin:4px 0;\">Kepala Sub Bagian Tata Usaha</p>\n            <span style=\"font-size:12px; color:#888;\">NIP. 19800415 200212 2 001</span>\n          </div>\n          <div style=\"border:1px solid #e2e8f0; border-radius:8px; padding:20px; text-align:center; background:#f8fafc;\">\n            <div style=\"width:80px; height:80px; border-radius:50%; background:#e3f2fd; color:#003580; display:flex; align-items:center; justify-content:center; margin:0 auto 15px; font-size:32px;\"><i class=\"fas fa-user-tie\"></i></div>\n            <h4 style=\"color:#002255; font-size:16px;\">Drs. Hendra Gunawan, S.H.</h4>\n            <p style=\"color:#0052a3; font-weight:600; font-size:13px; margin:4px 0;\">Kasi Bimbingan Klien Dewasa</p>\n            <span style=\"font-size:12px; color:#888;\">NIP. 19780911 200103 1 002</span>\n          </div>\n        </div>\n\n      ")
+    ;  } else if (sub === 'visi-misi') { 
+    ; __append("\n        <h2 style=\"font-family:'Playfair Display', serif; color:#002255; font-size:24px;\">Visi dan Misi</h2>\n        <div style=\"width:50px; height:3px; background:#003580; margin:10px 0 25px;\"></div>\n        <div style=\"background:#e3f2fd; border-left:4px solid #003580; padding:20px; border-radius:6px; margin-bottom:25px;\">\n          <h3 style=\"color:#003580; font-size:17px; margin-bottom:8px;\"><i class=\"fas fa-bullseye\"></i> Visi</h3>\n          <p style=\"color:#222; font-size:14.5px; font-style:italic; line-height:1.7;\">\"Mewujudkan Pemasyarakatan yang Maju, Humanis, dan Berkeadilan Melalui Pembimbingan Kemasyarakatan yang Berkualitas.\"</p>\n        </div>\n        <h3 style=\"color:#002255; font-size:17px; margin-bottom:12px;\"><i class=\"fas fa-check-circle\" style=\"color:#003580;\"></i> Misi</h3>\n        <ol style=\"padding-left:20px; color:#444;\">\n          <li style=\"margin-bottom:8px;\">Melaksanakan penelitian kemasyarakatan yang objektif, akurat, dan dapat dipertanggungjawabkan.</li>\n          <li style=\"margin-bottom:8px;\">Melaksanakan pembimbingan kemasyarakatan yang berbasis kompetensi dan kemandirian klien.</li>\n          <li style=\"margin-bottom:8px;\">Melaksanakan pengawasan secara konsisten, terukur, dan berbasis teknologi informasi.</li>\n          <li style=\"margin-bottom:8px;\">Membangun kemitraan dan sinergi dengan instansi terkait serta kelompok masyarakat peduli pemasyarakatan.</li>\n        </ol>\n\n      ")
+    ;  } else if (sub === 'tugas-fungsi') { 
+    ; __append("\n        <h2 style=\"font-family:'Playfair Display', serif; color:#002255; font-size:24px;\">Tugas dan Fungsi</h2>\n        <div style=\"width:50px; height:3px; background:#003580; margin:10px 0 25px;\"></div>\n        <p style=\"color:#475569; margin-bottom:15px;\">Balai Pemasyarakatan Kelas I Medan mempunyai tugas pokok dan fungsi dalam menyelenggarakan pembimbingan dan pengawasan klien kemasyarakatan sesuai peraturan perundang-undangan:</p>\n        <div style=\"display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:15px; margin-top:20px;\">\n          <div style=\"border:1px solid #e2e8f0; border-radius:8px; padding:18px; background:#f8fafc;\">\n            <h4 style=\"color:#003580; font-size:15px; margin-bottom:6px;\"><i class=\"fas fa-search\" style=\"color:#2563eb;\"></i> Litmas</h4>\n            <p style=\"color:#64748b; font-size:13px; margin:0;\">Penelitian Kemasyarakatan untuk keperluan peradilan pidana, diversi, dan program reintegrasi sosial.</p>\n          </div>\n          <div style=\"border:1px solid #e2e8f0; border-radius:8px; padding:18px; background:#f8fafc;\">\n            <h4 style=\"color:#003580; font-size:15px; margin-bottom:6px;\"><i class=\"fas fa-user-graduate\" style=\"color:#16a34a;\"></i> Pembimbingan</h4>\n            <p style=\"color:#64748b; font-size:13px; margin:0;\">Bimbingan kepribadian dan kemandirian agar klien siap berintegrasi kembali dengan masyarakat.</p>\n          </div>\n          <div style=\"border:1px solid #e2e8f0; border-radius:8px; padding:18px; background:#f8fafc;\">\n            <h4 style=\"color:#003580; font-size:15px; margin-bottom:6px;\"><i class=\"fas fa-shield-alt\" style=\"color:#d97706;\"></i> Pengawasan</h4>\n            <p style=\"color:#64748b; font-size:13px; margin:0;\">Pengawasan pelaksanaan syarat umum dan khusus selama klien menjalani masa bimbingan pemasyarakatan.</p>\n          </div>\n          <div style=\"border:1px solid #e2e8f0; border-radius:8px; padding:18px; background:#f8fafc;\">\n            <h4 style=\"color:#003580; font-size:15px; margin-bottom:6px;\"><i class=\"fas fa-child\" style=\"color:#7c3aed;\"></i> Pendampingan ABH</h4>\n            <p style=\"color:#64748b; font-size:13px; margin:0;\">Pendampingan bagi Anak yang Berhadapan dengan Hukum dari tingkat penyidikan hingga peradilan.</p>\n          </div>\n        </div>\n\n      ")
+    ;  } else if (sub === 'struktur-organisasi') { 
+    ; __append("\n        <h2 style=\"font-family:'Playfair Display', serif; color:#002255; font-size:24px;\">Struktur Organisasi</h2>\n        <div style=\"width:50px; height:3px; background:#003580; margin:10px 0 25px;\"></div>\n        <p style=\"color:#475569; margin-bottom:20px;\">BAPAS Kelas I Medan dipimpin oleh Kepala Balai Pemasyarakatan yang membawahi Sub Bagian Tata Usaha, Seksi Bimbingan Klien Dewasa, Seksi Bimbingan Klien Anak, dan Kelompok Jabatan Fungsional Pembimbing Kemasyarakatan (PK).</p>\n        <div style=\"background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:20px; text-align:center;\">\n          <i class=\"fas fa-sitemap\" style=\"font-size:48px; color:#003580; margin-bottom:12px;\"></i>\n          <h4 style=\"color:#002255; margin-bottom:8px;\">Bagan Struktur Organisasi Resmi</h4>\n          <p style=\"color:#64748b; font-size:13.5px; max-width:600px; margin:0 auto 15px;\">Struktur tata kelola Balai Pemasyarakatan Kelas I Medan disusun berdasarkan Permenkumham untuk menjamin efektivitas pembinaan dan layanan publik.</p>\n          <span style=\"font-size:12.5px; background:#e0f2fe; color:#0369a1; padding:6px 14px; border-radius:20px; font-weight:700;\"><i class=\"fas fa-check-circle\"></i> Sesuai Ketetapan Kementerian</span>\n        </div>\n\n      ")
+    ;  } else { 
+    ; __append("\n        <h2 style=\"font-family:'Playfair Display', serif; color:#002255; font-size:24px;\">Sejarah BAPAS Kelas I Medan</h2>\n        <div style=\"width:50px; height:3px; background:#003580; margin:10px 0 25px;\"></div>\n        <p style=\"color:#475569; margin-bottom:15px; font-size:15px; line-height:1.8;\">\n          Balai Pemasyarakatan (BAPAS) Kelas I Medan didirikan sebagai salah satu Unit Pelaksana Teknis di bawah naungan Kementerian Hukum dan HAM RI (kini Kementerian Imigrasi dan Pemasyarakatan RI). BAPAS Medan memiliki mandat penting dalam sistem peradilan pidana terpadu di Indonesia.\n        </p>\n        <p style=\"color:#475569; margin-bottom:15px; font-size:15px; line-height:1.8;\">\n          Sebagai garda terdepan pelaksanaan keadilan restoratif dan reintegrasi sosial di wilayah Sumatera Utara, BAPAS Kelas I Medan membimbing ribuan klien pemasyarakatan dewasa maupun anak, memastikan hak-hak mereka terpenuhi serta membantu mereka pulih dan diterima kembali dengan baik oleh masyarakat luas.\n        </p>\n      ")
+    ;  } 
+    ; __append("\n    </div>\n  </div>\n</div>\n\n")
+    ; __append( include('../partials/footer') )
+    ; __append("\n")
+  }
+  return __output;
+
+},
+};
+
+module.exports = views;

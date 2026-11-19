@@ -5,6 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
+    "build": "node scripts/build_views.js",
+    "predeploy": "node scripts/build_views.js",
     "dev": "node --watch server.js",
     "seed": "node scripts/seed.js",
     "sync-firebase": "node scripts/sync_firebase.js"
