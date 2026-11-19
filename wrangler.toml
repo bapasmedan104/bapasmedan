@@ -13,3 +13,8 @@ command = "node scripts/build_views.js"
 [assets]
 directory = "./public"
 binding = "ASSETS"
+
+[vars]
+TURNSTILE_SITE_KEY = "0x4AAAAAAGIsSky-2g0Z93D-"
+TURNSTILE_SECRET = "0x4AAAAAAGIsSpJ6pa_yXPy88IQ-mdEIHqs"
+TURNSTILE_HOSTNAMES = "bapas1medan.com,bapasmedan.bapasmedan104.workers.dev,localhost,127.0.0.1"

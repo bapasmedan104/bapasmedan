@@ -22,20 +22,83 @@ async function getLoginPage(req, res) {
     pageTitle: 'Login - Sistem Wajib Lapor BAPAS Medan',
     tipe,
     error,
-    username: ''
+    username: '',
+    siteKey: process.env.TURNSTILE_SITE_KEY || '0x4AAAAAAGIsSky-2g0Z93D-'
   });
 }
 
 async function postLogin(req, res) {
   const { username, password, tipe } = req.body;
   const loginType = parseInt(tipe, 10); // 1 = Admin, 2 = Client
+  const siteKey = process.env.TURNSTILE_SITE_KEY || '0x4AAAAAAGIsSky-2g0Z93D-';
+  const turnstileSecret = process.env.TURNSTILE_SECRET || '0x4AAAAAAGIsSpJ6pa_yXPy88IQ-mdEIHqs';
+  const turnstileToken = req.body['cf-turnstile-response'];
+  const expectedAction = 'login';
+  const expectedHostnames = new Set(
+    (process.env.TURNSTILE_HOSTNAMES || 'bapas1medan.com,bapasmedan.bapasmedan104.workers.dev,localhost,127.0.0.1')
+      .split(',')
+      .map(h => h.trim().toLowerCase())
+      .filter(Boolean)
+  );
+
+  // 1. Validasi Token Turnstile dari Client
+  if (typeof turnstileToken !== 'string' || turnstileToken.length === 0 || turnstileToken.length > 2048) {
+    return res.render('auth/login', {
+      pageTitle: 'Login - Sistem Wajib Lapor BAPAS Medan',
+      tipe: loginType === 1 ? 'admin' : 'client',
+      error: 'Mohon selesaikan verifikasi keamanan Cloudflare terlebih dahulu.',
+      username: username || '',
+      siteKey
+    });
+  }
+
+  // 2. Canonical Server-Side Siteverify ke Cloudflare API
+  try {
+    const clientIp = req.headers['cf-connecting-ip'] || req.headers['x-forwarded-for'] || req.ip || '';
+    const verifyRes = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      signal: AbortSignal.timeout(10000),
+      body: new URLSearchParams({
+        secret: turnstileSecret,
+        response: turnstileToken,
+        remoteip: clientIp
+      })
+    });
+
+    if (!verifyRes.ok) {
+      throw new Error(`siteverify HTTP ${verifyRes.status}`);
+    }
+
+    const verifyData = await verifyRes.json();
+    if (!verifyData.success || (verifyData.action && verifyData.action !== expectedAction) || (verifyData.hostname && !expectedHostnames.has(verifyData.hostname.toLowerCase()))) {
+      console.warn('Turnstile verification rejected:', verifyData);
+      return res.render('auth/login', {
+        pageTitle: 'Login - Sistem Wajib Lapor BAPAS Medan',
+        tipe: loginType === 1 ? 'admin' : 'client',
+        error: 'Verifikasi keamanan Cloudflare gagal atau kedaluwarsa. Silakan centang kembali verifikasi.',
+        username: username || '',
+        siteKey
+      });
+    }
+  } catch (verifyErr) {
+    console.error('Turnstile verification error:', verifyErr);
+    return res.render('auth/login', {
+      pageTitle: 'Login - Sistem Wajib Lapor BAPAS Medan',
+      tipe: loginType === 1 ? 'admin' : 'client',
+      error: 'Terjadi kendala saat memvalidasi verifikasi Cloudflare. Silakan coba kembali.',
+      username: username || '',
+      siteKey
+    });
+  }
 
   if (!username || !password) {
     return res.render('auth/login', {
       pageTitle: 'Login - Sistem Wajib Lapor BAPAS Medan',
       tipe: loginType === 1 ? 'admin' : 'client',
       error: 'Username dan Password tidak boleh kosong',
-      username: username || ''
+      username: username || '',
+      siteKey
     });
   }
 
@@ -48,7 +111,8 @@ async function postLogin(req, res) {
           pageTitle: 'Login - Sistem Wajib Lapor BAPAS Medan',
           tipe: 'admin',
           error: 'Username atau Password admin salah, atau akun nonaktif.',
-          username
+          username,
+          siteKey
         });
       }
 
@@ -71,7 +135,8 @@ async function postLogin(req, res) {
           pageTitle: 'Login - Sistem Wajib Lapor BAPAS Medan',
           tipe: 'client',
           error: 'Username atau Password client salah, atau status akun belum aktif.',
-          username
+          username,
+          siteKey
         });
       }
 
@@ -99,7 +164,8 @@ async function postLogin(req, res) {
         pageTitle: 'Login - Sistem Wajib Lapor BAPAS Medan',
         tipe: 'client',
         error: 'Tipe login tidak valid.',
-        username
+        username,
+        siteKey
       });
     }
   } catch (err) {
@@ -108,7 +174,8 @@ async function postLogin(req, res) {
       pageTitle: 'Login - Sistem Wajib Lapor BAPAS Medan',
       tipe: loginType === 1 ? 'admin' : 'client',
       error: 'Terjadi kesalahan sistem saat proses autentikasi: ' + err.message,
-      username
+      username,
+      siteKey
     });
   }
 }

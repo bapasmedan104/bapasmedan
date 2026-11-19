@@ -42,6 +42,11 @@ export default {
 
     // 2. Jalankan aplikasi Express Node.js secara langsung di Cloudflare
     try {
+      if (env) {
+        for (const [k, v] of Object.entries(env)) {
+          if (typeof v === 'string') process.env[k] = v;
+        }
+      }
       return await nodeHandler.fetch(request, env, ctx);
     } catch (edgeErr) {
       return new Response('Server Processing Error: ' + (edgeErr.stack || edgeErr.message), {
