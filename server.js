@@ -315,6 +315,13 @@ app.use((req, res) => {
 
 // Global Error Handler
 app.use((err, req, res, next) => {
+  if (err.type === 'request.aborted' || err.code === 'ECONNABORTED' || (err.message && err.message.includes('request aborted'))) {
+    // Client aborted / connection closed gracefully
+    if (!res.headersSent) {
+      return res.status(400).end();
+    }
+    return;
+  }
   console.error('Unhandled Application Error:', err);
   if (res.headersSent) return next(err);
   res.status(500).type('text/plain').send('SERVER ERROR:\n' + (err.stack || err.message));

@@ -15,15 +15,29 @@ const nodeHandler = httpServerHandler({ port: 3000 });
 
 export default {
   async fetch(request, env, ctx) {
-    // 1. Sajikan aset statis (CSS, JS, logo) langsung dari edge cache jika tersedia
-    if (env.ASSETS && typeof env.ASSETS.fetch === 'function') {
+    const url = new URL(request.url);
+
+    // 1. Sajikan aset statis HANYA jika request adalah GET/HEAD dan merupakan file statis (ekstensi file atau direktori aset)
+    const isStaticAsset = (request.method === 'GET' || request.method === 'HEAD') && (
+      /\.[a-zA-Z0-9]{2,5}$/.test(url.pathname) ||
+      url.pathname.startsWith('/css/') ||
+      url.pathname.startsWith('/js/') ||
+      url.pathname.startsWith('/images/') ||
+      url.pathname === '/favicon.ico' ||
+      url.pathname === '/favicon.png' ||
+      url.pathname === '/robots.txt' ||
+      url.pathname === '/sitemap.xml'
+    );
+
+    if (isStaticAsset && env.ASSETS && typeof env.ASSETS.fetch === 'function') {
       try {
-        const assetResponse = await env.ASSETS.fetch(request);
+        // Selalu gunakan request.clone() agar stream asli tidak terkonsumsi/aborted jika 404
+        const assetResponse = await env.ASSETS.fetch(request.clone());
         if (assetResponse.status < 400) {
           return assetResponse;
         }
       } catch (err) {
-        // Lanjutkan ke Express jika bukan aset statis
+        // Lanjutkan ke Express jika gagal di ASSETS
       }
     }
 
