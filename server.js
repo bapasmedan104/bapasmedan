@@ -106,9 +106,36 @@ app.engine('ejs', (filePath, data, cb) => {
 
   return cb(new Error('Template view not found in memory: ' + rel));
 });
+
+// Custom View class untuk Express agar tidak memeriksa disk dengan fs.statSync di Cloudflare Workers
+function CloudflareView(name, options) {
+  this.name = name;
+  this.ext = path.extname(name) || ('.' + options.defaultEngine);
+  this.path = name.endsWith('.ejs') ? name : (name + '.ejs');
+  this.engine = options.engines[this.ext];
+  this.render = function (renderOpts, callback) {
+    this.engine(this.path, renderOpts, callback);
+  };
+}
+app.set('view', CloudflareView);
 app.set('views', path.join(appDir, 'src', 'views'));
 app.set('view engine', 'ejs');
 app.set('view cache', true);
+
+// Nilai default untuk global template locals
+app.locals.activePage = 'beranda';
+app.locals.pageTitle = 'BAPAS Kelas I Medan';
+app.locals.tipe = 'client';
+app.locals.username = '';
+app.locals.error = null;
+app.locals.pesan = null;
+app.locals.isLoggedIn = false;
+app.locals.user = null;
+app.locals.userType = null;
+app.locals.successMessage = null;
+app.locals.errorMessage = null;
+app.locals.warningMessage = null;
+app.locals.getFileUrl = (p) => p || '';
 
 // HTTP Logger (Hanya aktif di lokal dev)
 if (process.env.NODE_ENV === 'development' && !process.env.CF_PAGES) {
