@@ -174,10 +174,121 @@ function writeLocalDb(data) {
   }
 }
 
+function getFirestoreConfig() {
+  const apiKey = (process.env.FIREBASE_API_KEY || 'AIzaSyADYXlJ9raZ1hNERRhHz7oAOYz3HbgLcac').trim();
+  const projectId = (process.env.FIREBASE_PROJECT_ID || 'bapasmedan-173dd').trim();
+  return { apiKey, projectId };
+}
+
+function toFirestoreValue(val) {
+  if (val === null || val === undefined) return { nullValue: null };
+  if (typeof val === 'boolean') return { booleanValue: val };
+  if (typeof val === 'number') {
+    if (Number.isInteger(val)) return { integerValue: val.toString() };
+    return { doubleValue: val };
+  }
+  if (typeof val === 'string') return { stringValue: val };
+  if (Array.isArray(val)) {
+    return { arrayValue: { values: val.map(toFirestoreValue) } };
+  }
+  if (typeof val === 'object') {
+    const fields = {};
+    for (const k of Object.keys(val)) {
+      fields[k] = toFirestoreValue(val[k]);
+    }
+    return { mapValue: { fields } };
+  }
+  return { stringValue: String(val) };
+}
+
+function fromFirestoreValue(val) {
+  if (!val) return null;
+  if ('stringValue' in val) return val.stringValue;
+  if ('integerValue' in val) return parseInt(val.integerValue, 10);
+  if ('doubleValue' in val) return parseFloat(val.doubleValue);
+  if ('booleanValue' in val) return val.booleanValue;
+  if ('timestampValue' in val) return val.timestampValue;
+  if ('nullValue' in val) return null;
+  if ('arrayValue' in val) {
+    return (val.arrayValue.values || []).map(fromFirestoreValue);
+  }
+  if ('mapValue' in val) {
+    const res = {};
+    const f = val.mapValue.fields || {};
+    for (const k of Object.keys(f)) {
+      res[k] = fromFirestoreValue(f[k]);
+    }
+    return res;
+  }
+  return null;
+}
+
+async function fetchCollectionFromCloudFirestore(collName) {
+  const { apiKey, projectId } = getFirestoreConfig();
+  const url = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/${collName}?key=${apiKey}&pageSize=300`;
+  const res = await fetch(url, { signal: AbortSignal.timeout(6500) });
+  if (res.status === 404) return [];
+  if (!res.ok) throw new Error(`Firestore GET collection ${collName} failed HTTP ${res.status}`);
+  const data = await res.json();
+  if (!data.documents || !data.documents.length) return [];
+  return data.documents.map(d => {
+    const id = d.name.split('/').pop();
+    const docData = { id };
+    const fields = d.fields || {};
+    for (const k of Object.keys(fields)) {
+      docData[k] = fromFirestoreValue(fields[k]);
+    }
+    return docData;
+  });
+}
+
+async function fetchDocFromCloudFirestore(collName, docId) {
+  const { apiKey, projectId } = getFirestoreConfig();
+  const url = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/${collName}/${encodeURIComponent(docId)}?key=${apiKey}`;
+  const res = await fetch(url, { signal: AbortSignal.timeout(6000) });
+  if (res.status === 404) return null;
+  if (!res.ok) throw new Error(`Firestore GET doc ${collName}/${docId} failed HTTP ${res.status}`);
+  const d = await res.json();
+  const id = d.name.split('/').pop();
+  const docData = { id };
+  const fields = d.fields || {};
+  for (const k of Object.keys(fields)) {
+    docData[k] = fromFirestoreValue(fields[k]);
+  }
+  return docData;
+}
+
+async function saveDocToCloudFirestore(collName, docId, data, merge = false) {
+  const { apiKey, projectId } = getFirestoreConfig();
+  let updateMask = '';
+  if (merge) {
+    const fieldKeys = Object.keys(data).filter(k => k !== 'id');
+    if (fieldKeys.length > 0) {
+      updateMask = '&' + fieldKeys.map(k => `updateMask.fieldPaths=${encodeURIComponent(k)}`).join('&');
+    }
+  }
+  const fields = {};
+  for (const k of Object.keys(data)) {
+    if (k === 'id') continue;
+    fields[k] = toFirestoreValue(data[k]);
+  }
+  const url = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/${collName}/${encodeURIComponent(docId)}?key=${apiKey}${updateMask}`;
+  const res = await fetch(url, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ fields }),
+    signal: AbortSignal.timeout(7000)
+  });
+  if (!res.ok) {
+    const errText = await res.text();
+    throw new Error(`Firestore PATCH ${collName}/${docId} failed HTTP ${res.status}: ${errText}`);
+  }
+  return true;
+}
+
 async function deleteFromCloudFirestore(collName, docId) {
   try {
-    const apiKey = (process.env.FIREBASE_API_KEY || 'AIzaSyADYXlJ9raZ1hNERRhHz7oAOYz3HbgLcac').trim();
-    const projectId = (process.env.FIREBASE_PROJECT_ID || 'bapasmedan-173dd').trim();
+    const { apiKey, projectId } = getFirestoreConfig();
     const url = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/${collName}/${encodeURIComponent(docId)}?key=${apiKey}`;
 
     const res = await fetch(url, {
@@ -404,28 +515,54 @@ class ResilientDocumentRef {
       } catch (err) {
         if (isPermissionError(err)) {
           logPermissionWarningOnce(err);
-          return await this.localDocRef.get();
+        } else {
+          console.warn(`[Firebase Admin] Get error on ${this.collName}/${this.id}:`, err.message);
         }
-        console.warn(`[Firebase] Get error on ${this.collName}/${this.id}:`, err.message);
-        return await this.localDocRef.get();
+      }
+    } else {
+      // Cloudflare Workers REST API: Ambil dokumen langsung dari Cloud Firestore
+      try {
+        const cloudDoc = await fetchDocFromCloudFirestore(this.collName, this.id);
+        if (cloudDoc) {
+          // Sinkronkan ke local cache
+          await this.localDocRef.set(cloudDoc);
+          return {
+            id: this.id,
+            exists: true,
+            data: () => ({ ...cloudDoc })
+          };
+        } else {
+          // Dokumen tidak ada di cloud
+          return {
+            id: this.id,
+            exists: false,
+            data: () => undefined
+          };
+        }
+      } catch (restErr) {
+        console.warn(`[Firebase REST] Get doc error on ${this.collName}/${this.id}:`, restErr.message);
       }
     }
     return await this.localDocRef.get();
   }
 
   async set(data, options = {}) {
-    // Simpan selalu ke local sebagai backup
+    // 1. Simpan selalu ke local cache
     await this.localDocRef.set(data, options);
 
+    // 2. Simpan permanen ke Cloud Firestore
     if (cloudDb) {
       try {
         await this.cloudDocRef.set(data, options);
       } catch (err) {
-        if (isPermissionError(err)) {
-          logPermissionWarningOnce(err);
-        } else {
-          console.warn(`[Firebase] Set error on ${this.collName}/${this.id}:`, err.message);
-        }
+        if (isPermissionError(err)) logPermissionWarningOnce(err);
+        else console.warn(`[Firebase Admin] Set error on ${this.collName}/${this.id}:`, err.message);
+      }
+    } else {
+      try {
+        await saveDocToCloudFirestore(this.collName, this.id, data, Boolean(options.merge));
+      } catch (restErr) {
+        console.warn(`[Firebase REST] Set doc error on ${this.collName}/${this.id}:`, restErr.message);
       }
     }
     return { id: this.id };
@@ -438,58 +575,69 @@ class ResilientDocumentRef {
       try {
         await this.cloudDocRef.update(data);
       } catch (err) {
-        if (isPermissionError(err)) {
-          logPermissionWarningOnce(err);
-        } else {
-          console.warn(`[Firebase] Update error on ${this.collName}/${this.id}:`, err.message);
-        }
+        if (isPermissionError(err)) logPermissionWarningOnce(err);
+        else console.warn(`[Firebase Admin] Update error on ${this.collName}/${this.id}:`, err.message);
+      }
+    } else {
+      try {
+        await saveDocToCloudFirestore(this.collName, this.id, data, true);
+      } catch (restErr) {
+        console.warn(`[Firebase REST] Update doc error on ${this.collName}/${this.id}:`, restErr.message);
       }
     }
     return { id: this.id };
   }
 
   async delete() {
+    // 1. Hapus dari cache local memory
     await this.localDocRef.delete();
-    await deleteFromCloudFirestore(this.collName, this.id);
 
+    // 2. Hapus permanen dari Cloud Firestore via Admin SDK jika ada
     if (cloudDb) {
       try {
         await this.cloudDocRef.delete();
       } catch (err) {
-        if (isPermissionError(err)) {
-          logPermissionWarningOnce(err);
-        } else {
-          console.warn(`[Firebase] Delete error on ${this.collName}/${this.id}:`, err.message);
-        }
+        if (isPermissionError(err)) logPermissionWarningOnce(err);
+        else console.warn(`[Firebase Admin] Delete error on ${this.collName}/${this.id}:`, err.message);
       }
+    }
+
+    // 3. Hapus permanen dari Cloud Firestore via REST API
+    try {
+      await deleteFromCloudFirestore(this.collName, this.id);
+    } catch (restErr) {
+      console.warn(`[Firebase REST] Delete error on ${this.collName}/${this.id}:`, restErr.message);
     }
     return true;
   }
 }
 
 class ResilientQuery {
-  constructor(collName, cloudQuery, localQuery) {
+  constructor(collName, cloudQuery, localQuery, filters = [], sorts = [], limitCount = null) {
     this.collName = collName;
     this.cloudQuery = cloudQuery;
     this.localQuery = localQuery;
+    this.filters = filters;
+    this.sorts = sorts;
+    this.limitCount = limitCount;
   }
 
   where(field, op, value) {
     const nextCloud = this.cloudQuery ? this.cloudQuery.where(field, op, value) : null;
     const nextLocal = this.localQuery.where(field, op, value);
-    return new ResilientQuery(this.collName, nextCloud, nextLocal);
+    return new ResilientQuery(this.collName, nextCloud, nextLocal, [...this.filters, { field, op, value }], this.sorts, this.limitCount);
   }
 
   orderBy(field, dir = 'asc') {
     const nextCloud = this.cloudQuery ? this.cloudQuery.orderBy(field, dir) : null;
     const nextLocal = this.localQuery.orderBy(field, dir);
-    return new ResilientQuery(this.collName, nextCloud, nextLocal);
+    return new ResilientQuery(this.collName, nextCloud, nextLocal, this.filters, [...this.sorts, { field, dir: dir.toLowerCase() }], this.limitCount);
   }
 
   limit(n) {
     const nextCloud = this.cloudQuery ? this.cloudQuery.limit(n) : null;
     const nextLocal = this.localQuery.limit(n);
-    return new ResilientQuery(this.collName, nextCloud, nextLocal);
+    return new ResilientQuery(this.collName, nextCloud, nextLocal, this.filters, this.sorts, n);
   }
 
   async get() {
@@ -500,21 +648,77 @@ class ResilientQuery {
           setTimeout(() => reject(new Error('Firestore query timeout')), 4000)
         );
         const snap = await Promise.race([this.cloudQuery.get(), timeoutPromise]);
-        // Jika cloud kosong tapi local ada data (misal baru mulai), gunakan local
-        if (snap.empty) {
-          const localSnap = await this.localQuery.get();
-          if (!localSnap.empty) {
-            return localSnap;
-          }
-        }
         return snap;
       } catch (err) {
         if (isPermissionError(err)) {
           logPermissionWarningOnce(err);
-          return await this.localQuery.get();
+        } else {
+          console.warn(`[Firebase Admin] Query error on ${this.collName}:`, err.message);
         }
-        console.warn(`[Firebase] Query error on ${this.collName}:`, err.message);
-        return await this.localQuery.get();
+      }
+    } else {
+      // CLOUDFLARE WORKERS REST API: Ambil data live langsung dari Cloud Firestore
+      try {
+        const cloudDocs = await fetchCollectionFromCloudFirestore(this.collName);
+        
+        // Perbarui memory cache dengan data aktual dari Cloud
+        const dbData = readLocalDb();
+        const freshColl = {};
+        for (const item of cloudDocs) {
+          freshColl[item.id] = { ...item };
+        }
+        dbData[this.collName] = freshColl;
+        writeLocalDb(dbData);
+
+        // Terapkan filter query secara in-memory pada data live dari cloud
+        let items = [...cloudDocs];
+        for (const f of this.filters) {
+          items = items.filter(item => {
+            const val = item[f.field];
+            switch (f.op) {
+              case '==': return val == f.value;
+              case '!=': return val != f.value;
+              case '>': return val > f.value;
+              case '>=': return val >= f.value;
+              case '<': return val < f.value;
+              case '<=': return val <= f.value;
+              case 'in': return Array.isArray(f.value) && f.value.includes(val);
+              case 'array-contains': return Array.isArray(val) && val.includes(f.value);
+              default: return true;
+            }
+          });
+        }
+
+        for (const s of this.sorts) {
+          items.sort((a, b) => {
+            let va = a[s.field] ?? '';
+            let vb = b[s.field] ?? '';
+            if (typeof va === 'string') va = va.toLowerCase();
+            if (typeof vb === 'string') vb = vb.toLowerCase();
+            if (va < vb) return s.dir === 'desc' ? 1 : -1;
+            if (va > vb) return s.dir === 'desc' ? -1 : 1;
+            return 0;
+          });
+        }
+
+        if (this.limitCount && this.limitCount > 0) {
+          items = items.slice(0, this.limitCount);
+        }
+
+        const docs = items.map(item => ({
+          id: item.id,
+          exists: true,
+          data: () => ({ ...item })
+        }));
+
+        return {
+          docs,
+          empty: docs.length === 0,
+          size: docs.length,
+          forEach: fn => docs.forEach(fn)
+        };
+      } catch (restErr) {
+        console.warn(`[Firebase REST] Query error on ${this.collName}:`, restErr.message);
       }
     }
     return await this.localQuery.get();
