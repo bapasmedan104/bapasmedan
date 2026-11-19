@@ -67,10 +67,12 @@
 </div>
 
 <script>
+// Modal Ganti Sandi Administrator
 function openResetAdminModal() {
   const m = document.getElementById('modalResetAdmin');
   if (m) {
-    document.getElementById('adminNewPassword').value = '';
+    const input = document.getElementById('adminNewPassword');
+    if (input) input.value = '';
     m.style.display = 'flex';
   }
 }
@@ -78,7 +80,8 @@ function tutupResetAdminModal() {
   const m = document.getElementById('modalResetAdmin');
   if (m) m.style.display = 'none';
 }
-</script>
+
+// Modal Bukti Foto (Lightbox)
 function bukaModalFoto(srcUrl, namaKlien, periode) {
   const modal = document.getElementById('modalLihatFoto');
   const img = document.getElementById('modalFotoSrc');
@@ -121,68 +124,27 @@ function tutupModalFoto() {
 }
 
 window.addEventListener('click', function(e) {
-  const modal = document.getElementById('modalLihatFoto');
-  if (modal && e.target === modal) {
+  const modalFoto = document.getElementById('modalLihatFoto');
+  if (modalFoto && e.target === modalFoto) {
     tutupModalFoto();
+  }
+  const modalReset = document.getElementById('modalResetAdmin');
+  if (modalReset && e.target === modalReset) {
+    tutupResetAdminModal();
   }
 });
 
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') {
     tutupModalFoto();
+    tutupResetAdminModal();
   }
 });
-</script>
 
-<!-- AUTO LOGOUT ADMIN INACTIVITY TRACKER (2 MENIT) -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<!-- MODAL RESET SANDI ADMINISTRATOR -->
-<div id="modalResetAdmin" style="display:none; position:fixed; z-index:99999; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.65); align-items:center; justify-content:center; padding:15px; box-sizing:border-box;">
-  <div style="background:white; border-radius:10px; max-width:440px; width:100%; overflow:hidden; box-shadow:0 20px 40px rgba(0,0,0,0.4); animation:fadeInModal 0.2s ease;">
-    <div style="display:flex; justify-content:space-between; align-items:center; padding:14px 18px; border-bottom:1px solid #e2e8f0; background:#f8fafc;">
-      <strong style="font-size:15px; color:#002255; display:flex; align-items:center; gap:8px;">
-        <i class="fas fa-user-shield" style="color:#003580;"></i> Ganti Sandi Administrator
-      </strong>
-      <button type="button" onclick="tutupResetAdminModal()" style="background:none; border:none; font-size:24px; cursor:pointer; color:#64748b; line-height:1; padding:0 4px;">&times;</button>
-    </div>
-    <form action="/admin/reset-password" method="POST" autocomplete="off" style="padding:18px;">
-      <div style="margin-bottom:16px;">
-        <label for="adminNewPassword" style="display:block; font-weight:700; font-size:13px; color:#1e293b; margin-bottom:6px;">Kata Sandi Baru Admin *</label>
-        <input 
-          type="password" 
-          name="new_password" 
-          id="adminNewPassword" 
-          required 
-          minlength="5"
-          placeholder="Masukkan kata sandi baru admin"
-          style="width:100%; padding:10px 12px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:14px; box-sizing:border-box;"
-        >
-        <small style="color:#64748b; font-size:11.5px; margin-top:4px; display:block;">Minimal 5 karakter. Sandi ini akan langsung aktif untuk login admin berikutnya.</small>
-      </div>
-      <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
-        <button type="button" class="btn btn-secondary" onclick="tutupResetAdminModal()" style="padding:8px 14px; font-size:13px;">Batal</button>
-        <button type="submit" class="btn btn-primary" style="padding:8px 16px; font-size:13px; font-weight:700; background:#003580;">
-          <i class="fas fa-check"></i> Simpan Sandi Baru
-        </button>
-      </div>
-    </form>
-  </div>
-</div>
-
-<script>
-function openResetAdminModal() {
-  const m = document.getElementById('modalResetAdmin');
-  if (m) {
-    document.getElementById('adminNewPassword').value = '';
-    m.style.display = 'flex';
-  }
-}
-function tutupResetAdminModal() {
-  const m = document.getElementById('modalResetAdmin');
-  if (m) m.style.display = 'none';
-}
-</script>
+// AUTO LOGOUT ADMIN JIKA TIDAK ADA AKTIVITAS SELAMA 2 MENIT (Khusus Halaman Admin)
 (function() {
+  if (!window.location.pathname.startsWith('/admin')) return;
+
   const INACTIVITY_LIMIT_MS = 2 * 60 * 1000; // 2 Menit (120 detik)
   const WARNING_BEFORE_MS = 15 * 1000; // Peringatan 15 detik sebelum logout
   let lastActivityTime = Date.now();
