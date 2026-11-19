@@ -227,44 +227,63 @@
 
         <!-- SEKSI UPLOAD & KAMERA FOTO -->
         <div class="foto-section">
-          <label style="font-weight:700; color:#003580; display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+          <label style="font-weight:700; color:#003580; display:flex; align-items:center; gap:8px; margin-bottom:14px; font-size:15px;">
             <i class="fas fa-camera"></i> Foto Bukti Lapor Diri (Wajib Selfie / Foto Terkini)
           </label>
 
+          <!-- TAB PEMILIHAN METODE: KAMERA & GALERI -->
           <div class="foto-tabs">
             <button type="button" class="foto-tab active" id="tabCamBtn" onclick="switchFotoTab('camera')">
-              <i class="fas fa-video"></i> Ambil Foto dengan Kamera
+              <i class="fas fa-camera"></i> Ambil dari Kamera
             </button>
             <button type="button" class="foto-tab" id="tabUploadBtn" onclick="switchFotoTab('upload')">
-              <i class="fas fa-file-upload"></i> Unggah File Foto
+              <i class="fas fa-images"></i> Pilih dari Galeri
             </button>
           </div>
 
-          <!-- TAB KAMERA -->
+          <!-- TAB 1: KAMERA (BISA DEPAN & BELAKANG) -->
           <div class="foto-content active" id="camContent">
-            <div style="display:flex; gap:10px; margin-bottom:12px; flex-wrap:wrap;">
-              <button type="button" class="btn btn-primary" id="startCamBtn" onclick="startCamera()"><i class="fas fa-power-off"></i> Buka Kamera</button>
-              <button type="button" class="btn btn-success" id="snapBtn" onclick="takeSnapshot()" style="display:none;"><i class="fas fa-camera"></i> Ambil Gambar</button>
+            <div style="display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap; align-items:center;">
+              <button type="button" class="btn btn-primary" id="startCamBtn" onclick="startCamera()"><i class="fas fa-video"></i> Buka Kamera</button>
+              <button type="button" class="btn btn-warning" id="switchCamBtn" onclick="switchCameraFacing()" style="display:none; background:#f59e0b; color:#ffffff;">
+                <i class="fas fa-sync-alt"></i> Ganti Kamera (<span id="camFacingText">Depan</span>)
+              </button>
+              <button type="button" class="btn btn-success" id="snapBtn" onclick="takeSnapshot()" style="display:none;"><i class="fas fa-camera"></i> Ambil Foto</button>
               <button type="button" class="btn btn-secondary" id="stopCamBtn" onclick="stopCamera()" style="display:none;"><i class="fas fa-times"></i> Tutup Kamera</button>
             </div>
-            <div class="video-container" id="videoBox" style="display:none;">
-              <video id="videoElement" autoplay playsinline></video>
+
+            <div class="video-container" id="videoBox" style="display:none; position:relative; max-width:480px; margin:0 auto 12px; border-radius:12px; overflow:hidden; border:2px solid #003580; background:#000;">
+              <video id="videoElement" autoplay playsinline style="width:100%; height:auto; display:block;"></video>
+              <div id="camBadge" style="position:absolute; top:10px; left:10px; background:rgba(0,0,0,0.7); color:#fff; padding:4px 10px; border-radius:20px; font-size:11.5px; font-weight:700; display:flex; align-items:center; gap:6px;">
+                <span style="width:8px; height:8px; border-radius:50%; background:#10b981; display:inline-block;"></span>
+                <span id="camBadgeText">Kamera Depan (Selfie)</span>
+              </div>
             </div>
             <canvas id="photoCanvas" style="display:none;"></canvas>
           </div>
 
-          <!-- TAB UPLOAD FILE -->
-          <div class="foto-content" id="uploadContent">
-            <p style="font-size:13px; color:#666; margin-bottom:10px;">Pilih file gambar dari komputer atau HP Anda (JPG, PNG, WebP maks 5MB):</p>
-            <input type="file" id="fotoFileInput" accept="image/jpeg,image/png,image/webp" onchange="handleFileUpload(event)">
+          <!-- TAB 2: PILIH DARI GALERI HP / FILE -->
+          <div class="foto-content" id="uploadContent" style="display:none;">
+            <div style="background:#f8fafc; border:2px dashed #93c5fd; border-radius:12px; padding:22px; text-align:center;">
+              <div style="font-size:38px; color:#003580; margin-bottom:10px;">
+                <i class="fas fa-images"></i>
+              </div>
+              <p style="font-size:14.5px; color:#1e293b; font-weight:700; margin-bottom:4px;">Pilih Foto dari Galeri HP / Komputer</p>
+              <p style="font-size:12.5px; color:#64748b; margin-bottom:16px;">Mendukung foto selfie / kegiatan langsung dari galeri HP (JPG, PNG, WebP)</p>
+              
+              <label for="fotoFileInput" class="btn btn-primary" style="padding:11px 24px; font-size:14px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:8px;">
+                <i class="fas fa-folder-open"></i> Buka Galeri HP
+              </label>
+              <input type="file" id="fotoFileInput" accept="image/jpeg,image/png,image/webp" style="display:none;" onchange="handleFileUpload(event)">
+            </div>
           </div>
 
           <!-- PREVIEW FOTO AKTIF -->
-          <div id="fotoPreviewContainer" style="margin-top:15px; <%= (laporBulanIni && laporBulanIni.foto_bukti) ? '' : 'display:none;' %>">
-            <span style="font-size:13px; font-weight:700; color:#28a745;"><i class="fas fa-check-circle"></i> Foto Terpasang:</span><br>
-            <img id="imgPreview" src="<%= (laporBulanIni && laporBulanIni.foto_bukti) ? getFileUrl(laporBulanIni.foto_bukti, 'wajib_lapor') : '' %>" alt="Preview Foto" style="max-width:240px; border-radius:6px; margin-top:8px; border:2px solid #28a745; box-shadow:0 2px 6px rgba(0,0,0,0.1);" onerror="this.onerror=null; this.src='/logo_pemasyarakatan-removebg-preview.png';">
+          <div id="fotoPreviewContainer" style="margin-top:16px; <%= (laporBulanIni && laporBulanIni.foto_bukti) ? '' : 'display:none;' %>">
+            <span style="font-size:13px; font-weight:700; color:#10b981;"><i class="fas fa-check-circle"></i> Foto Terpasang:</span><br>
+            <img id="imgPreview" src="<%= (laporBulanIni && laporBulanIni.foto_bukti) ? getFileUrl(laporBulanIni.foto_bukti, 'wajib_lapor') : '' %>" alt="Preview Foto" style="max-width:240px; border-radius:8px; margin-top:8px; border:2px solid #10b981; box-shadow:0 4px 12px rgba(0,0,0,0.1);" onerror="this.onerror=null; this.src='/logo_pemasyarakatan-removebg-preview.png';">
           </div>
-          <div id="uploadStatusText" style="margin-top:10px; font-size:13px; color:#0052a3;"></div>
+          <div id="uploadStatusText" style="margin-top:10px; font-size:13px; color:#003580; font-weight:600;"></div>
         </div>
 
         <div style="display:flex; gap:12px; flex-wrap:wrap;">
@@ -341,6 +360,7 @@
 
 <script>
   let videoStream = null;
+  let currentFacingMode = 'user'; // 'user' (depan/selfie) atau 'environment' (belakang)
 
   function switchFotoTab(tab) {
     const camBtn = document.getElementById('tabCamBtn');
@@ -351,44 +371,81 @@
     if (tab === 'camera') {
       camBtn.classList.add('active');
       uploadBtn.classList.remove('active');
-      camContent.classList.add('active');
-      uploadContent.classList.remove('active');
+      camContent.style.display = 'block';
+      uploadContent.style.display = 'none';
     } else {
       uploadBtn.classList.add('active');
       camBtn.classList.remove('active');
-      uploadContent.classList.add('active');
-      camContent.classList.remove('active');
+      uploadContent.style.display = 'block';
+      camContent.style.display = 'none';
       stopCamera();
     }
   }
 
-  async function startCamera() {
+  async function startCamera(facing = currentFacingMode) {
     const video = document.getElementById('videoElement');
     const videoBox = document.getElementById('videoBox');
     const startBtn = document.getElementById('startCamBtn');
+    const switchBtn = document.getElementById('switchCamBtn');
     const snapBtn = document.getElementById('snapBtn');
     const stopBtn = document.getElementById('stopCamBtn');
+    const facingText = document.getElementById('camFacingText');
+    const badgeText = document.getElementById('camBadgeText');
+
+    if (videoStream) {
+      videoStream.getTracks().forEach(track => track.stop());
+      videoStream = null;
+    }
+
+    currentFacingMode = facing;
+    if (facingText) {
+      facingText.innerText = (facing === 'user') ? 'Depan' : 'Belakang';
+    }
+    if (badgeText) {
+      badgeText.innerText = (facing === 'user') ? 'Kamera Depan (Selfie)' : 'Kamera Belakang';
+    }
 
     try {
-      videoStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
+      const constraints = {
+        video: {
+          facingMode: { ideal: facing },
+          width: { ideal: 1280 },
+          height: { ideal: 720 }
+        },
+        audio: false
+      };
+
+      try {
+        videoStream = await navigator.mediaDevices.getUserMedia(constraints);
+      } catch (specErr) {
+        // Fallback jika facingMode spesifik ditolak oleh perangkat/browser
+        videoStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+      }
+
       video.srcObject = videoStream;
       video.style.display = 'block';
       videoBox.style.display = 'block';
       startBtn.style.display = 'none';
+      if (switchBtn) switchBtn.style.display = 'inline-flex';
       snapBtn.style.display = 'inline-flex';
       stopBtn.style.display = 'inline-flex';
     } catch (err) {
       if (typeof Swal !== 'undefined') {
         Swal.fire({
           title: 'Akses Kamera Gagal',
-          text: 'Tidak dapat mengakses kamera: ' + err.message + '. Silakan gunakan opsi "Unggah File Foto".',
+          text: 'Tidak dapat membuka kamera: ' + err.message + '. Silakan gunakan opsi "Pilih dari Galeri".',
           icon: 'warning',
           confirmButtonColor: '#003580'
         });
       } else {
-        alert('Tidak dapat mengakses kamera: ' + err.message + '\nSilakan gunakan opsi "Unggah File Foto".');
+        alert('Tidak dapat mengakses kamera: ' + err.message + '\nSilakan gunakan opsi "Pilih dari Galeri".');
       }
     }
+  }
+
+  async function switchCameraFacing() {
+    const nextFacing = (currentFacingMode === 'user') ? 'environment' : 'user';
+    await startCamera(nextFacing);
   }
 
   function stopCamera() {
@@ -399,12 +456,14 @@
     const video = document.getElementById('videoElement');
     const videoBox = document.getElementById('videoBox');
     const startBtn = document.getElementById('startCamBtn');
+    const switchBtn = document.getElementById('switchCamBtn');
     const snapBtn = document.getElementById('snapBtn');
     const stopBtn = document.getElementById('stopCamBtn');
 
     if (video) video.style.display = 'none';
     if (videoBox) videoBox.style.display = 'none';
     if (startBtn) startBtn.style.display = 'inline-flex';
+    if (switchBtn) switchBtn.style.display = 'none';
     if (snapBtn) snapBtn.style.display = 'none';
     if (stopBtn) stopBtn.style.display = 'none';
   }
@@ -440,10 +499,10 @@
         document.getElementById('imgPreview').src = data.foto_url;
         document.getElementById('fotoPreviewContainer').style.display = 'block';
         document.getElementById('uploadStatusText').innerText = '';
-        showToast('Foto webcam berhasil diunggah!', 'success');
+        showToast('Foto berhasil diunggah!', 'success');
       } else {
         if (typeof Swal !== 'undefined') {
-          Swal.fire('Gagal Unggah Foto', data.message || 'Gagal memproses foto webcam.', 'error');
+          Swal.fire('Gagal Unggah Foto', data.message || 'Gagal memproses foto kamera.', 'error');
         } else {
           alert('Gagal mengunggah foto: ' + data.message);
         }
@@ -463,40 +522,67 @@
     const file = e.target.files[0];
     if (!file) return;
 
-    const formData = new FormData();
-    formData.append('foto', file);
-    formData.append('action', 'upload');
-    formData.append('bulan', '<%= bulanIni %>');
-    formData.append('tahun', '<%= tahunIni %>');
-
-    document.getElementById('uploadStatusText').innerText = 'Mengunggah file foto...';
-    try {
-      const res = await fetch('/client/upload-foto', {
-        method: 'POST',
-        body: formData
-      });
-      const data = await res.json();
-      if (data.success) {
-        document.getElementById('imgPreview').src = data.foto_url;
-        document.getElementById('fotoPreviewContainer').style.display = 'block';
-        document.getElementById('uploadStatusText').innerText = '';
-        showToast('File foto berhasil diunggah!', 'success');
-      } else {
-        if (typeof Swal !== 'undefined') {
-          Swal.fire('Gagal Unggah File', data.message || 'File foto ditolak sistem.', 'error');
-        } else {
-          alert('Gagal upload: ' + data.message);
+    // Kompresi di sisi browser via Canvas agar cepat terupload dan aman di server
+    const reader = new FileReader();
+    reader.onload = function(ev) {
+      const img = new Image();
+      img.onload = async function() {
+        const canvas = document.createElement('canvas');
+        let width = img.width;
+        let height = img.height;
+        const maxDim = 1200;
+        if (width > height && width > maxDim) {
+          height = Math.round((height * maxDim) / width);
+          width = maxDim;
+        } else if (height > maxDim) {
+          width = Math.round((width * maxDim) / height);
+          height = maxDim;
         }
-        document.getElementById('uploadStatusText').innerText = '';
-      }
-    } catch (err) {
-      if (typeof Swal !== 'undefined') {
-        Swal.fire('Kesalahan Jaringan', 'Terjadi kesalahan saat mengunggah file: ' + err.message, 'error');
-      } else {
-        alert('Gagal upload: ' + err.message);
-      }
-      document.getElementById('uploadStatusText').innerText = '';
-    }
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+
+        const base64Data = canvas.toDataURL('image/jpeg', 0.85);
+
+        document.getElementById('uploadStatusText').innerText = 'Mengunggah foto dari galeri...';
+        try {
+          const res = await fetch('/client/upload-foto', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              action: 'capture',
+              foto_base64: base64Data,
+              bulan: '<%= bulanIni %>',
+              tahun: '<%= tahunIni %>'
+            })
+          });
+          const data = await res.json();
+          if (data.success) {
+            document.getElementById('imgPreview').src = data.foto_url;
+            document.getElementById('fotoPreviewContainer').style.display = 'block';
+            document.getElementById('uploadStatusText').innerText = '';
+            showToast('Foto dari galeri berhasil dipasang!', 'success');
+          } else {
+            if (typeof Swal !== 'undefined') {
+              Swal.fire('Gagal Unggah Foto', data.message || 'File foto ditolak sistem.', 'error');
+            } else {
+              alert('Gagal upload: ' + data.message);
+            }
+            document.getElementById('uploadStatusText').innerText = '';
+          }
+        } catch (err) {
+          if (typeof Swal !== 'undefined') {
+            Swal.fire('Kesalahan Jaringan', 'Terjadi kesalahan saat mengunggah foto: ' + err.message, 'error');
+          } else {
+            alert('Gagal upload: ' + err.message);
+          }
+          document.getElementById('uploadStatusText').innerText = '';
+        }
+      };
+      img.src = ev.target.result;
+    };
+    reader.readAsDataURL(file);
   }
 
   function confirmSubmitLapor() {
