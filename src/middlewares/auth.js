@@ -23,7 +23,7 @@ function setLocals(req, res, next) {
 
 function requireAdmin(req, res, next) {
   if (!req.session || !req.session.isLoggedIn || req.session.userType !== 'admin') {
-    return res.redirect('/login?tipe=admin&pesan=login_required');
+    return res.redirect('/administrator?pesan=login_required');
   }
 
   const now = Date.now();
@@ -35,7 +35,7 @@ function requireAdmin(req, res, next) {
       req.session.destroy();
     }
     req.session = null;
-    return res.redirect('/login?tipe=admin&pesan=timeout');
+    return res.redirect('/administrator?pesan=timeout');
   }
 
   // Perbarui waktu aktivitas terakhir

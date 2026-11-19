@@ -272,16 +272,7 @@
       <img src="/logo_pemasyarakatan_custom.png?v=2" alt="Logo Pemasyarakatan" onerror="this.src='/logo_pemasyarakatan-removebg-preview.png'">
     </div>
     <h2>BAPAS KELAS I MEDAN</h2>
-    <p>Sistem Informasi Wajib Lapor Online</p>
-  </div>
-
-  <div class="tabs-nav">
-    <button type="button" class="tab-btn <%= tipe === 'client' ? 'active' : '' %>" id="tabClientBtn" onclick="selectTab('client')">
-      <i class="fas fa-user"></i> Login Klien
-    </button>
-    <button type="button" class="tab-btn <%= tipe === 'admin' ? 'active' : '' %>" id="tabAdminBtn" onclick="selectTab('admin')">
-      <i class="fas fa-user-shield"></i> Login Admin
-    </button>
+    <p>Portal Layanan Wajib Lapor Klien Online</p>
   </div>
 
   <div class="login-body">
@@ -293,19 +284,17 @@
     <% } %>
 
     <form action="/login" method="POST" id="loginForm">
-      <input type="hidden" name="tipe" id="tipeInput" value="<%= tipe === 'admin' ? '1' : '2' %>">
+      <input type="hidden" name="tipe" id="tipeInput" value="2">
 
       <div class="form-group">
-        <label for="username" id="userLabel">
-          <%= tipe === 'admin' ? 'Email / Username Admin' : 'Nomor WhatsApp' %>
-        </label>
+        <label for="username" id="userLabel">Nomor WhatsApp / No. Register Klien</label>
         <div class="input-wrapper">
-          <i class="fas fa-<%= tipe === 'admin' ? 'user-shield' : 'phone' %> input-icon" id="userIcon"></i>
+          <i class="fas fa-phone input-icon" id="userIcon"></i>
           <input 
             type="text" 
             name="username" 
             id="username" 
-            placeholder="<%= tipe === 'admin' ? 'Masukkan email atau username admin' : 'Masukkan nomor WhatsApp Anda' %>" 
+            placeholder="Masukkan nomor WhatsApp atau no. register Anda" 
             value="<%= username || '' %>" 
             required 
             autocomplete="username"
@@ -337,12 +326,12 @@
       </div>
 
       <button type="submit" class="btn-submit" id="submitBtn">
-        <i class="fas fa-sign-in-alt"></i> Masuk Sekarang
+        <i class="fas fa-sign-in-alt"></i> Masuk Sebagai Klien
       </button>
     </form>
 
     <!-- HINT LOGIN KLIEN -->
-    <div class="credential-hint" id="clientHint" style="<%= tipe === 'client' ? '' : 'display:none;' %>">
+    <div class="credential-hint" id="clientHint">
       <strong><i class="fas fa-info-circle"></i> Info Akun Klien:</strong><br>
       Gunakan <strong>Nomor WhatsApp</strong> dan kata sandi yang telah didaftarkan oleh petugas BAPAS.<br>
       • Contoh Akun: WhatsApp: <code>08xxxxxxxxxx</code> (atau <code>xxxxx</code>) | Sandi: <code>xxxxx</code>
@@ -370,40 +359,6 @@
       }
     });
   <% } %>
-
-  <% if (tipe === 'admin') { %>
-    document.addEventListener('DOMContentLoaded', function() {
-      selectTab('admin');
-    });
-  <% } %>
-
-  function selectTab(type) {
-    const clientBtn = document.getElementById('tabClientBtn');
-    const adminBtn = document.getElementById('tabAdminBtn');
-    const tipeInput = document.getElementById('tipeInput');
-    const clientHint = document.getElementById('clientHint');
-    const userLabel = document.getElementById('userLabel');
-    const userInput = document.getElementById('username');
-    const userIcon = document.getElementById('userIcon');
-
-    if (type === 'admin') {
-      adminBtn.classList.add('active');
-      clientBtn.classList.remove('active');
-      tipeInput.value = '1';
-      if (clientHint) clientHint.style.display = 'none';
-      userLabel.innerText = 'Email / Username Admin';
-      userInput.placeholder = 'Masukkan email atau username admin';
-      userIcon.className = 'fas fa-user-shield input-icon';
-    } else {
-      clientBtn.classList.add('active');
-      adminBtn.classList.remove('active');
-      tipeInput.value = '2';
-      if (clientHint) clientHint.style.display = 'block';
-      userLabel.innerText = 'Nomor WhatsApp';
-      userInput.placeholder = 'Masukkan nomor WhatsApp Anda';
-      userIcon.className = 'fas fa-phone input-icon';
-    }
-  }
 
   function togglePasswordVisibility() {
     const passwordInput = document.getElementById('password');
