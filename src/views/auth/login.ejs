@@ -371,6 +371,12 @@
     });
   <% } %>
 
+  <% if (tipe === 'admin') { %>
+    document.addEventListener('DOMContentLoaded', function() {
+      selectTab('admin');
+    });
+  <% } %>
+
   function selectTab(type) {
     const clientBtn = document.getElementById('tabClientBtn');
     const adminBtn = document.getElementById('tabAdminBtn');

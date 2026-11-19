@@ -16,6 +16,8 @@ async function getLoginPage(req, res) {
     error = 'Silakan login terlebih dahulu untuk mengakses halaman tersebut.';
   } else if (pesan === 'logout_sukses') {
     req.session.successMessage = 'Anda telah berhasil logout.';
+  } else if (pesan === 'timeout') {
+    error = 'Sesi Admin telah berakhir otomatis karena tidak ada aktivitas selama 2 menit. Silakan login kembali.';
   }
 
   res.render('auth/login', {
@@ -118,6 +120,7 @@ async function postLogin(req, res) {
 
       req.session.isLoggedIn = true;
       req.session.userType = 'admin';
+      req.session.lastAdminActivity = Date.now();
       req.session.user = {
         id: adminUser.id,
         username: adminUser.username,
@@ -181,14 +184,17 @@ async function postLogin(req, res) {
 }
 
 async function logout(req, res) {
+  const pesan = req.query.pesan || 'logout_sukses';
+  const tipe = (req.session && req.session.userType === 'admin') || req.query.tipe === 'admin' ? 'admin' : 'client';
+  
   if (req.session && typeof req.session.destroy === 'function') {
     req.session.destroy(err => {
       if (err) console.error('Logout error:', err);
-      res.redirect('/login?pesan=logout_sukses');
+      res.redirect(`/login?tipe=${tipe}&pesan=${pesan}`);
     });
   } else {
     req.session = null;
-    res.redirect('/login?pesan=logout_sukses');
+    res.redirect(`/login?tipe=${tipe}&pesan=${pesan}`);
   }
 }
 

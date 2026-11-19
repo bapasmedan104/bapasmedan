@@ -22,9 +22,24 @@ function setLocals(req, res, next) {
 }
 
 function requireAdmin(req, res, next) {
-  if (!req.session.isLoggedIn || req.session.userType !== 'admin') {
+  if (!req.session || !req.session.isLoggedIn || req.session.userType !== 'admin') {
     return res.redirect('/login?tipe=admin&pesan=login_required');
   }
+
+  const now = Date.now();
+  const INACTIVITY_TIMEOUT = 2 * 60 * 1000; // 2 Menit (120.000 ms)
+
+  if (req.session.lastAdminActivity && (now - req.session.lastAdminActivity > INACTIVITY_TIMEOUT)) {
+    // Sesi kedaluwarsa karena tidak ada aktivitas selama 2 menit
+    if (typeof req.session.destroy === 'function') {
+      req.session.destroy();
+    }
+    req.session = null;
+    return res.redirect('/login?tipe=admin&pesan=timeout');
+  }
+
+  // Perbarui waktu aktivitas terakhir
+  req.session.lastAdminActivity = now;
   next();
 }
 
