@@ -199,17 +199,21 @@
       </div>
 
       <% if (laporMenunggu && laporMenunggu.length > 0) { %>
+        <div class="table-scroll-hint">
+          <i class="fas fa-arrows-alt-h" style="color:#003580;"></i>
+          <span>Tabel dapat digeser ke samping (&larr; &rarr;) untuk melihat detail dan tombol verifikasi</span>
+        </div>
         <div class="table-responsive">
           <table class="table">
             <thead>
               <tr>
-                <th>No</th>
-                <th>Klien & No Register</th>
-                <th>Periode Lapor</th>
-                <th>Tanggal Kirim</th>
-                <th>Foto Bukti</th>
-                <th>Aktivitas Harian</th>
-                <th>Aksi Verifikasi</th>
+                <th style="width:50px;">No</th>
+                <th style="min-width:180px;">Klien & No Register</th>
+                <th style="min-width:130px;">Periode Lapor</th>
+                <th style="min-width:140px;">Tanggal Kirim</th>
+                <th style="min-width:120px;">Foto Bukti</th>
+                <th style="min-width:240px;">Aktivitas Harian</th>
+                <th style="min-width:160px; text-align:center;">Aksi Verifikasi</th>
               </tr>
             </thead>
             <tbody>
@@ -231,10 +235,10 @@
                       <span style="color:#dc3545; font-size:12px;"><i class="fas fa-times-circle"></i> Tanpa Foto</span>
                     <% } %>
                   </td>
-                  <td style="max-width:240px; font-size:13px;"><%= lapor.aktivitas_harian || '-' %></td>
-                  <td>
-                    <div style="display:flex; gap:6px;">
-                      <form action="/admin/lapor/terima" method="POST" style="display:inline;">
+                  <td class="wrap-cell"><%= lapor.aktivitas_harian || '-' %></td>
+                  <td style="text-align:center;">
+                    <div class="table-action-box" style="display:inline-flex; gap:6px; align-items:center; justify-content:center;">
+                      <form action="/admin/lapor/terima" method="POST" style="display:inline; margin:0;">
                         <input type="hidden" name="lapor_id" value="<%= lapor.id %>">
                         <input type="hidden" name="redirect_to" value="/admin/dashboard?tab=lapor">
                         <button type="button" class="btn btn-sm btn-success" onclick="konfirmasiTerimaLapor(this.form, '<%= lapor.nama_lengkap %>')"><i class="fas fa-check"></i> Terima</button>
@@ -265,44 +269,50 @@
         <a href="/admin/kelola-client" class="btn btn-sm btn-primary" style="margin-left:auto;"><i class="fas fa-cog"></i> Buka Kelola Klien Lengkap</a>
       </div>
 
-      <table class="table">
-        <thead>
-          <tr>
-            <th>No Register</th>
-            <th>Nama Lengkap</th>
-            <th>Status Akun</th>
-            <th>No Telepon</th>
-            <th>Profil</th>
-            <th>Masa Wajib Lapor</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% clients.forEach(function(c) { %>
+      <div class="table-scroll-hint">
+        <i class="fas fa-arrows-alt-h" style="color:#003580;"></i>
+        <span>Tabel dapat digeser ke samping (&larr; &rarr;) untuk melihat seluruh data klien</span>
+      </div>
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
             <tr>
-              <td><strong><%= c.no_register %></strong></td>
-              <td><%= c.nama_lengkap %></td>
-              <td>
-                <% if (c.status === 'aktif') { %>
-                  <span class="badge badge-success">Aktif</span>
-                <% } else if (c.status === 'selesai') { %>
-                  <span class="badge badge-warning">Selesai</span>
-                <% } else { %>
-                  <span class="badge badge-danger">Nonaktif</span>
-                <% } %>
-              </td>
-              <td><%= c.no_telepon || '-' %></td>
-              <td>
-                <% if (c.profil_lengkap) { %>
-                  <span style="color:#28a745; font-size:12px; font-weight:700;"><i class="fas fa-check-circle"></i> Lengkap</span>
-                <% } else { %>
-                  <span style="color:#e67e22; font-size:12px; font-weight:700;"><i class="fas fa-exclamation-circle"></i> Belum Lengkap</span>
-                <% } %>
-              </td>
-              <td style="font-size:13px;"><%= getNamaBulan(c.bulan_wajib_lapor_mulai) %> <%= c.tahun_wajib_lapor_mulai %> s/d <%= getNamaBulan(c.bulan_wajib_lapor_akhir) %> <%= c.tahun_wajib_lapor_akhir %></td>
+              <th style="min-width:140px;">No Register</th>
+              <th style="min-width:180px;">Nama Lengkap</th>
+              <th style="min-width:110px;">Status Akun</th>
+              <th style="min-width:140px;">No Telepon</th>
+              <th style="min-width:130px;">Profil</th>
+              <th style="min-width:220px;">Masa Wajib Lapor</th>
             </tr>
-          <% }); %>
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            <% clients.forEach(function(c) { %>
+              <tr>
+                <td><strong><%= c.no_register %></strong></td>
+                <td><%= c.nama_lengkap %></td>
+                <td>
+                  <% if (c.status === 'aktif') { %>
+                    <span class="badge badge-success">Aktif</span>
+                  <% } else if (c.status === 'selesai') { %>
+                    <span class="badge badge-warning">Selesai</span>
+                  <% } else { %>
+                    <span class="badge badge-danger">Nonaktif</span>
+                  <% } %>
+                </td>
+                <td><%= c.no_telepon || '-' %></td>
+                <td>
+                  <% if (c.profil_lengkap) { %>
+                    <span style="color:#28a745; font-size:12px; font-weight:700;"><i class="fas fa-check-circle"></i> Lengkap</span>
+                  <% } else { %>
+                    <span style="color:#e67e22; font-size:12px; font-weight:700;"><i class="fas fa-exclamation-circle"></i> Belum Lengkap</span>
+                  <% } %>
+                </td>
+                <td style="font-size:13px;"><%= getNamaBulan(c.bulan_wajib_lapor_mulai) %> <%= c.tahun_wajib_lapor_mulai %> s/d <%= getNamaBulan(c.bulan_wajib_lapor_akhir) %> <%= c.tahun_wajib_lapor_akhir %></td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>

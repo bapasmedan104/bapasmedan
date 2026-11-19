@@ -257,18 +257,22 @@
     </div>
 
     <% if (laporList && laporList.length > 0) { %>
+      <div class="table-scroll-hint">
+        <i class="fas fa-arrows-alt-h" style="color:#003580;"></i>
+        <span>Tabel dapat digeser ke samping (&larr; &rarr;) untuk melihat seluruh kolom data riwayat lapor</span>
+      </div>
       <div class="table-responsive">
         <table class="table">
         <thead>
           <tr>
-            <th>No</th>
-            <th>Klien Pemasyarakatan</th>
-            <th>Periode Lapor</th>
-            <th>Tanggal Kirim</th>
-            <th>Status</th>
-            <th>Foto Bukti</th>
-            <th>Verifikator</th>
-            <th class="no-print">Aksi</th>
+            <th style="width:50px;">No</th>
+            <th style="min-width:200px;">Klien Pemasyarakatan</th>
+            <th style="min-width:140px;">Periode Lapor</th>
+            <th style="min-width:140px;">Tanggal Kirim</th>
+            <th style="min-width:120px;">Status</th>
+            <th style="min-width:120px;">Foto Bukti</th>
+            <th style="min-width:160px;">Verifikator</th>
+            <th class="no-print" style="min-width:100px; text-align:center;">Aksi</th>
           </tr>
         </thead>
         <tbody>

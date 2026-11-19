@@ -146,19 +146,23 @@
     </div>
 
     <% if (clients && clients.length > 0) { %>
+      <div class="table-scroll-hint">
+        <i class="fas fa-arrows-alt-h" style="color:#003580;"></i>
+        <span>Tabel dapat digeser ke samping (&larr; &rarr;) untuk melihat seluruh kolom data klien & tombol aksi</span>
+      </div>
       <div class="table-responsive">
         <table class="table">
           <thead>
             <tr>
-              <th>No</th>
-              <th>No Register & Sandi Login</th>
-              <th>Nama Lengkap</th>
-              <th>Username</th>
-              <th>Kontak / Telp</th>
-              <th>Status Akun</th>
-              <th>Masa Wajib Lapor</th>
-              <th>Profil</th>
-              <th>Aksi</th>
+              <th style="width:50px;">No</th>
+              <th style="min-width:180px;">No Register & Sandi Login</th>
+              <th style="min-width:200px;">Nama Lengkap</th>
+              <th style="min-width:130px;">Username</th>
+              <th style="min-width:140px;">Kontak / Telp</th>
+              <th style="min-width:110px;">Status Akun</th>
+              <th style="min-width:180px;">Masa Wajib Lapor</th>
+              <th style="min-width:110px;">Profil</th>
+              <th style="min-width:160px; text-align:center;">Aksi</th>
             </tr>
           </thead>
           <tbody>
@@ -207,8 +211,8 @@
                   <span style="color:#e67e22; font-size:12px; font-weight:700;"><i class="fas fa-exclamation-circle"></i> Belum</span>
                 <% } %>
               </td>
-              <td>
-                <div style="display:flex; gap:6px;">
+              <td style="text-align:center;">
+                <div class="table-action-box" style="display:inline-flex; gap:6px; align-items:center; justify-content:center;">
                   <button type="button" class="btn btn-sm btn-primary" onclick='openEditModal(<%= JSON.stringify(c) %>)'><i class="fas fa-edit"></i> Edit</button>
                   <button type="button" class="btn btn-sm btn-danger" onclick="openHapusModal('<%= c.id %>', '<%= c.nama_lengkap %>')"><i class="fas fa-trash"></i> Hapus</button>
                 </div>

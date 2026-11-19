@@ -287,15 +287,19 @@
     </div>
 
     <% if (riwayat && riwayat.length > 0) { %>
+      <div class="table-scroll-hint">
+        <i class="fas fa-arrows-alt-h" style="color:#003580;"></i>
+        <span>Tabel dapat digeser ke samping (&larr; &rarr;) untuk melihat detail status & catatan</span>
+      </div>
       <div class="table-responsive">
         <table class="table">
           <thead>
             <tr>
-              <th>Periode</th>
-              <th>Tanggal Submit</th>
-              <th>Status</th>
-              <th>Foto Bukti</th>
-              <th>Catatan Petugas</th>
+              <th style="min-width:140px;">Periode</th>
+              <th style="min-width:140px;">Tanggal Submit</th>
+              <th style="min-width:120px;">Status</th>
+              <th style="min-width:120px;">Foto Bukti</th>
+              <th style="min-width:220px;">Catatan Petugas</th>
             </tr>
           </thead>
           <tbody>
