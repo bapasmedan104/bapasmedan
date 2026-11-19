@@ -139,10 +139,6 @@ app.use(
 // Global Template Variables & Flash Messages
 app.use(setLocals);
 
-// Static Assets
-app.use(express.static(path.join(appDir, 'public')));
-app.use('/assets', express.static(path.join(appDir, 'public')));
-
 // Uploads Handler (Serverless & Disk Fallback)
 const os = require('os');
 const isServerless = Boolean(
@@ -154,8 +150,23 @@ const isServerless = Boolean(
 const serverlessUploadsDir = path.join(os.tmpdir(), 'bapas_uploads');
 const localUploadsDir = path.join(appDir, 'public', 'uploads');
 
-app.use('/uploads', express.static(serverlessUploadsDir));
-app.use('/uploads', express.static(localUploadsDir));
+// Static Assets (Hanya jika filesystem fisik tersedia, di Cloudflare Workers ditangani edge binding ASSETS)
+let hasPhysicalFs = false;
+try {
+  if (typeof fs.statSync === 'function') {
+    fs.statSync(appDir);
+    hasPhysicalFs = true;
+  }
+} catch (e) {
+  hasPhysicalFs = false;
+}
+
+if (hasPhysicalFs) {
+  app.use(express.static(path.join(appDir, 'public')));
+  app.use('/assets', express.static(path.join(appDir, 'public')));
+  app.use('/uploads', express.static(serverlessUploadsDir));
+  app.use('/uploads', express.static(localUploadsDir));
+}
 
 // Media Streaming Endpoint (Mencegah browser Chromium memblokir data: URI di tab baru)
 const { getLaporById, getClientById } = require('./src/models/db');
