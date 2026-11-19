@@ -42,15 +42,29 @@ try {
     return target;
   };
 
-  // Kompilasi template saat startup worker
+  // Kompilasi template saat startup worker (dengan cache: true agar include tidak memanggil new Function di runtime)
   for (const [k, content] of Object.entries(rawViews)) {
     if (k.startsWith('src/views/')) continue;
     try {
-      const fn = ejs.compile(content, { filename: 'src/views/' + k });
+      const fn = ejs.compile(content, { filename: 'src/views/' + k, cache: true });
       inMemoryCompiled[k] = fn;
       inMemoryCompiled[k.replace(/\.ejs$/, '')] = fn;
-    } catch (e) {}
+      ejs.cache.set('src/views/' + k, fn);
+      ejs.cache.set('src/views/' + k.replace(/\.ejs$/, ''), fn);
+    } catch (e) {
+      console.warn('Compile error at startup for ' + k + ':', e.message);
+    }
   }
+
+  // Override ejs.cache.get agar include child template langsung mengambil template yang sudah terkompilasi
+  ejs.cache.get = function (filename) {
+    if (!filename) return null;
+    const norm = filename.replace(/\\/g, '/');
+    for (const [k, fn] of Object.entries(inMemoryCompiled)) {
+      if (norm.endsWith(k) || norm.endsWith(k + '.ejs')) return fn;
+    }
+    return inMemoryCompiled[norm] || inMemoryCompiled[norm.replace(/\.ejs$/, '')] || null;
+  };
 } catch (e) {
   console.warn('rawViews not loaded, using ejs.renderFile fallback.');
 }
@@ -65,26 +79,31 @@ app.engine('ejs', (filePath, data, cb) => {
   }
   rel = rel.replace(/\.ejs$/, '');
 
-  const fn = inMemoryCompiled[rel] || inMemoryCompiled[rel + '.ejs'];
+  let fn = inMemoryCompiled[rel] || inMemoryCompiled[rel + '.ejs'];
+  if (!fn) {
+    for (const [k, v] of Object.entries(inMemoryCompiled)) {
+      if (k.endsWith(rel) || k.endsWith(rel + '.ejs')) {
+        fn = v;
+        break;
+      }
+    }
+  }
+
   if (fn) {
     try {
       const html = fn(data);
       return cb(null, html);
     } catch (err) {
-      console.warn('In-memory render error for ' + rel + ':', err.message);
+      console.error('In-memory render error for ' + rel + ':', err);
+      return cb(err);
     }
   }
 
-  const opts = {
-    views: data.settings && data.settings.views,
-    cache: Boolean(data.settings && data.settings['view cache']),
-    filename: filePath,
-    client: false
-  };
-  ejs.renderFile(filePath, data, opts, cb);
+  return cb(new Error('Template view not found in memory: ' + rel));
 });
 app.set('views', path.join(appDir, 'src', 'views'));
 app.set('view engine', 'ejs');
+app.set('view cache', true);
 
 // HTTP Logger & Security
 app.use(morgan('dev'));
@@ -205,6 +224,11 @@ app.get('/uploads/*', (req, res) => {
   res.redirect('/logo_pemasyarakatan-removebg-preview.png');
 });
 
+// Test endpoint untuk verifikasi kesiapan server Cloudflare
+app.get('/ping', (req, res) => {
+  res.type('text/plain').send('PONG - BAPAS CLOUDFLARE IS LIVE!');
+});
+
 // Mounting Routes
 app.use('/', publicRoutes);
 app.use('/', authRoutes);
@@ -222,11 +246,16 @@ app.use((req, res) => {
 // Global Error Handler
 app.use((err, req, res, next) => {
   console.error('Unhandled Application Error:', err);
-  res.status(500).render('public/500', {
-    pageTitle: '500 - Kesalahan Server',
-    error: process.env.NODE_ENV === 'development' ? err.message : 'Terjadi kesalahan internal pada server.',
-    activePage: '500'
-  });
+  if (res.headersSent) return next(err);
+  try {
+    res.status(500).render('public/500', {
+      pageTitle: '500 - Kesalahan Server',
+      error: err.message,
+      activePage: '500'
+    });
+  } catch (renderErr) {
+    res.status(500).type('text/plain').send('SERVER ERROR:\n' + (err.stack || err.message));
+  }
 });
 
 if (require.main === module) {

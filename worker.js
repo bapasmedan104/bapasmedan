@@ -28,6 +28,13 @@ export default {
     }
 
     // 2. Jalankan aplikasi Express Node.js secara langsung di Cloudflare
-    return nodeHandler.fetch(request, env, ctx);
+    try {
+      return await nodeHandler.fetch(request, env, ctx);
+    } catch (edgeErr) {
+      return new Response('Cloudflare Edge Exception:\n' + (edgeErr.stack || edgeErr.message), {
+        status: 500,
+        headers: { 'Content-Type': 'text/plain; charset=utf-8' }
+      });
+    }
   }
 };
