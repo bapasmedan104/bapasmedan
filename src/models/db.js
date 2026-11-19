@@ -579,8 +579,8 @@ async function cekBisaInputLapor(clientId) {
 
   const lapor = await getLaporBulanIni(clientId, bulan, tahun);
   if (!lapor) return true;
-  // Jika masih draft atau belum dibuat, masih bisa input/edit
-  if (lapor.status === 'draft') return true;
+  // Jika masih draft atau ditolak, masih bisa input/edit dan kirim ulang
+  if (lapor.status === 'draft' || lapor.status === 'ditolak') return true;
   // Jika sudah menunggu verifikasi atau diterima, tidak bisa input baru lagi
   return false;
 }
@@ -641,11 +641,19 @@ async function submitLapor(clientId, laporId) {
     return { success: false, message: 'Laporan tidak ditemukan' };
   }
 
-  await docRef.set({
+  const existingData = snap.data() || {};
+  const updatePayload = {
     status: 'menunggu_verifikasi',
     tanggal_submit: new Date().toISOString(),
     updated_at: new Date().toISOString()
-  }, { merge: true });
+  };
+
+  // Jika sebelumnya ditolak, arsipkan catatan penolakan sebelumnya
+  if (existingData.status === 'ditolak' && existingData.catatan_admin) {
+    updatePayload.catatan_penolakan_sebelumnya = existingData.catatan_admin;
+  }
+
+  await docRef.set(updatePayload, { merge: true });
 
   await logActivity('client', clientId, 'Submit Lapor', `Client submit lapor ID: ${laporId}`);
   return { success: true, message: 'Lapor berhasil dikirim untuk verifikasi admin' };
@@ -822,16 +830,20 @@ async function terimaLapor(laporId, adminId) {
 
 async function tolakLapor(laporId, adminId, catatan) {
   const docRef = db.collection('wajib_lapor').doc(laporId);
+  const alasanFinal = (catatan && catatan.trim()) ? catatan.trim() : 'Laporan tidak sesuai ketentuan / bukti foto tidak valid';
+
   await docRef.set({
     status: 'ditolak',
-    catatan_admin: catatan || 'Laporan tidak sesuai ketentuan',
+    catatan_admin: alasanFinal,
+    alasan_penolakan: alasanFinal,
+    catatan_petugas: alasanFinal,
     verified_by: adminId,
     verified_at: new Date().toISOString(),
     updated_at: new Date().toISOString()
   }, { merge: true });
 
-  await logActivity('admin', adminId, 'Tolak Lapor', `Admin menolak lapor ID: ${laporId}`);
-  return { success: true, message: 'Lapor berhasil ditolak' };
+  await logActivity('admin', adminId, 'Tolak Lapor', `Admin menolak lapor ID: ${laporId} dengan alasan: ${alasanFinal}`);
+  return { success: true, message: 'Laporan berhasil ditolak dan catatan alasan telah diteruskan ke klien' };
 }
 
 async function batalkanLapor(laporId, adminId, catatan) {

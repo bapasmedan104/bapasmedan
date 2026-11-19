@@ -311,10 +311,24 @@
               <td style="font-size:13px; color:#475569;">
                 <%= lapor.admin_verifikasi || '-' %>
               </td>
-              <td class="no-print">
-                <button type="button" class="btn btn-outline" style="padding:5px 10px; font-size:12px;" onclick="showDetailModal('<%= lapor.id %>')">
-                  <i class="fas fa-eye"></i> Detail
-                </button>
+              <td class="no-print" style="white-space:nowrap; text-align:center;">
+                <div style="display:inline-flex; gap:6px; align-items:center; justify-content:center;">
+                  <button type="button" class="btn btn-primary btn-sm" style="padding:5px 10px; font-size:12px;" onclick="showDetailModal('<%= lapor.id %>')">
+                    <i class="fas fa-eye"></i> Detail
+                  </button>
+                  <% if (lapor.status === 'menunggu_verifikasi') { %>
+                    <form action="/admin/lapor/terima" method="POST" style="display:inline; margin:0;">
+                      <input type="hidden" name="lapor_id" value="<%= lapor.id %>">
+                      <input type="hidden" name="redirect_to" value="/admin/riwayat-lapor">
+                      <button type="button" class="btn btn-sm btn-success" style="padding:5px 9px; font-size:12px;" onclick="konfirmasiTerimaTabel(this.form, '<%= lapor.nama_lengkap %>')" title="Terima & Setujui Laporan">
+                        <i class="fas fa-check"></i> Terima
+                      </button>
+                    </form>
+                    <button type="button" class="btn btn-sm btn-danger" style="padding:5px 9px; font-size:12px;" onclick="openTolakModal('<%= lapor.id %>', '<%= lapor.nama_lengkap %>')" title="Tolak Laporan dengan Alasan">
+                      <i class="fas fa-times"></i> Tolak
+                    </button>
+                  <% } %>
+                </div>
               </td>
             </tr>
           <% }); %>
@@ -334,10 +348,10 @@
 
 <!-- MODAL DETAIL LAPORAN INTERAKTIF -->
 <div class="modal no-print" id="modalDetail">
-  <div class="modal-content">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid #e2e8f0; padding-bottom:12px;">
-      <h3 style="color:#1a3a52; font-size:18px;"><i class="fas fa-file-alt"></i> Rincian Wajib Lapor Klien</h3>
-      <button type="button" onclick="closeDetailModal()" style="border:none; background:transparent; font-size:22px; cursor:pointer; color:#94a3b8;">&times;</button>
+  <div class="modal-content" style="max-width:680px; width:95%; max-height:90vh; overflow-y:auto;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; border-bottom:1px solid #e2e8f0; padding-bottom:12px;">
+      <h3 style="color:#1a3a52; font-size:18px; margin:0;"><i class="fas fa-file-alt"></i> Rincian & Verifikasi Wajib Lapor Klien</h3>
+      <button type="button" onclick="closeDetailModal()" style="border:none; background:transparent; font-size:24px; cursor:pointer; color:#94a3b8; line-height:1;">&times;</button>
     </div>
 
     <div id="modalLoading" style="text-align:center; padding:30px; color:#64748b;">
@@ -345,33 +359,41 @@
     </div>
 
     <div id="modalDetailBody" style="display:none;">
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-bottom:15px; background:#f8fafc; padding:15px; border-radius:6px;">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:15px; background:#f8fafc; padding:15px; border-radius:8px; border:1px solid #e2e8f0;">
         <div>
-          <span style="font-size:12px; color:#64748b; font-weight:700;">NAMA KLIEN:</span><br>
+          <span style="font-size:11px; color:#64748b; font-weight:700; text-transform:uppercase;">NAMA KLIEN:</span><br>
           <strong id="dNama" style="color:#1a3a52; font-size:15px;"></strong>
         </div>
         <div>
-          <span style="font-size:12px; color:#64748b; font-weight:700;">NO. REGISTER:</span><br>
+          <span style="font-size:11px; color:#64748b; font-weight:700; text-transform:uppercase;">NO. REGISTER:</span><br>
           <strong id="dRegister" style="color:#1a3a52;"></strong>
         </div>
         <div>
-          <span style="font-size:12px; color:#64748b; font-weight:700;">PERIODE LAPOR:</span><br>
+          <span style="font-size:11px; color:#64748b; font-weight:700; text-transform:uppercase;">PERIODE LAPOR:</span><br>
           <span id="dPeriode" style="font-weight:700; color:#0052a3;"></span>
         </div>
         <div>
-          <span style="font-size:12px; color:#64748b; font-weight:700;">TANGGAL SUBMIT:</span><br>
-          <span id="dSubmit"></span>
+          <span style="font-size:11px; color:#64748b; font-weight:700; text-transform:uppercase;">STATUS VERIFIKASI:</span><br>
+          <span id="dStatusBadge"></span>
+        </div>
+        <div>
+          <span style="font-size:11px; color:#64748b; font-weight:700; text-transform:uppercase;">TANGGAL SUBMIT:</span><br>
+          <span id="dSubmit" style="font-size:13px; color:#334155;"></span>
+        </div>
+        <div>
+          <span style="font-size:11px; color:#64748b; font-weight:700; text-transform:uppercase;">PETUGAS VERIFIKATOR:</span><br>
+          <span id="dVerifikator" style="font-size:13px; color:#475569; font-weight:600;">-</span>
         </div>
       </div>
 
       <div style="margin-bottom:15px;">
         <span style="font-size:12px; color:#64748b; font-weight:700; display:block; margin-bottom:4px;">AKTIVITAS HARIAN / PEKERJAAN:</span>
-        <div id="dAktivitas" style="background:#fff; border:1px solid #e2e8f0; padding:12px; border-radius:6px; font-size:14px; color:#333;"></div>
+        <div id="dAktivitas" style="background:#fff; border:1px solid #e2e8f0; padding:12px; border-radius:6px; font-size:14px; color:#333; line-height:1.5;"></div>
       </div>
 
       <div style="margin-bottom:15px;">
         <span style="font-size:12px; color:#64748b; font-weight:700; display:block; margin-bottom:4px;">RENCANA KEGIATAN MENDATANG:</span>
-        <div id="dRencana" style="background:#fff; border:1px solid #e2e8f0; padding:12px; border-radius:6px; font-size:14px; color:#333;"></div>
+        <div id="dRencana" style="background:#fff; border:1px solid #e2e8f0; padding:12px; border-radius:6px; font-size:14px; color:#333; line-height:1.5;"></div>
       </div>
 
       <div id="dFotoBox" style="margin-bottom:15px; text-align:center;">
@@ -384,21 +406,45 @@
         </div>
       </div>
 
-      <div id="dCatatanBox" style="margin-bottom:20px; padding:12px; background:#fff3cd; border-radius:6px; color:#856404; font-size:13px; display:none;">
-        <strong>Catatan Petugas Verifikator:</strong><br>
-        <span id="dCatatan"></span>
+      <div id="dCatatanBox" style="margin-bottom:20px; padding:12px 14px; background:#fff1f2; border:1px solid #fecdd3; border-left:4px solid #dc2626; border-radius:6px; color:#991b1b; font-size:13px; display:none;">
+        <strong id="dCatatanTitle"><i class="fas fa-comment-dots"></i> Catatan Petugas / Alasan Penolakan:</strong><br>
+        <span id="dCatatan" style="display:inline-block; margin-top:4px; font-weight:600; color:#7f1d1d;"></span>
       </div>
 
+      <!-- FOOTER AKSI LENGKAP -->
       <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid #e2e8f0; padding-top:15px; flex-wrap:wrap; gap:10px;">
-        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
-          <form id="formBatalkan" action="/admin/lapor/batalkan" method="POST">
-            <input type="hidden" name="lapor_id" id="cancelLaporId">
-            <input type="hidden" name="catatan_admin" value="Dibatalkan oleh administrator">
-            <button type="button" class="btn btn-outline" style="color:#d97706; border-color:#d97706;" onclick="konfirmasiBatalkanLapor(this.form)"><i class="fas fa-ban"></i> Batalkan Laporan</button>
+        <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+          <!-- TOMBOL TERIMA LAPORAN (HIJAU) -->
+          <form id="formTerimaModal" action="/admin/lapor/terima" method="POST" style="display:inline; margin:0;">
+            <input type="hidden" name="lapor_id" id="terimaLaporId">
+            <input type="hidden" name="redirect_to" value="/admin/riwayat-lapor">
+            <button type="button" id="btnTerimaModal" class="btn btn-success" onclick="konfirmasiTerimaModal(this.form)">
+              <i class="fas fa-check"></i> Terima Laporan
+            </button>
           </form>
-          <form id="formHapusLapor" action="/admin/lapor/delete" method="POST">
+
+          <!-- TOMBOL TOLAK LAPORAN (MERAH DENGAN MODAL ALASAN) -->
+          <button type="button" id="btnTolakModal" class="btn btn-danger" onclick="openTolakFromDetail()">
+            <i class="fas fa-times"></i> Tolak Laporan
+          </button>
+
+          <!-- TOMBOL BATALKAN STATUS LAPORAN (ORANYE) -->
+          <form id="formBatalkan" action="/admin/lapor/batalkan" method="POST" style="display:inline; margin:0;">
+            <input type="hidden" name="lapor_id" id="cancelLaporId">
+            <input type="hidden" name="redirect_to" value="/admin/riwayat-lapor">
+            <input type="hidden" name="catatan_admin" value="Dibatalkan oleh administrator">
+            <button type="button" id="btnBatalkanModal" class="btn btn-outline" style="color:#d97706; border-color:#d97706;" onclick="konfirmasiBatalkanLapor(this.form)">
+              <i class="fas fa-ban"></i> Batalkan
+            </button>
+          </form>
+
+          <!-- TOMBOL HAPUS PERMANEN (MERAH TUA) -->
+          <form id="formHapusLapor" action="/admin/lapor/delete" method="POST" style="display:inline; margin:0;">
             <input type="hidden" name="lapor_id" id="hapusLaporId">
-            <button type="button" class="btn btn-danger" onclick="konfirmasiHapusLaporPermanen(this.form)"><i class="fas fa-trash"></i> Hapus Permanen</button>
+            <input type="hidden" name="redirect_to" value="/admin/riwayat-lapor">
+            <button type="button" class="btn btn-outline" style="color:#dc3545; border-color:#fca5a5;" onclick="konfirmasiHapusLaporPermanen(this.form)" title="Hapus permanen dari database">
+              <i class="fas fa-trash"></i>
+            </button>
           </form>
         </div>
         <button type="button" class="btn btn-secondary" onclick="closeDetailModal()">Tutup</button>
@@ -407,7 +453,37 @@
   </div>
 </div>
 
+<!-- MODAL TOLAK LAPORAN DENGAN ALASAN PENOLAKAN -->
+<div class="modal no-print" id="modalTolak">
+  <div class="modal-content" style="max-width:500px; width:95%;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:1px solid #fee2e2; padding-bottom:10px;">
+      <h3 style="color:#dc2626; font-size:18px; margin:0;"><i class="fas fa-exclamation-triangle"></i> Tolak Wajib Lapor Klien</h3>
+      <button type="button" onclick="closeTolakModal()" style="border:none; background:transparent; font-size:24px; cursor:pointer; color:#94a3b8; line-height:1;">&times;</button>
+    </div>
+    <p style="font-size:13.5px; color:#475569; margin-bottom:15px; line-height:1.5;">
+      Anda akan menolak laporan dari klien: <strong id="tolakClientName" style="color:#0f172a;"></strong>.<br>
+      Berikan catatan / alasan penolakan secara jelas agar klien mengetahui perbaikan apa yang harus dilakukan:
+    </p>
+    <form action="/admin/lapor/tolak" method="POST" id="formModalTolak">
+      <input type="hidden" name="lapor_id" id="tolakLaporId">
+      <input type="hidden" name="redirect_to" value="/admin/riwayat-lapor">
+      <div style="margin-bottom:15px;">
+        <label for="catatan_admin" style="display:block; font-size:12.5px; font-weight:700; color:#334155; margin-bottom:6px;">
+          Alasan / Catatan Penolakan *
+        </label>
+        <textarea name="catatan_admin" id="catatan_admin" rows="4" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:6px; font-family:inherit; font-size:13.5px; resize:vertical; box-sizing:border-box;" placeholder="Contoh: Foto selfie tidak jelas / tidak menampilkan wajah terkini, atau uraian kegiatan belum diisi dengan lengkap..." required></textarea>
+      </div>
+      <div style="display:flex; justify-content:flex-end; gap:10px;">
+        <button type="button" class="btn btn-secondary" onclick="closeTolakModal()">Batal</button>
+        <button type="submit" class="btn btn-danger"><i class="fas fa-paper-plane"></i> Kirim Penolakan</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <script>
+  let currentDetailItem = null;
+
   async function showDetailModal(laporId) {
     const modal = document.getElementById('modalDetail');
     const loading = document.getElementById('modalLoading');
@@ -422,15 +498,50 @@
       const resJson = await res.json();
       if (resJson.success) {
         const item = resJson.data;
+        currentDetailItem = item;
+
         document.getElementById('dNama').innerText = item.nama_lengkap || '-';
         document.getElementById('dRegister').innerText = item.no_register || '-';
         document.getElementById('dPeriode').innerText = item.nama_bulan + ' ' + item.tahun;
         document.getElementById('dSubmit').innerText = item.tanggal_submit_formatted || '-';
         document.getElementById('dAktivitas').innerText = item.aktivitas_harian || '(Tidak ada keterangan)';
         document.getElementById('dRencana').innerText = item.rencana_mendatang || '(Tidak ada keterangan)';
+        document.getElementById('dVerifikator').innerText = item.admin_verifikasi || '-';
+
         document.getElementById('cancelLaporId').value = item.id;
         document.getElementById('hapusLaporId').value = item.id;
+        document.getElementById('terimaLaporId').value = item.id;
 
+        // Status Badge & Tombol Visibilitas
+        const badgeEl = document.getElementById('dStatusBadge');
+        const btnTerima = document.getElementById('btnTerimaModal');
+        const btnTolak = document.getElementById('btnTolakModal');
+        const btnBatal = document.getElementById('btnBatalkanModal');
+
+        if (item.status === 'diterima') {
+          badgeEl.innerHTML = '<span class="badge badge-success"><i class="fas fa-check"></i> Diterima</span>';
+          btnTerima.style.display = 'none';
+          btnTolak.style.display = 'inline-flex';
+          btnBatal.style.display = 'inline-flex';
+        } else if (item.status === 'ditolak') {
+          badgeEl.innerHTML = '<span class="badge badge-danger"><i class="fas fa-times"></i> Ditolak</span>';
+          btnTerima.style.display = 'inline-flex';
+          btnTolak.style.display = 'none';
+          btnBatal.style.display = 'inline-flex';
+        } else if (item.status === 'dibatalkan') {
+          badgeEl.innerHTML = '<span class="badge badge-danger">Dibatalkan</span>';
+          btnTerima.style.display = 'inline-flex';
+          btnTolak.style.display = 'inline-flex';
+          btnBatal.style.display = 'none';
+        } else {
+          // Menunggu Verifikasi
+          badgeEl.innerHTML = '<span class="badge badge-warning"><i class="fas fa-clock"></i> Menunggu Verifikasi</span>';
+          btnTerima.style.display = 'inline-flex';
+          btnTolak.style.display = 'inline-flex';
+          btnBatal.style.display = 'none';
+        }
+
+        // Tampilkan Foto jika ada
         if (item.foto_bukti || item.foto_url) {
           let fotoSrc = item.foto_url || item.foto_bukti;
           if (!fotoSrc.startsWith('data:') && !fotoSrc.startsWith('http://') && !fotoSrc.startsWith('https://')) {
@@ -448,8 +559,10 @@
           document.getElementById('dFotoBox').style.display = 'none';
         }
 
-        if (item.catatan_admin) {
-          document.getElementById('dCatatan').innerText = item.catatan_admin;
+        // Tampilkan Catatan / Alasan Penolakan jika ada
+        const catatan = item.catatan_admin || item.catatan_petugas || item.alasan_penolakan;
+        if (catatan) {
+          document.getElementById('dCatatan').innerText = catatan;
           document.getElementById('dCatatanBox').style.display = 'block';
         } else {
           document.getElementById('dCatatanBox').style.display = 'none';
@@ -477,6 +590,40 @@
 
   function closeDetailModal() {
     document.getElementById('modalDetail').classList.remove('active');
+  }
+
+  function openTolakModal(laporId, clientName) {
+    document.getElementById('tolakLaporId').value = laporId;
+    document.getElementById('tolakClientName').innerText = clientName || 'Klien';
+    document.getElementById('catatan_admin').value = '';
+    document.getElementById('modalTolak').classList.add('active');
+  }
+
+  function closeTolakModal() {
+    document.getElementById('modalTolak').classList.remove('active');
+  }
+
+  function openTolakFromDetail() {
+    if (!currentDetailItem) return;
+    openTolakModal(currentDetailItem.id, currentDetailItem.nama_lengkap);
+  }
+
+  function konfirmasiTerimaTabel(form, namaKlien) {
+    customConfirm({
+      title: 'Terima Laporan Wajib Lapor?',
+      text: 'Apakah Anda yakin ingin menyetujui laporan dari ' + (namaKlien || 'klien') + '?',
+      icon: 'question',
+      confirmColor: '#28a745',
+      confirmText: '<i class="fas fa-check"></i> Ya, Terima Laporan',
+      cancelText: 'Batal'
+    }).then((res) => {
+      if (res.isConfirmed) form.submit();
+    });
+  }
+
+  function konfirmasiTerimaModal(form) {
+    const nama = currentDetailItem ? currentDetailItem.nama_lengkap : 'klien';
+    konfirmasiTerimaTabel(form, nama);
   }
 
   function konfirmasiBatalkanLapor(form) {

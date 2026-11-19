@@ -320,21 +320,25 @@
 
 <!-- MODAL TOLAK LAPORAN -->
 <div class="modal" id="modalTolak">
-  <div class="modal-content">
-    <h3 style="color:#dc3545; margin-bottom:15px; font-size:18px;"><i class="fas fa-exclamation-triangle"></i> Tolak Wajib Lapor Klien</h3>
-    <p style="font-size:14px; color:#555; margin-bottom:15px;">
-      Anda akan menolak laporan dari klien: <strong id="tolakClientName"></strong>. Berikan catatan alasan penolakan agar klien dapat memperbaiki laporannya:
+  <div class="modal-content" style="max-width:500px; width:95%;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:1px solid #fee2e2; padding-bottom:10px;">
+      <h3 style="color:#dc2626; font-size:18px; margin:0;"><i class="fas fa-exclamation-triangle"></i> Tolak Wajib Lapor Klien</h3>
+      <button type="button" onclick="closeTolakModal()" style="border:none; background:transparent; font-size:24px; cursor:pointer; color:#94a3b8; line-height:1;">&times;</button>
+    </div>
+    <p style="font-size:13.5px; color:#475569; margin-bottom:15px; line-height:1.5;">
+      Anda akan menolak laporan dari klien: <strong id="tolakClientName" style="color:#0f172a;"></strong>.<br>
+      Berikan catatan alasan penolakan agar klien dapat memperbaiki laporannya:
     </p>
     <form action="/admin/lapor/tolak" method="POST">
       <input type="hidden" name="lapor_id" id="tolakLaporId">
       <input type="hidden" name="redirect_to" value="/admin/dashboard?tab=lapor">
-      <div class="form-group">
-        <label for="catatan_admin">Alasan / Catatan Penolakan *</label>
-        <textarea name="catatan_admin" id="catatan_admin" rows="4" placeholder="Misal: Foto bukti tidak jelas atau aktivitas belum lengkap diisi..." required></textarea>
+      <div class="form-group" style="margin-bottom:15px;">
+        <label for="catatan_admin" style="display:block; font-size:12.5px; font-weight:700; color:#334155; margin-bottom:6px;">Alasan / Catatan Penolakan *</label>
+        <textarea name="catatan_admin" id="catatan_admin" rows="4" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:6px; font-family:inherit; font-size:13.5px; resize:vertical; box-sizing:border-box;" placeholder="Misal: Foto selfie tidak jelas atau aktivitas harian belum lengkap diisi..." required></textarea>
       </div>
       <div style="display:flex; justify-content:flex-end; gap:10px;">
         <button type="button" class="btn btn-secondary" onclick="closeTolakModal()">Batal</button>
-        <button type="submit" class="btn btn-danger"><i class="fas fa-times"></i> Kirim Penolakan</button>
+        <button type="submit" class="btn btn-danger"><i class="fas fa-paper-plane"></i> Kirim Penolakan</button>
       </div>
     </form>
   </div>
@@ -352,6 +356,8 @@
   function openTolakModal(laporId, clientName) {
     document.getElementById('tolakLaporId').value = laporId;
     document.getElementById('tolakClientName').innerText = clientName;
+    const catEl = document.getElementById('catatan_admin');
+    if (catEl) catEl.value = '';
     document.getElementById('modalTolak').classList.add('active');
   }
 

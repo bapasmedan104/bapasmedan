@@ -305,7 +305,7 @@ async function postTolakLapor(req, res) {
   try {
     const adminId = req.session.user.id;
     const laporId = req.body.lapor_id;
-    const catatan = req.body.catatan_admin;
+    const catatan = req.body.catatan_admin || req.body.alasan_penolakan || req.body.alasan;
     const result = await tolakLapor(laporId, adminId, catatan);
     if (result.success) {
       req.session.successMessage = result.message;
