@@ -7,6 +7,8 @@ const {
   getLaporById,
   createClient,
   updateClient,
+  resetClientPassword,
+  resetAdminPassword,
   deleteClient,
   deleteLapor,
   terimaLapor,
@@ -231,6 +233,40 @@ async function postUpdateClient(req, res) {
   res.redirect('/admin/kelola-client');
 }
 
+async function postResetClientPassword(req, res) {
+  try {
+    const adminId = req.session.user.id;
+    const clientId = req.body.client_id;
+    const newPassword = req.body.new_password;
+    const result = await resetClientPassword(clientId, newPassword, adminId);
+    if (result.success) {
+      req.session.successMessage = result.message;
+    } else {
+      req.session.errorMessage = result.message;
+    }
+  } catch (err) {
+    req.session.errorMessage = 'Gagal mereset kata sandi klien: ' + err.message;
+  }
+  res.redirect('/admin/kelola-client');
+}
+
+async function postResetAdminPassword(req, res) {
+  try {
+    const adminId = req.session.user.id;
+    const newPassword = req.body.new_password;
+    const result = await resetAdminPassword(adminId, newPassword);
+    if (result.success) {
+      req.session.successMessage = result.message;
+    } else {
+      req.session.errorMessage = result.message;
+    }
+  } catch (err) {
+    req.session.errorMessage = 'Gagal mereset kata sandi administrator: ' + err.message;
+  }
+  const redirectUrl = req.headers.referer || '/admin/dashboard';
+  res.redirect(redirectUrl);
+}
+
 async function postDeleteClient(req, res) {
   try {
     const adminId = req.session.user.id;
@@ -373,6 +409,8 @@ module.exports = {
   getExportClientsCsv,
   postCreateClient,
   postUpdateClient,
+  postResetClientPassword,
+  postResetAdminPassword,
   postDeleteClient,
   postTerimaLapor,
   postTolakLapor,

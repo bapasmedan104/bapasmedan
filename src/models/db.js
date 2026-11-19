@@ -357,6 +357,56 @@ async function updateClient(clientId, data, adminId) {
   return { success: true, message: 'Client berhasil diupdate' };
 }
 
+async function resetClientPassword(clientId, newPassword, adminId) {
+  const cleanPass = (newPassword || '').trim();
+  if (!cleanPass) {
+    return { success: false, message: 'Kata sandi baru tidak boleh kosong' };
+  }
+  const docRef = db.collection('client').doc(clientId);
+  const snap = await docRef.get();
+  if (!snap.exists) {
+    return { success: false, message: 'Data klien tidak ditemukan' };
+  }
+  const clientData = snap.data();
+  const hashedPassword = await hashPassword(cleanPass);
+  await docRef.set({
+    password: hashedPassword,
+    password_plain: cleanPass,
+    password_reset_at: new Date().toISOString()
+  }, { merge: true });
+
+  await logActivity('admin', adminId, 'Reset Sandi Klien', `Admin mereset kata sandi klien ${clientData.nama_lengkap || clientId} (${clientData.no_register || '-'})`);
+  return {
+    success: true,
+    newPassword: cleanPass,
+    clientName: clientData.nama_lengkap || 'Klien',
+    message: `Kata sandi klien "${clientData.nama_lengkap || 'Klien'}" (${clientData.no_register || ''}) berhasil direset menjadi: "${cleanPass}"`
+  };
+}
+
+async function resetAdminPassword(adminId, newPassword) {
+  const cleanPass = (newPassword || '').trim();
+  if (!cleanPass || cleanPass.length < 5) {
+    return { success: false, message: 'Kata sandi baru admin minimal 5 karakter' };
+  }
+  const docRef = db.collection('admin').doc(adminId);
+  const snap = await docRef.get();
+  if (!snap.exists) {
+    return { success: false, message: 'Akun administrator tidak ditemukan' };
+  }
+  const hashedPassword = await hashPassword(cleanPass);
+  await docRef.set({
+    password: hashedPassword,
+    password_reset_at: new Date().toISOString()
+  }, { merge: true });
+
+  await logActivity('admin', adminId, 'Reset Sandi Admin', `Admin mereset kata sandi akunnya sendiri`);
+  return {
+    success: true,
+    message: 'Kata sandi administrator berhasil diperbarui! Silakan gunakan kata sandi baru untuk login selanjutnya.'
+  };
+}
+
 async function deleteClient(clientId, adminId) {
   // 1. Hapus semua laporan client dari koleksi wajib_lapor
   const laporCol = db.collection('wajib_lapor');
@@ -838,6 +888,8 @@ module.exports = {
   updateProfilClient,
   createClient,
   updateClient,
+  resetClientPassword,
+  resetAdminPassword,
   deleteClient,
   deleteLapor,
   getAllClients,

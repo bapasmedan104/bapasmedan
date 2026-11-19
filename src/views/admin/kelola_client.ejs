@@ -74,6 +74,7 @@
     <a href="/admin/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
     <a href="/admin/riwayat-lapor"><i class="fas fa-filter"></i> Riwayat Lapor</a>
     <a href="/admin/kelola-client" style="font-weight:700; border-bottom:2px solid #ffc107; padding-bottom:4px;"><i class="fas fa-users-cog"></i> Kelola Klien</a>
+    <a href="javascript:void(0)" onclick="openResetAdminModal()"><i class="fas fa-key"></i> Sandi Admin</a>
     <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
   </div>
 </div>
@@ -212,8 +213,9 @@
                 <% } %>
               </td>
               <td style="text-align:center;">
-                <div class="table-action-box" style="display:inline-flex; gap:6px; align-items:center; justify-content:center;">
+                <div class="table-action-box" style="display:inline-flex; gap:6px; align-items:center; justify-content:center; flex-wrap:wrap;">
                   <button type="button" class="btn btn-sm btn-primary" onclick='openEditModal(<%= JSON.stringify(c) %>)'><i class="fas fa-edit"></i> Edit</button>
+                  <button type="button" class="btn btn-sm" style="background:#f59e0b; color:white; font-weight:700;" onclick='openResetModal("<%= c.id %>", "<%= (c.nama_lengkap || "").replace(/"/g, "&quot;") %>", "<%= c.no_register || "" %>", "<%= c.username || "" %>")'><i class="fas fa-key"></i> Reset Sandi</button>
                   <button type="button" class="btn btn-sm btn-danger" onclick="openHapusModal('<%= c.id %>', '<%= c.nama_lengkap %>')"><i class="fas fa-trash"></i> Hapus</button>
                 </div>
               </td>
@@ -411,7 +413,88 @@
   </div>
 </div>
 
+<!-- MODAL RESET SANDI KLIEN -->
+<div class="modal" id="modalResetSandi">
+  <div class="modal-content" style="max-width:500px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; border-bottom:1px solid #e2e8f0; padding-bottom:12px;">
+      <h3 style="color:#b45309; font-size:18px; display:flex; align-items:center; gap:8px;">
+        <i class="fas fa-key" style="color:#f59e0b;"></i> Reset Kata Sandi Klien
+      </h3>
+      <button type="button" onclick="closeResetModal()" style="background:none; border:none; font-size:20px; cursor:pointer; color:#94a3b8;">&times;</button>
+    </div>
+
+    <div style="background:#fffbeb; border:1px solid #fef3c7; border-radius:8px; padding:12px 14px; margin-bottom:18px;">
+      <div style="font-size:13px; color:#92400e; margin-bottom:4px;">
+        Nama Klien: <strong id="resetNamaKlien" style="font-size:14px; color:#78350f;">-</strong>
+      </div>
+      <div style="font-size:12px; color:#b45309;">
+        No. Register: <code id="resetNoRegister" style="background:#fef3c7; padding:1px 5px; border-radius:4px; font-weight:700;">-</code> &bull; 
+        Username / WA: <span id="resetUsername" style="font-weight:700;">-</span>
+      </div>
+    </div>
+
+    <form action="/admin/client/reset-password" method="POST" autocomplete="off">
+      <input type="hidden" name="client_id" id="resetClientId">
+
+      <div class="form-group">
+        <label for="resetNewPassword" style="font-weight:700; color:#1e293b; font-size:13.5px; display:block; margin-bottom:6px;">
+          Kata Sandi (Password) Baru Klien *
+        </label>
+        <div style="position:relative; display:flex; align-items:center;">
+          <input 
+            type="text" 
+            name="new_password" 
+            id="resetNewPassword" 
+            required 
+            placeholder="Masukkan kata sandi baru"
+            style="padding-right:75px; font-weight:700; font-family:monospace; font-size:15px; color:#0f172a; border:1.5px solid #cbd5e1; border-radius:6px;"
+          >
+          <button 
+            type="button" 
+            onclick="generateSandiReset()" 
+            style="position:absolute; right:6px; background:#f59e0b; color:white; border:none; padding:6px 10px; border-radius:4px; font-size:11px; font-weight:700; cursor:pointer;" 
+            title="Buat Sandi Acak Otomatis"
+          >
+            <i class="fas fa-random"></i> Acak
+          </button>
+        </div>
+        <small style="color:#64748b; font-size:11.5px; margin-top:6px; display:block;">
+          Kata sandi baru ini akan langsung tersimpan di Cloud Firebase dan dapat langsung digunakan oleh klien untuk login.
+        </small>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:22px;">
+        <button type="button" class="btn btn-secondary" onclick="closeResetModal()">Batal</button>
+        <button type="submit" class="btn" style="background:#003580; color:white; font-weight:700;">
+          <i class="fas fa-check-circle"></i> Simpan & Reset Sandi
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <script>
+  function generateSandiReset() {
+    const chars = 'abcdefghjkmnpqrstuvwxyz23456789';
+    let res = 'klien';
+    for (let i = 0; i < 4; i++) {
+      res += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    document.getElementById('resetNewPassword').value = res;
+  }
+
+  function openResetModal(id, nama, noReg, uname) {
+    document.getElementById('resetClientId').value = id;
+    document.getElementById('resetNamaKlien').innerText = nama || 'Klien';
+    document.getElementById('resetNoRegister').innerText = noReg || '-';
+    document.getElementById('resetUsername').innerText = uname || '-';
+    generateSandiReset();
+    document.getElementById('modalResetSandi').classList.add('active');
+  }
+
+  function closeResetModal() {
+    document.getElementById('modalResetSandi').classList.remove('active');
+  }
   function generateSandi() {
     const chars = 'abcdefghjkmnpqrstuvwxyz23456789';
     let res = 'klien';

@@ -18,7 +18,11 @@ router.get('/kelola-client', adminController.getKelolaClient);
 router.get('/kelola-client/export-csv', adminController.getExportClientsCsv);
 router.post('/client/create', adminController.postCreateClient);
 router.post('/client/update', adminController.postUpdateClient);
+router.post('/client/reset-password', adminController.postResetClientPassword);
 router.post('/client/delete', adminController.postDeleteClient);
+
+// Reset Password Administrator
+router.post('/reset-password', adminController.postResetAdminPassword);
 
 // Tindakan Verifikasi Laporan
 router.post('/lapor/terima', adminController.postTerimaLapor);
