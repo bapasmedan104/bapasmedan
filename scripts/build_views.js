@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const ejs = require('ejs');
 
 const viewsDir = path.join(__dirname, '..', 'src', 'views');
 
@@ -17,20 +16,19 @@ function getFiles(dir) {
 }
 
 const files = getFiles(viewsDir);
-let code = '/** Auto-generated precompiled EJS templates for Cloudflare Workers & Serverless **/\n';
-code += 'const ejs = require("ejs");\n\n';
-code += 'const views = {\n';
+let code = '/** In-memory EJS templates for Cloudflare Workers & Serverless without filesystem access **/\n';
+code += 'module.exports = {\n';
 
 for (const f of files) {
-  const rel = path.relative(viewsDir, f).replace(/\\/g, '/').replace(/\.ejs$/, '');
+  const rel = path.relative(viewsDir, f).replace(/\\/g, '/');
   const src = fs.readFileSync(f, 'utf8');
-  const fnStr = ejs.compile(src, { filename: f, client: true, compileDebug: false }).toString();
-  code += `  ${JSON.stringify(rel)}: ${fnStr},\n`;
-  code += `  ${JSON.stringify(rel + '.ejs')}: ${fnStr},\n`;
+  code += `  ${JSON.stringify(rel)}: ${JSON.stringify(src)},\n`;
+  code += `  ${JSON.stringify('src/views/' + rel)}: ${JSON.stringify(src)},\n`;
+  code += `  ${JSON.stringify(rel.replace(/\.ejs$/, ''))}: ${JSON.stringify(src)},\n`;
 }
 
-code += '};\n\nmodule.exports = views;\n';
+code += '};\n';
 
-const outPath = path.join(viewsDir, 'precompiledViews.js');
+const outPath = path.join(viewsDir, 'rawViews.js');
 fs.writeFileSync(outPath, code, 'utf8');
-console.log('✅ Generated precompiledViews.js successfully! Total size:', code.length);
+console.log('✅ Generated rawViews.js successfully! Total size:', code.length);

@@ -19,34 +19,51 @@ const clientRoutes = require('./src/routes/clientRoutes');
 
 const app = express();
 
-let precompiledViews = null;
+let rawViews = null;
+const inMemoryCompiled = {};
+
 try {
-  precompiledViews = require('./src/views/precompiledViews');
+  rawViews = require('./src/views/rawViews');
+  // Dukungan runtime Cloudflare Workers tanpa akses filesystem disk
+  ejs.fileLoader = function (filePath) {
+    const norm = filePath.replace(/\\/g, '/');
+    for (const [k, v] of Object.entries(rawViews)) {
+      if (norm.endsWith(k)) return v;
+    }
+    throw new Error('Not found in rawViews: ' + filePath);
+  };
+  ejs.resolveInclude = function(name, filename, isDir) {
+    const dir = path.posix.dirname(filename.replace(/\\/g, '/'));
+    let target = path.posix.normalize(path.posix.join(dir, name));
+    if (!target.endsWith('.ejs')) target += '.ejs';
+    return target;
+  };
+
+  // Kompilasi template saat startup worker
+  for (const [k, content] of Object.entries(rawViews)) {
+    if (k.startsWith('src/views/')) continue;
+    try {
+      const fn = ejs.compile(content, { filename: 'src/views/' + k });
+      inMemoryCompiled[k] = fn;
+      inMemoryCompiled[k.replace(/\.ejs$/, '')] = fn;
+    } catch (e) {}
+  }
 } catch (e) {
-  console.warn('Precompiled views not loaded, using ejs.renderFile fallback.');
+  console.warn('rawViews not loaded, using ejs.renderFile fallback.');
 }
 
-// View engine setup (Mendukung precompiled views murni untuk Cloudflare Workers tanpa akses filesystem)
+// View engine setup
 app.engine('ejs', (filePath, data, cb) => {
-  if (precompiledViews) {
-    const rel = path.relative(path.join(__dirname, 'src', 'views'), filePath)
-                    .replace(/\\/g, '/')
-                    .replace(/\.ejs$/, '');
-    const fn = precompiledViews[rel] || precompiledViews[rel + '.ejs'];
-    if (fn) {
-      try {
-        function includeHelper(name, incData) {
-          const dir = path.posix.dirname(rel);
-          const resolved = path.posix.normalize(path.posix.join(dir, name)).replace(/\.ejs$/, '');
-          const childFn = precompiledViews[resolved] || precompiledViews[resolved + '.ejs'] || precompiledViews[name] || precompiledViews['partials/' + name];
-          if (!childFn) throw new Error('Include not found in precompiled views: ' + name);
-          return childFn(Object.assign({}, data, incData), ejs.escapeXML, includeHelper);
-        }
-        const html = fn(data, ejs.escapeXML, includeHelper);
-        return cb(null, html);
-      } catch (err) {
-        console.warn('Precompiled render error for ' + rel + ', trying renderFile:', err.message);
-      }
+  const rel = path.relative(path.join(__dirname, 'src', 'views'), filePath)
+                  .replace(/\\/g, '/')
+                  .replace(/\.ejs$/, '');
+  const fn = inMemoryCompiled[rel] || inMemoryCompiled[rel + '.ejs'];
+  if (fn) {
+    try {
+      const html = fn(data);
+      return cb(null, html);
+    } catch (err) {
+      console.warn('In-memory render error for ' + rel + ':', err.message);
     }
   }
 
