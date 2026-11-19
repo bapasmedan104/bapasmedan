@@ -15,79 +15,166 @@
   <!-- Primary SEO Meta Tags -->
   <title><%= pageTitle || 'BAPAS Kelas I Medan - Sistem Informasi & Wajib Lapor Online' %></title>
   <meta name="title" content="<%= pageTitle || 'BAPAS Kelas I Medan - Sistem Informasi & Wajib Lapor Online' %>">
-  <meta name="description" content="<%= typeof pageDescription !== 'undefined' && pageDescription ? pageDescription : 'Situs Resmi Balai Pemasyarakatan (BAPAS) Kelas I Medan, Kementerian Imigrasi dan Pemasyarakatan RI. Layanan Wajib Lapor Online Klien Pemasyarakatan, Pembimbingan Kemasyarakatan, dan Layanan Integrasi Sosial.' %>">
-  <meta name="keywords" content="<%= typeof pageKeywords !== 'undefined' && pageKeywords ? pageKeywords : 'BAPAS Medan, Balai Pemasyarakatan Kelas I Medan, Wajib Lapor Online, Klien Pemasyarakatan, Pembimbing Kemasyarakatan, Kemenimipas, Litmas, Pembebasan Bersyarat, CB, CMB, PB' %>">
+  <meta name="description" content="<%= typeof pageDescription !== 'undefined' && pageDescription ? pageDescription : 'Situs Resmi Balai Pemasyarakatan (BAPAS) Kelas I Medan, Kementerian Imigrasi dan Pemasyarakatan RI. Layanan Wajib Lapor Online Klien Pemasyarakatan, Pembimbingan Kemasyarakatan, Litmas, dan Layanan Integrasi Sosial (PB, CB, CMB, Asimilasi).' %>">
+  <meta name="keywords" content="<%= typeof pageKeywords !== 'undefined' && pageKeywords ? pageKeywords : 'BAPAS Medan, Balai Pemasyarakatan Kelas I Medan, Wajib Lapor Online, Klien Pemasyarakatan, Pembimbing Kemasyarakatan, Kemenimipas, Litmas, Pembebasan Bersyarat, CB, CMB, PB, Asimilasi, Bapas Helvetia Tanjung Gusta' %>">
   <meta name="author" content="Balai Pemasyarakatan Kelas I Medan">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
-  <meta name="theme-color" content="#003580">
+  <meta name="language" content="Indonesia">
+  <meta http-equiv="content-language" content="id">
+  <meta name="revisit-after" content="1 days">
+  <meta name="rating" content="general">
+  <meta name="theme-color" content="#00246b">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="BAPAS Medan">
+
+  <!-- Geo Meta Tags (Lokasi Resmi Medan, Sumatera Utara) -->
+  <meta name="geo.region" content="ID-SU">
+  <meta name="geo.placename" content="Medan, Sumatera Utara">
+  <meta name="geo.position" content="3.6067;98.6322">
+  <meta name="ICBM" content="3.6067, 98.6322">
   
   <!-- Canonical Link -->
   <link rel="canonical" href="https://bapas1medan.com<%= typeof canonicalUrl !== 'undefined' ? canonicalUrl : '' %>">
 
-  <!-- Open Graph / Facebook / WhatsApp -->
+  <!-- Open Graph / Facebook / WhatsApp Preview -->
   <meta property="og:type" content="website">
   <meta property="og:locale" content="id_ID">
-  <meta property="og:site_name" content="BAPAS Kelas I Medan">
-  <meta property="og:title" content="<%= pageTitle || 'BAPAS Kelas I Medan - Sistem Wajib Lapor' %>">
-  <meta property="og:description" content="<%= typeof pageDescription !== 'undefined' && pageDescription ? pageDescription : 'Situs Resmi Balai Pemasyarakatan Kelas I Medan - Layanan Wajib Lapor Online dan Informasi Pemasyarakatan.' %>">
+  <meta property="og:site_name" content="BAPAS Kelas I Medan - Kemenimipas RI">
+  <meta property="og:title" content="<%= pageTitle || 'BAPAS Kelas I Medan - Sistem Informasi & Wajib Lapor' %>">
+  <meta property="og:description" content="<%= typeof pageDescription !== 'undefined' && pageDescription ? pageDescription : 'Situs Resmi Balai Pemasyarakatan Kelas I Medan - Layanan Wajib Lapor Online Klien Pemasyarakatan dan Informasi Pemasyarakatan Terpadu.' %>">
   <meta property="og:url" content="https://bapas1medan.com<%= typeof canonicalUrl !== 'undefined' ? canonicalUrl : '' %>">
   <meta property="og:image" content="https://bapas1medan.com/logo_pemasyarakatan_custom.png">
+  <meta property="og:image:secure_url" content="https://bapas1medan.com/logo_pemasyarakatan_custom.png">
+  <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="512">
   <meta property="og:image:height" content="512">
+  <meta property="og:image:alt" content="Logo Resmi Balai Pemasyarakatan Kelas I Medan">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="<%= pageTitle || 'BAPAS Kelas I Medan - Sistem Wajib Lapor' %>">
-  <meta name="twitter:description" content="<%= typeof pageDescription !== 'undefined' && pageDescription ? pageDescription : 'Situs Resmi Balai Pemasyarakatan Kelas I Medan.' %>">
+  <meta name="twitter:title" content="<%= pageTitle || 'BAPAS Kelas I Medan - Sistem Informasi & Wajib Lapor' %>">
+  <meta name="twitter:description" content="<%= typeof pageDescription !== 'undefined' && pageDescription ? pageDescription : 'Situs Resmi Balai Pemasyarakatan Kelas I Medan - Kementerian Imigrasi dan Pemasyarakatan RI.' %>">
   <meta name="twitter:image" content="https://bapas1medan.com/logo_pemasyarakatan_custom.png">
 
-  <!-- Schema.org JSON-LD Structured Data -->
+  <!-- Schema.org JSON-LD Structured Data: GovernmentOffice & WebSite -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "GovernmentOrganization",
-    "name": "Balai Pemasyarakatan Kelas I Medan",
-    "alternateName": ["BAPAS Medan", "Bapas Kelas 1 Medan"],
-    "url": "https://bapas1medan.com",
-    "logo": "https://bapas1medan.com/logo_pemasyarakatan_custom.png",
-    "image": "https://bapas1medan.com/logo_pemasyarakatan_custom.png",
-    "description": "Balai Pemasyarakatan Kelas I Medan adalah Unit Pelaksana Teknis Kementerian Imigrasi dan Pemasyarakatan yang menyelenggarakan penelitian kemasyarakatan, pembimbingan, pengawasan, dan pendampingan klien pemasyarakatan.",
-    "telephone": "(061) 4516516",
-    "email": "bapasmedan@kemenkumham.go.id",
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": "Jl. Lembaga Pemasyarakatan, Tj. Gusta, Kec. Medan Helvetia",
-      "addressLocality": "Medan",
-      "addressRegion": "Sumatera Utara",
-      "postalCode": "20125",
-      "addressCountry": "ID"
-    },
-    "openingHoursSpecification": {
-      "@type": "OpeningHoursSpecification",
-      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-      "opens": "08:00",
-      "closes": "16:00"
-    }
+    "@graph": [
+      {
+        "@type": "GovernmentOffice",
+        "@id": "https://bapas1medan.com/#organization",
+        "name": "Balai Pemasyarakatan Kelas I Medan",
+        "alternateName": ["BAPAS Medan", "Bapas Kelas 1 Medan", "Bapas Kanwil Sumut"],
+        "url": "https://bapas1medan.com",
+        "logo": "https://bapas1medan.com/logo_pemasyarakatan_custom.png",
+        "image": "https://bapas1medan.com/logo_pemasyarakatan_custom.png",
+        "description": "Balai Pemasyarakatan Kelas I Medan adalah Unit Pelaksana Teknis Kementerian Imigrasi dan Pemasyarakatan RI di Kota Medan yang menyelenggarakan penelitian kemasyarakatan (Litmas), pembimbingan, pengawasan, dan pendampingan klien pemasyarakatan.",
+        "telephone": "+62614516516",
+        "email": "bapasmedan@kemenkumham.go.id",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Jl. Lembaga Pemasyarakatan, Tj. Gusta, Kec. Medan Helvetia",
+          "addressLocality": "Medan",
+          "addressRegion": "Sumatera Utara",
+          "postalCode": "20125",
+          "addressCountry": "ID"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": "3.6067",
+          "longitude": "98.6322"
+        },
+        "openingHoursSpecification": [
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday"],
+            "opens": "08:00",
+            "closes": "16:00"
+          },
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Friday"],
+            "opens": "08:00",
+            "closes": "16:30"
+          }
+        ],
+        "priceRange": "Rp 0 (Gratis / Bebas Pungutan Liar)"
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://bapas1medan.com/#website",
+        "url": "https://bapas1medan.com",
+        "name": "BAPAS Kelas I Medan",
+        "publisher": { "@id": "https://bapas1medan.com/#organization" },
+        "inLanguage": "id-ID"
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://bapas1medan.com/#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Kapan jadwal pelaksanaan Wajib Lapor Klien di BAPAS Medan?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Wajib Lapor Online dibuka secara berkala setiap tanggal 1 hingga 15 setiap bulannya melalui portal web resmi https://bapas1medan.com/login."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Bagaimana cara melakukan Wajib Lapor Klien secara online?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Klien cukup masuk menggunakan Nomor Register / Nomor Telepon yang terdaftar, mengambil foto bukti presensi dengan kamera, mengisi laporan perkembangan, lalu mengirimkan laporan untuk diverifikasi oleh Pembimbing Kemasyarakatan (PK)."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Apakah layanan Litmas dan Wajib Lapor di BAPAS Medan dipungut biaya?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Seluruh layanan di Balai Pemasyarakatan Kelas I Medan adalah GRATIS (Rp 0,-) tanpa dipungut biaya apa pun dalam rangka pembangunan Zona Integritas Wilayah Bebas dari Korupsi (WBK)."
+            }
+          }
+        ]
+      }
+    ]
   }
   </script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/responsive.css">
 </head>
 <body>
 
+<!-- TOPBAR RESMI INSTANSI -->
+<div class="topbar">
+  <div class="container" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+    <div class="topbar-left" style="display:flex; align-items:center; gap:16px; font-size:12px;">
+      <span><i class="fas fa-flag" style="color:var(--gold);"></i> Republik Indonesia</span>
+      <span class="d-none-sm"><i class="fas fa-balance-scale" style="color:var(--gold);"></i> Zona Integritas WBK / WBBM</span>
+      <span><i class="fas fa-clock" style="color:var(--gold);"></i> Pelayanan: Senin - Jumat 08:00 - 16:00 WIB</span>
+    </div>
+    <div class="topbar-right" style="display:flex; align-items:center; gap:14px; font-size:12px;">
+      <a href="tel:0614516516" style="color:rgba(255,255,255,0.85); text-decoration:none; display:inline-flex; align-items:center; gap:5px;"><i class="fas fa-phone-alt" style="color:var(--gold);"></i> (061) 4516516</a>
+      <a href="/login" class="btn-login-top"><i class="fas fa-clipboard-check"></i> Wajib Lapor Klien</a>
+    </div>
+  </div>
+</div>
+
 <!-- HEADER UTAMA -->
 <header class="header">
   <div class="container header-inner">
     <div class="header-logo">
-      <div style="display:flex; align-items:center; gap:12px; flex-shrink:0;">
-        <img src="/logo_kemenimpas-removebg-preview.png" alt="Logo Kemenimipas" style="height:60px;" onerror="this.style.display='none'">
-        <img src="/logo_pemasyarakatan-removebg-preview.png" alt="Logo Pemasyarakatan" style="height:60px;" onerror="this.style.display='none'">
+      <div style="display:flex; align-items:center; gap:14px; flex-shrink:0;">
+        <img src="/logo_kemenimpas-removebg-preview.png" alt="Lambang Kementerian Imigrasi dan Pemasyarakatan" style="height:62px; filter:drop-shadow(0 2px 6px rgba(0,0,0,0.3));" onerror="this.style.display='none'">
+        <img src="/logo_pemasyarakatan_custom.png" alt="Logo Pemasyarakatan Balai Pemasyarakatan Kelas I Medan" style="height:62px; filter:drop-shadow(0 2px 6px rgba(0,0,0,0.3));" onerror="this.src='/logo_pemasyarakatan-removebg-preview.png'">
       </div>
       <div>
         <span class="header-sub">
@@ -102,9 +189,9 @@
       </div>
     </div>
     <div class="header-contact">
-      <i class="fas fa-envelope"></i>
+      <i class="fas fa-envelope-open-text"></i>
       <div>
-        <span class="contact-label">Email Resmi</span>
+        <span class="contact-label">Layanan Informasi Resmi</span>
         <span class="contact-value">bapasmedan@kemenkumham.go.id</span>
       </div>
     </div>
@@ -131,9 +218,9 @@
       <li class="nav-item has-dropdown <%= activePage === 'informasi' ? 'active' : '' %>">
         <a href="/informasi"><i class="fas fa-info-circle"></i> Informasi Publik <i class="fas fa-chevron-down arrow"></i></a>
         <ul class="dropdown">
-          <li><a href="/informasi?sub=layanan-integrasi"><i class="fas fa-hands-helping"></i> Layanan Integrasi</a></li>
-          <li><a href="/informasi?sub=alur-serah-terima"><i class="fas fa-exchange-alt"></i> Alur Serah Terima</a></li>
-          <li><a href="/informasi?sub=alur-wajib-lapor"><i class="fas fa-clipboard-list"></i> Alur Wajib Lapor</a></li>
+          <li><a href="/informasi?sub=layanan-integrasi"><i class="fas fa-hands-helping"></i> Layanan Integrasi (PB/CB/CMB)</a></li>
+          <li><a href="/informasi?sub=alur-serah-terima"><i class="fas fa-exchange-alt"></i> Alur Serah Terima Klien</a></li>
+          <li><a href="/informasi?sub=alur-wajib-lapor"><i class="fas fa-clipboard-list"></i> Alur Wajib Lapor Online</a></li>
           <li><a href="/informasi?sub=informasi-lkip"><i class="fas fa-file-alt"></i> Laporan Kinerja (LKIP)</a></li>
           <li><a href="/informasi?sub=laporan-keuangan"><i class="fas fa-chart-line"></i> Laporan Keuangan</a></li>
         </ul>
