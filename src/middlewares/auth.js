@@ -2,18 +2,21 @@ const { isProfilClientLengkap } = require('../models/db');
 const { getFileUrl } = require('../utils/helpers');
 
 function setLocals(req, res, next) {
-  res.locals.user = req.session.user || null;
-  res.locals.userType = req.session.userType || null;
-  res.locals.isLoggedIn = Boolean(req.session.isLoggedIn);
-  res.locals.successMessage = req.session.successMessage || null;
-  res.locals.errorMessage = req.session.errorMessage || null;
-  res.locals.warningMessage = req.session.warningMessage || null;
+  const sess = req.session || {};
+  res.locals.user = sess.user || null;
+  res.locals.userType = sess.userType || null;
+  res.locals.isLoggedIn = Boolean(sess.isLoggedIn);
+  res.locals.successMessage = sess.successMessage || null;
+  res.locals.errorMessage = sess.errorMessage || null;
+  res.locals.warningMessage = sess.warningMessage || null;
   res.locals.getFileUrl = getFileUrl;
 
   // Clear flash messages once consumed
-  delete req.session.successMessage;
-  delete req.session.errorMessage;
-  delete req.session.warningMessage;
+  if (req.session) {
+    delete req.session.successMessage;
+    delete req.session.errorMessage;
+    delete req.session.warningMessage;
+  }
 
   next();
 }

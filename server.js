@@ -19,6 +19,11 @@ const clientRoutes = require('./src/routes/clientRoutes');
 
 const app = express();
 
+// Diagnostic ping langsung di level teratas sebelum middleware apapun
+app.get('/ping', (req, res) => {
+  res.type('text/plain').send('PONG - BAPAS CLOUDFLARE IS LIVE!');
+});
+
 // Base root directory aman untuk runtime Node.js lokal maupun ESM Cloudflare Workers
 const appDir = (typeof process !== 'undefined' && typeof process.cwd === 'function') ? process.cwd() : '/';
 
@@ -224,11 +229,6 @@ app.get('/uploads/*', (req, res) => {
   res.redirect('/logo_pemasyarakatan-removebg-preview.png');
 });
 
-// Test endpoint untuk verifikasi kesiapan server Cloudflare
-app.get('/ping', (req, res) => {
-  res.type('text/plain').send('PONG - BAPAS CLOUDFLARE IS LIVE!');
-});
-
 // Mounting Routes
 app.use('/', publicRoutes);
 app.use('/', authRoutes);
@@ -247,15 +247,7 @@ app.use((req, res) => {
 app.use((err, req, res, next) => {
   console.error('Unhandled Application Error:', err);
   if (res.headersSent) return next(err);
-  try {
-    res.status(500).render('public/500', {
-      pageTitle: '500 - Kesalahan Server',
-      error: err.message,
-      activePage: '500'
-    });
-  } catch (renderErr) {
-    res.status(500).type('text/plain').send('SERVER ERROR:\n' + (err.stack || err.message));
-  }
+  res.status(500).type('text/plain').send('SERVER ERROR:\n' + (err.stack || err.message));
 });
 
 if (require.main === module) {
