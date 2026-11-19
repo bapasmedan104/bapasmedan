@@ -260,14 +260,14 @@
       <input type="hidden" name="tipe" id="tipeInput" value="2">
 
       <div class="form-group">
-        <label for="username" id="userLabel">Nomor WhatsApp / No. Register Klien</label>
+        <label for="username" id="userLabel">Nomor Register / Nomor WhatsApp Klien</label>
         <div class="input-wrapper">
-          <i class="fas fa-phone input-icon" id="userIcon"></i>
+          <i class="fas fa-id-card input-icon" id="userIcon"></i>
           <input 
             type="text" 
             name="username" 
             id="username" 
-            placeholder="Masukkan nomor WhatsApp atau no. register Anda" 
+            placeholder="Masukkan no. register (contoh: REG-...) atau no. WhatsApp" 
             value="<%= username || '' %>" 
             required 
             autocomplete="username"
@@ -305,9 +305,11 @@
 
     <!-- HINT LOGIN KLIEN -->
     <div class="credential-hint" id="clientHint">
-      <strong><i class="fas fa-info-circle"></i> Info Akun Klien:</strong><br>
-      Gunakan <strong>Nomor WhatsApp</strong> dan kata sandi yang telah didaftarkan oleh petugas BAPAS.<br>
-      • Contoh Akun: WhatsApp: <code>08xxxxxxxxxx</code> (atau <code>xxxxx</code>) | Sandi: <code>xxxxx</code>
+      <strong><i class="fas fa-info-circle"></i> Petunjuk Login Klien:</strong><br>
+      Anda dapat masuk menggunakan salah satu identitas yang terdaftar:<br>
+      • <strong>Nomor Register BAPAS</strong> (contoh: <code>REG-2026-xxxxxx</code>)<br>
+      • <strong>Nomor WhatsApp / HP</strong> (contoh: <code>08xxxxxxxxxx</code>)<br>
+      Masukkan juga <strong>Kata Sandi</strong> yang telah didaftarkan oleh petugas BAPAS.
     </div>
   </div>
 </div>

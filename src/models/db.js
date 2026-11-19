@@ -141,11 +141,17 @@ async function getClientByRegister(noRegister) {
     const doc = snap.docs[0];
     return { ...doc.data(), id: doc.id };
   }
-  // Coba pencarian case-insensitive jika tidak ketemu langsung
+  // Coba pencarian case-insensitive dan normalisasi tanda hubung/spasi
   const allSnap = await col.get();
+  const cleanNorm = clean.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
   for (const doc of allSnap.docs) {
     const data = doc.data();
-    if ((data.no_register || '').trim().toLowerCase() === clean.toLowerCase()) {
+    const docReg = (data.no_register || '').trim();
+    if (docReg.toLowerCase() === clean.toLowerCase()) {
+      return { ...data, id: doc.id };
+    }
+    const docNorm = docReg.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+    if (cleanNorm && docNorm && cleanNorm === docNorm) {
       return { ...data, id: doc.id };
     }
   }

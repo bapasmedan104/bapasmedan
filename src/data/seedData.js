@@ -26,31 +26,31 @@ module.exports = {
   },
   "client": {
     "client_081275623551": {
-      "tahun_wajib_lapor_mulai": 2026,
-      "foto_profil": null,
-      "nama_lengkap": "Klien BAPAS (081275623551)",
-      "username": "081275623551",
-      "alamat_sekarang": "Kota Medan",
-      "tempat_lahir": "Medan",
-      "bulan_wajib_lapor_mulai": 1,
-      "created_by": "admin",
-      "last_login": "2026-11-19T12:00:12.967Z",
-      "no_register": "REG-2026-081275",
-      "password": "$2a$10$q/TtMotWvYMyV9ocnHyzIe2frMOjyKKBX8XiLrso1SA5kpb7dtJ0W",
-      "bulan_wajib_lapor_akhir": 12,
+      "id": "client_081275623551",
       "email": "klien081275623551@bapasmedan.id",
       "masa_wajib_lapor": "Januari 2026 s/d Desember 2026",
+      "password": "$2a$10$q/TtMotWvYMyV9ocnHyzIe2frMOjyKKBX8XiLrso1SA5kpb7dtJ0W",
+      "tahun_wajib_lapor_mulai": 2026,
       "tanggal_lahir": "1998-05-15",
-      "tahun_wajib_lapor_akhir": 2026,
+      "nama_lengkap": "Klien BAPAS (081275623551)",
+      "no_register": "REG-2026-081275",
       "profil_updated_at": "2026-11-18T10:00:00.000Z",
-      "no_telepon": "081275623551",
-      "profil_lengkap": 1,
-      "id": "client_081275623551",
+      "bulan_wajib_lapor_mulai": 1,
+      "created_by": "admin",
       "status": "aktif",
+      "alamat_sekarang": "Kota Medan",
+      "username": "081275623551",
+      "bulan_wajib_lapor_akhir": 12,
+      "profil_lengkap": 1,
       "created_at": "2026-11-18T10:00:00.000Z",
-      "no_hp_gmail": "081275623551",
+      "tempat_lahir": "Medan",
+      "foto_profil": null,
+      "alamat": "Jl. Lembaga Pemasyarakatan, Medan",
+      "last_login": "2026-11-19T16:14:21.711Z",
+      "no_telepon": "081275623551",
       "total_bulan_wajib_lapor": 12,
-      "alamat": "Jl. Lembaga Pemasyarakatan, Medan"
+      "no_hp_gmail": "081275623551",
+      "tahun_wajib_lapor_akhir": 2026
     }
   },
   "wajib_lapor": {},
@@ -574,6 +574,51 @@ module.exports = {
       "user_type": "client",
       "deskripsi": "Client login berhasil (Klien BAPAS (081275623551))",
       "created_at": "2026-11-19T12:00:12.968Z"
+    },
+    "doc_1795104548737_di0xwx": {
+      "user_type": "admin",
+      "user_id": "admin_5UGpDijDxA",
+      "aksi": "Buat Client",
+      "deskripsi": "Admin membuat client baru: Klien Percobaan Hapus (REG-TEST-999)",
+      "ip_address": "127.0.0.1",
+      "created_at": "2026-11-19T16:09:08.737Z",
+      "id": "doc_1795104548737_di0xwx"
+    },
+    "doc_1795104550952_fwrrcc": {
+      "user_type": "admin",
+      "user_id": "admin_5UGpDijDxA",
+      "aksi": "Hapus Client Permanen",
+      "deskripsi": "Admin menghapus permanen client ID: doc_1795104547625_ecewd7 dari Firebase",
+      "ip_address": "127.0.0.1",
+      "created_at": "2026-11-19T16:09:10.952Z",
+      "id": "doc_1795104550952_fwrrcc"
+    },
+    "doc_1795104858873_1jd71m": {
+      "user_type": "client",
+      "user_id": "client_081275623551",
+      "aksi": "Login",
+      "deskripsi": "Client login berhasil (Klien BAPAS (081275623551))",
+      "ip_address": "127.0.0.1",
+      "created_at": "2026-11-19T16:14:18.873Z",
+      "id": "doc_1795104858873_1jd71m"
+    },
+    "doc_1795104860315_2a2tu3": {
+      "user_type": "client",
+      "user_id": "client_081275623551",
+      "aksi": "Login",
+      "deskripsi": "Client login berhasil (Klien BAPAS (081275623551))",
+      "ip_address": "127.0.0.1",
+      "created_at": "2026-11-19T16:14:20.315Z",
+      "id": "doc_1795104860315_2a2tu3"
+    },
+    "doc_1795104862053_rcj25z": {
+      "user_type": "client",
+      "user_id": "client_081275623551",
+      "aksi": "Login",
+      "deskripsi": "Client login berhasil (Klien BAPAS (081275623551))",
+      "ip_address": "127.0.0.1",
+      "created_at": "2026-11-19T16:14:22.053Z",
+      "id": "doc_1795104862053_rcj25z"
     }
   }
 };
