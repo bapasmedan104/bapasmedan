@@ -3,6 +3,9 @@ main = "worker.js"
 compatibility_date = "2025-06-01"
 compatibility_flags = ["nodejs_compat"]
 
+[build]
+command = "node scripts/build_views.js"
+
 [assets]
 directory = "./public"
 binding = "ASSETS"

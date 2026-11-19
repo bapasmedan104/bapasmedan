@@ -32,3 +32,7 @@ code += '};\n';
 const outPath = path.join(viewsDir, 'rawViews.js');
 fs.writeFileSync(outPath, code, 'utf8');
 console.log('✅ Generated rawViews.js successfully! Total size:', code.length);
+
+const dummyPrecompiled = path.join(viewsDir, 'precompiledViews.js');
+fs.writeFileSync(dummyPrecompiled, '/** Deprecated: digantikan oleh rawViews.js **/\nmodule.exports = {};\n', 'utf8');
+console.log('✅ Ensured precompiledViews.js is clean and safe (no with statements).');
