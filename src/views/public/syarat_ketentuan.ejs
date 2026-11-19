@@ -1,0 +1,142 @@
+<%- include('../partials/header') %>
+
+<div class="content-breadcrumb" style="background:#f0f4f8; padding:12px 0; border-bottom:1px solid #d9e2ec;">
+  <div class="container breadcrumb-container" style="display:flex; align-items:center; gap:8px; font-size:13px; color:#627d98; flex-wrap:wrap;">
+    <a href="/" style="color:#003580; text-decoration:none;"><i class="fas fa-home"></i> Beranda</a>
+    <i class="fas fa-chevron-right" style="font-size:9px; color:#94a3b8;"></i>
+    <span>Legalitas & Kebijakan</span>
+    <i class="fas fa-chevron-right" style="font-size:9px; color:#94a3b8;"></i>
+    <span style="font-weight:700; color:#002255;">Syarat & Ketentuan</span>
+  </div>
+</div>
+
+<div class="content-page" style="padding:35px 0 60px;">
+  <div class="container page-layout">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div style="background:#003580; color:#fff; padding:14px 18px; border-radius:8px 8px 0 0; font-weight:700; font-size:14px; display:flex; align-items:center; gap:8px;">
+        <i class="fas fa-shield-alt" style="color:#ffc107;"></i> Kebijakan & Layanan
+      </div>
+      <ul style="list-style:none; padding:0; margin:0; border:1px solid #d9e2ec; border-top:none; border-radius:0 0 8px 8px; background:#fff; overflow:hidden;">
+        <li style="border-bottom:1px solid #f0f4f8;">
+          <a href="/privasi" style="display:flex; align-items:center; gap:10px; padding:12px 18px; text-decoration:none; color:#486581; font-weight:500; background:transparent; min-height:44px;">
+            <i class="fas fa-user-shield" style="color:#94a3b8;"></i> Kebijakan Privasi
+          </a>
+        </li>
+        <li style="border-bottom:1px solid #f0f4f8;">
+          <a href="/syarat-ketentuan" style="display:flex; align-items:center; gap:10px; padding:12px 18px; text-decoration:none; color:#003580; font-weight:700; background:#e3f2fd; min-height:44px;">
+            <i class="fas fa-file-contract" style="color:#003580;"></i> Syarat & Ketentuan
+          </a>
+        </li>
+        <li style="border-bottom:1px solid #f0f4f8;">
+          <a href="/informasi?sub=alur-wajib-lapor" style="display:flex; align-items:center; gap:10px; padding:12px 18px; text-decoration:none; color:#486581; font-weight:500; background:transparent; min-height:44px;">
+            <i class="fas fa-clipboard-list" style="color:#94a3b8;"></i> Panduan Wajib Lapor
+          </a>
+        </li>
+        <li style="border-bottom:1px solid #f0f4f8;">
+          <a href="/informasi?sub=layanan-integrasi" style="display:flex; align-items:center; gap:10px; padding:12px 18px; text-decoration:none; color:#486581; font-weight:500; background:transparent; min-height:44px;">
+            <i class="fas fa-handshake" style="color:#94a3b8;"></i> Layanan Integrasi
+          </a>
+        </li>
+        <li>
+          <a href="/login" style="display:flex; align-items:center; gap:10px; padding:12px 18px; text-decoration:none; color:#003580; font-weight:700; background:#fff8e1; min-height:44px;">
+            <i class="fas fa-sign-in-alt" style="color:#b7791f;"></i> Masuk Portal Klien
+          </a>
+        </li>
+      </ul>
+
+      <div style="margin-top:20px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:18px;">
+        <h4 style="font-size:13px; font-weight:700; color:#002255; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+          <i class="fas fa-exclamation-triangle" style="color:#b45309;"></i> Peringatan Wajib Lapor
+        </h4>
+        <p style="font-size:12px; color:#64748b; line-height:1.6; margin:0;">
+          Klien yang tidak melaksanakan wajib lapor rutin berturut-turut dapat dikenakan sanksi evaluasi hak program integrasi (PB/CB/CMB).
+        </p>
+      </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="content-main" style="background:#fff; padding:36px; border-radius:8px; box-shadow:0 2px 12px rgba(0,0,0,0.06); line-height:1.8;">
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+        <span style="background:#fef3c7; color:#92400e; padding:4px 10px; border-radius:20px; font-size:11.5px; font-weight:700; letter-spacing:0.5px; text-transform:uppercase;">
+          Ketentuan Layanan Resmi
+        </span>
+        <span style="color:#94a3b8; font-size:12px;">Tahun Berlaku: <%= new Date().getFullYear() %></span>
+      </div>
+
+      <h1 style="font-family:'Playfair Display', serif; color:#002255; font-size:26px; margin:0 0 10px; font-weight:700;">
+        Syarat & Ketentuan Penggunaan Layanan Portal BAPAS Kelas I Medan
+      </h1>
+      <div style="width:60px; height:3px; background:#003580; margin:10px 0 25px;"></div>
+
+      <p style="color:#475569; font-size:14.5px; margin-bottom:20px;">
+        Selamat datang di Portal Digital Resmi Balai Pemasyarakatan (BAPAS) Kelas I Medan. Ketentuan ini mengatur seluruh hak, kewajiban, tata tertib, dan sanksi bagi Klien Pemasyarakatan serta pengguna portal dalam mengakses fitur Wajib Lapor Online maupun permohonan informasi publik.
+      </p>
+
+      <div style="background:#f8fafc; border-left:4px solid #b45309; padding:15px 18px; border-radius:0 8px 8px 0; margin-bottom:30px;">
+        <p style="margin:0; font-size:13.5px; color:#1e293b; font-weight:600;">
+          <i class="fas fa-gavel" style="color:#b45309; margin-right:6px;"></i> Kepatuhan Hukum:
+        </p>
+        <p style="margin:5px 0 0; font-size:13px; color:#475569;">
+          Dengan menggunakan sistem ini, Anda menyatakan setuju dan tunduk pada seluruh ketentuan yang ditetapkan berdasarkan Undang-Undang Nomor 22 Tahun 2022 tentang Pemasyarakatan.
+        </p>
+      </div>
+
+      <h2 style="font-size:18px; color:#002255; margin:30px 0 12px; display:flex; align-items:center; gap:8px;">
+        <i class="fas fa-user-check" style="color:#003580; font-size:16px;"></i> 1. Kriteria dan Hak Akses Pengguna
+      </h2>
+      <ul style="color:#475569; font-size:14px; padding-left:22px; margin-bottom:22px; line-height:1.9;">
+        <li><strong>Klien Pemasyarakatan:</strong> Merupakan warga binaan yang sedang menjalani masa integrasi (Pembebasan Bersyarat, Cuti Bersyarat, Cuti Menjelang Bebas, atau Asimilasi) di wilayah kerja BAPAS Kelas I Medan dan telah didaftarkan dalam sistem.</li>
+        <li><strong>Kerahasiaan Akun:</strong> Setiap Klien bertanggung jawab penuh atas keamanan kredensial akun wajib lapor (Nomor Register/Kata Sandi). Tidak diperbolehkan memberikan akses akun kepada orang lain tanpa persetujuan Pembimbing Kemasyarakatan.</li>
+      </ul>
+
+      <h2 style="font-size:18px; color:#002255; margin:30px 0 12px; display:flex; align-items:center; gap:8px;">
+        <i class="fas fa-clipboard-check" style="color:#003580; font-size:16px;"></i> 2. Tata Tertib Pelaksanaan Wajib Lapor Online
+      </h2>
+      <p style="color:#475569; font-size:14px; margin-bottom:12px;">Dalam melaksanakan wajib lapor rutin daring, Klien wajib memenuhi parameter validitas:</p>
+      <ul style="color:#475569; font-size:14px; padding-left:22px; margin-bottom:22px; line-height:1.9;">
+        <li><strong>Jadwal Pelaporan:</strong> Wajib lapor dilaksanakan sesuai frekuensi berkala yang telah disepakati bersama Pembimbing Kemasyarakatan (PK).</li>
+        <li><strong>Swafoto Wajah Asli (Real-Time):</strong> Swafoto harus memperlihatkan wajah Klien secara jelas, berpakaian rapi dan sopan, serta diambil secara langsung tanpa menggunakan foto cetak atau dokumen arsip lama.</li>
+        <li><strong>Keaslian Geolokasi GPS:</strong> Perangkat wajib mengaktifkan izin GPS akurat. Dilarang keras menggunakan aplikasi pemalsu lokasi (Fake GPS / Mock Location).</li>
+        <li><strong>Pembaruan Data Domisili & Usaha:</strong> Klien wajib mengisi perubahan nomor kontak aktif, tempat tinggal, atau tempat kerja secara jujur dan transparan.</li>
+      </ul>
+
+      <h2 style="font-size:18px; color:#002255; margin:30px 0 12px; display:flex; align-items:center; gap:8px;">
+        <i class="fas fa-exclamation-circle" style="color:#b91c1c; font-size:16px;"></i> 3. Larangan dan Sanksi Pelanggaran
+      </h2>
+      <p style="color:#475569; font-size:14px; margin-bottom:12px;">Tindakan berikut merupakan pelanggaran berat terhadap tata tertib bimbingan:</p>
+      <div style="background:#fff5f5; border:1px solid #fed7d7; border-radius:8px; padding:18px; margin-bottom:22px;">
+        <ul style="color:#991b1b; font-size:13.5px; padding-left:20px; margin:0; line-height:1.9;">
+          <li>Melakukan pemalsuan data kehadiran presensi atau meminta orang lain mewakili proses swafoto (joki lapor).</li>
+          <li>Menggunakan teknologi modifikasi data geolokasi (Fake GPS) untuk menyembunyikan lokasi keberadaan sebenarnya.</li>
+          <li>Mangkir dari kewajiban lapor berkala tanpa surat keterangan izin resmi atau surat sakit yang sah dari dokter.</li>
+        </ul>
+      </div>
+      <p style="color:#475569; font-size:14px; margin-bottom:22px;">
+        <strong>Konsekuensi Administratif:</strong> Pelanggaran tata tertib dapat berakibat pada pemberian Surat Peringatan (SP 1, SP 2, SP 3), panggilan fisik ke kantor BAPAS Medan, hingga rekomendasi pencabutan Surat Keputusan (SK) Pembebasan Bersyarat / Cuti Bersyarat kepada Ditjen Pemasyarakatan untuk dikembalikan ke Lembaga Pemasyarakatan (Lapas).
+      </p>
+
+      <h2 style="font-size:18px; color:#002255; margin:30px 0 12px; display:flex; align-items:center; gap:8px;">
+        <i class="fas fa-shield-alt" style="color:#003580; font-size:16px;"></i> 4. Kepemilikan Intelektual dan Hak Cipta
+      </h2>
+      <p style="color:#475569; font-size:14px; margin-bottom:22px;">
+        Seluruh rancangan antarmuka, logo instansi, kode program, basis data, dan konten publikasi pada portal ini merupakan hak cipta resmi milik <strong>Balai Pemasyarakatan Kelas I Medan - All Rights Reserved</strong>. Dilarang menduplikasi, memodifikasi, atau mendistribusikan ulang materi tanpa izin tertulis dari pihak berwenang.
+      </p>
+
+      <h2 style="font-size:18px; color:#002255; margin:30px 0 12px; display:flex; align-items:center; gap:8px;">
+        <i class="fas fa-question-circle" style="color:#003580; font-size:16px;"></i> 5. Konsultasi dan Layanan Bantuan
+      </h2>
+      <p style="color:#475569; font-size:14px; margin-bottom:15px;">
+        Bagi Klien yang mengalami kendala teknis atau memerlukan konsultasi bimbingan dapat menghubungi:
+      </p>
+      <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:8px; padding:18px 22px; font-size:13.5px; color:#334155; line-height:1.8;">
+        <strong>Balai Pemasyarakatan Kelas I Medan</strong><br>
+        Jl. Lembaga Pemasyarakatan, Tanjung Gusta, Medan Helvetia, Kota Medan 20125<br>
+        Layanan Telepon: (061) 4516516 | Surel: bapasmedan@kemenkumham.go.id<br>
+        Jam Layanan Konsultasi: Hari Kerja, 08:00 – 16:00 WIB
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

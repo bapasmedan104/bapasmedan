@@ -1,0 +1,158 @@
+<%- include('../partials/header') %>
+
+<div class="content-breadcrumb" style="background:#f0f4f8; padding:12px 0; border-bottom:1px solid #d9e2ec;">
+  <div class="container breadcrumb-container" style="display:flex; align-items:center; gap:8px; font-size:13px; color:#627d98; flex-wrap:wrap;">
+    <a href="/" style="color:#003580; text-decoration:none;"><i class="fas fa-home"></i> Beranda</a>
+    <i class="fas fa-chevron-right" style="font-size:9px; color:#94a3b8;"></i>
+    <span>Legalitas & Kebijakan</span>
+    <i class="fas fa-chevron-right" style="font-size:9px; color:#94a3b8;"></i>
+    <span style="font-weight:700; color:#002255;">Kebijakan Privasi</span>
+  </div>
+</div>
+
+<div class="content-page" style="padding:35px 0 60px;">
+  <div class="container page-layout">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div style="background:#003580; color:#fff; padding:14px 18px; border-radius:8px 8px 0 0; font-weight:700; font-size:14px; display:flex; align-items:center; gap:8px;">
+        <i class="fas fa-shield-alt" style="color:#ffc107;"></i> Kebijakan & Layanan
+      </div>
+      <ul style="list-style:none; padding:0; margin:0; border:1px solid #d9e2ec; border-top:none; border-radius:0 0 8px 8px; background:#fff; overflow:hidden;">
+        <li style="border-bottom:1px solid #f0f4f8;">
+          <a href="/privasi" style="display:flex; align-items:center; gap:10px; padding:12px 18px; text-decoration:none; color:#003580; font-weight:700; background:#e3f2fd; min-height:44px;">
+            <i class="fas fa-user-shield" style="color:#003580;"></i> Kebijakan Privasi
+          </a>
+        </li>
+        <li style="border-bottom:1px solid #f0f4f8;">
+          <a href="/syarat-ketentuan" style="display:flex; align-items:center; gap:10px; padding:12px 18px; text-decoration:none; color:#486581; font-weight:500; background:transparent; min-height:44px;">
+            <i class="fas fa-file-contract" style="color:#94a3b8;"></i> Syarat & Ketentuan
+          </a>
+        </li>
+        <li style="border-bottom:1px solid #f0f4f8;">
+          <a href="/informasi?sub=alur-wajib-lapor" style="display:flex; align-items:center; gap:10px; padding:12px 18px; text-decoration:none; color:#486581; font-weight:500; background:transparent; min-height:44px;">
+            <i class="fas fa-clipboard-list" style="color:#94a3b8;"></i> Panduan Wajib Lapor
+          </a>
+        </li>
+        <li style="border-bottom:1px solid #f0f4f8;">
+          <a href="/informasi?sub=layanan-integrasi" style="display:flex; align-items:center; gap:10px; padding:12px 18px; text-decoration:none; color:#486581; font-weight:500; background:transparent; min-height:44px;">
+            <i class="fas fa-handshake" style="color:#94a3b8;"></i> Layanan Integrasi
+          </a>
+        </li>
+        <li>
+          <a href="/login" style="display:flex; align-items:center; gap:10px; padding:12px 18px; text-decoration:none; color:#003580; font-weight:700; background:#fff8e1; min-height:44px;">
+            <i class="fas fa-sign-in-alt" style="color:#b7791f;"></i> Masuk Portal Klien
+          </a>
+        </li>
+      </ul>
+
+      <div style="margin-top:20px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:18px;">
+        <h4 style="font-size:13px; font-weight:700; color:#002255; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+          <i class="fas fa-headset" style="color:#003580;"></i> Layanan Bantuan Privasi
+        </h4>
+        <p style="font-size:12px; color:#64748b; line-height:1.6; margin:0 0 10px;">
+          Apabila terdapat kendala data pribadi atau akun wajib lapor, hubungi narahubung resmi kami.
+        </p>
+        <a href="mailto:bapasmedan@kemenkumham.go.id" style="font-size:12px; color:#003580; font-weight:600; text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
+          <i class="fas fa-envelope"></i> bapasmedan@kemenkumham.go.id
+        </a>
+      </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="content-main" style="background:#fff; padding:36px; border-radius:8px; box-shadow:0 2px 12px rgba(0,0,0,0.06); line-height:1.8;">
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+        <span style="background:#e0f2fe; color:#0369a1; padding:4px 10px; border-radius:20px; font-size:11.5px; font-weight:700; letter-spacing:0.5px; text-transform:uppercase;">
+          Dokumen Resmi Instansi
+        </span>
+        <span style="color:#94a3b8; font-size:12px;">Pembaruan Terakhir: <%= new Date().getFullYear() %></span>
+      </div>
+
+      <h1 style="font-family:'Playfair Display', serif; color:#002255; font-size:26px; margin:0 0 10px; font-weight:700;">
+        Kebijakan Privasi Balai Pemasyarakatan Kelas I Medan
+      </h1>
+      <div style="width:60px; height:3px; background:#003580; margin:10px 0 25px;"></div>
+
+      <p style="color:#475569; font-size:14.5px; margin-bottom:20px;">
+        Balai Pemasyarakatan (BAPAS) Kelas I Medan berkomitmen penuh untuk menjamin keamanan, kerahasiaan, serta pelindungan seluruh data pribadi yang dipercayakan kepada kami oleh Klien Pemasyarakatan, keluarga penjamin, maupun masyarakat luas pengguna layanan. Kebijakan ini menjelaskan bagaimana data pribadi dikumpulkan, diproses, disimpan, dan dilindungi.
+      </p>
+
+      <div style="background:#f1f5f9; border-left:4px solid #003580; padding:15px 18px; border-radius:0 8px 8px 0; margin-bottom:30px;">
+        <p style="margin:0; font-size:13.5px; color:#1e293b; font-weight:600;">
+          <i class="fas fa-balance-scale" style="color:#003580; margin-right:6px;"></i> Landasan Regulasi Pelindungan Data:
+        </p>
+        <p style="margin:5px 0 0; font-size:13px; color:#475569;">
+          Undang-Undang Nomor 27 Tahun 2022 tentang Pelindungan Data Pribadi (UU PDP), Undang-Undang Nomor 22 Tahun 2022 tentang Pemasyarakatan, serta Peraturan Menteri Hukum dan HAM Republik Indonesia terkait sistem manajemen data pemasyarakatan.
+        </p>
+      </div>
+
+      <h2 style="font-size:18px; color:#002255; margin:30px 0 12px; display:flex; align-items:center; gap:8px;">
+        <i class="fas fa-database" style="color:#003580; font-size:16px;"></i> 1. Jenis Data Pribadi yang Kami Kumpulkan
+      </h2>
+      <p style="color:#475569; font-size:14px; margin-bottom:12px;">Dalam penyelenggaraan layanan wajib lapor daring dan pembimbingan kemasyarakatan, sistem kami mencatat informasi berikut:</p>
+      <ul style="color:#475569; font-size:14px; padding-left:22px; margin-bottom:22px; line-height:1.9;">
+        <li><strong>Data Identitas Diri:</strong> Nama lengkap, Nomor Induk Kependudukan (NIK), Nomor Register Klien, nomor telepon seluler/WhatsApp, dan alamat domisili resmi klien.</li>
+        <li><strong>Data Biometrik & Dokumentasi Presensi:</strong> Swafoto (selfie) verifikasi kehadiran yang diambil saat pelaksanaan wajib lapor online secara langsung (real-time).</li>
+        <li><strong>Data Geolokasi (GPS):</strong> Koordinat posisi geografis (latitude & longitude) perangkat saat melakukan pengisian laporan presensi untuk memastikan klien berada dalam wilayah pembimbingan yang ditentukan.</li>
+        <li><strong>Data Penjamin & Pembimbing:</strong> Nama dan kontak penjamin, serta nama Pembimbing Kemasyarakatan (PK) yang menangani pengawasan klien.</li>
+        <li><strong>Data Log Sistem:</strong> Waktu akses, jenis peramban (browser), dan alamat IP (Internet Protocol) semata-mata untuk tujuan audit keamanan sistem.</li>
+      </ul>
+
+      <h2 style="font-size:18px; color:#002255; margin:30px 0 12px; display:flex; align-items:center; gap:8px;">
+        <i class="fas fa-bullseye" style="color:#003580; font-size:16px;"></i> 2. Tujuan Penggunaan Data
+      </h2>
+      <p style="color:#475569; font-size:14px; margin-bottom:12px;">Seluruh data yang diperoleh dipergunakan secara eksklusif untuk kebutuhan dinas pemasyarakatan:</p>
+      <ul style="color:#475569; font-size:14px; padding-left:22px; margin-bottom:22px; line-height:1.9;">
+        <li>Memverifikasi kepatuhan dan keaktifan klien dalam memenuhi kewajiban lapor berkala.</li>
+        <li>Menyusun Laporan Evaluasi Pembimbingan Kemasyarakatan oleh Pembimbing Kemasyarakatan (PK).</li>
+        <li>Memastikan validitas pelaksanaan integrasi (Pembebasan Bersyarat, Cuti Bersyarat, Cuti Menjelang Bebas, dan Asimilasi Rumah).</li>
+        <li>Memberikan notifikasi, pengingat, atau konfirmasi terkait jadwal bimbingan dan pelaporan.</li>
+      </ul>
+
+      <h2 style="font-size:18px; color:#002255; margin:30px 0 12px; display:flex; align-items:center; gap:8px;">
+        <i class="fas fa-lock" style="color:#003580; font-size:16px;"></i> 3. Kerahasiaan dan Keamanan Data
+      </h2>
+      <p style="color:#475569; font-size:14px; margin-bottom:15px;">
+        Kami menerapkan standar pengamanan teknis dan operasional yang ketat:
+      </p>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:15px; margin-bottom:25px;">
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; padding:15px;">
+          <div style="font-weight:700; color:#003580; font-size:13px; margin-bottom:5px;"><i class="fas fa-key"></i> Enkripsi Data Transmisi</div>
+          <div style="font-size:12.5px; color:#64748b;">Semua pertukaran data dilindungi protokol TLS/SSL berkeamanan tinggi dengan sertifikat digital resmi.</div>
+        </div>
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; padding:15px;">
+          <div style="font-weight:700; color:#003580; font-size:13px; margin-bottom:5px;"><i class="fas fa-user-lock"></i> Kontrol Hak Akses</div>
+          <div style="font-size:12.5px; color:#64748b;">Hanya petugas Pembimbing Kemasyarakatan yang memiliki mandat resmi yang dapat mengakses riwayat pelaporan.</div>
+        </div>
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; padding:15px;">
+          <div style="font-weight:700; color:#003580; font-size:13px; margin-bottom:5px;"><i class="fas fa-ban"></i> Bebas Komersialisasi</div>
+          <div style="font-size:12.5px; color:#64748b;">Data pribadi tidak pernah dan tidak akan pernah dijual, disewakan, atau dibagikan kepada pihak ketiga non-hukum.</div>
+        </div>
+      </div>
+
+      <h2 style="font-size:18px; color:#002255; margin:30px 0 12px; display:flex; align-items:center; gap:8px;">
+        <i class="fas fa-user-check" style="color:#003580; font-size:16px;"></i> 4. Hak-Hak Klien sebagai Subjek Data
+      </h2>
+      <p style="color:#475569; font-size:14px; margin-bottom:12px;">Sesuai regulasi UU PDP, setiap Klien berhak untuk:</p>
+      <ul style="color:#475569; font-size:14px; padding-left:22px; margin-bottom:22px; line-height:1.9;">
+        <li>Mendapatkan kejelasan mengenai tujuan pengolahan data pribadi yang dikumpulkan.</li>
+        <li>Mengajukan permohonan pembaruan atau perbaikan data identitas apabila terdapat ketidaksesuaian melalui Pembimbing Kemasyarakatan terkait.</li>
+        <li>Menuntut kerahasiaan atas rekam jejak pembimbingan kemasyarakatan sesuai amanat Undang-Undang Pemasyarakatan.</li>
+      </ul>
+
+      <h2 style="font-size:18px; color:#002255; margin:30px 0 12px; display:flex; align-items:center; gap:8px;">
+        <i class="fas fa-envelope-open-text" style="color:#003580; font-size:16px;"></i> 5. Narahubung Resmi
+      </h2>
+      <p style="color:#475569; font-size:14px; margin-bottom:15px;">
+        Apabila Klien atau publik memiliki pertanyaan, saran, atau keluhan terkait pelindungan data pribadi di lingkungan Balai Pemasyarakatan Kelas I Medan, silakan menghubungi:
+      </p>
+      <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:8px; padding:18px 22px; font-size:13.5px; color:#334155; line-height:1.8;">
+        <strong>Balai Pemasyarakatan Kelas I Medan</strong><br>
+        Jl. Lembaga Pemasyarakatan, Tanjung Gusta, Kec. Medan Helvetia, Kota Medan, Sumatera Utara 20125<br>
+        Telepon: (061) 4516516 | Surel: bapasmedan@kemenkumham.go.id<br>
+        Jam Pelayanan: Senin – Jumat, 08.00 – 16.00 WIB
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

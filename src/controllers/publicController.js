@@ -74,6 +74,28 @@ function getInformasiPage(req, res) {
   });
 }
 
+function getPrivasiPage(req, res) {
+  res.render('public/privasi', {
+    pageTitle: 'Kebijakan Privasi - Balai Pemasyarakatan Kelas I Medan',
+    pageDescription: 'Kebijakan Privasi resmi Balai Pemasyarakatan Kelas I Medan mengenai pelindungan data pribadi klien pemasyarakatan dan tata kelola informasi wajib lapor online.',
+    pageKeywords: 'kebijakan privasi bapas medan, pelindungan data pribadi klien pemasyarakatan, kerahasiaan wajib lapor bapas',
+    canonicalUrl: '/privasi',
+    activePage: 'privasi',
+    sub: ''
+  });
+}
+
+function getSyaratKetentuanPage(req, res) {
+  res.render('public/syarat_ketentuan', {
+    pageTitle: 'Syarat & Ketentuan - Balai Pemasyarakatan Kelas I Medan',
+    pageDescription: 'Syarat dan Ketentuan resmi penggunaan sistem informasi dan portal wajib lapor online Balai Pemasyarakatan Kelas I Medan.',
+    pageKeywords: 'syarat ketentuan wajib lapor bapas medan, tata tertib klien pemasyarakatan, ketentuan integrasi bapas medan',
+    canonicalUrl: '/syarat-ketentuan',
+    activePage: 'syarat-ketentuan',
+    sub: ''
+  });
+}
+
 function getRobotsTxt(req, res) {
   res.type('text/plain');
   res.send(`User-agent: *
@@ -175,6 +197,18 @@ function getSitemapXml(req, res) {
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
+  <url>
+    <loc>https://bapas1medan.com/privasi</loc>
+    <lastmod>${now}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://bapas1medan.com/syarat-ketentuan</loc>
+    <lastmod>${now}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
 </urlset>`);
 }
 
@@ -183,6 +217,8 @@ module.exports = {
   getBeritaPage,
   getProfilPage,
   getInformasiPage,
+  getPrivasiPage,
+  getSyaratKetentuanPage,
   getRobotsTxt,
   getSitemapXml
 };
