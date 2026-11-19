@@ -257,7 +257,7 @@ async function postLogin(req, res) {
       nama_lengkap: clientUser.nama_lengkap,
       no_register: clientUser.no_register,
       email: clientUser.email,
-      foto_profil: clientUser.foto_profil,
+      foto_profil: (clientUser.foto_profil && !clientUser.foto_profil.startsWith('data:')) ? clientUser.foto_profil : (clientUser.foto_profil ? 'has_photo' : null),
       profil_lengkap: clientUser.profil_lengkap
     };
 

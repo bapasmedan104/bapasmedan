@@ -1,68 +1,4 @@
 const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
-const os = require('os');
-
-const isServerless = Boolean(
-  process.env.NETLIFY || 
-  process.env.AWS_LAMBDA_FUNCTION_NAME || 
-  process.env.LAMBDA_TASK_ROOT ||
-  (process.env.NODE_ENV === 'production' && !process.env.LOCAL_ENV)
-);
-
-// Storage untuk Foto/Video Bukti Wajib Lapor
-const wajibLaporStorage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    const now = new Date();
-    const year = String(req.body.tahun || now.getFullYear());
-    const month = String(req.body.bulan || now.getMonth() + 1).padStart(2, '0');
-    const dir = isServerless
-      ? path.join(os.tmpdir(), 'bapas_uploads', 'wajib_lapor', year, month)
-      : path.join(process.cwd(), 'public', 'uploads', 'wajib_lapor', year, month);
-
-    try {
-      if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir, { recursive: true });
-      }
-    } catch (e) {
-      console.warn('Wajib lapor upload dir warning:', e.message);
-    }
-    cb(null, dir);
-  },
-  filename: function (req, file, cb) {
-    const clientId = req.session.user ? req.session.user.id : 'unknown';
-    const ext = path.extname(file.originalname).toLowerCase() || '.jpg';
-    const random = Math.random().toString(36).substring(2, 8);
-    const filename = `lapor_${clientId}_${Date.now()}_${random}${ext}`;
-    cb(null, filename);
-  }
-});
-
-// Storage untuk Foto Profil Client
-const profilStorage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    const clientId = req.session.user ? req.session.user.id : 'temp';
-    const dir = isServerless
-      ? path.join(os.tmpdir(), 'bapas_uploads', 'profil', clientId)
-      : path.join(process.cwd(), 'public', 'uploads', 'profil', clientId);
-
-    try {
-      if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir, { recursive: true });
-      }
-    } catch (e) {
-      console.warn('Profil upload dir warning:', e.message);
-    }
-    cb(null, dir);
-  },
-  filename: function (req, file, cb) {
-    const clientId = req.session.user ? req.session.user.id : 'user';
-    const ext = path.extname(file.originalname).toLowerCase() || '.jpg';
-    const random = Math.random().toString(36).substring(2, 8);
-    const filename = `profil_${clientId}_${Date.now()}_${random}${ext}`;
-    cb(null, filename);
-  }
-});
 
 function fileFilter(req, file, cb) {
   const allowedMimes = [
@@ -82,14 +18,17 @@ function fileFilter(req, file, cb) {
   }
 }
 
+// Gunakan MemoryStorage agar aman di Serverless & Cloudflare Workers (tanpa ketergantungan filesystem)
+const memoryStorage = multer.memoryStorage();
+
 const uploadWajibLapor = multer({
-  storage: wajibLaporStorage,
-  limits: { fileSize: 50 * 1024 * 1024 }, // 50MB (mendukung video)
+  storage: memoryStorage,
+  limits: { fileSize: 30 * 1024 * 1024 }, // 30MB (mendukung foto & video)
   fileFilter: fileFilter
 });
 
 const uploadProfil = multer({
-  storage: profilStorage,
+  storage: memoryStorage,
   limits: { fileSize: 10 * 1024 * 1024 }, // 10MB
   fileFilter: fileFilter
 });

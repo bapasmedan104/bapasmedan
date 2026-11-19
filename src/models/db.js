@@ -1,5 +1,5 @@
 const { db, firebaseAuth } = require('../config/firebase');
-const { hashPassword, verifyPassword } = require('../utils/helpers');
+const { hashPassword, verifyPassword, getNamaBulan } = require('../utils/helpers');
 
 // Helper to convert Firestore snapshot to array of objects
 function docsToArray(snapshot) {
@@ -245,20 +245,33 @@ async function updateProfilClient(clientId, data, fotoRelatif = null) {
   const namaLengkap = (data.nama_lengkap || '').trim();
   const noHpGmail = (data.no_hp_gmail || '').trim();
   const alamatSekarang = (data.alamat_sekarang || '').trim();
-  const masaWajibLapor = (data.masa_wajib_lapor || '').trim();
-
-  if (!namaLengkap || !noHpGmail || !alamatSekarang || !masaWajibLapor) {
-    return { success: false, message: 'Semua field profil wajib diisi' };
-  }
+  let masaWajibLapor = (data.masa_wajib_lapor || '').trim();
 
   const clientLama = await getClientById(clientId);
   if (!clientLama) {
     return { success: false, message: 'Client tidak ditemukan' };
   }
 
+  // Otomatis isi masa_wajib_lapor dari penetapan admin jika tidak dikirim dari form
+  if (!masaWajibLapor) {
+    if (clientLama.masa_wajib_lapor) {
+      masaWajibLapor = clientLama.masa_wajib_lapor;
+    } else {
+      const bMulai = clientLama.bulan_wajib_lapor_mulai || 1;
+      const tMulai = clientLama.tahun_wajib_lapor_mulai || new Date().getFullYear();
+      const bAkhir = clientLama.bulan_wajib_lapor_akhir || 12;
+      const tAkhir = clientLama.tahun_wajib_lapor_akhir || tMulai;
+      masaWajibLapor = `${getNamaBulan(bMulai)} ${tMulai} s/d ${getNamaBulan(bAkhir)} ${tAkhir}`;
+    }
+  }
+
+  if (!namaLengkap || !noHpGmail || !alamatSekarang) {
+    return { success: false, message: 'Nama lengkap, nomor HP/WA, dan alamat domisili wajib diisi!' };
+  }
+
   const sudahAdaFoto = Boolean(clientLama.foto_profil);
   if (!fotoRelatif && !sudahAdaFoto) {
-    return { success: false, message: 'Foto profil wajib diunggah' };
+    return { success: false, message: 'Harap pilih atau ambil foto profil wajah Anda terlebih dahulu!' };
   }
 
   const updatePayload = {
@@ -312,6 +325,13 @@ async function createClient(data, adminId) {
     username = username + '_' + Math.floor(Math.random() * 1000);
   }
 
+  const bMulai = parseInt(data.bulan_mulai, 10) || 1;
+  const tMulai = parseInt(data.tahun_mulai, 10) || new Date().getFullYear();
+  const bAkhir = parseInt(data.bulan_akhir, 10) || 12;
+  const tAkhir = parseInt(data.tahun_akhir, 10) || tMulai;
+  const totalBulan = parseInt(data.total_bulan, 10) || 12;
+  const autoMasaWajib = `${getNamaBulan(bMulai)} ${tMulai} s/d ${getNamaBulan(bAkhir)} ${tAkhir}`;
+
   const hashedPassword = await hashPassword(password);
   const newClient = {
     username,
@@ -325,15 +345,15 @@ async function createClient(data, adminId) {
     email: data.email || '',
     no_telepon: (data.no_telepon || '').trim(),
     status: 'aktif',
-    bulan_wajib_lapor_mulai: parseInt(data.bulan_mulai, 10) || 1,
-    tahun_wajib_lapor_mulai: parseInt(data.tahun_mulai, 10) || new Date().getFullYear(),
-    bulan_wajib_lapor_akhir: parseInt(data.bulan_akhir, 10) || 12,
-    tahun_wajib_lapor_akhir: parseInt(data.tahun_akhir, 10) || new Date().getFullYear(),
-    total_bulan_wajib_lapor: parseInt(data.total_bulan, 10) || 12,
+    bulan_wajib_lapor_mulai: bMulai,
+    tahun_wajib_lapor_mulai: tMulai,
+    bulan_wajib_lapor_akhir: bAkhir,
+    tahun_wajib_lapor_akhir: tAkhir,
+    total_bulan_wajib_lapor: totalBulan,
     foto_profil: null,
-    no_hp_gmail: null,
-    alamat_sekarang: null,
-    masa_wajib_lapor: null,
+    no_hp_gmail: (data.no_telepon || '').trim() || data.email || null,
+    alamat_sekarang: data.alamat || null,
+    masa_wajib_lapor: autoMasaWajib,
     profil_lengkap: 0,
     created_by: adminId || null,
     created_at: new Date().toISOString(),
@@ -371,6 +391,12 @@ async function updateClient(clientId, data, adminId) {
   if (data.tahun_mulai) updatePayload.tahun_wajib_lapor_mulai = parseInt(data.tahun_mulai, 10);
   if (data.bulan_akhir) updatePayload.bulan_wajib_lapor_akhir = parseInt(data.bulan_akhir, 10);
   if (data.tahun_akhir) updatePayload.tahun_wajib_lapor_akhir = parseInt(data.tahun_akhir, 10);
+
+  const bMulai = updatePayload.bulan_wajib_lapor_mulai || snap.data().bulan_wajib_lapor_mulai || 1;
+  const tMulai = updatePayload.tahun_wajib_lapor_mulai || snap.data().tahun_wajib_lapor_mulai || new Date().getFullYear();
+  const bAkhir = updatePayload.bulan_wajib_lapor_akhir || snap.data().bulan_wajib_lapor_akhir || 12;
+  const tAkhir = updatePayload.tahun_wajib_lapor_akhir || snap.data().tahun_wajib_lapor_akhir || tMulai;
+  updatePayload.masa_wajib_lapor = `${getNamaBulan(bMulai)} ${tMulai} s/d ${getNamaBulan(bAkhir)} ${tAkhir}`;
 
   await docRef.set(updatePayload, { merge: true });
   await logActivity('admin', adminId, 'Update Client', `Admin update client ID: ${clientId}`);

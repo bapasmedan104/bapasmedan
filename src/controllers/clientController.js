@@ -146,21 +146,10 @@ async function postUploadFoto(req, res) {
         savedPathOrUrl = req.body.foto_base64;
       }
     } else if (req.file) {
-      if (isCloudinaryConfigured()) {
-        try {
-          const cldRes = await uploadFile(req.file.path, {
-            folder: `bapas_medan/wajib_lapor/${tahun}/${String(bulan).padStart(2, '0')}`,
-            public_id: `lapor_${clientId}_${Date.now()}`,
-            resource_type: 'auto'
-          });
-          savedPathOrUrl = cldRes.secure_url;
-        } catch (cldErr) {
-          console.warn('⚠️ Gagal upload ke Cloudinary, fallback ke penyimpanan lokal / Base64:', cldErr.message);
-        }
-      }
-
-      // Fallback data URI jika file tersedia di disk
-      if (!savedPathOrUrl && req.file.path && fs.existsSync(req.file.path)) {
+      if (req.file.buffer) {
+        const mime = req.file.mimetype || 'image/jpeg';
+        savedPathOrUrl = `data:${mime};base64,${req.file.buffer.toString('base64')}`;
+      } else if (req.file.path && fs.existsSync(req.file.path)) {
         try {
           const buf = fs.readFileSync(req.file.path);
           const mime = req.file.mimetype || 'image/jpeg';
@@ -208,6 +197,15 @@ async function getProfil(req, res) {
     const client = await getClientById(clientId);
     const belumLengkap = req.query.belum_lengkap === '1';
 
+    // Otomatis susun masa_wajib_lapor jika belum ada teksnya di DB
+    if (client && !client.masa_wajib_lapor) {
+      const bMulai = client.bulan_wajib_lapor_mulai || 1;
+      const tMulai = client.tahun_wajib_lapor_mulai || new Date().getFullYear();
+      const bAkhir = client.bulan_wajib_lapor_akhir || 12;
+      const tAkhir = client.tahun_wajib_lapor_akhir || tMulai;
+      client.masa_wajib_lapor = `${getNamaBulan(bMulai)} ${tMulai} s/d ${getNamaBulan(bAkhir)} ${tAkhir}`;
+    }
+
     res.render('client/profil', {
       pageTitle: 'Profil Client - BAPAS Medan',
       client,
@@ -230,42 +228,25 @@ async function postProfil(req, res) {
       fotoRelatif = req.body.foto_profil_base64;
     }
 
-    if (req.file) {
-      if (isCloudinaryConfigured()) {
-        try {
-          const cldRes = await uploadFile(req.file.path, {
-            folder: `bapas_medan/profil/${clientId}`,
-            public_id: `profil_${clientId}_${Date.now()}`,
-            resource_type: 'image'
-          });
-          fotoRelatif = cldRes.secure_url;
-        } catch (cldErr) {
-          console.warn('⚠️ Gagal upload foto profil ke Cloudinary, fallback ke data URI / lokal:', cldErr.message);
-        }
-      }
-
-      // Fallback: Jika Cloudinary gagal atau belum aktif, simpan sebagai Data URI (Base64)
-      // agar foto langsung tampil di Netlify tanpa tergantung disk read-only!
-      if (!fotoRelatif && req.file.path && fs.existsSync(req.file.path)) {
-        try {
-          const buf = fs.readFileSync(req.file.path);
-          const mime = req.file.mimetype || 'image/jpeg';
-          fotoRelatif = `data:${mime};base64,${buf.toString('base64')}`;
-        } catch {
-          fotoRelatif = `${clientId}/${req.file.filename}`;
-        }
-      } else if (!fotoRelatif) {
-        fotoRelatif = `${clientId}/${req.file.filename}`;
-      }
+    // Prioritas 2: File yang diunggah via form (req.file dari multer memoryStorage)
+    if (!fotoRelatif && req.file && req.file.buffer) {
+      const mime = req.file.mimetype || 'image/jpeg';
+      fotoRelatif = `data:${mime};base64,${req.file.buffer.toString('base64')}`;
     }
 
     const result = await updateProfilClient(clientId, req.body, fotoRelatif);
 
     if (result.success) {
-      req.session.user.nama_lengkap = req.body.nama_lengkap;
-      req.session.user.profil_lengkap = 1;
-      if (fotoRelatif) {
-        req.session.user.foto_profil = fotoRelatif;
+      if (req.session && req.session.user) {
+        req.session.user.nama_lengkap = req.body.nama_lengkap;
+        req.session.user.profil_lengkap = 1;
+        // PENTING: JANGAN simpan string base64 gambar yang besar di session cookie (batas max cookie 4KB)
+        // Data gambar asli sudah aman tersimpan di database Firestore
+        if (fotoRelatif && !fotoRelatif.startsWith('data:')) {
+          req.session.user.foto_profil = fotoRelatif;
+        } else if (fotoRelatif) {
+          req.session.user.foto_profil = 'has_photo';
+        }
       }
       req.session.successMessage = 'Profil Anda berhasil disimpan!';
       return res.redirect('/client/dashboard');
