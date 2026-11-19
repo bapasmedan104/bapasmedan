@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
-const session = require('express-session');
+const cookieSession = require('cookie-session');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const cors = require('cors');
@@ -179,16 +179,14 @@ app.use(express.json({ limit: '20mb' }));
 app.use(express.urlencoded({ extended: true, limit: '20mb' }));
 app.use(cookieParser());
 
-// Session Management
+// Session Management (Stateless Cryptographically Signed Cookies - Serverless & Edge Safe)
 app.use(
-  session({
-    secret: SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      maxAge: 1000 * 60 * 60 * 24, // 24 jam
-      httpOnly: true
-    }
+  cookieSession({
+    name: 'bapas_session',
+    keys: [SESSION_SECRET, 'bapas_backup_secret_key_2026'],
+    maxAge: 1000 * 60 * 60 * 24, // 24 jam
+    sameSite: 'lax',
+    secure: false
   })
 );
 

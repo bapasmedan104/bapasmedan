@@ -10,7 +10,7 @@ module.exports = {
       "no_telepon": "(061) 4516516",
       "status": "aktif",
       "tanggal_daftar": "2026-11-06T08:19:47.321Z",
-      "last_login": "2026-11-19T11:53:38.846Z",
+      "last_login": "2026-11-19T11:59:53.858Z",
       "id": "doc_1793953187321_0krpeh"
     },
     "admin_5UGpDijDxA": {
@@ -49,7 +49,7 @@ module.exports = {
       "profil_updated_at": "2026-11-18T10:00:00.000Z",
       "created_by": "admin",
       "created_at": "2026-11-18T10:00:00.000Z",
-      "last_login": "2026-11-19T11:53:39.161Z",
+      "last_login": "2026-11-19T12:00:12.967Z",
       "id": "client_081275623551"
     },
     "doc_1793953187400_a3wi75": {
@@ -385,6 +385,24 @@ module.exports = {
       "ip_address": "127.0.0.1",
       "created_at": "2026-11-19T11:53:39.164Z",
       "id": "doc_1795089219164_yzj8ex"
+    },
+    "doc_1795089593859_a2jzts": {
+      "user_type": "admin",
+      "user_id": "doc_1793953187321_0krpeh",
+      "aksi": "Login",
+      "deskripsi": "Admin login via Database (admin)",
+      "ip_address": "127.0.0.1",
+      "created_at": "2026-11-19T11:59:53.859Z",
+      "id": "doc_1795089593859_a2jzts"
+    },
+    "doc_1795089612968_xavhku": {
+      "user_type": "client",
+      "user_id": "client_081275623551",
+      "aksi": "Login",
+      "deskripsi": "Client login berhasil (Klien BAPAS (081275623551))",
+      "ip_address": "127.0.0.1",
+      "created_at": "2026-11-19T12:00:12.968Z",
+      "id": "doc_1795089612968_xavhku"
     }
   }
 };
