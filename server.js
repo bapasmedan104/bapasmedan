@@ -33,6 +33,33 @@ const inMemoryCompiled = {};
 try {
   rawViews = require('./src/views/rawViews');
   // Dukungan runtime Cloudflare Workers tanpa akses filesystem disk
+  const origExistsSync = fs.existsSync;
+  fs.existsSync = function (filePath) {
+    if (!filePath || typeof filePath !== 'string') return false;
+    const norm = filePath.replace(/\\/g, '/');
+    for (const k of Object.keys(rawViews)) {
+      if (norm.endsWith(k) || norm.endsWith(k + '.ejs')) return true;
+    }
+    if (typeof origExistsSync === 'function') {
+      try { return origExistsSync(filePath); } catch (e) { return false; }
+    }
+    return false;
+  };
+
+  const origReadFileSync = fs.readFileSync;
+  fs.readFileSync = function (filePath, encoding) {
+    if (typeof filePath === 'string') {
+      const norm = filePath.replace(/\\/g, '/');
+      for (const [k, v] of Object.entries(rawViews)) {
+        if (norm.endsWith(k) || norm.endsWith(k + '.ejs')) return v;
+      }
+    }
+    if (typeof origReadFileSync === 'function') {
+      return origReadFileSync(filePath, encoding);
+    }
+    throw new Error('File not found: ' + filePath);
+  };
+
   ejs.fileLoader = function (filePath) {
     const norm = filePath.replace(/\\/g, '/');
     for (const [k, v] of Object.entries(rawViews)) {
@@ -126,6 +153,7 @@ app.set('view cache', true);
 app.locals.activePage = 'beranda';
 app.locals.pageTitle = 'BAPAS Kelas I Medan';
 app.locals.tipe = 'client';
+app.locals.sub = '';
 app.locals.username = '';
 app.locals.error = null;
 app.locals.pesan = null;
