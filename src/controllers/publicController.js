@@ -100,8 +100,32 @@ function getSitemapXml(req, res) {
   <url>
     <loc>https://bapas1medan.com/profil</loc>
     <lastmod>${now}</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://bapas1medan.com/profil?sub=visi-misi</loc>
+    <lastmod>${now}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://bapas1medan.com/profil?sub=tugas-fungsi</loc>
+    <lastmod>${now}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://bapas1medan.com/profil?sub=struktur-organisasi</loc>
+    <lastmod>${now}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://bapas1medan.com/profil?sub=sejarah-bapas</loc>
+    <lastmod>${now}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://bapas1medan.com/informasi</loc>
@@ -110,7 +134,37 @@ function getSitemapXml(req, res) {
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://bapas1medan.com/informasi?sub=alur-wajib-lapor</loc>
+    <lastmod>${now}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://bapas1medan.com/informasi?sub=layanan-integrasi</loc>
+    <lastmod>${now}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://bapas1medan.com/informasi?sub=alur-serah-terima</loc>
+    <lastmod>${now}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://bapas1medan.com/informasi?sub=informasi-lkip</loc>
+    <lastmod>${now}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://bapas1medan.com/berita</loc>
+    <lastmod>${now}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://bapas1medan.com/berita?sub=berita-utama</loc>
     <lastmod>${now}</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>

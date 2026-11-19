@@ -1,0 +1,8 @@
+# robots.txt for https://bapas1medan.com
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /client/
+Disallow: /logout
+
+Sitemap: https://bapas1medan.com/sitemap.xml
