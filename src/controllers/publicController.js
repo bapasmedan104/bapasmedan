@@ -81,9 +81,8 @@ Allow: /
 Disallow: /admin/
 Disallow: /client/
 Disallow: /logout
-Disallow: /login
 
-Sitemap: http://localhost:3000/sitemap.xml
+Sitemap: https://bapas1medan.com/sitemap.xml
 `);
 }
 
@@ -93,31 +92,31 @@ function getSitemapXml(req, res) {
   res.send(`<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>http://localhost:3000/</loc>
+    <loc>https://bapas1medan.com/</loc>
     <lastmod>${now}</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>http://localhost:3000/profil</loc>
+    <loc>https://bapas1medan.com/profil</loc>
     <lastmod>${now}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>http://localhost:3000/informasi</loc>
+    <loc>https://bapas1medan.com/informasi</loc>
     <lastmod>${now}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>http://localhost:3000/berita</loc>
+    <loc>https://bapas1medan.com/berita</loc>
     <lastmod>${now}</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>http://localhost:3000/login</loc>
+    <loc>https://bapas1medan.com/login</loc>
     <lastmod>${now}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
