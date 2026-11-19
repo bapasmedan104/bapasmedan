@@ -157,7 +157,13 @@ async function postAdminLogin(req, res) {
 
 async function postLogin(req, res) {
   const { username, password, tipe } = req.body;
-  const loginType = parseInt(tipe, 10); // 1 = Admin, 2 = Client
+  const loginType = parseInt(tipe, 10);
+
+  // Jika mencoba login Admin melalui halaman /login, alihkan paksa ke /administrator
+  if (loginType === 1 || req.query.tipe === 'admin') {
+    return res.redirect('/administrator');
+  }
+
   const siteKey = process.env.TURNSTILE_SITE_KEY || '0x4AAAAAAGIsSky-2g0Z93D-';
   const turnstileSecret = process.env.TURNSTILE_SECRET || '0x4AAAAAAGIsSpJ6pa_yXPy88IQ-mdEIHqs';
   const turnstileToken = req.body['cf-turnstile-response'];
@@ -172,8 +178,8 @@ async function postLogin(req, res) {
   // 1. Validasi Token Turnstile dari Client
   if (typeof turnstileToken !== 'string' || turnstileToken.length === 0 || turnstileToken.length > 2048) {
     return res.render('auth/login', {
-      pageTitle: 'Login - Sistem Wajib Lapor BAPAS Medan',
-      tipe: loginType === 1 ? 'admin' : 'client',
+      pageTitle: 'Login Klien - Wajib Lapor BAPAS Medan',
+      tipe: 'client',
       error: 'Mohon selesaikan verifikasi keamanan Cloudflare terlebih dahulu.',
       username: username || '',
       siteKey
@@ -202,8 +208,8 @@ async function postLogin(req, res) {
     if (!verifyData.success || (verifyData.action && verifyData.action !== expectedAction) || (verifyData.hostname && !expectedHostnames.has(verifyData.hostname.toLowerCase()))) {
       console.warn('Turnstile verification rejected:', verifyData);
       return res.render('auth/login', {
-        pageTitle: 'Login - Sistem Wajib Lapor BAPAS Medan',
-        tipe: loginType === 1 ? 'admin' : 'client',
+        pageTitle: 'Login Klien - Wajib Lapor BAPAS Medan',
+        tipe: 'client',
         error: 'Verifikasi keamanan Cloudflare gagal atau kedaluwarsa. Silakan centang kembali verifikasi.',
         username: username || '',
         siteKey
@@ -212,8 +218,8 @@ async function postLogin(req, res) {
   } catch (verifyErr) {
     console.error('Turnstile verification error:', verifyErr);
     return res.render('auth/login', {
-      pageTitle: 'Login - Sistem Wajib Lapor BAPAS Medan',
-      tipe: loginType === 1 ? 'admin' : 'client',
+      pageTitle: 'Login Klien - Wajib Lapor BAPAS Medan',
+      tipe: 'client',
       error: 'Terjadi kendala saat memvalidasi verifikasi Cloudflare. Silakan coba kembali.',
       username: username || '',
       siteKey
@@ -222,86 +228,51 @@ async function postLogin(req, res) {
 
   if (!username || !password) {
     return res.render('auth/login', {
-      pageTitle: 'Login - Sistem Wajib Lapor BAPAS Medan',
-      tipe: loginType === 1 ? 'admin' : 'client',
-      error: 'Username dan Password tidak boleh kosong',
+      pageTitle: 'Login Klien - Wajib Lapor BAPAS Medan',
+      tipe: 'client',
+      error: 'Nomor WhatsApp / Register dan Password tidak boleh kosong',
       username: username || '',
       siteKey
     });
   }
 
   try {
-    if (loginType === 1) {
-      // Login Admin
-      const adminUser = await loginAdmin(username.trim(), password);
-      if (!adminUser) {
-        return res.render('auth/login', {
-          pageTitle: 'Login - Sistem Wajib Lapor BAPAS Medan',
-          tipe: 'admin',
-          error: 'Username atau Password admin salah, atau akun nonaktif.',
-          username,
-          siteKey
-        });
-      }
-
-      req.session.isLoggedIn = true;
-      req.session.userType = 'admin';
-      req.session.lastAdminActivity = Date.now();
-      req.session.user = {
-        id: adminUser.id,
-        username: adminUser.username,
-        nama_lengkap: adminUser.nama_lengkap,
-        email: adminUser.email
-      };
-      req.session.successMessage = `Selamat datang kembali, ${adminUser.nama_lengkap}!`;
-      return res.redirect('/admin/dashboard');
-
-    } else if (loginType === 2) {
-      // Login Client
-      const clientUser = await loginClient(username.trim(), password);
-      if (!clientUser) {
-        return res.render('auth/login', {
-          pageTitle: 'Login - Sistem Wajib Lapor BAPAS Medan',
-          tipe: 'client',
-          error: 'Username atau Password client salah, atau status akun belum aktif.',
-          username,
-          siteKey
-        });
-      }
-
-      req.session.isLoggedIn = true;
-      req.session.userType = 'client';
-      req.session.user = {
-        id: clientUser.id,
-        username: clientUser.username,
-        nama_lengkap: clientUser.nama_lengkap,
-        no_register: clientUser.no_register,
-        email: clientUser.email,
-        foto_profil: clientUser.foto_profil,
-        profil_lengkap: clientUser.profil_lengkap
-      };
-
-      if (!clientUser.profil_lengkap) {
-        req.session.warningMessage = 'Selamat datang! Silakan lengkapi profil Anda terlebih dahulu.';
-        return res.redirect('/client/profil?belum_lengkap=1');
-      }
-
-      req.session.successMessage = `Selamat datang, ${clientUser.nama_lengkap}!`;
-      return res.redirect('/client/dashboard');
-    } else {
+    // Login Khusus Klien Pemasyarakatan
+    const clientUser = await loginClient(username.trim(), password);
+    if (!clientUser) {
       return res.render('auth/login', {
-        pageTitle: 'Login - Sistem Wajib Lapor BAPAS Medan',
+        pageTitle: 'Login Klien - Wajib Lapor BAPAS Medan',
         tipe: 'client',
-        error: 'Tipe login tidak valid.',
+        error: 'Nomor WhatsApp atau kata sandi klien salah, atau status akun belum aktif.',
         username,
         siteKey
       });
     }
+
+    req.session.isLoggedIn = true;
+    req.session.userType = 'client';
+    req.session.user = {
+      id: clientUser.id,
+      username: clientUser.username,
+      nama_lengkap: clientUser.nama_lengkap,
+      no_register: clientUser.no_register,
+      email: clientUser.email,
+      foto_profil: clientUser.foto_profil,
+      profil_lengkap: clientUser.profil_lengkap
+    };
+
+    if (!clientUser.profil_lengkap) {
+      req.session.warningMessage = 'Selamat datang! Silakan lengkapi profil Anda terlebih dahulu.';
+      return res.redirect('/client/profil?belum_lengkap=1');
+    }
+
+    req.session.successMessage = `Selamat datang, ${clientUser.nama_lengkap}!`;
+    return res.redirect('/client/dashboard');
   } catch (err) {
     console.error('Login error:', err);
     return res.render('auth/login', {
-      pageTitle: 'Login - Sistem Wajib Lapor BAPAS Medan',
-      tipe: loginType === 1 ? 'admin' : 'client',
+      pageTitle: 'Login Klien - Wajib Lapor BAPAS Medan',
+      tipe: 'client',
       error: 'Terjadi kesalahan sistem saat proses autentikasi: ' + err.message,
       username,
       siteKey
