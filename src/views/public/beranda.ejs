@@ -2,243 +2,233 @@
 <%- include('../partials/alerts') %>
 
 <!-- HERO SECTION RESMI & MODERN -->
-<section class="hero-section" style="position:relative; background:radial-gradient(circle at 20% 30%, #002b66 0%, #001938 100%); color:#ffffff; padding:75px 0 85px; overflow:hidden; border-bottom:3px solid var(--gold);">
+<section class="hero-section">
   <div style="position:absolute; top:0; left:0; right:0; bottom:0; opacity:0.04; background-image:radial-gradient(#ffffff 1px, transparent 1px); background-size:24px 24px; pointer-events:none;"></div>
   
   <div class="container" style="position:relative; z-index:2;">
-    <div style="display:grid; grid-template-columns:1fr; gap:40px; align-items:center;">
-      <div style="max-width:860px; margin:0 auto; text-align:center;">
-        
-        <!-- Badge Identitas Resmi -->
-        <div style="display:inline-flex; align-items:center; gap:8px; background:rgba(200,168,75,0.15); border:1px solid rgba(200,168,75,0.45); padding:6px 18px; border-radius:30px; margin-bottom:20px;">
-          <i class="fas fa-certificate" style="color:var(--gold); font-size:13px;"></i>
-          <span style="color:#fce8a6; font-size:12px; font-weight:700; letter-spacing:1px; text-transform:uppercase;">Unit Pelaksana Teknis Pemasyarakatan</span>
-        </div>
-
-        <!-- Judul Utama -->
-        <h1 style="font-family:'Playfair Display', serif; font-size:clamp(30px, 4.5vw, 44px); font-weight:900; line-height:1.22; margin-bottom:18px; text-shadow:0 3px 12px rgba(0,0,0,0.4); color:#ffffff;">
-          Balai Pemasyarakatan Kelas I Medan
-        </h1>
-        
-        <p style="font-size:clamp(15px, 2vw, 17px); line-height:1.75; color:#d6e4f0; margin-bottom:35px; max-width:760px; margin-left:auto; margin-right:auto; font-weight:300;">
-          Pusat Layanan Wajib Lapor Klien Pemasyarakatan Daring, Penelitian Kemasyarakatan (Litmas), dan Pendampingan Hukum Terintegrasi menuju Wilayah Bebas dari Korupsi (WBK).
-        </p>
-
-        <!-- Tombol Aksi Utama -->
-        <div style="display:flex; justify-content:center; gap:16px; flex-wrap:wrap; margin-bottom:35px;">
-          <a href="/login" class="btn" style="background:linear-gradient(135deg, #d4af37 0%, #aa841c 100%); color:#001938; font-weight:800; font-size:15px; padding:14px 32px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:10px; box-shadow:0 6px 20px rgba(212,175,55,0.35); transition:all 0.3s ease;">
-            <i class="fas fa-clipboard-check" style="font-size:18px;"></i> Wajib Lapor Klien Online
-          </a>
-          <a href="/informasi?sub=alur-wajib-lapor" class="btn" style="background:rgba(255,255,255,0.08); color:#ffffff; font-weight:600; font-size:15px; padding:14px 26px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:8px; border:1px solid rgba(255,255,255,0.25); transition:all 0.3s ease;">
-            <i class="fas fa-book-open"></i> Panduan & Alur Layanan
-          </a>
-          <a href="/profil" class="btn" style="background:rgba(255,255,255,0.08); color:#ffffff; font-weight:600; font-size:15px; padding:14px 24px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:8px; border:1px solid rgba(255,255,255,0.25); transition:all 0.3s ease;">
-            <i class="fas fa-landmark"></i> Profil Institusi
-          </a>
-        </div>
-
-        <!-- Banner Maklumat / Running Announcement -->
-        <div style="background:rgba(0,18,48,0.7); border:1px solid rgba(200,168,75,0.3); border-radius:10px; padding:12px 20px; display:inline-flex; align-items:center; gap:12px; max-width:780px; width:100%; text-align:left; box-shadow:0 4px 15px rgba(0,0,0,0.25);">
-          <span style="background:#e67e22; color:#fff; font-size:11px; font-weight:800; padding:4px 10px; border-radius:4px; text-transform:uppercase; letter-spacing:0.5px; flex-shrink:0;">
-            <i class="fas fa-bullhorn"></i> Pengumuman
-          </span>
-          <span style="font-size:13px; color:#e2e8f0; line-height:1.5;">
-            Layanan Wajib Lapor Online dibuka setiap tanggal <strong>1 s/d 15 setiap bulannya</strong>. Seluruh proses bebas pungutan liar (Gratis Rp 0,-).
-          </span>
-        </div>
-
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- STATISTIK TRANSPARANSI KINERJA -->
-<section style="background:#ffffff; padding:40px 0; border-bottom:1px solid #e2e8f0; box-shadow:0 6px 20px rgba(0,30,77,0.04);">
-  <div class="container">
-    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(210px, 1fr)); gap:25px; text-align:center;">
+    <div style="max-width:860px; margin:0 auto; text-align:center;">
       
-      <div style="padding:15px; border-right:1px solid #edf2f7;">
-        <div style="font-size:38px; font-weight:900; color:var(--primary); font-family:'Playfair Display', serif; line-height:1;">1.280+</div>
-        <div style="font-size:13px; color:#64748b; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; margin-top:8px;">Klien Pemasyarakatan</div>
-        <div style="font-size:12px; color:#94a3b8; margin-top:4px;">Dalam pengawasan aktif</div>
+      <!-- Badge Identitas Resmi -->
+      <div class="hero-badge">
+        <i class="fas fa-certificate" style="color:var(--gold); font-size:13px;"></i>
+        <span>Unit Pelaksana Teknis Pemasyarakatan</span>
       </div>
 
-      <div style="padding:15px; border-right:1px solid #edf2f7;">
-        <div style="font-size:38px; font-weight:900; color:#16a34a; font-family:'Playfair Display', serif; line-height:1;">98.7%</div>
-        <div style="font-size:13px; color:#64748b; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; margin-top:8px;">Tingkat Kepatuhan Lapor</div>
-        <div style="font-size:12px; color:#94a3b8; margin-top:4px;">Disiplin jadwal bulanan</div>
+      <!-- Judul Utama -->
+      <h1 class="hero-title">
+        Balai Pemasyarakatan Kelas I Medan
+      </h1>
+      
+      <p class="hero-desc">
+        Pusat Layanan Wajib Lapor Klien Daring, Penelitian Kemasyarakatan (Litmas), dan Pendampingan Hukum Terintegrasi menuju Wilayah Bebas dari Korupsi (WBK).
+      </p>
+
+      <!-- Tombol Aksi Utama (Tinggi & Padding Seragam) -->
+      <div class="hero-btn-group">
+        <a href="/login" class="btn-hero btn-hero-primary">
+          <i class="fas fa-clipboard-check"></i> Wajib Lapor Klien Online
+        </a>
+        <a href="/informasi?sub=alur-wajib-lapor" class="btn-hero btn-hero-secondary">
+          <i class="fas fa-book-open"></i> Panduan & Alur Layanan
+        </a>
+        <a href="/profil" class="btn-hero btn-hero-secondary">
+          <i class="fas fa-landmark"></i> Profil Institusi
+        </a>
       </div>
 
-      <div style="padding:15px; border-right:1px solid #edf2f7;">
-        <div style="font-size:38px; font-weight:900; color:#d97706; font-family:'Playfair Display', serif; line-height:1;">48+</div>
-        <div style="font-size:13px; color:#64748b; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; margin-top:8px;">Pembimbing Kemasyarakatan</div>
-        <div style="font-size:12px; color:#94a3b8; margin-top:4px;">Petugas fungsional bersertifikat</div>
-      </div>
-
-      <div style="padding:15px;">
-        <div style="font-size:38px; font-weight:900; color:#2563eb; font-family:'Playfair Display', serif; line-height:1;">Rp 0,-</div>
-        <div style="font-size:13px; color:#64748b; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; margin-top:8px;">Bebas Pungutan Liar</div>
-        <div style="font-size:12px; color:#94a3b8; margin-top:4px;">Komitmen Zona Integritas (WBK)</div>
+      <!-- Banner Maklumat / Running Announcement -->
+      <div class="hero-announcement">
+        <span class="hero-announcement-badge">
+          <i class="fas fa-bullhorn"></i> Pengumuman
+        </span>
+        <span style="font-size:13px; color:#e2e8f0; line-height:1.5;">
+          Layanan Wajib Lapor Online dibuka setiap tanggal <strong>1 s/d 15 setiap bulannya</strong>. Seluruh proses bebas pungutan liar (Gratis Rp 0,-).
+        </span>
       </div>
 
     </div>
   </div>
 </section>
 
-<!-- 4 LANGKAH WAJIB LAPOR ONLINE (WORKFLOW ELEGAN) -->
-<section style="padding:70px 0; background:#f8fafc; border-bottom:1px solid #e2e8f0;">
+<!-- STATISTIK KINERJA TRANSPARAN -->
+<section style="background:#ffffff; padding:45px 0; border-bottom:1px solid #e2e8f0;">
   <div class="container">
-    <div style="text-align:center; max-width:700px; margin:0 auto 50px;">
+    <div class="stats-container">
+      
+      <div class="stat-card-box">
+        <div class="stat-val" style="color:var(--primary);">1.280+</div>
+        <div class="stat-tit">Klien Pemasyarakatan</div>
+        <div class="stat-sub">Dalam pengawasan aktif</div>
+      </div>
+
+      <div class="stat-card-box">
+        <div class="stat-val" style="color:#16a34a;">98.7%</div>
+        <div class="stat-tit">Kepatuhan Wajib Lapor</div>
+        <div class="stat-sub">Disiplin jadwal bulanan</div>
+      </div>
+
+      <div class="stat-card-box">
+        <div class="stat-val" style="color:#d97706;">48+</div>
+        <div class="stat-tit">Petugas Pembimbing (PK)</div>
+        <div class="stat-sub">Fungsional tersertifikasi</div>
+      </div>
+
+      <div class="stat-card-box">
+        <div class="stat-val" style="color:#2563eb;">Rp 0,-</div>
+        <div class="stat-tit">Bebas Pungutan Liar</div>
+        <div class="stat-sub">Zona Integritas (WBK)</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- 4 LANGKAH WAJIB LAPOR ONLINE (EQUAL HEIGHT & RAPI) -->
+<section style="padding:65px 0; background:#f8fafc; border-bottom:1px solid #e2e8f0;">
+  <div class="container">
+    <div style="text-align:center; max-width:700px; margin:0 auto 45px;">
       <span style="color:var(--primary); font-weight:800; text-transform:uppercase; font-size:12px; letter-spacing:1.5px; display:inline-block; margin-bottom:8px;">
-        Layanan Cepat & Mudah
+        Layanan Cepat & Akuntabel
       </span>
-      <h2 style="font-family:'Playfair Display', serif; font-size:32px; color:#0f172a; margin-bottom:12px;">
+      <h2 style="font-family:'Playfair Display', serif; font-size:30px; color:#0f172a; margin-bottom:10px;">
         4 Langkah Wajib Lapor Klien Online
       </h2>
-      <p style="font-size:15px; color:#64748b; line-height:1.6;">
-        Klien Pemasyarakatan kini dapat menunaikan kewajiban lapor secara mandiri melalui smartphone atau komputer secara transparan dan akuntabel.
+      <p style="font-size:14.5px; color:#64748b; line-height:1.6;">
+        Tunaikan kewajiban lapor secara mandiri melalui smartphone atau komputer secara transparan dan mudah dipahami.
       </p>
-      <div style="width:60px; height:3px; background:var(--gold); margin:18px auto 0;"></div>
+      <div style="width:50px; height:3px; background:var(--gold); margin:14px auto 0;"></div>
     </div>
 
-    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:25px;">
+    <div class="step-grid-4">
       
       <!-- Step 1 -->
-      <div style="background:#ffffff; border-radius:12px; padding:30px 24px; box-shadow:0 4px 15px rgba(0,0,0,0.05); border:1px solid #e2e8f0; position:relative; transition:all 0.3s ease;">
-        <div style="position:absolute; top:-14px; left:24px; width:34px; height:34px; border-radius:50%; background:var(--primary); color:#ffffff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:14px; box-shadow:0 4px 10px rgba(0,53,128,0.3);">
-          1
-        </div>
-        <div style="width:55px; height:55px; border-radius:12px; background:#eff6ff; color:var(--primary); display:flex; align-items:center; justify-content:center; font-size:22px; margin-bottom:20px; margin-top:8px;">
+      <div class="step-card-box">
+        <div class="step-badge-num" style="background:var(--primary);">1</div>
+        <div class="step-icon-wrap" style="background:#eff6ff; color:var(--primary);">
           <i class="fas fa-sign-in-alt"></i>
         </div>
-        <h3 style="font-size:17px; color:#0f172a; margin-bottom:10px; font-weight:700;">Masuk Akun Klien</h3>
-        <p style="font-size:14px; color:#64748b; line-height:1.6;">
-          Gunakan Nomor Registrasi atau Nomor Handphone yang telah terdaftar resmi saat serah terima klien di BAPAS Medan.
+        <h3 class="step-title">Masuk Akun Klien</h3>
+        <p class="step-desc">
+          Gunakan Nomor Register Klien atau Nomor Handphone yang telah terverifikasi saat penerimaan awal di BAPAS Medan.
         </p>
       </div>
 
       <!-- Step 2 -->
-      <div style="background:#ffffff; border-radius:12px; padding:30px 24px; box-shadow:0 4px 15px rgba(0,0,0,0.05); border:1px solid #e2e8f0; position:relative; transition:all 0.3s ease;">
-        <div style="position:absolute; top:-14px; left:24px; width:34px; height:34px; border-radius:50%; background:#16a34a; color:#ffffff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:14px; box-shadow:0 4px 10px rgba(22,163,74,0.3);">
-          2
-        </div>
-        <div style="width:55px; height:55px; border-radius:12px; background:#f0fdf4; color:#16a34a; display:flex; align-items:center; justify-content:center; font-size:22px; margin-bottom:20px; margin-top:8px;">
+      <div class="step-card-box">
+        <div class="step-badge-num" style="background:#16a34a;">2</div>
+        <div class="step-icon-wrap" style="background:#f0fdf4; color:#16a34a;">
           <i class="fas fa-camera-retro"></i>
         </div>
-        <h3 style="font-size:17px; color:#0f172a; margin-bottom:10px; font-weight:700;">Ambil Foto Bukti</h3>
-        <p style="font-size:14px; color:#64748b; line-height:1.6;">
-          Ambil swafoto (selfie) bukti presensi langsung menggunakan kamera web / ponsel Anda dengan pencahayaan yang jelas.
+        <h3 class="step-title">Ambil Foto Bukti</h3>
+        <p class="step-desc">
+          Ambil swafoto bukti presensi langsung menggunakan kamera ponsel/laptop Anda dengan pencahayaan yang jelas.
         </p>
       </div>
 
       <!-- Step 3 -->
-      <div style="background:#ffffff; border-radius:12px; padding:30px 24px; box-shadow:0 4px 15px rgba(0,0,0,0.05); border:1px solid #e2e8f0; position:relative; transition:all 0.3s ease;">
-        <div style="position:absolute; top:-14px; left:24px; width:34px; height:34px; border-radius:50%; background:#d97706; color:#ffffff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:14px; box-shadow:0 4px 10px rgba(217,119,6,0.3);">
-          3
-        </div>
-        <div style="width:55px; height:55px; border-radius:12px; background:#fffbeb; color:#d97706; display:flex; align-items:center; justify-content:center; font-size:22px; margin-bottom:20px; margin-top:8px;">
+      <div class="step-card-box">
+        <div class="step-badge-num" style="background:#d97706;">3</div>
+        <div class="step-icon-wrap" style="background:#fffbeb; color:#d97706;">
           <i class="fas fa-edit"></i>
         </div>
-        <h3 style="font-size:17px; color:#0f172a; margin-bottom:10px; font-weight:700;">Tulis Perkembangan</h3>
-        <p style="font-size:14px; color:#64748b; line-height:1.6;">
+        <h3 class="step-title">Tulis Perkembangan</h3>
+        <p class="step-desc">
           Isi ringkasan kegiatan positif, pekerjaan, dan perkembangan sosial Anda selama satu bulan terakhir dengan jujur.
         </p>
       </div>
 
       <!-- Step 4 -->
-      <div style="background:#ffffff; border-radius:12px; padding:30px 24px; box-shadow:0 4px 15px rgba(0,0,0,0.05); border:1px solid #e2e8f0; position:relative; transition:all 0.3s ease;">
-        <div style="position:absolute; top:-14px; left:24px; width:34px; height:34px; border-radius:50%; background:#2563eb; color:#ffffff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:14px; box-shadow:0 4px 10px rgba(37,99,235,0.3);">
-          4
-        </div>
-        <div style="width:55px; height:55px; border-radius:12px; background:#eff6ff; color:#2563eb; display:flex; align-items:center; justify-content:center; font-size:22px; margin-bottom:20px; margin-top:8px;">
+      <div class="step-card-box">
+        <div class="step-badge-num" style="background:#2563eb;">4</div>
+        <div class="step-icon-wrap" style="background:#eff6ff; color:#2563eb;">
           <i class="fas fa-user-shield"></i>
         </div>
-        <h3 style="font-size:17px; color:#0f172a; margin-bottom:10px; font-weight:700;">Verifikasi Pembimbing</h3>
-        <p style="font-size:14px; color:#64748b; line-height:1.6;">
-          Laporan diverifikasi langsung oleh Pembimbing Kemasyarakatan (PK) Anda dan tercatat sah dalam riwayat kepatuhan klien.
+        <h3 class="step-title">Verifikasi Petugas</h3>
+        <p class="step-desc">
+          Laporan diverifikasi oleh Pembimbing Kemasyarakatan (PK) dan tercatat sah dalam buku riwayat kepatuhan klien.
         </p>
       </div>
 
     </div>
 
-    <div style="text-align:center; margin-top:40px;">
-      <a href="/login" style="display:inline-flex; align-items:center; gap:8px; background:var(--primary); color:#ffffff; font-weight:700; padding:12px 28px; border-radius:6px; text-decoration:none; font-size:14px; transition:all 0.3s ease; box-shadow:0 4px 15px rgba(0,53,128,0.25);">
-        Mulai Pelaporan Sekarang <i class="fas fa-arrow-right"></i>
+    <div style="text-align:center; margin-top:35px;">
+      <a href="/login" class="btn-hero btn-hero-primary" style="display:inline-flex; width:auto; padding:12px 30px;">
+        Mulai Pelaporan Sekarang <i class="fas fa-arrow-right" style="margin-left:6px;"></i>
       </a>
     </div>
   </div>
 </section>
 
-<!-- LAYANAN UTAMA PEMASYARAKATAN -->
-<section style="padding:70px 0; background:#ffffff;">
+<!-- LAYANAN UTAMA PEMASYARAKATAN (KARTU KONSISTEN) -->
+<section style="padding:65px 0; background:#ffffff;">
   <div class="container">
-    <div style="text-align:center; max-width:700px; margin:0 auto 50px;">
+    <div style="text-align:center; max-width:700px; margin:0 auto 45px;">
       <span style="color:var(--primary); font-weight:800; text-transform:uppercase; font-size:12px; letter-spacing:1.5px; display:inline-block; margin-bottom:8px;">
         Tugas Pokok & Fungsi
       </span>
-      <h2 style="font-family:'Playfair Display', serif; font-size:32px; color:#0f172a; margin-bottom:12px;">
+      <h2 style="font-family:'Playfair Display', serif; font-size:30px; color:#0f172a; margin-bottom:10px;">
         Layanan Balai Pemasyarakatan
       </h2>
-      <p style="font-size:15px; color:#64748b; line-height:1.6;">
+      <p style="font-size:14.5px; color:#64748b; line-height:1.6;">
         Menyelenggarakan penelitian kemasyarakatan, pembimbingan, pengawasan, dan pendampingan berdasarkan Undang-Undang Pemasyarakatan.
       </p>
-      <div style="width:60px; height:3px; background:var(--gold); margin:18px auto 0;"></div>
+      <div style="width:50px; height:3px; background:var(--gold); margin:14px auto 0;"></div>
     </div>
 
-    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:25px;">
+    <div class="service-grid-4">
       
       <!-- Service 1 -->
-      <div style="background:#ffffff; border-radius:10px; padding:30px 24px; border:1px solid #e2e8f0; box-shadow:0 4px 14px rgba(0,0,0,0.04); border-top:4px solid var(--primary); transition:all 0.3s ease;">
-        <div style="width:56px; height:56px; border-radius:10px; background:#e0f2fe; color:var(--primary); display:flex; align-items:center; justify-content:center; font-size:24px; margin-bottom:20px;">
+      <div class="service-card-box" style="border-top:4px solid var(--primary);">
+        <div class="service-icon-wrap" style="background:#e0f2fe; color:var(--primary);">
           <i class="fas fa-file-signature"></i>
         </div>
-        <h3 style="font-size:18px; color:#0f172a; margin-bottom:12px; font-weight:700;">Penelitian Kemasyarakatan (Litmas)</h3>
-        <p style="font-size:14px; color:#64748b; line-height:1.7; margin-bottom:15px;">
-          Pembuatan laporan penelitian kemasyarakatan komprehensif sebagai rekomendasi penjaminan integrasi (PB, CB, CMB, Asimilasi) dan peradilan pidana anak.
+        <h3 class="service-title">Penelitian Kemasyarakatan (Litmas)</h3>
+        <p class="service-desc">
+          Laporan penelitian kemasyarakatan sebagai rekomendasi penjaminan program Integrasi (PB, CB, CMB, Asimilasi) dan peradilan pidana anak.
         </p>
-        <a href="/informasi?sub=layanan-integrasi" style="color:var(--primary); font-weight:700; font-size:13px; text-decoration:none; display:inline-flex; align-items:center; gap:5px;">
+        <a href="/informasi?sub=layanan-integrasi" class="service-link" style="color:var(--primary);">
           Pelajari Selengkapnya <i class="fas fa-chevron-right" style="font-size:10px;"></i>
         </a>
       </div>
 
       <!-- Service 2 -->
-      <div style="background:#ffffff; border-radius:10px; padding:30px 24px; border:1px solid #e2e8f0; box-shadow:0 4px 14px rgba(0,0,0,0.04); border-top:4px solid #16a34a; transition:all 0.3s ease;">
-        <div style="width:56px; height:56px; border-radius:10px; background:#dcfce7; color:#16a34a; display:flex; align-items:center; justify-content:center; font-size:24px; margin-bottom:20px;">
+      <div class="service-card-box" style="border-top:4px solid #16a34a;">
+        <div class="service-icon-wrap" style="background:#dcfce7; color:#16a34a;">
           <i class="fas fa-users-cog"></i>
         </div>
-        <h3 style="font-size:18px; color:#0f172a; margin-bottom:12px; font-weight:700;">Pembimbingan Klien Pemasyarakatan</h3>
-        <p style="font-size:14px; color:#64748b; line-height:1.7; margin-bottom:15px;">
-          Program pembimbingan kepribadian mental-spiritual dan bimbingan kemandirian kerja agar klien mampu beradaptasi kembali di tengah masyarakat.
+        <h3 class="service-title">Pembimbingan Klien Pemasyarakatan</h3>
+        <p class="service-desc">
+          Bimbingan kepribadian mental-spiritual dan bimbingan kemandirian wirausaha agar klien berdaya guna di tengah masyarakat.
         </p>
-        <a href="/informasi?sub=alur-wajib-lapor" style="color:#16a34a; font-weight:700; font-size:13px; text-decoration:none; display:inline-flex; align-items:center; gap:5px;">
+        <a href="/informasi?sub=alur-wajib-lapor" class="service-link" style="color:#16a34a;">
           Pelajari Selengkapnya <i class="fas fa-chevron-right" style="font-size:10px;"></i>
         </a>
       </div>
 
       <!-- Service 3 -->
-      <div style="background:#ffffff; border-radius:10px; padding:30px 24px; border:1px solid #e2e8f0; box-shadow:0 4px 14px rgba(0,0,0,0.04); border-top:4px solid #d97706; transition:all 0.3s ease;">
-        <div style="width:56px; height:56px; border-radius:10px; background:#fef3c7; color:#d97706; display:flex; align-items:center; justify-content:center; font-size:24px; margin-bottom:20px;">
+      <div class="service-card-box" style="border-top:4px solid #d97706;">
+        <div class="service-icon-wrap" style="background:#fef3c7; color:#d97706;">
           <i class="fas fa-child"></i>
         </div>
-        <h3 style="font-size:18px; color:#0f172a; margin-bottom:12px; font-weight:700;">Pendampingan Hukum Anak (ABH)</h3>
-        <p style="font-size:14px; color:#64748b; line-height:1.7; margin-bottom:15px;">
-          Pendampingan terhadap Anak yang Berhadapan dengan Hukum di tingkat kepolisian, kejaksaan, pengadilan, hingga pelaksanaan kesepakatan Diversi.
+        <h3 class="service-title">Pendampingan Hukum Anak (ABH)</h3>
+        <p class="service-desc">
+          Pendampingan terhadap Anak yang Berhadapan dengan Hukum di tingkat kepolisian, kejaksaan, pengadilan, hingga kesepakatan Diversi.
         </p>
-        <a href="/informasi?sub=alur-serah-terima" style="color:#d97706; font-weight:700; font-size:13px; text-decoration:none; display:inline-flex; align-items:center; gap:5px;">
+        <a href="/informasi?sub=alur-serah-terima" class="service-link" style="color:#d97706;">
           Pelajari Selengkapnya <i class="fas fa-chevron-right" style="font-size:10px;"></i>
         </a>
       </div>
 
       <!-- Service 4 -->
-      <div style="background:#ffffff; border-radius:10px; padding:30px 24px; border:1px solid #e2e8f0; box-shadow:0 4px 14px rgba(0,0,0,0.04); border-top:4px solid #7c3aed; transition:all 0.3s ease;">
-        <div style="width:56px; height:56px; border-radius:10px; background:#ede9fe; color:#7c3aed; display:flex; align-items:center; justify-content:center; font-size:24px; margin-bottom:20px;">
+      <div class="service-card-box" style="border-top:4px solid #7c3aed;">
+        <div class="service-icon-wrap" style="background:#ede9fe; color:#7c3aed;">
           <i class="fas fa-gavel"></i>
         </div>
-        <h3 style="font-size:18px; color:#0f172a; margin-bottom:12px; font-weight:700;">Sidang TPP Terpadu</h3>
-        <p style="font-size:14px; color:#64748b; line-height:1.7; margin-bottom:15px;">
-          Sidang Tim Pengamat Pemasyarakatan (TPP) untuk mengevaluasi dan merumuskan rekomendasi penanganan klien yang tepat, transparan, dan terukur.
+        <h3 class="service-title">Sidang TPP Terpadu</h3>
+        <p class="service-desc">
+          Sidang Tim Pengamat Pemasyarakatan (TPP) untuk merumuskan rekomendasi penanganan pembimbingan yang tepat dan terukur.
         </p>
-        <a href="/profil?sub=tugas-fungsi" style="color:#7c3aed; font-weight:700; font-size:13px; text-decoration:none; display:inline-flex; align-items:center; gap:5px;">
+        <a href="/profil?sub=tugas-fungsi" class="service-link" style="color:#7c3aed;">
           Pelajari Selengkapnya <i class="fas fa-chevron-right" style="font-size:10px;"></i>
         </a>
       </div>
@@ -247,20 +237,20 @@
   </div>
 </section>
 
-<!-- MAKLUMAT PELAYANAN & ZONA INTEGRITAS (WBK / WBBM) -->
-<section style="padding:60px 0; background:linear-gradient(135deg, #001f4d 0%, #003580 100%); color:#ffffff;">
+<!-- MAKLUMAT PELAYANAN & ZONA INTEGRITAS -->
+<section style="padding:55px 0; background:linear-gradient(135deg, #001f4d 0%, #003580 100%); color:#ffffff;">
   <div class="container">
-    <div style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.18); border-radius:14px; padding:40px 30px; text-align:center; max-width:960px; margin:0 auto; box-shadow:0 10px 30px rgba(0,0,0,0.25);">
-      <div style="display:inline-flex; align-items:center; gap:8px; background:var(--gold); color:#001f4d; padding:6px 18px; border-radius:20px; font-weight:800; font-size:12px; text-transform:uppercase; letter-spacing:1px; margin-bottom:20px;">
+    <div style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.18); border-radius:14px; padding:35px 25px; text-align:center; max-width:920px; margin:0 auto;">
+      <div style="display:inline-flex; align-items:center; gap:8px; background:var(--gold); color:#001f4d; padding:6px 18px; border-radius:20px; font-weight:800; font-size:12px; text-transform:uppercase; letter-spacing:1px; margin-bottom:18px;">
         <i class="fas fa-shield-alt"></i> Maklumat Pelayanan Publik
       </div>
-      <h2 style="font-family:'Playfair Display', serif; font-size:clamp(24px, 3.5vw, 32px); margin-bottom:18px; color:#ffffff;">
+      <h2 style="font-family:'Playfair Display', serif; font-size:clamp(22px, 3.2vw, 30px); margin-bottom:15px; color:#ffffff; line-height:1.35;">
         "Dengan ini kami menyatakan sanggup menyelenggarakan pelayanan sesuai standar pelayanan yang telah ditetapkan."
       </h2>
-      <p style="font-size:16px; color:#cbd5e1; line-height:1.7; max-width:800px; margin:0 auto 25px;">
+      <p style="font-size:15px; color:#cbd5e1; line-height:1.7; max-width:760px; margin:0 auto 22px;">
         Balai Pemasyarakatan Kelas I Medan berkomitmen penuh mewujudkan <strong>Wilayah Bebas dari Korupsi (WBK)</strong>. Seluruh proses pembimbingan dan pengawasan klien dilaksanakan tanpa diskriminasi, transparan, cepat, dan <strong>bebas pungutan liar (Gratis Rp 0,-)</strong>.
       </p>
-      <div style="display:flex; justify-content:center; gap:20px; flex-wrap:wrap; font-size:14px; color:#fce8a6; font-weight:600;">
+      <div style="display:flex; justify-content:center; gap:18px; flex-wrap:wrap; font-size:13.5px; color:#fce8a6; font-weight:600;">
         <span><i class="fas fa-check-circle" style="color:#22c55e;"></i> Bebas Gratifikasi</span>
         <span><i class="fas fa-check-circle" style="color:#22c55e;"></i> Berkeadilan & Humanis</span>
         <span><i class="fas fa-check-circle" style="color:#22c55e;"></i> Pelayanan Prima & Akuntabel</span>
@@ -269,65 +259,65 @@
   </div>
 </section>
 
-<!-- FREQUENTLY ASKED QUESTIONS (FAQ INTERAKTIF & SEO SCHEMA) -->
-<section style="padding:70px 0; background:#f8fafc;" id="faq-section">
-  <div class="container" style="max-width:880px;">
-    <div style="text-align:center; margin-bottom:45px;">
+<!-- FAQ INTERAKTIF (BEBAS ARROW GANDA & RAPI) -->
+<section style="padding:65px 0; background:#f8fafc;" id="faq-section">
+  <div class="container" style="max-width:820px;">
+    <div style="text-align:center; margin-bottom:40px;">
       <span style="color:var(--primary); font-weight:800; text-transform:uppercase; font-size:12px; letter-spacing:1.5px; display:inline-block; margin-bottom:8px;">
         Pusat Bantuan
       </span>
-      <h2 style="font-family:'Playfair Display', serif; font-size:32px; color:#0f172a; margin-bottom:12px;">
+      <h2 style="font-family:'Playfair Display', serif; font-size:30px; color:#0f172a; margin-bottom:10px;">
         Pertanyaan yang Sering Diajukan (FAQ)
       </h2>
-      <p style="font-size:15px; color:#64748b;">
-        Informasi penting seputar pelaksanaan Wajib Lapor Klien dan pelayanan di BAPAS Kelas I Medan.
+      <p style="font-size:14.5px; color:#64748b;">
+        Jawaban praktis seputar pelaksanaan Wajib Lapor Klien dan pelayanan di BAPAS Kelas I Medan.
       </p>
-      <div style="width:60px; height:3px; background:var(--gold); margin:18px auto 0;"></div>
+      <div style="width:50px; height:3px; background:var(--gold); margin:14px auto 0;"></div>
     </div>
 
-    <div style="display:flex; flex-direction:column; gap:16px;">
+    <div>
       
       <!-- FAQ 1 -->
-      <details style="background:#ffffff; border:1px solid #e2e8f0; border-radius:10px; padding:18px 24px; box-shadow:0 2px 8px rgba(0,0,0,0.03); cursor:pointer;" open>
-        <summary style="font-size:16px; font-weight:700; color:#0f172a; display:flex; justify-content:space-between; align-items:center; outline:none; user-select:none;">
-          <span><i class="fas fa-question-circle" style="color:var(--primary); margin-right:10px;"></i> Kapan periode jadwal Wajib Lapor dibuka setiap bulan?</span>
-          <i class="fas fa-chevron-down" style="font-size:12px; color:#94a3b8;"></i>
+      <details class="faq-box" open>
+        <summary>
+          <span><i class="fas fa-question-circle" style="color:var(--primary); margin-right:8px;"></i> Kapan periode jadwal Wajib Lapor dibuka setiap bulan?</span>
+          <i class="fas fa-chevron-down"></i>
         </summary>
-        <div style="margin-top:14px; font-size:14px; color:#475569; line-height:1.7; border-top:1px solid #f1f5f9; padding-top:12px;">
-          Sistem Wajib Lapor Daring di BAPAS Kelas I Medan dibuka secara rutin mulai dari <strong>tanggal 1 hingga tanggal 15 setiap bulannya</strong>. Klien diharapkan melapor tepat waktu agar riwayat kedisiplinan pembimbingan tetap baik.
+        <div class="faq-body">
+          Sistem Wajib Lapor Daring di BAPAS Kelas I Medan dibuka secara rutin mulai dari <strong>tanggal 1 hingga tanggal 15 setiap bulannya</strong>. Klien diharapkan melapor tepat waktu agar riwayat kedisiplinan pembimbingan tetap tercatat tertib.
         </div>
       </details>
 
       <!-- FAQ 2 -->
-      <details style="background:#ffffff; border:1px solid #e2e8f0; border-radius:10px; padding:18px 24px; box-shadow:0 2px 8px rgba(0,0,0,0.03); cursor:pointer;">
-        <summary style="font-size:16px; font-weight:700; color:#0f172a; display:flex; justify-content:space-between; align-items:center; outline:none; user-select:none;">
-          <span><i class="fas fa-question-circle" style="color:var(--primary); margin-right:10px;"></i> Apa data yang digunakan untuk login ke portal Wajib Lapor?</span>
-          <i class="fas fa-chevron-down" style="font-size:12px; color:#94a3b8;"></i>
+      <details class="faq-box">
+        <summary>
+          <span><i class="fas fa-question-circle" style="color:var(--primary); margin-right:8px;"></i> Apa data yang digunakan untuk login ke portal Wajib Lapor?</span>
+          <i class="fas fa-chevron-down"></i>
         </summary>
-        <div style="margin-top:14px; font-size:14px; color:#475569; line-height:1.7; border-top:1px solid #f1f5f9; padding-top:12px;">
+        <div class="faq-body">
           Klien dapat masuk menggunakan <strong>Nomor Register Klien</strong> atau <strong>Nomor Handphone</strong> yang telah diverifikasi saat penerimaan awal di BAPAS Medan, beserta kata sandi yang telah ditentukan oleh petugas registrasi.
         </div>
       </details>
 
       <!-- FAQ 3 -->
-      <details style="background:#ffffff; border:1px solid #e2e8f0; border-radius:10px; padding:18px 24px; box-shadow:0 2px 8px rgba(0,0,0,0.03); cursor:pointer;">
-        <summary style="font-size:16px; font-weight:700; color:#0f172a; display:flex; justify-content:space-between; align-items:center; outline:none; user-select:none;">
-          <span><i class="fas fa-question-circle" style="color:var(--primary); margin-right:10px;"></i> Apakah ada pungutan biaya dalam pembuatan Litmas atau Wajib Lapor?</span>
-          <i class="fas fa-chevron-down" style="font-size:12px; color:#94a3b8;"></i>
+      <details class="faq-box">
+        <summary>
+          <span><i class="fas fa-question-circle" style="color:var(--primary); margin-right:8px;"></i> Apakah ada pungutan biaya dalam pembuatan Litmas atau Wajib Lapor?</span>
+          <i class="fas fa-chevron-down"></i>
         </summary>
-        <div style="margin-top:14px; font-size:14px; color:#475569; line-height:1.7; border-top:1px solid #f1f5f9; padding-top:12px;">
+        <div class="faq-body">
           <strong>TIDAK ADA BIAYA APAPUN (GRATIS Rp 0,-)</strong>. Seluruh proses layanan di Balai Pemasyarakatan Kelas I Medan tidak memungut biaya apapun. Jika menemukan indikasi pungutan liar, harap laporkan ke saluran pengaduan kami.
         </div>
       </details>
 
       <!-- FAQ 4 -->
-      <details style="background:#ffffff; border:1px solid #e2e8f0; border-radius:10px; padding:18px 24px; box-shadow:0 2px 8px rgba(0,0,0,0.03); cursor:pointer;">
-        <summary style="font-size:16px; font-weight:700; color:#0f172a; display:flex; justify-content:space-between; align-items:center; outline:none; user-select:none;">
-          <span><i class="fas fa-question-circle" style="color:var(--primary); margin-right:10px;"></i> Bagaimana jika klien mengalami kendala teknis saat melapor?</span>
-          <i class="fas fa-chevron-down" style="font-size:12px; color:#94a3b8;"></i>
+      <details class="faq-box">
+        <summary>
+          <span><i class="fas fa-question-circle" style="color:var(--primary); margin-right:8px;"></i> Bagaimana jika klien mengalami kendala teknis saat melapor?</span>
+          <i class="fas fa-chevron-down"></i>
         </summary>
-        <div style="margin-top:14px; font-size:14px; color:#475569; line-height:1.7; border-top:1px solid #f1f5f9; padding-top:12px;">
-          Klien dapat langsung menghubungi Pembimbing Kemasyarakatan (PK) yang bersangkutan, menghubungi layanan telepon kantor di <strong>(061) 4516516</strong>, atau berkonsultasi via email resmi <strong>bapasmedan@kemenkumham.go.id</strong>.
+        <div class="faq-body">
+          Klien dapat langsung menghubungi Pembimbing Kemasyarakatan (PK) yang bersangkutan, menghubungi telepon kantor di <strong>(061) 4516516</strong>, atau berkonsultasi via email resmi <strong>bapasmedan@kemenkumham.go.id</strong>.
         </div>
       </details>
 
@@ -335,7 +325,7 @@
   </div>
 </section>
 
-<!-- KONTAK & PETA LOKASI RESMI -->
+<!-- KONTAK & PETA LOKASI RESMI (SEIMBANG & RAPI) -->
 <section style="padding:60px 0; background:#ffffff; border-top:1px solid #e2e8f0;">
   <div class="container">
     <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:35px; align-items:center;">
@@ -344,42 +334,42 @@
         <span style="color:var(--primary); font-weight:800; text-transform:uppercase; font-size:12px; letter-spacing:1px; display:inline-block; margin-bottom:6px;">
           Akses & Lokasi
         </span>
-        <h2 style="font-family:'Playfair Display', serif; font-size:28px; color:#0f172a; margin-bottom:15px;">
+        <h2 style="font-family:'Playfair Display', serif; font-size:26px; color:#0f172a; margin-bottom:14px;">
           Kantor BAPAS Kelas I Medan
         </h2>
         <p style="font-size:14px; color:#64748b; line-height:1.7; margin-bottom:20px;">
           Balai Pemasyarakatan Kelas I Medan beralamat di Komplek Lembaga Pemasyarakatan Tanjung Gusta, siap melayani masyarakat dan klien pemasyarakatan dengan ramah dan profesional.
         </p>
 
-        <div style="display:flex; flex-direction:column; gap:14px; font-size:14px; color:#334155;">
+        <div style="display:flex; flex-direction:column; gap:12px; font-size:13.5px; color:#334155;">
           <div style="display:flex; align-items:flex-start; gap:12px;">
-            <i class="fas fa-map-marker-alt" style="color:var(--primary); font-size:18px; margin-top:3px;"></i>
+            <i class="fas fa-map-marker-alt" style="color:var(--primary); font-size:16px; margin-top:3px; flex-shrink:0;"></i>
             <span><strong>Alamat:</strong> Jl. Lembaga Pemasyarakatan, Kel. Tanjung Gusta, Kec. Medan Helvetia, Kota Medan, Sumatera Utara 20125</span>
           </div>
           <div style="display:flex; align-items:center; gap:12px;">
-            <i class="fas fa-phone-alt" style="color:var(--primary); font-size:16px;"></i>
+            <i class="fas fa-phone-alt" style="color:var(--primary); font-size:15px; flex-shrink:0;"></i>
             <span><strong>Telepon:</strong> <a href="tel:0614516516" style="color:inherit; text-decoration:none;">(061) 4516516</a></span>
           </div>
           <div style="display:flex; align-items:center; gap:12px;">
-            <i class="fas fa-envelope" style="color:var(--primary); font-size:16px;"></i>
+            <i class="fas fa-envelope" style="color:var(--primary); font-size:15px; flex-shrink:0;"></i>
             <span><strong>Email:</strong> <a href="mailto:bapasmedan@kemenkumham.go.id" style="color:inherit; text-decoration:none;">bapasmedan@kemenkumham.go.id</a></span>
           </div>
           <div style="display:flex; align-items:center; gap:12px;">
-            <i class="fas fa-clock" style="color:var(--primary); font-size:16px;"></i>
+            <i class="fas fa-clock" style="color:var(--primary); font-size:15px; flex-shrink:0;"></i>
             <span><strong>Jam Operasional:</strong> Senin – Jumat: 08.00 – 16.00 WIB</span>
           </div>
         </div>
       </div>
 
-      <div style="border-radius:12px; overflow:hidden; box-shadow:0 6px 20px rgba(0,0,0,0.08); border:1px solid #e2e8f0; background:#f1f5f9; min-height:260px; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:30px; text-align:center;">
-        <div style="width:70px; height:70px; border-radius:50%; background:#e0f2fe; color:var(--primary); display:flex; align-items:center; justify-content:center; font-size:30px; margin-bottom:16px;">
+      <div style="border-radius:12px; overflow:hidden; box-shadow:0 4px 16px rgba(0,0,0,0.06); border:1px solid #e2e8f0; background:#f8fafc; padding:30px 24px; text-align:center;">
+        <div style="width:64px; height:64px; border-radius:50%; background:#e0f2fe; color:var(--primary); display:flex; align-items:center; justify-content:center; font-size:26px; margin:0 auto 14px;">
           <i class="fas fa-map-marked-alt"></i>
         </div>
-        <h3 style="font-size:18px; font-weight:700; color:#0f172a; margin-bottom:8px;">Peta Navigasi BAPAS Medan</h3>
-        <p style="font-size:13px; color:#64748b; margin-bottom:18px; max-width:320px;">
-          Buka lokasi langsung melalui Google Maps untuk panduan rute perjalanan tercepat ke kantor kami.
+        <h3 style="font-size:17px; font-weight:700; color:#0f172a; margin-bottom:6px;">Peta Navigasi BAPAS Medan</h3>
+        <p style="font-size:13px; color:#64748b; margin-bottom:18px; line-height:1.5;">
+          Buka rute perjalanan langsung melalui Google Maps menuju kantor BAPAS Kelas I Medan.
         </p>
-        <a href="https://maps.google.com/?q=Bapas+Kelas+I+Medan+Tanjung+Gusta" target="_blank" rel="noopener noreferrer" style="display:inline-flex; align-items:center; gap:8px; background:var(--primary); color:#ffffff; font-weight:700; font-size:13px; padding:10px 22px; border-radius:6px; text-decoration:none; box-shadow:0 4px 12px rgba(0,53,128,0.2);">
+        <a href="https://maps.google.com/?q=Bapas+Kelas+I+Medan+Tanjung+Gusta" target="_blank" rel="noopener noreferrer" class="btn-hero btn-hero-primary" style="display:inline-flex; width:auto; padding:10px 22px; font-size:13.5px; min-height:42px;">
           <i class="fas fa-directions"></i> Buka Rute di Google Maps
         </a>
       </div>

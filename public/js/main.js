@@ -52,7 +52,7 @@ if (hamburger && navMenu) {
 // Mobile dropdown toggle
 document.querySelectorAll('.has-dropdown > a').forEach(link => {
   link.addEventListener('click', (e) => {
-    if (window.innerWidth <= 768) {
+    if (window.innerWidth <= 992) {
       e.preventDefault();
       const dropdown = link.nextElementSibling;
       if (dropdown) {
