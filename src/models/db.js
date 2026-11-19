@@ -79,46 +79,66 @@ async function loginAdmin(identifier, password) {
   if (!identifier || !password) return null;
   const cleanId = identifier.trim();
 
-  // 1. Coba login menggunakan Firebase Authentication jika input berupa email
+  // 1. Cek akun admin di Database (Firestore / Local JSON) terlebih dahulu
+  const adminUser = await getAdminByIdentifier(cleanId);
+
+  // Jika akun admin ditemukan di database:
+  if (adminUser) {
+    if (adminUser.status !== 'aktif') {
+      console.log(`⚠️ Admin login ditolak: akun nonaktif (${cleanId})`);
+      return null;
+    }
+
+    // Jika admin sudah memiliki sandi tersimpan di database:
+    // WAJIB verifikasi kecocokan sandi terhadap hash database.
+    // Jika tidak cocok, LANGSUNG TOLAK! Jangan biarkan sandi lama login lewat mana pun!
+    if (adminUser.password) {
+      const valid = await verifyPassword(password, adminUser.password);
+      if (!valid) {
+        console.log(`❌ Admin login gagal: kata sandi tidak cocok (${cleanId})`);
+        return null;
+      }
+
+      await updateAdminLastLogin(adminUser.id);
+      await logActivity('admin', adminUser.id, 'Login', `Admin login berhasil via Database (${adminUser.username})`);
+      return adminUser;
+    }
+  }
+
+  // 2. Fallback khusus jika akun belum memiliki password di database (misal pertama kali setup Firebase Auth)
   if (firebaseAuth && cleanId.includes('@')) {
     try {
       const userCred = await firebaseAuth.signInWithEmailAndPassword(cleanId, password);
       const fbUser = userCred.user;
       if (fbUser) {
         console.log(`🔐 Admin berhasil login via Firebase Auth: ${fbUser.email}`);
-        let adminUser = await getAdminByEmail(fbUser.email);
-        if (!adminUser) {
-          adminUser = {
+        let fbAdminUser = adminUser || await getAdminByEmail(fbUser.email);
+        const hashedPassword = await hashPassword(password);
+        if (!fbAdminUser) {
+          fbAdminUser = {
             id: 'admin_' + (fbUser.uid ? fbUser.uid.substring(0, 10) : Date.now()),
             username: fbUser.email.split('@')[0],
             email: fbUser.email,
             nama_lengkap: fbUser.displayName || 'Administrator BAPAS',
             status: 'aktif',
             firebase_uid: fbUser.uid,
+            password: hashedPassword,
             tanggal_daftar: new Date().toISOString()
           };
-          await db.collection('admin').doc(adminUser.id).set(adminUser, { merge: true });
+          await db.collection('admin').doc(fbAdminUser.id).set(fbAdminUser, { merge: true });
+        } else {
+          await db.collection('admin').doc(fbAdminUser.id).set({ password: hashedPassword }, { merge: true });
         }
-        await updateAdminLastLogin(adminUser.id);
-        await logActivity('admin', adminUser.id, 'Login', `Admin login via Firebase Auth (${fbUser.email})`);
-        return adminUser;
+        await updateAdminLastLogin(fbAdminUser.id);
+        await logActivity('admin', fbAdminUser.id, 'Login', `Admin login via Firebase Auth (${fbUser.email})`);
+        return fbAdminUser;
       }
     } catch (fbErr) {
       console.log(`ℹ️ Catatan Firebase Auth Login (${cleanId}): ${fbErr.code || fbErr.message}`);
     }
   }
 
-  // 2. Coba login melalui Database (Firestore / Local JSON)
-  const adminUser = await getAdminByIdentifier(cleanId);
-  if (!adminUser) return null;
-  if (adminUser.status !== 'aktif') return null;
-
-  const valid = await verifyPassword(password, adminUser.password);
-  if (!valid) return null;
-
-  await updateAdminLastLogin(adminUser.id);
-  await logActivity('admin', adminUser.id, 'Login', `Admin login via Database (${adminUser.username})`);
-  return adminUser;
+  return null;
 }
 
 // ============================================
