@@ -388,12 +388,18 @@
         <span id="dCatatan"></span>
       </div>
 
-      <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid #e2e8f0; padding-top:15px;">
-        <form id="formBatalkan" action="/admin/lapor/batalkan" method="POST">
-          <input type="hidden" name="lapor_id" id="cancelLaporId">
-          <input type="hidden" name="catatan_admin" value="Dibatalkan oleh administrator">
-          <button type="button" class="btn btn-outline" style="color:#dc3545; border-color:#dc3545;" onclick="konfirmasiBatalkanLapor(this.form)"><i class="fas fa-ban"></i> Batalkan Laporan</button>
-        </form>
+      <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid #e2e8f0; padding-top:15px; flex-wrap:wrap; gap:10px;">
+        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+          <form id="formBatalkan" action="/admin/lapor/batalkan" method="POST">
+            <input type="hidden" name="lapor_id" id="cancelLaporId">
+            <input type="hidden" name="catatan_admin" value="Dibatalkan oleh administrator">
+            <button type="button" class="btn btn-outline" style="color:#d97706; border-color:#d97706;" onclick="konfirmasiBatalkanLapor(this.form)"><i class="fas fa-ban"></i> Batalkan Laporan</button>
+          </form>
+          <form id="formHapusLapor" action="/admin/lapor/delete" method="POST">
+            <input type="hidden" name="lapor_id" id="hapusLaporId">
+            <button type="button" class="btn btn-danger" onclick="konfirmasiHapusLaporPermanen(this.form)"><i class="fas fa-trash"></i> Hapus Permanen</button>
+          </form>
+        </div>
         <button type="button" class="btn btn-secondary" onclick="closeDetailModal()">Tutup</button>
       </div>
     </div>
@@ -422,6 +428,7 @@
         document.getElementById('dAktivitas').innerText = item.aktivitas_harian || '(Tidak ada keterangan)';
         document.getElementById('dRencana').innerText = item.rencana_mendatang || '(Tidak ada keterangan)';
         document.getElementById('cancelLaporId').value = item.id;
+        document.getElementById('hapusLaporId').value = item.id;
 
         if (item.foto_bukti || item.foto_url) {
           let fotoSrc = item.foto_url || item.foto_bukti;
@@ -476,12 +483,33 @@
       title: 'Batalkan Status Laporan?',
       text: 'Laporan ini akan dibatalkan status verifikasinya dan status akan kembali diproses. Anda yakin?',
       icon: 'warning',
-      confirmColor: '#dc3545',
+      confirmColor: '#d97706',
       confirmText: '<i class="fas fa-ban"></i> Ya, Batalkan Status',
       cancelText: 'Kembali'
     }).then((res) => {
       if (res.isConfirmed) form.submit();
     });
+  }
+
+  function konfirmasiHapusLaporPermanen(form) {
+    if (typeof Swal !== 'undefined') {
+      Swal.fire({
+        title: 'Hapus Laporan Permanen?',
+        text: 'Laporan ini akan DIHAPUS PERMANEN dari Firebase Cloud. Data tidak dapat dipulihkan!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc3545',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: '<i class="fas fa-trash"></i> Ya, Hapus Permanen',
+        cancelButtonText: 'Batal'
+      }).then((result) => {
+        if (result.isConfirmed) form.submit();
+      });
+    } else {
+      if (confirm('Laporan ini akan DIHAPUS PERMANEN dari Firebase. Anda yakin?')) {
+        form.submit();
+      }
+    }
   }
 </script>
 

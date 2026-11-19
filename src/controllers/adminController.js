@@ -8,6 +8,7 @@ const {
   createClient,
   updateClient,
   deleteClient,
+  deleteLapor,
   terimaLapor,
   tolakLapor,
   batalkanLapor,
@@ -302,6 +303,24 @@ async function postBatalkanLapor(req, res) {
   res.redirect(redirectUrl);
 }
 
+async function postDeleteLapor(req, res) {
+  try {
+    const adminId = req.session.user.id;
+    const laporId = req.body.lapor_id;
+    const result = await deleteLapor(laporId, adminId);
+    if (result.success) {
+      req.session.successMessage = result.message;
+    } else {
+      req.session.errorMessage = result.message;
+    }
+  } catch (err) {
+    req.session.errorMessage = 'Gagal menghapus laporan: ' + err.message;
+  }
+
+  const redirectUrl = req.body.redirect_to || '/admin/riwayat-lapor';
+  res.redirect(redirectUrl);
+}
+
 async function postUpdateKonfigurasi(req, res) {
   try {
     const configId = req.body.config_id;
@@ -358,6 +377,7 @@ module.exports = {
   postTerimaLapor,
   postTolakLapor,
   postBatalkanLapor,
+  postDeleteLapor,
   postUpdateKonfigurasi,
   getDetailLaporJson
 };

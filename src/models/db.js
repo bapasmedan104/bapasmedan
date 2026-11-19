@@ -352,16 +352,45 @@ async function updateClient(clientId, data, adminId) {
 }
 
 async function deleteClient(clientId, adminId) {
-  // Hapus semua laporan client
+  // 1. Hapus semua laporan client dari koleksi wajib_lapor
   const laporCol = db.collection('wajib_lapor');
   const snap = await laporCol.where('client_id', '==', clientId).get();
   for (const doc of snap.docs) {
     await laporCol.doc(doc.id).delete();
   }
 
+  // 2. Query langsung ke Cloud Firestore via REST jika ada laporan tersisa di cloud
+  try {
+    const apiKey = (process.env.FIREBASE_API_KEY || 'AIzaSyADYXlJ9raZ1hNERRhHz7oAOYz3HbgLcac').trim();
+    const projectId = (process.env.FIREBASE_PROJECT_ID || 'bapasmedan-173dd').trim();
+    const url = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/wajib_lapor?key=${apiKey}`;
+    const res = await fetch(url, { signal: AbortSignal.timeout(6000) });
+    if (res.ok) {
+      const data = await res.json();
+      if (data.documents && data.documents.length) {
+        for (const d of data.documents) {
+          const docId = d.name.split('/').pop();
+          const cId = d.fields && d.fields.client_id && d.fields.client_id.stringValue;
+          if (cId === clientId) {
+            await laporCol.doc(docId).delete();
+          }
+        }
+      }
+    }
+  } catch (err) {
+    // Lanjutkan proses penghapusan
+  }
+
+  // 3. Hapus dokumen client secara permanen
   await db.collection('client').doc(clientId).delete();
-  await logActivity('admin', adminId, 'Hapus Client', `Admin hapus client ID: ${clientId}`);
-  return { success: true, message: 'Client berhasil dihapus beserta data laporannya' };
+  await logActivity('admin', adminId, 'Hapus Client Permanen', `Admin menghapus permanen client ID: ${clientId} dari Firebase`);
+  return { success: true, message: 'Data klien beserta seluruh berkas laporan berhasil DIHAPUS PERMANEN dari Firebase' };
+}
+
+async function deleteLapor(laporId, adminId) {
+  await db.collection('wajib_lapor').doc(laporId).delete();
+  await logActivity('admin', adminId, 'Hapus Laporan Permanen', `Admin menghapus permanen laporan ID: ${laporId} dari Firebase`);
+  return { success: true, message: 'Laporan berhasil DIHAPUS PERMANEN dari Firebase' };
 }
 
 async function getAllClients(filterOptions = {}) {
@@ -804,6 +833,7 @@ module.exports = {
   createClient,
   updateClient,
   deleteClient,
+  deleteLapor,
   getAllClients,
   getLaporById,
   getLaporBulanIni,

@@ -174,6 +174,35 @@ function writeLocalDb(data) {
   }
 }
 
+async function deleteFromCloudFirestore(collName, docId) {
+  try {
+    const apiKey = (process.env.FIREBASE_API_KEY || 'AIzaSyADYXlJ9raZ1hNERRhHz7oAOYz3HbgLcac').trim();
+    const projectId = (process.env.FIREBASE_PROJECT_ID || 'bapasmedan-173dd').trim();
+    const url = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/${collName}/${encodeURIComponent(docId)}?key=${apiKey}`;
+
+    const res = await fetch(url, {
+      method: 'DELETE',
+      signal: AbortSignal.timeout(8000)
+    });
+
+    if (res.ok) {
+      console.log(`🔥 [Firebase REST] Dokumen '${collName}/${docId}' BERHASIL DIHAPUS PERMANEN dari Firebase Cloud Firestore.`);
+      return true;
+    } else {
+      const errText = await res.text();
+      if (res.status === 404) {
+        console.log(`ℹ️ [Firebase REST] Dokumen '${collName}/${docId}' sudah tidak ada di Cloud Firestore.`);
+        return true;
+      }
+      console.warn(`⚠️ [Firebase REST] Gagal menghapus '${collName}/${docId}': HTTP ${res.status}`, errText);
+      return false;
+    }
+  } catch (err) {
+    console.warn(`⚠️ [Firebase REST] Error koneksi saat menghapus '${collName}/${docId}':`, err.message);
+    return false;
+  }
+}
+
 class LocalDocumentRef {
   constructor(collName, docId) {
     this.collName = collName;
@@ -227,6 +256,7 @@ class LocalDocumentRef {
       delete data[this.collName][this.id];
       writeLocalDb(data);
     }
+    await deleteFromCloudFirestore(this.collName, this.id);
     return true;
   }
 }
@@ -420,6 +450,7 @@ class ResilientDocumentRef {
 
   async delete() {
     await this.localDocRef.delete();
+    await deleteFromCloudFirestore(this.collName, this.id);
 
     if (cloudDb) {
       try {

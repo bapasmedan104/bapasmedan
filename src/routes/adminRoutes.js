@@ -24,6 +24,7 @@ router.post('/client/delete', adminController.postDeleteClient);
 router.post('/lapor/terima', adminController.postTerimaLapor);
 router.post('/lapor/tolak', adminController.postTolakLapor);
 router.post('/lapor/batalkan', adminController.postBatalkanLapor);
+router.post('/lapor/delete', adminController.postDeleteLapor);
 router.get('/lapor/detail/:id', adminController.getDetailLaporJson);
 
 // Konfigurasi Sistem
