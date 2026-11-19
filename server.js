@@ -19,6 +19,9 @@ const clientRoutes = require('./src/routes/clientRoutes');
 
 const app = express();
 
+// Base root directory aman untuk runtime Node.js lokal maupun ESM Cloudflare Workers
+const appDir = (typeof process !== 'undefined' && typeof process.cwd === 'function') ? process.cwd() : '/';
+
 let rawViews = null;
 const inMemoryCompiled = {};
 
@@ -54,9 +57,14 @@ try {
 
 // View engine setup
 app.engine('ejs', (filePath, data, cb) => {
-  const rel = path.relative(path.join(__dirname, 'src', 'views'), filePath)
-                  .replace(/\\/g, '/')
-                  .replace(/\.ejs$/, '');
+  let rel = filePath.replace(/\\/g, '/');
+  if (rel.includes('/src/views/')) {
+    rel = rel.substring(rel.indexOf('/src/views/') + '/src/views/'.length);
+  } else if (rel.startsWith('src/views/')) {
+    rel = rel.substring('src/views/'.length);
+  }
+  rel = rel.replace(/\.ejs$/, '');
+
   const fn = inMemoryCompiled[rel] || inMemoryCompiled[rel + '.ejs'];
   if (fn) {
     try {
@@ -75,7 +83,7 @@ app.engine('ejs', (filePath, data, cb) => {
   };
   ejs.renderFile(filePath, data, opts, cb);
 });
-app.set('views', path.join(__dirname, 'src', 'views'));
+app.set('views', path.join(appDir, 'src', 'views'));
 app.set('view engine', 'ejs');
 
 // HTTP Logger & Security
@@ -104,8 +112,8 @@ app.use(
 app.use(setLocals);
 
 // Static Assets
-app.use(express.static(path.join(__dirname, 'public')));
-app.use('/assets', express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(appDir, 'public')));
+app.use('/assets', express.static(path.join(appDir, 'public')));
 
 // Uploads Handler (Serverless & Disk Fallback)
 const os = require('os');
@@ -116,7 +124,7 @@ const isServerless = Boolean(
   (process.env.NODE_ENV === 'production' && !process.env.LOCAL_ENV)
 );
 const serverlessUploadsDir = path.join(os.tmpdir(), 'bapas_uploads');
-const localUploadsDir = path.join(__dirname, 'public', 'uploads');
+const localUploadsDir = path.join(appDir, 'public', 'uploads');
 
 app.use('/uploads', express.static(serverlessUploadsDir));
 app.use('/uploads', express.static(localUploadsDir));
