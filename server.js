@@ -110,8 +110,12 @@ app.set('views', path.join(appDir, 'src', 'views'));
 app.set('view engine', 'ejs');
 app.set('view cache', true);
 
-// HTTP Logger & Security
-app.use(morgan('dev'));
+// HTTP Logger (Hanya aktif di lokal dev)
+if (process.env.NODE_ENV === 'development' && !process.env.CF_PAGES) {
+  try {
+    app.use(morgan('dev'));
+  } catch (e) {}
+}
 app.use(cors());
 
 // Body Parsers
