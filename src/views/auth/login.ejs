@@ -204,23 +204,48 @@
       border-radius: 4px;
       font-weight: 700;
     }
-    .back-home {
+    .login-container {
+      width: 100%;
+      max-width: 460px;
+      display: flex;
+      flex-direction: column;
+      margin: 15px auto;
+    }
+    .login-top-bar {
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    .back-link {
       display: inline-flex;
       align-items: center;
-      justify-content: center;
       gap: 8px;
-      width: 100%;
-      margin-top: 20px;
+      color: #f1f5f9;
+      text-decoration: none;
       font-size: 13.5px;
       font-weight: 600;
-      color: #475569;
-      text-decoration: none;
-      padding: 8px;
-      border-radius: 6px;
-      transition: color 0.2s;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-radius: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
-    .back-home:hover {
-      color: #003580;
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.22);
+      color: #ffffff;
+      transform: translateX(-3px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+    }
+    .back-link i {
+      font-size: 12px;
+      transition: transform 0.2s ease;
+    }
+    .back-link:hover i {
+      transform: translateX(-2px);
     }
     
     @media (max-width: 480px) {
@@ -233,7 +258,14 @@
 </head>
 <body>
 
-<div class="login-card">
+<div class="login-container">
+  <div class="login-top-bar">
+    <a href="/" class="back-link">
+      <i class="fas fa-arrow-left"></i> Kembali ke Beranda Utama
+    </a>
+  </div>
+
+  <div class="login-card">
   <div class="login-header">
     <div style="display:flex; justify-content:center; gap:12px; margin-bottom:10px;">
       <img src="/logo_kemenimpas-removebg-preview.png" alt="Logo Kemenimipas" onerror="this.style.display='none'">
@@ -315,9 +347,8 @@
       Gunakan <strong>Nomor WhatsApp</strong> dan kata sandi yang telah didaftarkan oleh petugas BAPAS.<br>
       • Contoh Akun: WhatsApp: <code>08xxxxxxxxxx</code> (atau <code>xxxxx</code>) | Sandi: <code>xxxxx</code>
     </div>
-
-    <a href="/" class="back-home"><i class="fas fa-arrow-left"></i> Kembali ke Beranda Utama</a>
   </div>
+</div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
