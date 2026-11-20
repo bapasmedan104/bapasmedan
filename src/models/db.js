@@ -861,7 +861,7 @@ async function batalkanLapor(laporId, adminId, catatan) {
 }
 
 // ============================================
-// KONFIGURASI SISTEM
+// KONFIGURASI SISTEM (JADWAL PENGUMUMAN WAJIB LAPOR)
 // ============================================
 async function getKonfigurasi() {
   const col = db.collection('konfigurasi_sistem');
@@ -870,6 +870,8 @@ async function getKonfigurasi() {
     const defaultConfig = {
       tanggal_mulai_input: 1,
       tanggal_akhir_input: 15,
+      teks_pengumuman: '',
+      status_layanan: 'otomatis', // 'otomatis' | 'buka_selalu' | 'tutup_sementara'
       notifikasi_tertutup: 'Periode pengisian wajib lapor telah ditutup. Silakan datang ke BAPAS untuk melakukan wajib lapor secara offline.',
       updated_at: new Date().toISOString()
     };
@@ -877,26 +879,87 @@ async function getKonfigurasi() {
     return { ...defaultConfig, id: ref.id };
   }
   const doc = snap.docs[0];
-  return { ...doc.data(), id: doc.id };
+  const data = doc.data() || {};
+  return {
+    tanggal_mulai_input: 1,
+    tanggal_akhir_input: 15,
+    teks_pengumuman: '',
+    status_layanan: 'otomatis',
+    notifikasi_tertutup: 'Periode pengisian wajib lapor telah ditutup.',
+    ...data,
+    id: doc.id
+  };
 }
 
 async function updateKonfigurasi(id, data) {
   const docRef = db.collection('konfigurasi_sistem').doc(id);
-  await docRef.set({
-    tanggal_mulai_input: parseInt(data.tanggal_mulai_input, 10),
-    tanggal_akhir_input: parseInt(data.tanggal_akhir_input, 10),
-    notifikasi_tertutup: data.notifikasi_tertutup,
+  const payload = {
+    tanggal_mulai_input: parseInt(data.tanggal_mulai_input, 10) || 1,
+    tanggal_akhir_input: parseInt(data.tanggal_akhir_input, 10) || 15,
+    notifikasi_tertutup: data.notifikasi_tertutup || 'Periode pengisian wajib lapor telah ditutup.',
+    teks_pengumuman: (data.teks_pengumuman || '').trim(),
+    status_layanan: data.status_layanan || 'otomatis',
     updated_at: new Date().toISOString()
-  }, { merge: true });
-  return { success: true, message: 'Konfigurasi berhasil disimpan' };
+  };
+  await docRef.set(payload, { merge: true });
+  return { success: true, message: 'Konfigurasi jadwal pengumuman berhasil disimpan' };
 }
 
 async function cekPeriodeInput() {
   const config = await getKonfigurasi();
+  if (config.status_layanan === 'buka_selalu') return true;
+  if (config.status_layanan === 'tutup_sementara') return false;
+
   const tanggalSekarang = new Date().getDate();
-  const mulai = parseInt(config.tanggal_mulai_input, 10);
-  const akhir = parseInt(config.tanggal_akhir_input, 10);
+  const mulai = parseInt(config.tanggal_mulai_input, 10) || 1;
+  const akhir = parseInt(config.tanggal_akhir_input, 10) || 15;
   return tanggalSekarang >= mulai && tanggalSekarang <= akhir;
+}
+
+// ============================================
+// PUSAT BANTUAN & CS REAL-TIME
+// ============================================
+async function kirimPesanBantuan(data) {
+  const col = db.collection('pusat_bantuan_chat');
+  const payload = {
+    session_id: data.session_id || `cs_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+    nama: (data.nama || 'Pengunjung').trim(),
+    kontak: (data.kontak || '-').trim(),
+    pesan: (data.pesan || '').trim(),
+    pengirim: data.pengirim || 'user', // 'user' | 'admin' | 'bot'
+    admin_name: data.admin_name || '',
+    status: data.status || 'baru',
+    created_at: new Date().toISOString()
+  };
+  const ref = await col.add(payload);
+  return { ...payload, id: ref.id };
+}
+
+async function getPesanBantuanBySession(sessionId) {
+  if (!sessionId) return [];
+  const col = db.collection('pusat_bantuan_chat');
+  const snap = await col.where('session_id', '==', sessionId).get();
+  const list = docsToArray(snap);
+  return list.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+}
+
+async function getAllPesanBantuan(limit = 100) {
+  const col = db.collection('pusat_bantuan_chat');
+  const snap = await col.limit(limit).get();
+  const list = docsToArray(snap);
+  return list.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+}
+
+async function balasPesanBantuanAdmin(sessionId, pesan, adminName) {
+  return await kirimPesanBantuan({
+    session_id: sessionId,
+    nama: adminName || 'Petugas CS BAPAS',
+    kontak: 'BAPAS Medan',
+    pesan: pesan,
+    pengirim: 'admin',
+    admin_name: adminName || 'Petugas CS BAPAS',
+    status: 'dibalas'
+  });
 }
 
 // ============================================
@@ -967,6 +1030,10 @@ module.exports = {
   getKonfigurasi,
   updateKonfigurasi,
   cekPeriodeInput,
+  kirimPesanBantuan,
+  getPesanBantuanBySession,
+  getAllPesanBantuan,
+  balasPesanBantuanAdmin,
   getStatistikAdmin,
   getStatistikClient
 };

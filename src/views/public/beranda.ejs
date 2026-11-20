@@ -42,7 +42,11 @@
           <i class="fas fa-bullhorn"></i> Pengumuman
         </span>
         <span style="font-size:13px; color:#e2e8f0; line-height:1.5;">
-          Layanan Wajib Lapor Online dibuka setiap tanggal <strong>1 s/d 15 setiap bulannya</strong>. Seluruh proses bebas pungutan liar (Gratis Rp 0,-).
+          <% if (typeof konfigurasi !== 'undefined' && konfigurasi && konfigurasi.teks_pengumuman) { %>
+            <%= konfigurasi.teks_pengumuman %>
+          <% } else { %>
+            Layanan Wajib Lapor Online dibuka setiap tanggal <strong><%= (typeof konfigurasi !== 'undefined' && konfigurasi && konfigurasi.tanggal_mulai_input) ? konfigurasi.tanggal_mulai_input : 1 %> s/d <%= (typeof konfigurasi !== 'undefined' && konfigurasi && konfigurasi.tanggal_akhir_input) ? konfigurasi.tanggal_akhir_input : 15 %> setiap bulannya</strong>.
+          <% } %> Seluruh proses bebas pungutan liar (Gratis Rp 0,-).
         </span>
       </div>
 
@@ -284,7 +288,7 @@
           <i class="fas fa-chevron-down"></i>
         </summary>
         <div class="faq-body">
-          Sistem Wajib Lapor Daring di BAPAS Kelas I Medan dibuka secara rutin mulai dari <strong>tanggal 1 hingga tanggal 15 setiap bulannya</strong>. Klien diharapkan melapor tepat waktu agar riwayat kedisiplinan pembimbingan tetap tercatat tertib.
+          Sistem Wajib Lapor Daring di BAPAS Kelas I Medan dibuka secara rutin mulai dari <strong>tanggal <%= (typeof konfigurasi !== 'undefined' && konfigurasi && konfigurasi.tanggal_mulai_input) ? konfigurasi.tanggal_mulai_input : 1 %> hingga tanggal <%= (typeof konfigurasi !== 'undefined' && konfigurasi && konfigurasi.tanggal_akhir_input) ? konfigurasi.tanggal_akhir_input : 15 %> setiap bulannya</strong>. Klien diharapkan melapor tepat waktu agar riwayat kedisiplinan pembimbingan tetap tercatat tertib.
         </div>
       </details>
 

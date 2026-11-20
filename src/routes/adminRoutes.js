@@ -34,4 +34,8 @@ router.get('/lapor/detail/:id', adminController.getDetailLaporJson);
 // Konfigurasi Sistem
 router.post('/konfigurasi/update', adminController.postUpdateKonfigurasi);
 
+// Pusat Bantuan & CS Real-Time
+router.post('/pusat-bantuan/balas', adminController.postBalasPesanBantuan);
+router.get('/pusat-bantuan/semua', adminController.getPusatBantuanListJson);
+
 module.exports = router;

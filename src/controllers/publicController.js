@@ -3,6 +3,8 @@
  * Mengelola halaman publik dengan optimasi SEO & Metadata
  */
 
+const { kirimPesanBantuan, getPesanBantuanBySession } = require('../models/db');
+
 function getHomePage(req, res) {
   res.render('public/beranda', {
     pageTitle: 'BAPAS 1 MEDAN',
@@ -214,6 +216,61 @@ function getSitemapXml(req, res) {
 </urlset>`);
 }
 
+async function postKirimPesanBantuan(req, res) {
+  try {
+    const { session_id, nama, kontak, pesan } = req.body;
+    if (!pesan || !pesan.trim()) {
+      return res.status(400).json({ success: false, message: 'Pesan tidak boleh kosong.' });
+    }
+    const cleanSessionId = session_id || `cs_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+    const senderName = (nama || (req.session && req.session.clientUser ? req.session.clientUser.nama_lengkap : 'Pengunjung')).trim();
+    const senderKontak = (kontak || (req.session && req.session.clientUser ? req.session.clientUser.no_hp : '-')).trim();
+
+    const pesanData = await kirimPesanBantuan({
+      session_id: cleanSessionId,
+      nama: senderName,
+      kontak: senderKontak,
+      pesan: pesan.trim(),
+      pengirim: req.session && req.session.adminUser ? 'admin' : 'user',
+      admin_name: req.session && req.session.adminUser ? req.session.adminUser.nama_lengkap : ''
+    });
+
+    // Balasan otomatis instan dari Asisten BAPAS pada pesan pertama sesi
+    const existingMessages = await getPesanBantuanBySession(cleanSessionId);
+    if (existingMessages.length <= 1) {
+      setTimeout(async () => {
+        try {
+          await kirimPesanBantuan({
+            session_id: cleanSessionId,
+            nama: 'Asisten Layanan BAPAS',
+            kontak: 'BAPAS Kelas I Medan',
+            pesan: `Halo ${senderName}! Terima kasih telah menghubungi Pusat Bantuan Resmi BAPAS Kelas I Medan. Pesan Anda telah kami terima. Petugas kami akan segera merespons Anda melalui ruang chat ini. Untuk layanan instan melalui WhatsApp, Anda juga dapat menghubungi narahubung resmi kami.`,
+            pengirim: 'bot',
+            admin_name: 'Asisten Virtual BAPAS'
+          });
+        } catch (e) {}
+      }, 700);
+    }
+
+    return res.json({ success: true, message: 'Pesan berhasil dikirim', data: pesanData, session_id: cleanSessionId });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: 'Gagal mengirim pesan: ' + err.message });
+  }
+}
+
+async function getPesanBantuanJson(req, res) {
+  try {
+    const sessionId = req.params.sessionId || req.query.session_id;
+    if (!sessionId) {
+      return res.json({ success: true, data: [] });
+    }
+    const messages = await getPesanBantuanBySession(sessionId);
+    return res.json({ success: true, data: messages });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: err.message });
+  }
+}
+
 module.exports = {
   getHomePage,
   getBeritaPage,
@@ -222,5 +279,7 @@ module.exports = {
   getPrivasiPage,
   getSyaratKetentuanPage,
   getRobotsTxt,
-  getSitemapXml
+  getSitemapXml,
+  postKirimPesanBantuan,
+  getPesanBantuanJson
 };

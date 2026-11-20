@@ -15,8 +15,11 @@ const {
   tolakLapor,
   batalkanLapor,
   getKonfigurasi,
-  updateKonfigurasi
+  updateKonfigurasi,
+  getAllPesanBantuan,
+  balasPesanBantuanAdmin
 } = require('../models/db');
+const { invalidateConfigCache } = require('../middlewares/auth');
 const { getNamaBulan, formatTanggal, formatTanggalWaktu, getFileUrl } = require('../utils/helpers');
 
 async function getDashboard(req, res) {
@@ -26,6 +29,7 @@ async function getDashboard(req, res) {
     const laporMenunggu = await getLaporMenungguVerifikasi();
     const recentClients = await getAllClients();
     const config = await getKonfigurasi();
+    const pesanBantuan = await getAllPesanBantuan(50);
 
     res.render('admin/dashboard', {
       pageTitle: 'Dashboard Admin - BAPAS Medan',
@@ -34,6 +38,7 @@ async function getDashboard(req, res) {
       laporMenunggu,
       clients: recentClients.slice(0, 10),
       config,
+      pesanBantuan: pesanBantuan || [],
       getNamaBulan,
       formatTanggal,
       formatTanggalWaktu
@@ -363,10 +368,15 @@ async function postUpdateKonfigurasi(req, res) {
     const result = await updateKonfigurasi(configId, {
       tanggal_mulai_input: req.body.tanggal_mulai_input,
       tanggal_akhir_input: req.body.tanggal_akhir_input,
-      notifikasi_tertutup: req.body.notifikasi_tertutup
+      notifikasi_tertutup: req.body.notifikasi_tertutup,
+      teks_pengumuman: req.body.teks_pengumuman,
+      status_layanan: req.body.status_layanan
     });
     if (result.success) {
-      req.session.successMessage = 'Konfigurasi sistem berhasil diperbarui.';
+      if (typeof invalidateConfigCache === 'function') {
+        invalidateConfigCache();
+      }
+      req.session.successMessage = 'Pengumuman dan periode wajib lapor online berhasil diperbarui & langsung tampil di web utama!';
     } else {
       req.session.errorMessage = result.message;
     }
@@ -374,6 +384,29 @@ async function postUpdateKonfigurasi(req, res) {
     req.session.errorMessage = 'Gagal memperbarui konfigurasi: ' + err.message;
   }
   res.redirect('/admin/dashboard?tab=overview');
+}
+
+async function postBalasPesanBantuan(req, res) {
+  try {
+    const { session_id, pesan } = req.body;
+    if (!session_id || !pesan || !pesan.trim()) {
+      return res.status(400).json({ success: false, message: 'Session ID dan Pesan balasan wajib diisi.' });
+    }
+    const adminName = req.session && req.session.adminUser ? req.session.adminUser.nama_lengkap : 'Petugas CS BAPAS Medan';
+    const result = await balasPesanBantuanAdmin(session_id, pesan.trim(), adminName);
+    return res.json({ success: true, message: 'Balasan berhasil dikirim ke pengguna.', data: result });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: 'Gagal membalas pesan: ' + err.message });
+  }
+}
+
+async function getPusatBantuanListJson(req, res) {
+  try {
+    const list = await getAllPesanBantuan(100);
+    return res.json({ success: true, data: list });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: err.message });
+  }
 }
 
 async function getDetailLaporJson(req, res) {
@@ -417,5 +450,7 @@ module.exports = {
   postBatalkanLapor,
   postDeleteLapor,
   postUpdateKonfigurasi,
-  getDetailLaporJson
+  getDetailLaporJson,
+  postBalasPesanBantuan,
+  getPusatBantuanListJson
 };

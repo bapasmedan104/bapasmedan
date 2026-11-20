@@ -1,5 +1,34 @@
-const { isProfilClientLengkap } = require('../models/db');
+const { isProfilClientLengkap, getKonfigurasi } = require('../models/db');
 const { getFileUrl } = require('../utils/helpers');
+
+let cachedConfig = null;
+let lastConfigFetch = 0;
+
+async function getCachedConfig() {
+  const now = Date.now();
+  if (cachedConfig && (now - lastConfigFetch < 15000)) { // Cache 15 detik
+    return cachedConfig;
+  }
+  try {
+    cachedConfig = await getKonfigurasi();
+    lastConfigFetch = now;
+  } catch (e) {
+    if (!cachedConfig) {
+      cachedConfig = {
+        tanggal_mulai_input: 1,
+        tanggal_akhir_input: 15,
+        teks_pengumuman: '',
+        notifikasi_tertutup: 'Periode pengisian wajib lapor telah ditutup.'
+      };
+    }
+  }
+  return cachedConfig;
+}
+
+function invalidateConfigCache() {
+  cachedConfig = null;
+  lastConfigFetch = 0;
+}
 
 function setLocals(req, res, next) {
   const sess = req.session || {};
@@ -35,7 +64,18 @@ function setLocals(req, res, next) {
     delete req.session.warningMessage;
   }
 
-  next();
+  getCachedConfig().then(cfg => {
+    res.locals.konfigurasi = cfg;
+    next();
+  }).catch(() => {
+    res.locals.konfigurasi = {
+      tanggal_mulai_input: 1,
+      tanggal_akhir_input: 15,
+      teks_pengumuman: '',
+      notifikasi_tertutup: 'Periode pengisian wajib lapor telah ditutup.'
+    };
+    next();
+  });
 }
 
 function requireAdmin(req, res, next) {
@@ -86,5 +126,6 @@ module.exports = {
   setLocals,
   requireAdmin,
   requireClient,
-  requireProfilLengkap
+  requireProfilLengkap,
+  invalidateConfigCache
 };

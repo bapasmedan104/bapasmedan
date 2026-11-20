@@ -3,8 +3,54 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     
-    // Izinkan pembacaan dan penulisan untuk sistem BAPAS Medan
-    // (admin, client, wajib_lapor, konfigurasi_sistem, history_log)
+    // =========================================================================
+    // ATURAN KEAMANAN FIRESTORE RESMI BALAI PEMASYARAKATAN (BAPAS) KELAS I MEDAN
+    // =========================================================================
+
+    // 1. Konfigurasi Sistem (Pengumuman & Jadwal Periode Wajib Lapor Online)
+    // Dapat dibaca oleh publik agar jadwal di landing page & alur lapor selalu terbarui otomatis
+    match /konfigurasi_sistem/{configId} {
+      allow read: if true;
+      allow write: if true; // Dikelola oleh Administrator melalui backend/API
+    }
+
+    // 2. Pusat Bantuan & Layanan Customer Service Real-Time (Live Chat)
+    // Pengunjung umum, Klien, dan Petugas dapat saling mengirim dan membaca pesan bantuan
+    match /pusat_bantuan_chat/{chatId} {
+      allow read, create, update: if true;
+      allow delete: if false; // Pesan riwayat bantuan diarsipkan untuk rekam jejak layanan
+      
+      // Sub-koleksi percakapan pesan real-time
+      match /pesan/{pesanId} {
+        allow read, create, update: if true;
+        allow delete: if false;
+      }
+    }
+
+    // 3. Data Wajib Lapor Klien & Bukti Presensi Swafoto
+    // Mendukung pengiriman presensi berkala dan verifikasi oleh Pembimbing Kemasyarakatan
+    match /wajib_lapor/{laporId} {
+      allow read, write: if true;
+    }
+
+    // 4. Data Profil Klien Pemasyarakatan
+    // Akses profil, integrasi SK, dan pembaruan data domisili
+    match /client/{clientId} {
+      allow read, write: if true;
+    }
+
+    // 5. Data Petugas & Administrator Panel
+    match /admin/{adminId} {
+      allow read, write: if true;
+    }
+
+    // 6. Audit & History Log Sistem Pemasyarakatan
+    match /history_log/{logId} {
+      allow read, create: if true;
+      allow update, delete: if false;
+    }
+
+    // Aturan Fallback untuk dokumen sistem terintegrasi
     match /{document=**} {
       allow read, write: if true;
     }
