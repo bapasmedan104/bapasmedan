@@ -31,9 +31,9 @@
         </div>
       </div>
 
-      <button type="button" class="btn-close-fullscreen" onclick="tutupPusatBantuan()" aria-label="Tutup Pusat Bantuan">
-        <i class="fas fa-times"></i>
-        <span class="btn-close-label">Tutup</span>
+      <button type="button" class="btn-back-fullscreen" onclick="tutupPusatBantuan()" aria-label="Kembali ke Portal BAPAS" title="Kembali ke Halaman Sebelumnya">
+        <i class="fas fa-arrow-left"></i>
+        <span class="btn-back-label">Kembali</span>
       </button>
     </header>
 
@@ -550,29 +550,39 @@
   font-weight: 600;
 }
 
+.btn-back-fullscreen,
 .btn-close-fullscreen {
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.15);
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
   color: #ffffff;
   font-size: 13.5px;
   font-weight: 700;
-  padding: 8px 16px;
+  padding: 8px 18px;
   border-radius: 30px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  transition: all 0.2s ease;
+  transition: all 0.25s ease;
   font-family: inherit;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
+.btn-back-fullscreen:hover,
 .btn-close-fullscreen:hover {
-  background: #dc2626;
-  border-color: #dc2626;
-  color: #ffffff;
-  transform: translateY(-1px);
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  border-color: #fbbf24;
+  color: #001e4d;
+  transform: translateX(-3px);
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.45);
 }
+.btn-back-fullscreen i,
 .btn-close-fullscreen i {
-  font-size: 15px;
+  font-size: 14px;
+  transition: transform 0.2s ease;
+}
+.btn-back-fullscreen:hover i,
+.btn-close-fullscreen:hover i {
+  transform: translateX(-3px);
 }
 
 /* Tabs Navigation */
@@ -1453,9 +1463,10 @@
   .header-subtitle-text {
     font-size: 11px;
   }
+  .btn-back-fullscreen,
   .btn-close-fullscreen {
-    padding: 6px 12px;
-    font-size: 12px;
+    padding: 6px 14px;
+    font-size: 12.5px;
   }
   .bantuan-tab-btn {
     font-size: 12px;
@@ -1853,11 +1864,14 @@ function renderChatStream(messages) {
   const box = document.getElementById('chatStreamBox');
   if (!box) return;
 
+  const currentCsNama = (localStorage.getItem('bapas_cs_nama') || '').trim().toLowerCase();
+  const currentCsRegister = (localStorage.getItem('bapas_cs_register') || '').trim();
+
   let html = `
     <div class="chat-msg chat-msg-bot">
-      <div class="chat-avatar"><i class="fas fa-user-shield"></i></div>
+      <div class="chat-avatar"><i class="fas fa-robot"></i></div>
       <div class="chat-bubble">
-        <div class="chat-sender-name">Asisten Layanan BAPAS:</div>
+        <div class="chat-sender-name"><i class="fas fa-robot"></i> Asisten Layanan BAPAS:</div>
         <p class="chat-text">Halo! Selamat datang di Customer Service Resmi BAPAS Kelas I Medan. Silakan tuliskan kendala login, pertanyaan wajib lapor, atau permohonan informasi Anda di bawah ini. Petugas kami siap merespons secara real-time.</p>
         <span class="chat-time">Respon Otomatis</span>
       </div>
@@ -1865,25 +1879,52 @@ function renderChatStream(messages) {
   `;
 
   messages.forEach(m => {
-    const isUser = m.pengirim === 'user';
-    const isBot = m.pengirim === 'bot';
+    const isBot = m.pengirim === 'bot' || m.nama === 'Asisten Layanan BAPAS';
+    let isUser = false;
+    if (!isBot) {
+      if (m.pengirim === 'user' || m.tipe_pesan === 'client_card') {
+        isUser = true;
+      } else if (currentCsNama && m.nama && m.nama.trim().toLowerCase() === currentCsNama) {
+        isUser = true;
+      }
+    }
+
     const timeFormatted = m.created_at ? new Date(m.created_at).toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit' }) : '';
 
     if (isUser) {
       let contentHtml = '';
-      if (m.tipe_pesan === 'client_card' && m.detail_klien) {
-        contentHtml = renderVerifiedClientCardHtml(m.detail_klien, m.pesan);
+      if (m.tipe_pesan === 'client_card') {
+        let clientData = m.detail_klien;
+        if (!clientData) {
+          try {
+            clientData = JSON.parse(localStorage.getItem('bapas_cs_detail'));
+          } catch (_) {}
+        }
+        if (!clientData) {
+          clientData = {
+            no_register: currentCsRegister || m.kontak || '-',
+            nama_lengkap: m.nama,
+            status: 'aktif',
+            masa_wajib_lapor: 'Terdaftar di BAPAS Medan',
+            no_telepon: m.kontak || '-',
+            alamat: '-'
+          };
+        }
+        contentHtml = renderVerifiedClientCardHtml(clientData, m.pesan);
       } else {
         contentHtml = `<p class="chat-text">${escapeHtml(m.pesan)}</p>`;
       }
+
+      const displayName = m.nama || localStorage.getItem('bapas_cs_nama') || 'Anda';
+      const isReg = m.is_verified || Boolean(m.detail_klien) || Boolean(currentCsRegister);
 
       html += `
         <div class="chat-msg chat-msg-user">
           <div class="chat-bubble">
             <div class="chat-sender-name-user">
-              <i class="fas ${m.is_verified ? 'fa-id-badge' : 'fa-user-circle'}"></i> 
-              <span>${escapeHtml(m.nama || 'Anda')}</span>
-              ${m.is_verified ? '<span class="bubble-tag-verified"><i class="fas fa-check-circle"></i> Terverifikasi</span>' : ''}
+              <i class="fas ${isReg ? 'fa-id-badge' : 'fa-user-circle'}"></i> 
+              <span>${escapeHtml(displayName)}</span>
+              ${isReg ? '<span class="bubble-tag-verified"><i class="fas fa-check-circle"></i> Terverifikasi</span>' : ''}
             </div>
             ${contentHtml}
             <span class="chat-time">${timeFormatted} &bull; Terkirim</span>
@@ -1891,14 +1932,17 @@ function renderChatStream(messages) {
         </div>
       `;
     } else {
-      const senderTitle = isBot ? 'Asisten Virtual BAPAS' : (m.admin_name || 'Petugas CS BAPAS');
+      const senderTitle = isBot ? 'Asisten Layanan BAPAS' : (m.admin_name || m.nama || 'Petugas CS BAPAS');
       html += `
         <div class="chat-msg ${isBot ? 'chat-msg-bot' : 'chat-msg-admin'}">
-          <div class="chat-avatar" style="${isBot ? '' : 'background:#16a34a;'}">
+          <div class="chat-avatar" style="${isBot ? '' : 'background:linear-gradient(135deg, #10b981 0%, #059669 100%);'}">
             <i class="fas ${isBot ? 'fa-robot' : 'fa-headset'}"></i>
           </div>
           <div class="chat-bubble">
-            <div class="chat-sender-name">${escapeHtml(senderTitle)}:</div>
+            <div class="chat-sender-name">
+              <i class="fas ${isBot ? 'fa-robot' : 'fa-headset'}"></i> 
+              <span>${escapeHtml(senderTitle)}:</span>
+            </div>
             <p class="chat-text">${escapeHtml(m.pesan)}</p>
             <span class="chat-time">${timeFormatted}</span>
           </div>
@@ -1916,22 +1960,22 @@ function renderVerifiedClientCardHtml(client, messageText) {
     <div class="verified-card-bubble">
       <div class="card-bubble-header">
         <div style="display:flex; align-items:center; gap:6px;">
-          <i class="fas fa-shield-alt text-success" style="color:#16a34a;"></i>
+          <i class="fas fa-shield-alt text-success" style="color:#16a34a; font-size:15px;"></i>
           <strong>DATA KLIEN BINAAN TERVERIFIKASI</strong>
         </div>
-        <span class="badge-bubble-reg">RESMI BAPAS</span>
+        <span class="badge-bubble-reg"><i class="fas fa-check"></i> RESMI BAPAS</span>
       </div>
       <table class="card-bubble-table">
         <tr><th>No. Register:</th><td class="text-highlight">${escapeHtml(client.no_register || '-')}</td></tr>
         <tr><th>Nama Lengkap:</th><td style="font-weight:700;">${escapeHtml(client.nama_lengkap || '-')}</td></tr>
         <tr><th>Status Binaan:</th><td><span class="status-pill">${escapeHtml(client.status || 'aktif')}</span></td></tr>
         <tr><th>Masa Lapor:</th><td style="color:#b45309; font-weight:700;">${escapeHtml(client.masa_wajib_lapor || '-')}</td></tr>
-        <tr><th>No. Telepon:</th><td>${escapeHtml(client.no_telepon || '-')}</td></tr>
-        <tr><th>Alamat:</th><td>${escapeHtml(client.alamat || '-')}</td></tr>
+        <tr><th>No. Telepon / HP:</th><td>${escapeHtml(client.no_telepon || '-')}</td></tr>
+        <tr><th>Alamat Domisili:</th><td>${escapeHtml(client.alamat || '-')}</td></tr>
       </table>
       <div class="card-bubble-note">
         <i class="fas fa-check-circle" style="color:#16a34a;"></i>
-        <span>${escapeHtml(messageText || 'Data registrasi terdeteksi langsung dari database BAPAS Kelas I Medan.')}</span>
+        <span>${escapeHtml(messageText || 'Data registrasi terdeteksi langsung dari database resmi BAPAS Kelas I Medan.')}</span>
       </div>
     </div>
   `;

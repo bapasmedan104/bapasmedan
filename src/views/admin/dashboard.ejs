@@ -611,8 +611,8 @@
         html = '<div style="text-align:center; color:#94a3b8; font-size:12.5px; margin:auto;">Belum ada riwayat pesan dalam sesi ini.</div>';
       } else {
         json.data.forEach(m => {
-          const isUser = m.pengirim === 'user';
-          const isBot = m.pengirim === 'bot';
+          const isBot = m.pengirim === 'bot' || m.nama === 'Asisten Layanan BAPAS';
+          const isUser = !isBot && (m.pengirim === 'user' || m.tipe_pesan === 'client_card');
           const time = m.created_at ? new Date(m.created_at).toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit' }) : '';
           
           if (isUser) {

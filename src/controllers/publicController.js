@@ -267,16 +267,32 @@ async function postKirimPesanBantuan(req, res) {
       return res.status(400).json({ success: false, message: 'Pesan tidak boleh kosong.' });
     }
     const cleanSessionId = session_id || `cs_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
-    const senderName = (nama || (req.session && req.session.clientUser ? req.session.clientUser.nama_lengkap : 'Pengunjung')).trim();
-    const senderKontak = (kontak || (req.session && req.session.clientUser ? req.session.clientUser.no_hp : '-')).trim();
+    
+    let senderName = (nama && typeof nama === 'string' && nama.trim()) ? nama.trim() : '';
+    if (!senderName && req.session && req.session.clientUser && req.session.clientUser.nama_lengkap) {
+      senderName = req.session.clientUser.nama_lengkap.trim();
+    }
+    if (!senderName) {
+      senderName = 'Pengunjung';
+    }
 
+    let senderKontak = (kontak && typeof kontak === 'string' && kontak.trim()) ? kontak.trim() : '';
+    if (!senderKontak && req.session && req.session.clientUser) {
+      senderKontak = req.session.clientUser.no_telepon || req.session.clientUser.no_register || '-';
+    }
+    if (!senderKontak) {
+      senderKontak = '-';
+    }
+
+    // Pengirim dari antarmuka publik selalu 'user' (klien / pengunjung).
+    // Admin membalas pesan secara terpisah melalui adminController.postBalasPesanBantuan
     const pesanData = await kirimPesanBantuan({
       session_id: cleanSessionId,
       nama: senderName,
       kontak: senderKontak,
       pesan: pesan.trim(),
-      pengirim: req.session && req.session.adminUser ? 'admin' : (req.body.pengirim || 'user'),
-      admin_name: req.session && req.session.adminUser ? req.session.adminUser.nama_lengkap : '',
+      pengirim: 'user',
+      admin_name: '',
       is_verified: Boolean(is_verified),
       detail_klien: detail_klien || null,
       tipe_pesan: tipe_pesan || 'text'
