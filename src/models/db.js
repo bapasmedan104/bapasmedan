@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const { db, firebaseAuth } = require('../config/firebase');
 const { hashPassword, verifyPassword, getNamaBulan } = require('../utils/helpers');
 
@@ -450,6 +451,124 @@ async function resetAdminPassword(adminId, newPassword) {
   return {
     success: true,
     message: 'Kata sandi administrator berhasil diperbarui! Silakan gunakan kata sandi baru untuk login selanjutnya.'
+  };
+}
+
+async function createAdminPasswordResetToken(identifier) {
+  if (!identifier) {
+    return { success: false, message: 'Masukkan email atau username administrator Anda.' };
+  }
+  const cleanId = identifier.trim();
+  const adminUser = await getAdminByIdentifier(cleanId);
+  if (!adminUser) {
+    return { success: false, message: 'Akun administrator dengan email atau username tersebut tidak ditemukan dalam sistem.' };
+  }
+  if (adminUser.status !== 'aktif') {
+    return { success: false, message: 'Akun administrator ini berstatus nonaktif. Silakan hubungi pengelola sistem BAPAS.' };
+  }
+
+  // Generate 6 digit numeric code (misal: 684219)
+  const resetCode = Math.floor(100000 + Math.random() * 900000).toString();
+  // Generate secure token (64 hex characters)
+  const resetToken = crypto.randomBytes(32).toString('hex');
+  // Berlaku selama 15 menit
+  const resetExpires = Date.now() + 15 * 60 * 1000;
+
+  // Simpan token ke dokumen admin di database
+  const docRef = db.collection('admin').doc(adminUser.id);
+  await docRef.set({
+    reset_token: resetToken,
+    reset_code: resetCode,
+    reset_expires: resetExpires,
+    reset_requested_at: new Date().toISOString()
+  }, { merge: true });
+
+  // Kirim email reset resmi via Firebase Auth jika email admin terdaftar
+  let firebaseEmailSent = false;
+  let firebaseEmailError = null;
+  if (firebaseAuth && adminUser.email && adminUser.email.includes('@')) {
+    try {
+      await firebaseAuth.sendPasswordResetEmail(adminUser.email);
+      firebaseEmailSent = true;
+      console.log(`📧 Berhasil mengirim email reset kata sandi Firebase ke: ${adminUser.email}`);
+    } catch (fbErr) {
+      firebaseEmailError = fbErr.message;
+      console.warn(`ℹ️ Firebase sendPasswordResetEmail (${adminUser.email}):`, fbErr.message);
+    }
+  }
+
+  await logActivity('admin', adminUser.id, 'Permintaan Lupa Sandi', `Permintaan reset kata sandi dibuat untuk admin (${adminUser.username})`);
+
+  return {
+    success: true,
+    admin: {
+      id: adminUser.id,
+      username: adminUser.username,
+      nama_lengkap: adminUser.nama_lengkap,
+      email: adminUser.email || ''
+    },
+    resetToken,
+    resetCode,
+    resetExpires,
+    firebaseEmailSent,
+    firebaseEmailError
+  };
+}
+
+async function verifyAdminResetToken(token) {
+  if (!token) return null;
+  const col = db.collection('admin');
+  const snap = await col.where('reset_token', '==', token).limit(1).get();
+  if (snap.empty) return null;
+  const doc = snap.docs[0];
+  const adminData = { ...doc.data(), id: doc.id };
+  
+  if (!adminData.reset_expires || Date.now() > adminData.reset_expires) {
+    return null; // Expired
+  }
+  return adminData;
+}
+
+async function executeAdminPasswordReset(token, code, newPassword) {
+  if (!token) {
+    return { success: false, message: 'Token reset kata sandi tidak ditemukan atau sesi telah berakhir.' };
+  }
+  const cleanCode = (code || '').trim();
+  const cleanPass = (newPassword || '').trim();
+
+  if (!cleanCode) {
+    return { success: false, message: 'Masukkan 6 digit kode verifikasi keamanan.' };
+  }
+  if (!cleanPass || cleanPass.length < 6) {
+    return { success: false, message: 'Kata sandi baru minimal 6 karakter.' };
+  }
+
+  const adminUser = await verifyAdminResetToken(token);
+  if (!adminUser) {
+    return { success: false, message: 'Tautan atau sesi reset kata sandi tidak valid atau telah kedaluwarsa. Silakan ajukan ulang.' };
+  }
+
+  if (adminUser.reset_code !== cleanCode) {
+    return { success: false, message: 'Kode verifikasi 6 digit yang Anda masukkan salah. Periksa kembali kode keamanan Anda.' };
+  }
+
+  // Hash password baru dengan bcrypt
+  const hashedPassword = await hashPassword(cleanPass);
+  const docRef = db.collection('admin').doc(adminUser.id);
+  await docRef.set({
+    password: hashedPassword,
+    password_reset_at: new Date().toISOString(),
+    reset_token: null,
+    reset_code: null,
+    reset_expires: null
+  }, { merge: true });
+
+  await logActivity('admin', adminUser.id, 'Reset Sandi Selesai', `Kata sandi admin (${adminUser.username}) berhasil diperbarui via fitur Lupa Sandi`);
+
+  return {
+    success: true,
+    message: 'Kata sandi Administrator berhasil diubah! Silakan masuk menggunakan kata sandi baru Anda.',
+    username: adminUser.username
   };
 }
 
@@ -1011,6 +1130,9 @@ module.exports = {
   updateClient,
   resetClientPassword,
   resetAdminPassword,
+  createAdminPasswordResetToken,
+  verifyAdminResetToken,
+  executeAdminPasswordReset,
   deleteClient,
   deleteLapor,
   getAllClients,

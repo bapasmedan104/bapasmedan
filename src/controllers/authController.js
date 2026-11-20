@@ -1,4 +1,10 @@
-const { loginAdmin, loginClient } = require('../models/db');
+const {
+  loginAdmin,
+  loginClient,
+  createAdminPasswordResetToken,
+  verifyAdminResetToken,
+  executeAdminPasswordReset
+} = require('../models/db');
 
 async function getLoginPage(req, res) {
   // Hanya jika klien sudah memiliki sesi aktif, alihkan ke dashboard klien
@@ -309,10 +315,305 @@ async function logout(req, res) {
   res.redirect(isAdmin ? `/administrator?pesan=${pesan}` : `/login?pesan=${pesan}`);
 }
 
+async function getAdminLupaSandiPage(req, res) {
+  const isAdminLoggedIn = Boolean(req.session && (req.session.adminUser || (req.session.isLoggedIn && req.session.userType === 'admin')));
+  if (isAdminLoggedIn) {
+    return res.redirect('/admin/dashboard');
+  }
+
+  const siteKey = process.env.TURNSTILE_SITE_KEY || '0x4AAAAAAGIsSky-2g0Z93D-';
+  const error = req.query.error || '';
+  res.render('auth/admin_lupa_sandi', {
+    pageTitle: 'Lupa Kata Sandi Administrator - BAPAS Medan',
+    error,
+    success: '',
+    identifier: '',
+    siteKey
+  });
+}
+
+async function postAdminLupaSandi(req, res) {
+  const { identifier } = req.body;
+  const siteKey = process.env.TURNSTILE_SITE_KEY || '0x4AAAAAAGIsSky-2g0Z93D-';
+  const turnstileSecret = process.env.TURNSTILE_SECRET || '0x4AAAAAAGIsSpJ6pa_yXPy88IQ-mdEIHqs';
+  const turnstileToken = req.body['cf-turnstile-response'];
+  const expectedHostnames = new Set(
+    (process.env.TURNSTILE_HOSTNAMES || 'bapas1medan.com,bapasmedan.bapasmedan104.workers.dev,localhost,127.0.0.1')
+      .split(',')
+      .map(h => h.trim().toLowerCase())
+      .filter(Boolean)
+  );
+
+  // Turnstile verification
+  if (typeof turnstileToken !== 'string' || turnstileToken.length === 0 || turnstileToken.length > 2048) {
+    return res.render('auth/admin_lupa_sandi', {
+      pageTitle: 'Lupa Kata Sandi Administrator - BAPAS Medan',
+      error: 'Mohon selesaikan verifikasi keamanan Cloudflare terlebih dahulu.',
+      identifier: identifier || '',
+      siteKey
+    });
+  }
+
+  try {
+    const clientIp = req.headers['cf-connecting-ip'] || req.headers['x-forwarded-for'] || req.ip || '';
+    const verifyRes = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      signal: AbortSignal.timeout(10000),
+      body: new URLSearchParams({
+        secret: turnstileSecret,
+        response: turnstileToken,
+        remoteip: clientIp
+      })
+    });
+
+    if (!verifyRes.ok) throw new Error(`siteverify HTTP ${verifyRes.status}`);
+    const verifyData = await verifyRes.json();
+    if (!verifyData.success || (verifyData.hostname && !expectedHostnames.has(verifyData.hostname.toLowerCase()))) {
+      return res.render('auth/admin_lupa_sandi', {
+        pageTitle: 'Lupa Kata Sandi Administrator - BAPAS Medan',
+        error: 'Verifikasi keamanan Cloudflare gagal atau kedaluwarsa. Silakan centang kembali verifikasi.',
+        identifier: identifier || '',
+        siteKey
+      });
+    }
+  } catch (verifyErr) {
+    return res.render('auth/admin_lupa_sandi', {
+      pageTitle: 'Lupa Kata Sandi Administrator - BAPAS Medan',
+      error: 'Terjadi kendala verifikasi keamanan: ' + verifyErr.message,
+      identifier: identifier || '',
+      siteKey
+    });
+  }
+
+  if (!identifier || !identifier.trim()) {
+    return res.render('auth/admin_lupa_sandi', {
+      pageTitle: 'Lupa Kata Sandi Administrator - BAPAS Medan',
+      error: 'Harap masukkan email atau username administrator Anda.',
+      identifier: '',
+      siteKey
+    });
+  }
+
+  try {
+    const resetResult = await createAdminPasswordResetToken(identifier.trim());
+    if (!resetResult.success) {
+      return res.render('auth/admin_lupa_sandi', {
+        pageTitle: 'Lupa Kata Sandi Administrator - BAPAS Medan',
+        error: resetResult.message,
+        identifier,
+        siteKey
+      });
+    }
+
+    // Masked email for security display (e.g. bapas***@gmail.com)
+    let maskedEmail = '';
+    if (resetResult.admin.email) {
+      const parts = resetResult.admin.email.split('@');
+      const namePart = parts[0];
+      const domain = parts[1];
+      const visible = namePart.substring(0, Math.min(3, namePart.length));
+      maskedEmail = `${visible}***@${domain}`;
+    }
+
+    // Simpan info hint di session sementara
+    if (req.session) {
+      req.session.resetAdminUser = resetResult.admin.username;
+      req.session.resetCodeHint = resetResult.resetCode; // Memudahkan verifikasi
+    }
+
+    // Redirect ke halaman Atur Ulang Kata Sandi
+    return res.redirect(`/administrator/reset-sandi?token=${resetResult.resetToken}&user=${encodeURIComponent(resetResult.admin.username)}&mail=${encodeURIComponent(maskedEmail)}&fb=${resetResult.firebaseEmailSent ? '1' : '0'}`);
+  } catch (err) {
+    console.error('Error postAdminLupaSandi:', err);
+    return res.render('auth/admin_lupa_sandi', {
+      pageTitle: 'Lupa Kata Sandi Administrator - BAPAS Medan',
+      error: 'Terjadi kesalahan sistem: ' + err.message,
+      identifier,
+      siteKey
+    });
+  }
+}
+
+async function getAdminResetSandiPage(req, res) {
+  const token = req.query.token;
+  const siteKey = process.env.TURNSTILE_SITE_KEY || '0x4AAAAAAGIsSky-2g0Z93D-';
+
+  if (!token) {
+    return res.redirect('/administrator/lupa-sandi?error=' + encodeURIComponent('Token reset tidak ditemukan. Silakan ajukan ulang permintaan lupa sandi.'));
+  }
+
+  const adminUser = await verifyAdminResetToken(token);
+  if (!adminUser) {
+    return res.render('auth/admin_lupa_sandi', {
+      pageTitle: 'Lupa Kata Sandi Administrator - BAPAS Medan',
+      error: 'Sesi reset kata sandi tidak valid atau telah kedaluwarsa (lebih dari 15 menit). Silakan ajukan ulang permohonan reset sandi.',
+      identifier: req.query.user || '',
+      siteKey
+    });
+  }
+
+  const maskedEmail = req.query.mail || (adminUser.email ? adminUser.email.replace(/(.{2})(.*)(@.*)/, '$1***$3') : '');
+  const fbSent = req.query.fb === '1';
+  const codeHint = (req.session && req.session.resetCodeHint) || adminUser.reset_code || '';
+
+  res.render('auth/admin_reset_sandi', {
+    pageTitle: 'Atur Ulang Kata Sandi Administrator - BAPAS Medan',
+    token,
+    adminUser,
+    maskedEmail,
+    fbSent,
+    codeHint,
+    error: '',
+    siteKey
+  });
+}
+
+async function postAdminResetSandi(req, res) {
+  const { token, kode_verifikasi, password_baru, konfirmasi_password } = req.body;
+  const siteKey = process.env.TURNSTILE_SITE_KEY || '0x4AAAAAAGIsSky-2g0Z93D-';
+  const turnstileSecret = process.env.TURNSTILE_SECRET || '0x4AAAAAAGIsSpJ6pa_yXPy88IQ-mdEIHqs';
+  const turnstileToken = req.body['cf-turnstile-response'];
+  const expectedHostnames = new Set(
+    (process.env.TURNSTILE_HOSTNAMES || 'bapas1medan.com,bapasmedan.bapasmedan104.workers.dev,localhost,127.0.0.1')
+      .split(',')
+      .map(h => h.trim().toLowerCase())
+      .filter(Boolean)
+  );
+
+  // Turnstile verification
+  if (typeof turnstileToken !== 'string' || turnstileToken.length === 0 || turnstileToken.length > 2048) {
+    const adminUser = token ? await verifyAdminResetToken(token) : null;
+    return res.render('auth/admin_reset_sandi', {
+      pageTitle: 'Atur Ulang Kata Sandi Administrator - BAPAS Medan',
+      token: token || '',
+      adminUser: adminUser || { username: 'Administrator' },
+      maskedEmail: '',
+      fbSent: false,
+      codeHint: (req.session && req.session.resetCodeHint) || '',
+      error: 'Mohon selesaikan verifikasi keamanan Cloudflare terlebih dahulu.',
+      siteKey
+    });
+  }
+
+  try {
+    const clientIp = req.headers['cf-connecting-ip'] || req.headers['x-forwarded-for'] || req.ip || '';
+    const verifyRes = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      signal: AbortSignal.timeout(10000),
+      body: new URLSearchParams({
+        secret: turnstileSecret,
+        response: turnstileToken,
+        remoteip: clientIp
+      })
+    });
+
+    if (!verifyRes.ok) throw new Error(`siteverify HTTP ${verifyRes.status}`);
+    const verifyData = await verifyRes.json();
+    if (!verifyData.success || (verifyData.hostname && !expectedHostnames.has(verifyData.hostname.toLowerCase()))) {
+      const adminUser = token ? await verifyAdminResetToken(token) : null;
+      return res.render('auth/admin_reset_sandi', {
+        pageTitle: 'Atur Ulang Kata Sandi Administrator - BAPAS Medan',
+        token: token || '',
+        adminUser: adminUser || { username: 'Administrator' },
+        maskedEmail: '',
+        fbSent: false,
+        codeHint: (req.session && req.session.resetCodeHint) || '',
+        error: 'Verifikasi keamanan Cloudflare gagal atau kedaluwarsa. Silakan centang kembali verifikasi.',
+        siteKey
+      });
+    }
+  } catch (verifyErr) {
+    const adminUser = token ? await verifyAdminResetToken(token) : null;
+    return res.render('auth/admin_reset_sandi', {
+      pageTitle: 'Atur Ulang Kata Sandi Administrator - BAPAS Medan',
+      token: token || '',
+      adminUser: adminUser || { username: 'Administrator' },
+      maskedEmail: '',
+      fbSent: false,
+      codeHint: (req.session && req.session.resetCodeHint) || '',
+      error: 'Terjadi kendala verifikasi keamanan: ' + verifyErr.message,
+      siteKey
+    });
+  }
+
+  // Validate passwords
+  if (!password_baru || password_baru.length < 6) {
+    const adminUser = token ? await verifyAdminResetToken(token) : null;
+    return res.render('auth/admin_reset_sandi', {
+      pageTitle: 'Atur Ulang Kata Sandi Administrator - BAPAS Medan',
+      token: token || '',
+      adminUser: adminUser || { username: 'Administrator' },
+      maskedEmail: '',
+      fbSent: false,
+      codeHint: (req.session && req.session.resetCodeHint) || '',
+      error: 'Kata sandi baru minimal 6 karakter.',
+      siteKey
+    });
+  }
+
+  if (password_baru !== konfirmasi_password) {
+    const adminUser = token ? await verifyAdminResetToken(token) : null;
+    return res.render('auth/admin_reset_sandi', {
+      pageTitle: 'Atur Ulang Kata Sandi Administrator - BAPAS Medan',
+      token: token || '',
+      adminUser: adminUser || { username: 'Administrator' },
+      maskedEmail: '',
+      fbSent: false,
+      codeHint: (req.session && req.session.resetCodeHint) || '',
+      error: 'Konfirmasi kata sandi tidak cocok dengan kata sandi baru.',
+      siteKey
+    });
+  }
+
+  try {
+    const result = await executeAdminPasswordReset(token, kode_verifikasi, password_baru);
+    if (!result.success) {
+      const adminUser = token ? await verifyAdminResetToken(token) : null;
+      return res.render('auth/admin_reset_sandi', {
+        pageTitle: 'Atur Ulang Kata Sandi Administrator - BAPAS Medan',
+        token: token || '',
+        adminUser: adminUser || { username: 'Administrator' },
+        maskedEmail: '',
+        fbSent: false,
+        codeHint: (req.session && req.session.resetCodeHint) || '',
+        error: result.message,
+        siteKey
+      });
+    }
+
+    if (req.session) {
+      delete req.session.resetCodeHint;
+      delete req.session.resetAdminUser;
+      req.session.successMessage = 'Kata sandi Administrator berhasil diubah! Silakan login dengan kata sandi baru Anda.';
+    }
+
+    return res.redirect('/administrator');
+  } catch (err) {
+    console.error('Error postAdminResetSandi:', err);
+    const adminUser = token ? await verifyAdminResetToken(token) : null;
+    return res.render('auth/admin_reset_sandi', {
+      pageTitle: 'Atur Ulang Kata Sandi Administrator - BAPAS Medan',
+      token: token || '',
+      adminUser: adminUser || { username: 'Administrator' },
+      maskedEmail: '',
+      fbSent: false,
+      codeHint: (req.session && req.session.resetCodeHint) || '',
+      error: 'Terjadi kesalahan sistem saat memperbarui sandi: ' + err.message,
+      siteKey
+    });
+  }
+}
+
 module.exports = {
   getLoginPage,
   postLogin,
   getAdminLoginPage,
   postAdminLogin,
+  getAdminLupaSandiPage,
+  postAdminLupaSandi,
+  getAdminResetSandiPage,
+  postAdminResetSandi,
   logout
 };

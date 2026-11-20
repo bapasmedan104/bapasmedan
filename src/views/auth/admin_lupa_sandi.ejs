@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title><%= typeof pageTitle !== 'undefined' ? pageTitle : 'Lupa Kata Sandi Administrator - BAPAS Kelas I Medan' %></title>
+  
+  <meta name="description" content="Layanan Pemulihan Kata Sandi Administrator Balai Pemasyarakatan (BAPAS) Kelas I Medan.">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#001e4d">
+
+  <!-- Favicon Icons -->
+  <link rel="icon" type="image/png" href="/favicon.png?v=2">
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  
+  <!-- Cloudflare Turnstile API -->
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+  
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+      background: radial-gradient(circle at 50% 30%, #002255 0%, #001433 60%, #000a1a 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .login-container {
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      margin: 15px auto;
+    }
+    .login-top-bar {
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #f1f5f9;
+      text-decoration: none;
+      font-size: 13.5px;
+      font-weight: 600;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-radius: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.22);
+      color: #ffffff;
+      transform: translateX(-3px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+    }
+    .login-card {
+      background: #ffffff;
+      border-radius: 14px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+      width: 100%;
+      overflow: hidden;
+      border-top: 4px solid #ffc107;
+    }
+    .login-header {
+      background: #001e4d;
+      color: #ffffff;
+      padding: 26px 22px;
+      text-align: center;
+      position: relative;
+    }
+    .login-header img {
+      height: 48px;
+      margin-bottom: 10px;
+      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3));
+    }
+    .security-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 193, 7, 0.15);
+      border: 1px solid #ffc107;
+      color: #fce8a6;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 20px;
+      margin-bottom: 8px;
+    }
+    .login-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 21px;
+      margin-bottom: 4px;
+      color: #ffffff;
+    }
+    .login-header p {
+      font-size: 13px;
+      color: #93c5fd;
+    }
+    .login-body {
+      padding: 26px 24px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      display: block;
+      font-weight: 700;
+      font-size: 13.5px;
+      color: #102a43;
+      margin-bottom: 8px;
+    }
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .input-wrapper i.input-icon {
+      position: absolute;
+      left: 14px;
+      color: #627d98;
+      font-size: 16px;
+      pointer-events: none;
+    }
+    .input-wrapper input {
+      width: 100%;
+      padding: 13px 14px 13px 42px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 15px;
+      font-family: inherit;
+      color: #1e293b;
+      background: #f8fafc;
+      transition: all 0.2s ease;
+      min-height: 48px;
+    }
+    .input-wrapper input:focus {
+      outline: none;
+      border-color: #003580;
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(0, 53, 128, 0.15);
+    }
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      background: #002b66;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 48px;
+      box-shadow: 0 4px 12px rgba(0, 43, 102, 0.3);
+    }
+    .btn-submit:hover {
+      background: #001e4d;
+      transform: translateY(-1px);
+    }
+    .alert-error {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+      padding: 12px 14px;
+      border-radius: 8px;
+      font-size: 13.5px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      line-height: 1.4;
+    }
+    .info-box {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-left: 4px solid #003580;
+      padding: 12px 14px;
+      border-radius: 0 8px 8px 0;
+      font-size: 13px;
+      color: #1e3a8a;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+
+<div class="login-container">
+  <div class="login-top-bar">
+    <a href="/administrator" class="back-link">
+      <i class="fas fa-arrow-left"></i> Kembali ke Login Admin
+    </a>
+  </div>
+
+  <div class="login-card">
+    <div class="login-header">
+      <div style="display:flex; justify-content:center; gap:12px; margin-bottom:8px;">
+        <img src="/logo_kemenimpas-removebg-preview.png" alt="Logo Kemenimipas" onerror="this.style.display='none'">
+        <img src="/logo_pemasyarakatan_custom.png?v=2" alt="Logo Pemasyarakatan" onerror="this.src='/logo_pemasyarakatan-removebg-preview.png'">
+      </div>
+      <div>
+        <span class="security-badge"><i class="fas fa-shield-alt"></i> Pemulihan Akun Administrator</span>
+      </div>
+      <h2>LUPA KATA SANDI</h2>
+      <p>Balai Pemasyarakatan (BAPAS) Kelas I Medan</p>
+    </div>
+
+    <div class="login-body">
+      <% if (typeof error !== 'undefined' && error) { %>
+        <div class="alert-error">
+          <i class="fas fa-exclamation-circle" style="font-size:18px; flex-shrink:0;"></i>
+          <div><%= error %></div>
+        </div>
+      <% } %>
+
+      <div class="info-box">
+        <i class="fas fa-info-circle" style="color:#003580; margin-right:4px;"></i>
+        Masukkan <strong>Email Resmi</strong> atau <strong>Username Administrator</strong> Anda. Sistem akan memverifikasi akun dan menyediakan kode keamanan untuk menyetel ulang kata sandi Anda.
+      </div>
+
+      <form action="/administrator/lupa-sandi" method="POST" id="lupaSandiForm">
+        <div class="form-group">
+          <label for="identifier">Email / Username Administrator</label>
+          <div class="input-wrapper">
+            <i class="fas fa-user-shield input-icon"></i>
+            <input 
+              type="text" 
+              name="identifier" 
+              id="identifier" 
+              placeholder="Contoh: bapasmedan104@gmail.com atau admin" 
+              value="<%= typeof identifier !== 'undefined' ? identifier : '' %>" 
+              required 
+              autocomplete="username"
+              autofocus
+            >
+          </div>
+        </div>
+
+        <!-- Cloudflare Turnstile Verification Widget -->
+        <div style="display:flex; justify-content:center; align-items:center; margin: 18px 0; min-height: 65px;">
+          <div class="cf-turnstile" data-sitekey="<%= typeof siteKey !== 'undefined' && siteKey ? siteKey : '0x4AAAAAAGIsSky-2g0Z93D-' %>" data-action="reset_password" data-theme="light"></div>
+        </div>
+
+        <button type="submit" class="btn-submit" id="btnSubmit">
+          <i class="fas fa-paper-plane"></i> Lanjutkan & Dapatkan Kode Reset
+        </button>
+      </form>
+
+      <div style="text-align:center; margin-top:20px; font-size:13px; color:#64748b;">
+        Ingat kata sandi Anda? <a href="/administrator" style="color:#003580; font-weight:700; text-decoration:none;">Login di sini</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  <% if (typeof error !== 'undefined' && error) { %>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof Swal !== 'undefined') {
+        Swal.fire({
+          icon: 'error',
+          title: 'Permintaan Gagal',
+          text: '<%= error %>',
+          confirmButtonColor: '#003580'
+        });
+      }
+    });
+  <% } %>
+</script>
+</body>
+</html>

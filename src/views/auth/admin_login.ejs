@@ -263,6 +263,13 @@
     </div>
 
     <div class="login-body">
+      <% if (typeof successMessage !== 'undefined' && successMessage) { %>
+        <div style="background:#f0fdf4; color:#166534; border:1px solid #bbf7d0; padding:12px 14px; border-radius:8px; font-size:13.5px; margin-bottom:20px; display:flex; align-items:center; gap:10px; line-height:1.4;">
+          <i class="fas fa-check-circle" style="font-size:18px; color:#16a34a; flex-shrink:0;"></i>
+          <div><%= successMessage %></div>
+        </div>
+      <% } %>
+
       <% if (error) { %>
         <div class="alert-error">
           <i class="fas fa-exclamation-circle" style="font-size:18px; flex-shrink:0;"></i>
@@ -303,6 +310,13 @@
               <i class="fas fa-eye" id="eyeIcon"></i>
             </button>
           </div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:-10px; margin-bottom:18px;">
+          <span style="font-size:12px; color:#64748b;">Kendala autentikasi?</span>
+          <a href="/administrator/lupa-sandi" style="font-size:13px; font-weight:700; color:#003580; text-decoration:none; display:inline-flex; align-items:center; gap:5px; transition:all 0.2s;" onmouseover="this.style.color='#d97706'" onmouseout="this.style.color='#003580'">
+            <i class="fas fa-key" style="font-size:11px;"></i> Lupa Kata Sandi?
+          </a>
         </div>
 
         <!-- Cloudflare Turnstile Verification Widget -->
