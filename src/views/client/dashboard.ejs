@@ -252,24 +252,17 @@
           <textarea name="rencana_mendatang" id="rencana_mendatang" rows="3" placeholder="Rencana pekerjaan, pelatihan, atau rencana positif lainnya ke depan..."><%= laporBulanIni ? laporBulanIni.rencana_mendatang : '' %></textarea>
         </div>
 
-        <!-- SEKSI UPLOAD & KAMERA FOTO -->
+        <!-- SEKSI KAMERA FOTO BUKTI LAPOR (HANYA KAMERA LANGSUNG) -->
         <div class="foto-section">
-          <label style="font-weight:700; color:#003580; display:flex; align-items:center; gap:8px; margin-bottom:14px; font-size:15px;">
-            <i class="fas fa-camera"></i> Foto Bukti Lapor Diri (Wajib Selfie / Foto Terkini)
+          <label style="font-weight:700; color:#003580; display:flex; align-items:center; gap:8px; margin-bottom:6px; font-size:15px;">
+            <i class="fas fa-camera"></i> Foto Bukti Lapor Diri (Wajib Selfie / Foto Terkini via Kamera)
           </label>
+          <p style="font-size:12.5px; color:#64748b; margin-bottom:14px; line-height:1.5;">
+            Demi keabsahan dan keaslian presensi bimbingan, foto bukti lapor diri wajib diambil langsung melalui kamera ponsel (bisa kamera depan/selfie atau kamera belakang).
+          </p>
 
-          <!-- TAB PEMILIHAN METODE: KAMERA & GALERI -->
-          <div class="foto-tabs">
-            <button type="button" class="foto-tab active" id="tabCamBtn" onclick="switchFotoTab('camera')">
-              <i class="fas fa-camera"></i> Ambil dari Kamera
-            </button>
-            <button type="button" class="foto-tab" id="tabUploadBtn" onclick="switchFotoTab('upload')">
-              <i class="fas fa-images"></i> Pilih dari Galeri
-            </button>
-          </div>
-
-          <!-- TAB 1: KAMERA (BISA DEPAN & BELAKANG) -->
-          <div class="foto-content active" id="camContent">
+          <!-- KAMERA LANGSUNG (BISA DEPAN & BELAKANG) -->
+          <div class="foto-content" style="display:block;" id="camContent">
             <div style="display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap; align-items:center;">
               <button type="button" class="btn btn-primary" id="startCamBtn" onclick="startCamera()"><i class="fas fa-video"></i> Buka Kamera</button>
               <button type="button" class="btn btn-warning" id="switchCamBtn" onclick="switchCameraFacing()" style="display:none; background:#f59e0b; color:#ffffff;">
@@ -287,22 +280,6 @@
               </div>
             </div>
             <canvas id="photoCanvas" style="display:none;"></canvas>
-          </div>
-
-          <!-- TAB 2: PILIH DARI GALERI HP / FILE -->
-          <div class="foto-content" id="uploadContent" style="display:none;">
-            <div style="background:#f8fafc; border:2px dashed #93c5fd; border-radius:12px; padding:22px; text-align:center;">
-              <div style="font-size:38px; color:#003580; margin-bottom:10px;">
-                <i class="fas fa-images"></i>
-              </div>
-              <p style="font-size:14.5px; color:#1e293b; font-weight:700; margin-bottom:4px;">Pilih Foto dari Galeri HP / Komputer</p>
-              <p style="font-size:12.5px; color:#64748b; margin-bottom:16px;">Mendukung foto selfie / kegiatan langsung dari galeri HP (JPG, PNG, WebP)</p>
-              
-              <label for="fotoFileInput" class="btn btn-primary" style="padding:11px 24px; font-size:14px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:8px;">
-                <i class="fas fa-folder-open"></i> Buka Galeri HP
-              </label>
-              <input type="file" id="fotoFileInput" accept="image/jpeg,image/png,image/webp" style="display:none;" onchange="handleFileUpload(event)">
-            </div>
           </div>
 
           <!-- PREVIEW FOTO AKTIF -->
@@ -403,26 +380,6 @@
   let videoStream = null;
   let currentFacingMode = 'user'; // 'user' (depan/selfie) atau 'environment' (belakang)
 
-  function switchFotoTab(tab) {
-    const camBtn = document.getElementById('tabCamBtn');
-    const uploadBtn = document.getElementById('tabUploadBtn');
-    const camContent = document.getElementById('camContent');
-    const uploadContent = document.getElementById('uploadContent');
-
-    if (tab === 'camera') {
-      camBtn.classList.add('active');
-      uploadBtn.classList.remove('active');
-      camContent.style.display = 'block';
-      uploadContent.style.display = 'none';
-    } else {
-      uploadBtn.classList.add('active');
-      camBtn.classList.remove('active');
-      uploadContent.style.display = 'block';
-      camContent.style.display = 'none';
-      stopCamera();
-    }
-  }
-
   async function startCamera(facing = currentFacingMode) {
     const video = document.getElementById('videoElement');
     const videoBox = document.getElementById('videoBox');
@@ -474,12 +431,12 @@
       if (typeof Swal !== 'undefined') {
         Swal.fire({
           title: 'Akses Kamera Gagal',
-          text: 'Tidak dapat membuka kamera: ' + err.message + '. Silakan gunakan opsi "Pilih dari Galeri".',
+          text: 'Tidak dapat membuka kamera: ' + err.message + '. Harap periksa dan izinkan akses kamera pada pengaturan browser perangkat Anda.',
           icon: 'warning',
           confirmButtonColor: '#003580'
         });
       } else {
-        alert('Tidak dapat mengakses kamera: ' + err.message + '\nSilakan gunakan opsi "Pilih dari Galeri".');
+        alert('Tidak dapat mengakses kamera: ' + err.message + '\nHarap periksa dan izinkan akses kamera pada browser Anda.');
       }
     }
   }
@@ -557,73 +514,6 @@
       }
       document.getElementById('uploadStatusText').innerText = '';
     }
-  }
-
-  async function handleFileUpload(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    // Kompresi di sisi browser via Canvas agar cepat terupload dan aman di server
-    const reader = new FileReader();
-    reader.onload = function(ev) {
-      const img = new Image();
-      img.onload = async function() {
-        const canvas = document.createElement('canvas');
-        let width = img.width;
-        let height = img.height;
-        const maxDim = 1200;
-        if (width > height && width > maxDim) {
-          height = Math.round((height * maxDim) / width);
-          width = maxDim;
-        } else if (height > maxDim) {
-          width = Math.round((width * maxDim) / height);
-          height = maxDim;
-        }
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0, width, height);
-
-        const base64Data = canvas.toDataURL('image/jpeg', 0.85);
-
-        document.getElementById('uploadStatusText').innerText = 'Mengunggah foto dari galeri...';
-        try {
-          const res = await fetch('/client/upload-foto', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              action: 'capture',
-              foto_base64: base64Data,
-              bulan: '<%= bulanIni %>',
-              tahun: '<%= tahunIni %>'
-            })
-          });
-          const data = await res.json();
-          if (data.success) {
-            document.getElementById('imgPreview').src = data.foto_url;
-            document.getElementById('fotoPreviewContainer').style.display = 'block';
-            document.getElementById('uploadStatusText').innerText = '';
-            showToast('Foto dari galeri berhasil dipasang!', 'success');
-          } else {
-            if (typeof Swal !== 'undefined') {
-              Swal.fire('Gagal Unggah Foto', data.message || 'File foto ditolak sistem.', 'error');
-            } else {
-              alert('Gagal upload: ' + data.message);
-            }
-            document.getElementById('uploadStatusText').innerText = '';
-          }
-        } catch (err) {
-          if (typeof Swal !== 'undefined') {
-            Swal.fire('Kesalahan Jaringan', 'Terjadi kesalahan saat mengunggah foto: ' + err.message, 'error');
-          } else {
-            alert('Gagal upload: ' + err.message);
-          }
-          document.getElementById('uploadStatusText').innerText = '';
-        }
-      };
-      img.src = ev.target.result;
-    };
-    reader.readAsDataURL(file);
   }
 
   function confirmSubmitLapor() {
