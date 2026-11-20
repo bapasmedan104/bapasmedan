@@ -31,26 +31,54 @@ function getNamaBulan(bulan) {
   return NAMA_BULAN[b] || '';
 }
 
+/**
+ * Konversi tanggal ke representasi Waktu Indonesia Barat (WIB = UTC+7)
+ * Selalu konsisten dan akurat di semua environment server (Cloudflare Workers, Node.js, Linux, V8)
+ */
+function toWibDate(tanggal) {
+  if (!tanggal) return null;
+  const d = (tanggal instanceof Date) ? tanggal : new Date(tanggal);
+  if (isNaN(d.getTime())) return null;
+  // Offset pasti WIB adalah UTC+7 (7 * 3600 * 1000 milidetik)
+  return new Date(d.getTime() + (7 * 3600 * 1000));
+}
+
+/**
+ * Mengambil waktu saat ini dalam format kalender WIB
+ */
+function getWibNow() {
+  const wib = toWibDate(new Date());
+  return {
+    year: wib.getUTCFullYear(),
+    month: wib.getUTCMonth() + 1,
+    date: wib.getUTCDate(),
+    day: wib.getUTCDay(),
+    hours: wib.getUTCHours(),
+    minutes: wib.getUTCMinutes(),
+    seconds: wib.getUTCSeconds()
+  };
+}
+
 function formatTanggal(tanggal) {
   if (!tanggal) return '-';
-  const d = new Date(tanggal);
-  if (isNaN(d.getTime())) return '-';
-  const hari = NAMA_HARI[d.getDay()];
-  const tgl = d.getDate();
-  const bln = NAMA_BULAN[d.getMonth() + 1];
-  const thn = d.getFullYear();
+  const wib = toWibDate(tanggal);
+  if (!wib) return '-';
+  const hari = NAMA_HARI[wib.getUTCDay()];
+  const tgl = wib.getUTCDate();
+  const bln = NAMA_BULAN[wib.getUTCMonth() + 1];
+  const thn = wib.getUTCFullYear();
   return `${hari}, ${tgl} ${bln} ${thn}`;
 }
 
 function formatTanggalWaktu(tanggal) {
   if (!tanggal) return '-';
-  const d = new Date(tanggal);
-  if (isNaN(d.getTime())) return '-';
-  const tgl = String(d.getDate()).padStart(2, '0');
-  const bln = String(d.getMonth() + 1).padStart(2, '0');
-  const thn = d.getFullYear();
-  const jam = String(d.getHours()).padStart(2, '0');
-  const mnt = String(d.getMinutes()).padStart(2, '0');
+  const wib = toWibDate(tanggal);
+  if (!wib) return '-';
+  const tgl = String(wib.getUTCDate()).padStart(2, '0');
+  const bln = String(wib.getUTCMonth() + 1).padStart(2, '0');
+  const thn = wib.getUTCFullYear();
+  const jam = String(wib.getUTCHours()).padStart(2, '0');
+  const mnt = String(wib.getUTCMinutes()).padStart(2, '0');
   return `${tgl}/${bln}/${thn} ${jam}:${mnt} WIB`;
 }
 
@@ -97,6 +125,8 @@ module.exports = {
   NAMA_BULAN,
   NAMA_HARI,
   getNamaBulan,
+  toWibDate,
+  getWibNow,
   formatTanggal,
   formatTanggalWaktu,
   hashPassword,

@@ -582,15 +582,24 @@
     }
   }
 
-  // 2. Kontrol Kamera & Live Viewfinder Clock
+  // 2. Kontrol Kamera & Live Viewfinder Clock (WIB UTC+7)
   function updateCamLiveClock() {
     const clockEl = document.getElementById('camLiveClock');
     if (!clockEl) return;
-    const now = new Date();
-    const jam = String(now.getHours()).padStart(2, '0');
-    const menit = String(now.getMinutes()).padStart(2, '0');
-    const detik = String(now.getSeconds()).padStart(2, '0');
-    clockEl.innerText = `${jam}:${menit}:${detik} WIB`;
+    try {
+      const now = new Date();
+      const wib = new Date(now.getTime() + (7 * 3600 * 1000));
+      const jam = String(wib.getUTCHours()).padStart(2, '0');
+      const menit = String(wib.getUTCMinutes()).padStart(2, '0');
+      const detik = String(wib.getUTCSeconds()).padStart(2, '0');
+      clockEl.innerText = `${jam}:${menit}:${detik} WIB`;
+    } catch (e) {
+      const now = new Date();
+      const jam = String(now.getHours()).padStart(2, '0');
+      const menit = String(now.getMinutes()).padStart(2, '0');
+      const detik = String(now.getSeconds()).padStart(2, '0');
+      clockEl.innerText = `${jam}:${menit}:${detik} WIB`;
+    }
   }
 
   async function startCamera(facing = currentFacingMode) {
@@ -706,14 +715,15 @@
     // A. Gambar foto kamera langsung
     context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-    // B. Siapkan data waktu dan stempel anti-kamuflase
+    // B. Siapkan data waktu dan stempel anti-kamuflase (Presisi WIB UTC+7)
     const now = new Date();
+    const wib = new Date(now.getTime() + (7 * 3600 * 1000));
     const hariList = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
     const bulanList = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
 
-    const namaHari = hariList[now.getDay()];
-    const tglStr = String(now.getDate()).padStart(2, '0') + ' ' + bulanList[now.getMonth()] + ' ' + now.getFullYear();
-    const jamStr = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0') + ':' + String(now.getSeconds()).padStart(2, '0') + ' WIB';
+    const namaHari = hariList[wib.getUTCDay()];
+    const tglStr = String(wib.getUTCDate()).padStart(2, '0') + ' ' + bulanList[wib.getUTCMonth()] + ' ' + wib.getUTCFullYear();
+    const jamStr = String(wib.getUTCHours()).padStart(2, '0') + ':' + String(wib.getUTCMinutes()).padStart(2, '0') + ':' + String(wib.getUTCSeconds()).padStart(2, '0') + ' WIB';
 
     const clientNama = '<%= client ? (client.nama_lengkap || "").replace(/'/g, "\\'") : "KLIEN" %>';
     const clientNoReg = '<%= client ? (client.no_register || "").replace(/'/g, "\\'") : "-" %>';

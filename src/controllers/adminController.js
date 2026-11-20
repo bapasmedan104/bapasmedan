@@ -26,7 +26,7 @@ const {
   deleteAdminUser
 } = require('../models/db');
 const { invalidateConfigCache } = require('../middlewares/auth');
-const { getNamaBulan, formatTanggal, formatTanggalWaktu, getFileUrl } = require('../utils/helpers');
+const { getNamaBulan, formatTanggal, formatTanggalWaktu, getFileUrl, getWibNow } = require('../utils/helpers');
 
 async function getDashboard(req, res) {
   try {
@@ -83,7 +83,7 @@ async function getRiwayatLapor(req, res) {
     };
 
     // Daftar tahun yang ada dalam data untuk dropdown filter
-    const currentYear = new Date().getFullYear();
+    const currentYear = getWibNow().year;
     const availableYears = [currentYear + 1, currentYear, currentYear - 1, currentYear - 2, 2024, 2023];
 
     res.render('admin/riwayat_lapor', {

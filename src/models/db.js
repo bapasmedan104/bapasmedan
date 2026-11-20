@@ -1252,7 +1252,9 @@ async function cekPeriodeInput() {
   if (config.status_layanan === 'buka_selalu') return true;
   if (config.status_layanan === 'tutup_sementara') return false;
 
-  const tanggalSekarang = new Date().getDate();
+  // Gunakan kalender Waktu Indonesia Barat (WIB = UTC+7)
+  const nowWib = new Date(Date.now() + (7 * 3600 * 1000));
+  const tanggalSekarang = nowWib.getUTCDate();
   const mulai = parseInt(config.tanggal_mulai_input, 10) || 1;
   const akhir = parseInt(config.tanggal_akhir_input, 10) || 15;
   return tanggalSekarang >= mulai && tanggalSekarang <= akhir;

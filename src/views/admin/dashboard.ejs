@@ -1182,7 +1182,7 @@
 
           const isBot = m.pengirim === 'bot' || m.nama === 'Asisten Layanan BAPAS';
           const isUser = !isBot && (m.pengirim === 'user' || m.tipe_pesan === 'client_card');
-          const time = m.created_at ? new Date(m.created_at).toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit' }) : '';
+          const time = m.created_at ? new Date(m.created_at).toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit', timeZone: 'Asia/Jakarta' }) : '';
           
           if (isUser) {
             let userContentHtml = '';

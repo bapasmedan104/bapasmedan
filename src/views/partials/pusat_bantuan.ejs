@@ -2348,7 +2348,7 @@ function renderChatStream(messages) {
 
     // 2. Interactive Welcome Catalog Card
     if (m.tipe_pesan === 'katalog_welcome') {
-      const timeFormatted = m.created_at ? new Date(m.created_at).toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit' }) : '';
+      const timeFormatted = m.created_at ? new Date(m.created_at).toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit', timeZone: 'Asia/Jakarta' }) : '';
       html += `
         <div class="chat-msg chat-msg-bot chat-msg-katalog">
           <div class="chat-avatar" style="background:linear-gradient(135deg, #003580 0%, #001938 100%);"><i class="fas fa-robot"></i></div>
@@ -2414,7 +2414,7 @@ function renderChatStream(messages) {
       }
     }
 
-    const timeFormatted = m.created_at ? new Date(m.created_at).toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit' }) : '';
+    const timeFormatted = m.created_at ? new Date(m.created_at).toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit', timeZone: 'Asia/Jakarta' }) : '';
 
     if (isUser) {
       let contentHtml = '';

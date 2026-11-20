@@ -14,7 +14,7 @@ const {
   submitLapor,
   updateProfilClient
 } = require('../models/db');
-const { getNamaBulan, formatTanggal, getFileUrl } = require('../utils/helpers');
+const { getNamaBulan, formatTanggal, getFileUrl, getWibNow } = require('../utils/helpers');
 const { isCloudinaryConfigured, uploadFile, uploadBase64 } = require('../config/cloudinary');
 
 async function getDashboard(req, res) {
@@ -26,9 +26,9 @@ async function getDashboard(req, res) {
     const riwayat = await getRiwayatLaporClient(clientId);
     const recentRiwayat = riwayat.slice(0, 5);
 
-    const now = new Date();
-    const bulanIni = now.getMonth() + 1;
-    const tahunIni = now.getFullYear();
+    const wibNow = getWibNow();
+    const bulanIni = wibNow.month;
+    const tahunIni = wibNow.year;
 
     const laporBulanIni = await getLaporBulanIni(clientId, bulanIni, tahunIni);
     const config = await getKonfigurasi();
@@ -61,9 +61,9 @@ async function postLaporBaru(req, res) {
   try {
     const clientId = req.session.user.id;
     const action = req.body.action || 'draft';
-    const now = new Date();
-    const bulan = parseInt(req.body.bulan, 10) || now.getMonth() + 1;
-    const tahun = parseInt(req.body.tahun, 10) || now.getFullYear();
+    const wibNow = getWibNow();
+    const bulan = parseInt(req.body.bulan, 10) || wibNow.month;
+    const tahun = parseInt(req.body.tahun, 10) || wibNow.year;
 
     const bisaInput = await cekBisaInputLapor(clientId);
     if (!bisaInput) {
@@ -112,9 +112,9 @@ async function postLaporBaru(req, res) {
 async function postUploadFoto(req, res) {
   try {
     const clientId = req.session.user.id;
-    const now = new Date();
-    const bulan = parseInt(req.body.bulan, 10) || now.getMonth() + 1;
-    const tahun = parseInt(req.body.tahun, 10) || now.getFullYear();
+    const wibNow = getWibNow();
+    const bulan = parseInt(req.body.bulan, 10) || wibNow.month;
+    const tahun = parseInt(req.body.tahun, 10) || wibNow.year;
     const action = req.body.action || 'upload'; // 'upload' atau 'capture'
 
     // Pastikan draft lapor tersedia
@@ -212,8 +212,9 @@ async function getProfil(req, res) {
 
     // Otomatis susun masa_wajib_lapor jika belum ada teksnya di DB
     if (client && !client.masa_wajib_lapor) {
+      const wibNow = getWibNow();
       const bMulai = client.bulan_wajib_lapor_mulai || 1;
-      const tMulai = client.tahun_wajib_lapor_mulai || new Date().getFullYear();
+      const tMulai = client.tahun_wajib_lapor_mulai || wibNow.year;
       const bAkhir = client.bulan_wajib_lapor_akhir || 12;
       const tAkhir = client.tahun_wajib_lapor_akhir || tMulai;
       client.masa_wajib_lapor = `${getNamaBulan(bMulai)} ${tMulai} s/d ${getNamaBulan(bAkhir)} ${tAkhir}`;

@@ -1,3 +1,6 @@
+// Pastikan timezone default aplikasi adalah Waktu Indonesia Barat (WIB)
+process.env.TZ = 'Asia/Jakarta';
+
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
