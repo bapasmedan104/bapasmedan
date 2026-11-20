@@ -179,20 +179,31 @@ img, video, canvas {
 
   /* Tab menu (Overview / Verifikasi Lapor / Kelola Client) digulir horizontal */
   .tabs, .tabs-nav {
+    display: flex !important;
     overflow-x: auto !important;
     -webkit-overflow-scrolling: touch !important;
     flex-wrap: nowrap !important;
     white-space: nowrap !important;
     scrollbar-width: thin !important;
-    padding-bottom: 4px !important;
+    padding-bottom: 6px !important;
+    margin-bottom: 18px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    gap: 8px !important;
   }
   .tabs::-webkit-scrollbar, .tabs-nav::-webkit-scrollbar { height: 4px; }
   .tabs::-webkit-scrollbar-thumb, .tabs-nav::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
   .tab-button, .tab-btn {
     flex: 0 0 auto !important;
-    padding: 10px 14px !important;
+    padding: 10px 16px !important;
     font-size: 13px !important;
+    font-weight: 700 !important;
     min-height: 42px !important;
+    border-radius: 8px 8px 0 0 !important;
+    white-space: nowrap !important;
+    cursor: pointer !important;
+    -webkit-tap-highlight-color: transparent !important;
+    touch-action: manipulation !important;
   }
 
   /* Statistik Ringkas Klien Chips & Stat Grid pada Mobile */

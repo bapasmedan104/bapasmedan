@@ -26,15 +26,45 @@
     .container { max-width: 1350px; margin: 25px auto 40px; padding: 0 20px; }
     .header { margin-bottom: 25px; }
     .header h1 { font-family: 'Playfair Display', serif; color: #1a3a52; font-size: 30px; margin-bottom: 4px; }
-    .tabs-nav { display: flex; gap: 5px; border-bottom: 2px solid #e2e8f0; margin-bottom: 25px; }
-    .tab-btn {
-      padding: 12px 22px; border: none; background: transparent; font-size: 14px; font-weight: 700;
-      color: #64748b; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s;
-      display: flex; align-items: center; gap: 8px;
+    .tabs-nav {
+      display: flex;
+      gap: 6px;
+      border-bottom: 2px solid #e2e8f0;
+      margin-bottom: 22px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      white-space: nowrap;
+      scrollbar-width: thin;
     }
-    .tab-btn.active { color: #1a3a52; border-bottom-color: #1a3a52; background: #ffffff; border-radius: 6px 6px 0 0; }
+    .tab-btn {
+      padding: 12px 20px;
+      border: none;
+      background: transparent;
+      font-size: 14px;
+      font-weight: 700;
+      color: #64748b;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      touch-action: manipulation;
+    }
+    .tab-btn.active {
+      color: #003580;
+      border-bottom-color: #003580;
+      background: #ffffff;
+      border-radius: 6px 6px 0 0;
+    }
     .tab-pane { display: none; }
-    .tab-pane.active { display: block; }
+    .tab-pane.active { display: block; animation: fadeInPane 0.2s ease-out; }
+    @keyframes fadeInPane {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
     .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px; margin-bottom: 25px; }
     .stat-card {
       background: white; padding: 22px; border-radius: 8px;
@@ -780,8 +810,6 @@
                 </div>
                 <div style="font-size:13px; color:#713f12; line-height:1.55; word-break:break-word;">${formattedBot}</div>
                 <div style="font-size:10.5px; color:#a16207; margin-top:4px; text-align:right;">${time} &bull; Otomatis</div>
-              </div>
-            `;
               </div>
             `;
           } else {
