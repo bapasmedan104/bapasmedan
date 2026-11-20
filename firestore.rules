@@ -15,15 +15,13 @@ service cloud.firestore {
     }
 
     // 2. Pusat Bantuan & Layanan Customer Service Real-Time (Live Chat)
-    // Pengunjung umum, Klien, dan Petugas dapat saling mengirim dan membaca pesan bantuan
+    // Pengunjung umum, Klien, dan Petugas dapat saling bertukar pesan real-time
     match /pusat_bantuan_chat/{chatId} {
-      allow read, create, update: if true;
-      allow delete: if false; // Pesan riwayat bantuan diarsipkan untuk rekam jejak layanan
+      allow read, write: if true;
       
       // Sub-koleksi percakapan pesan real-time
-      match /pesan/{pesanId} {
-        allow read, create, update: if true;
-        allow delete: if false;
+      match /{allSubcollections=**} {
+        allow read, write: if true;
       }
     }
 

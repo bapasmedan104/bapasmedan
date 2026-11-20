@@ -1,8 +1,8 @@
 <!-- =======================================================
-     WIDGET PUSAT BANTUAN TERPADU BAPAS KELAS I MEDAN
+     WIDGET PUSAT BANTUAN TERPADU BAPAS KELAS I MEDAN (LAYAR PENUH)
      Memiliki 2 Kategori:
      1. Langkah-Langkah Bantuan (Panduan Lengkap & Interaktif)
-     2. Customer Service Real-Time (Live Chat & WhatsApp CS)
+     2. Customer Service Real-Time (Live Chat BAPAS Tanpa WhatsApp)
      ======================================================= -->
 
 <!-- TOMBOL FLOATING PUSAT BANTUAN -->
@@ -12,26 +12,33 @@
   <span class="btn-bantuan-text">Pusat Bantuan</span>
 </div>
 
-<!-- MODAL POPUP PUSAT BANTUAN -->
-<div id="modalPusatBantuan" class="modal-bantuan-backdrop" style="display:none;" onclick="handleBackdropClick(event)">
-  <div class="modal-bantuan-card">
+<!-- CONTAINER LAYAR PENUH PUSAT BANTUAN -->
+<div id="modalPusatBantuan" class="fullscreen-bantuan-overlay" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="bantuanModalTitle">
+  <div class="fullscreen-bantuan-wrapper">
     
-    <!-- Modal Header -->
-    <div class="modal-bantuan-header">
-      <div style="display:flex; align-items:center; gap:12px;">
-        <img src="/logo_pemasyarakatan_custom.png?v=2" alt="Logo" style="height:36px; width:auto;" onerror="this.src='/logo_pemasyarakatan-removebg-preview.png'">
+    <!-- Top Header Bar -->
+    <header class="fullscreen-bantuan-header">
+      <div class="header-brand-wrap">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <img src="/logo_kemenimpas-removebg-preview.png" alt="Logo Kemenimipas" class="header-logo-img" onerror="this.style.display='none'">
+          <img src="/logo_pemasyarakatan_custom.png?v=2" alt="Logo Pemasyarakatan" class="header-logo-img" onerror="this.src='/logo_pemasyarakatan-removebg-preview.png'">
+        </div>
         <div>
-          <h3 style="margin:0; font-size:16px; color:#ffffff; font-family:'Playfair Display', serif; display:flex; align-items:center; gap:6px;">
-            <i class="fas fa-life-ring" style="color:#f59e0b;"></i> Pusat Bantuan BAPAS Medan
-          </h3>
-          <span style="font-size:11.5px; color:#fde68a; display:block; margin-top:2px;">Kementerian Imigrasi dan Pemasyarakatan RI</span>
+          <h2 id="bantuanModalTitle" class="header-title-text">
+            <i class="fas fa-life-ring" style="color:#f59e0b;"></i> Pusat Bantuan & Layanan
+          </h2>
+          <span class="header-subtitle-text">Balai Pemasyarakatan (BAPAS) Kelas I Medan &bull; Kemenimipas RI</span>
         </div>
       </div>
-      <button type="button" class="btn-close-bantuan" onclick="tutupPusatBantuan()" aria-label="Tutup Pusat Bantuan">&times;</button>
-    </div>
 
-    <!-- 2 KATEGORI TABS (SESUAI PERMINTAAN USER) -->
-    <div class="bantuan-tabs-nav">
+      <button type="button" class="btn-close-fullscreen" onclick="tutupPusatBantuan()" aria-label="Tutup Pusat Bantuan">
+        <i class="fas fa-times"></i>
+        <span class="btn-close-label">Tutup</span>
+      </button>
+    </header>
+
+    <!-- Navigation Tabs (2 Kategori) -->
+    <nav class="bantuan-tabs-nav" aria-label="Pilihan Kategori Bantuan">
       <button type="button" id="tabHeadLangkah" class="bantuan-tab-btn active" onclick="switchKategoriBantuan('langkah')">
         <i class="fas fa-book-reader"></i>
         <span>1. Langkah-Langkah Bantuan</span>
@@ -41,194 +48,228 @@
         <i class="fas fa-comments"></i>
         <span>2. Customer Service Real-Time</span>
       </button>
-    </div>
+    </nav>
 
-    <!-- MODAL BODY -->
-    <div class="modal-bantuan-body">
+    <!-- Main Content Area -->
+    <main class="fullscreen-bantuan-content">
       
       <!-- ==============================================
            KATEGORI 1: LANGKAH-LANGKAH BANTUAN (PANDUAN)
            ============================================== -->
-      <div id="kategoriLangkah" class="kategori-pane active">
-        <div style="margin-bottom:14px; background:#f0fdf4; border:1px solid #bbf7d0; padding:10px 14px; border-radius:8px; font-size:12.5px; color:#166534; display:flex; align-items:center; gap:8px;">
-          <i class="fas fa-info-circle" style="color:#16a34a; font-size:16px; flex-shrink:0;"></i>
-          <span>Pilih topik di bawah ini untuk panduan langkah demi langkah penggunaan layanan wajib lapor online.</span>
-        </div>
-
-        <!-- ACCORDION PANDUAN LANGKAH-LANGKAH -->
-        <div class="faq-accordion-group">
+      <section id="kategoriLangkah" class="kategori-pane active" aria-labelledby="tabHeadLangkah">
+        <div class="kategori-inner-container">
           
-          <!-- Panduan 1: Login -->
-          <details class="bantuan-item" open>
-            <summary>
-              <span><i class="fas fa-sign-in-alt text-primary"></i> Langkah 1: Cara Masuk / Login ke Akun Klien</span>
-              <i class="fas fa-chevron-down arrow-icon"></i>
-            </summary>
-            <div class="bantuan-content">
-              <p>Untuk masuk ke portal wajib lapor online BAPAS Kelas I Medan:</p>
-              <ol>
-                <li>Buka halaman masuk melalui menu <strong>Wajib Lapor Online</strong> atau kunjungi <a href="/login" style="color:#003580; font-weight:700;">bapas1medan.com/login</a>.</li>
-                <li>Masukkan <strong>Nomor WhatsApp</strong> aktif atau <strong>Nomor Register Klien</strong> (contoh: <code>REG-2026</code>).</li>
-                <li>Masukkan Kata Sandi akun yang telah diberikan oleh Pembimbing Kemasyarakatan (PK).</li>
-                <li>Selesaikan verifikasi keamanan Cloudflare Turnstile, lalu klik <strong>Masuk ke Portal Klien</strong>.</li>
-              </ol>
-              <small style="color:#64748b;">*Jika Anda lupa kata sandi, hubungi petugas PK Anda atau kirim pesan di Kategori 2 Customer Service.</small>
+          <div class="banner-panduan-info">
+            <i class="fas fa-info-circle banner-info-icon"></i>
+            <div>
+              <strong>Panduan Interaktif Pelayanan Wajib Lapor Online</strong>
+              <p style="margin:2px 0 0; font-size:12.5px; color:#166534;">
+                Pilih topik panduan di bawah untuk melihat solusi langkah demi langkah penggunaan sistem wajib lapor.
+              </p>
             </div>
-          </details>
+          </div>
 
-          <!-- Panduan 2: Periode Jadwal -->
-          <details class="bantuan-item">
-            <summary>
-              <span><i class="fas fa-calendar-alt text-primary"></i> Langkah 2: Jadwal & Waktu Wajib Lapor Dibuka</span>
-              <i class="fas fa-chevron-down arrow-icon"></i>
-            </summary>
-            <div class="bantuan-content">
-              <div style="background:#eff6ff; border-left:4px solid #003580; padding:10px 12px; border-radius:0 6px 6px 0; margin-bottom:10px;">
-                <strong style="color:#002255; font-size:13px; display:block;">Jadwal Resmi Berdasarkan Sistem:</strong>
-                <span style="color:#334155; font-size:13px;">
-                  <% if (typeof konfigurasi !== 'undefined' && konfigurasi && konfigurasi.teks_pengumuman) { %>
-                    <%= konfigurasi.teks_pengumuman %>
-                  <% } else { %>
-                    Layanan dibuka setiap tanggal <strong><%= (typeof konfigurasi !== 'undefined' && konfigurasi && konfigurasi.tanggal_mulai_input) ? konfigurasi.tanggal_mulai_input : 1 %> s/d <%= (typeof konfigurasi !== 'undefined' && konfigurasi && konfigurasi.tanggal_akhir_input) ? konfigurasi.tanggal_akhir_input : 15 %> setiap bulannya</strong>.
-                  <% } %>
-                </span>
+          <!-- Accordion Group -->
+          <div class="faq-accordion-group">
+            
+            <!-- Langkah 1: Login -->
+            <details class="bantuan-item" open>
+              <summary>
+                <span><i class="fas fa-sign-in-alt text-primary"></i> Langkah 1: Cara Masuk / Login ke Akun Klien</span>
+                <i class="fas fa-chevron-down arrow-icon"></i>
+              </summary>
+              <div class="bantuan-content">
+                <p>Untuk masuk ke portal wajib lapor online BAPAS Kelas I Medan:</p>
+                <ol>
+                  <li>Kunjungi tautan masuk resmi di <a href="/login" style="color:#003580; font-weight:700;">bapas1medan.com/login</a>.</li>
+                  <li>Masukkan <strong>Nomor WhatsApp</strong> aktif atau <strong>Nomor Register Klien</strong> yang tercatat di Surat Keputusan (contoh: <code>REG-2026</code>).</li>
+                  <li>Masukkan Kata Sandi akun Anda yang telah didaftarkan oleh Pembimbing Kemasyarakatan (PK).</li>
+                  <li>Selesaikan verifikasi keamanan Cloudflare Turnstile, lalu klik tombol <strong>Masuk ke Portal Klien</strong>.</li>
+                </ol>
+                <div class="note-tips">
+                  <i class="fas fa-lightbulb" style="color:#d97706;"></i>
+                  <span>Jika mengalami kendala kata sandi atau akun belum aktif, Anda dapat langsung mengirim pesan di tab <strong>2. Customer Service Real-Time</strong>.</span>
+                </div>
               </div>
-              <p>Klien diwajibkan melapor tepat waktu di dalam rentang tanggal tersebut. Di luar tanggal ini, sistem pelaporan online ditutup secara otomatis untuk evaluasi bulanan.</p>
-            </div>
-          </details>
+            </details>
 
-          <!-- Panduan 3: Profil -->
-          <details class="bantuan-item">
-            <summary>
-              <span><i class="fas fa-user-edit text-primary"></i> Langkah 3: Melengkapi Profil & Masa Wajib Lapor</span>
-              <i class="fas fa-chevron-down arrow-icon"></i>
-            </summary>
-            <div class="bantuan-content">
-              <ol>
-                <li>Sebelum membuat laporan pertama, Anda wajib memeriksa dan memperbarui kelengkapan profil.</li>
-                <li>Buka menu <strong>Profil Klien</strong> pada dashboard Anda.</li>
-                <li>Lengkapi Nama Lengkap sesuai KTP, Nomor WhatsApp Aktif, dan Alamat Domisili tinggal saat ini.</li>
-                <li>Kolom <strong>Masa / Periode Wajib Lapor</strong> otomatis terisi dari data penetapan SK admin sehingga Anda tidak perlu repot mengisi manual.</li>
-                <li>Klik tombol <strong>Simpan & Perbarui Profil</strong>.</li>
-              </ol>
-            </div>
-          </details>
+            <!-- Langkah 2: Jadwal Wajib Lapor -->
+            <details class="bantuan-item">
+              <summary>
+                <span><i class="fas fa-calendar-alt text-primary"></i> Langkah 2: Jadwal & Waktu Wajib Lapor Dibuka</span>
+                <i class="fas fa-chevron-down arrow-icon"></i>
+              </summary>
+              <div class="bantuan-content">
+                <div class="jadwal-badge-box">
+                  <strong style="color:#002255; font-size:13.5px; display:block; margin-bottom:4px;">
+                    <i class="fas fa-bullhorn" style="color:#003580;"></i> Jadwal Resmi Berdasarkan Sistem:
+                  </strong>
+                  <span style="color:#1e293b; font-size:13px; font-weight:600;">
+                    <% if (typeof konfigurasi !== 'undefined' && konfigurasi && konfigurasi.teks_pengumuman) { %>
+                      <%= konfigurasi.teks_pengumuman %>
+                    <% } else { %>
+                      Layanan dibuka setiap tanggal <strong><%= (typeof konfigurasi !== 'undefined' && konfigurasi && konfigurasi.tanggal_mulai_input) ? konfigurasi.tanggal_mulai_input : 1 %> s/d <%= (typeof konfigurasi !== 'undefined' && konfigurasi && konfigurasi.tanggal_akhir_input) ? konfigurasi.tanggal_akhir_input : 15 %> setiap bulannya</strong>.
+                    <% } %>
+                  </span>
+                </div>
+                <p>Klien diwajibkan melapor tepat waktu di dalam rentang tanggal tersebut. Di luar tanggal ini, sistem pelaporan daring ditutup secara otomatis untuk proses evaluasi dan audit pembimbingan.</p>
+              </div>
+            </details>
 
-          <!-- Panduan 4: Kamera & Bukti Presensi -->
-          <details class="bantuan-item">
-            <summary>
-              <span><i class="fas fa-camera text-primary"></i> Langkah 4: Pengambilan Foto Bukti (Kamera Depan / Belakang & Galeri)</span>
-              <i class="fas fa-chevron-down arrow-icon"></i>
-            </summary>
-            <div class="bantuan-content">
-              <p>Pada formulir wajib lapor bulanan, Anda dapat memilih dua metode bukti foto:</p>
-              <ul>
-                <li><strong>Ambil Foto dengan Kamera:</strong> Klik "Buka Kamera". Sistem kini mendukung pergantian <em>Kamera Depan (Selfie)</em> maupun <em>Kamera Belakang</em> ponsel Anda. Klik "Ambil Gambar" saat posisi wajah sudah pas.</li>
-                <li><strong>Pilih dari Galeri:</strong> Klik tab "Pilih dari Galeri" untuk mengunggah foto swafoto terkini yang sudah tersimpan di memori ponsel Anda.</li>
-                <li>Pastikan foto terang, tidak menggunakan masker/kacamata hitam tebal, dan wajah menghadap lurus ke kamera.</li>
-              </ul>
-            </div>
-          </details>
+            <!-- Langkah 3: Profil Klien -->
+            <details class="bantuan-item">
+              <summary>
+                <span><i class="fas fa-user-edit text-primary"></i> Langkah 3: Melengkapi Profil & Masa Wajib Lapor Otomatis</span>
+                <i class="fas fa-chevron-down arrow-icon"></i>
+              </summary>
+              <div class="bantuan-content">
+                <ol>
+                  <li>Sebelum membuat laporan pertama, periksa dan perbarui data profil Anda melalui menu <strong>Profil Klien</strong>.</li>
+                  <li>Lengkapi Nama Lengkap sesuai KTP, Nomor WhatsApp Aktif, dan Alamat Domisili tinggal saat ini.</li>
+                  <li>Kolom <strong>Masa / Periode Wajib Lapor</strong> kini terisi secara <strong>otomatis</strong> sesuai tanggal SK bimbingan yang telah ditetapkan oleh admin BAPAS, sehingga Anda tidak perlu menghitung atau mengisi manual.</li>
+                  <li>Klik tombol <strong>Simpan & Perbarui Profil</strong>.</li>
+                </ol>
+              </div>
+            </details>
 
-          <!-- Panduan 5: GPS & Izin Lokasi -->
-          <details class="bantuan-item">
-            <summary>
-              <span><i class="fas fa-map-marker-alt text-primary"></i> Langkah 5: Mengatasi Kendala Lokasi GPS</span>
-              <i class="fas fa-chevron-down arrow-icon"></i>
-            </summary>
-            <div class="bantuan-content">
-              <p>Sistem mewajibkan pencatatan geolokasi presensi akurat:</p>
-              <ul>
-                <li>Saat browser meminta izin lokasi (<em>Location Permission</em>), pilih <strong>Izinkan / Allow</strong>.</li>
-                <li>Pastikan GPS pada ponsel Android/iPhone dalam status aktif (Mode Akurasi Tinggi).</li>
-                <li><strong>Peringatan Tegas:</strong> Dilarang keras menggunakan aplikasi Fake GPS / Mock Location. Sistem akan otomatis mendeteksi dan menolak laporan dengan lokasi palsu.</li>
-              </ul>
-            </div>
-          </details>
+            <!-- Langkah 4: Kamera & Bukti Presensi -->
+            <details class="bantuan-item">
+              <summary>
+                <span><i class="fas fa-camera text-primary"></i> Langkah 4: Foto Bukti Lapor (Kamera Depan/Belakang & Unggah Galeri)</span>
+                <i class="fas fa-chevron-down arrow-icon"></i>
+              </summary>
+              <div class="bantuan-content">
+                <p>Pada formulir wajib lapor bulanan, Anda memiliki 2 pilihan metode foto presensi:</p>
+                <ul>
+                  <li><strong>Ambil Foto dengan Kamera:</strong> Klik tombol "Buka Kamera". Tersedia tombol putar kamera untuk berganti antara <em>Kamera Depan (Swafoto/Selfie)</em> dan <em>Kamera Belakang</em> ponsel Anda. Klik "Ambil Gambar" saat posisi wajah Anda telah jelas.</li>
+                  <li><strong>Pilih dari Galeri:</strong> Anda juga dapat memilih swafoto terkini yang sudah tersimpan di galeri ponsel Anda. Sistem otomatis memproses dan mengompres foto secara optimal.</li>
+                  <li>Pastikan wajah terlihat jelas, pencahayaan cukup, tidak menggunakan kacamata hitam tebal atau masker.</li>
+                </ul>
+              </div>
+            </details>
 
-          <!-- Panduan 6: Laporan Ditolak -->
-          <details class="bantuan-item">
-            <summary>
-              <span><i class="fas fa-exclamation-circle text-primary"></i> Langkah 6: Jika Laporan Ditolak Petugas PK</span>
-              <i class="fas fa-chevron-down arrow-icon"></i>
-            </summary>
-            <div class="bantuan-content">
-              <p>Apabila laporan Anda berstatus <strong>Ditolak</strong>:</p>
-              <ul>
-                <li>Buka menu <strong>Riwayat Lapor</strong> di dashboard klien.</li>
-                <li>Pada baris laporan yang ditolak, lihat <strong>Alasan Penolakan</strong> dari petugas (misalnya: foto buram atau deskripsi kegiatan belum lengkap).</li>
-                <li>Segera perbaiki kekurangan tersebut dan kirim ulang laporan perbaikan sebelum periode pelaporan bulan ini berakhir.</li>
-              </ul>
-            </div>
-          </details>
+            <!-- Langkah 5: GPS & Izin Lokasi -->
+            <details class="bantuan-item">
+              <summary>
+                <span><i class="fas fa-map-marker-alt text-primary"></i> Langkah 5: Mengatasi Kendala Lokasi GPS</span>
+                <i class="fas fa-chevron-down arrow-icon"></i>
+              </summary>
+              <div class="bantuan-content">
+                <p>Sistem mewajibkan deteksi titik koordinat presensi yang sah demi keabsahan laporan:</p>
+                <ul>
+                  <li>Saat browser ponsel menampilkan permintaan izin lokasi (<em>Location Permission</em>), pilih <strong>Izinkan / Allow</strong>.</li>
+                  <li>Pastikan GPS pada ponsel Android/iPhone dalam kondisi Aktif (Akurasi Tinggi).</li>
+                  <li><strong>Peringatan Tegas:</strong> Sistem BAPAS Medan secara otomatis mendeteksi dan menolak laporan yang menggunakan aplikasi lokasi palsu (Fake GPS / Mock Location).</li>
+                </ul>
+              </div>
+            </details>
 
+            <!-- Langkah 6: Laporan Ditolak -->
+            <details class="bantuan-item">
+              <summary>
+                <span><i class="fas fa-exclamation-circle text-primary"></i> Langkah 6: Jika Laporan Ditolak oleh Petugas Pembimbing</span>
+                <i class="fas fa-chevron-down arrow-icon"></i>
+              </summary>
+              <div class="bantuan-content">
+                <p>Apabila laporan Anda berstatus <strong>Ditolak</strong>:</p>
+                <ul>
+                  <li>Buka menu <strong>Riwayat Lapor</strong> pada dashboard klien.</li>
+                  <li>Pada tabel riwayat lapor yang berstatus ditolak, periksa <strong>Catatan / Alasan Penolakan</strong> dari petugas PK (contoh: foto buram atau deskripsi pekerjaan belum lengkap).</li>
+                  <li>Segera lakukan perbaikan dan kirimkan laporan revisi sebelum tanggal penutupan wajib lapor bulan berjalan.</li>
+                </ul>
+              </div>
+            </details>
+
+          </div>
         </div>
-      </div>
+      </section>
 
       <!-- ==============================================
-           KATEGORI 2: CUSTOMER SERVICE REAL-TIME (LIVE CHAT)
+           KATEGORI 2: CUSTOMER SERVICE REAL-TIME (LIVE CHAT RESMI)
+           TANPA WHATSAPP - SEPENUHNYA IN-APP REAL-TIME
            ============================================== -->
-      <div id="kategoriCS" class="kategori-pane">
-        
-        <!-- Bar Status CS Online & WhatsApp Direct -->
-        <div class="cs-top-bar">
-          <div style="display:flex; align-items:center; gap:8px;">
-            <div class="pulse-green-dot"></div>
-            <div>
-              <strong style="font-size:13px; color:#065f46; display:block;">Petugas Layanan Online</strong>
-              <span style="font-size:11.5px; color:#047857;">Balai Pemasyarakatan Kelas I Medan</span>
+      <section id="kategoriCS" class="kategori-pane" aria-labelledby="tabHeadCS">
+        <div class="cs-full-container">
+          
+          <!-- CS Status Header Bar (No WhatsApp) -->
+          <div class="cs-status-bar">
+            <div class="cs-status-info">
+              <div class="pulse-green-dot"></div>
+              <div>
+                <strong style="font-size:13.5px; color:#065f46; display:block;">Petugas Layanan BAPAS Medan Online</strong>
+                <span style="font-size:12px; color:#047857;">Layanan Percakapan Customer Service Terintegrasi Real-Time</span>
+              </div>
+            </div>
+            <div class="cs-badge-secure">
+              <i class="fas fa-shield-alt"></i> Obrolan Resmi Terverifikasi
             </div>
           </div>
-          <a href="https://wa.me/6281275623551?text=Halo%20Admin%20Customer%20Service%20BAPAS%20Kelas%20I%20Medan,%20saya%20memerlukan%20bantuan%20terkait%20layanan%20wajib%20lapor..." target="_blank" class="btn-wa-direct-help" title="Chat via WhatsApp">
-            <i class="fab fa-whatsapp"></i> Chat WhatsApp
-          </a>
+
+          <!-- Chat Stream Messages Box -->
+          <div id="chatStreamBox" class="cs-chat-stream" role="log" aria-live="polite">
+            <div class="chat-msg chat-msg-bot">
+              <div class="chat-avatar"><i class="fas fa-user-shield"></i></div>
+              <div class="chat-bubble">
+                <div class="chat-sender-name">Asisten Layanan BAPAS:</div>
+                <p class="chat-text">Halo! Selamat datang di Customer Service Resmi BAPAS Kelas I Medan. Silakan tuliskan kendala login, pertanyaan wajib lapor, atau permohonan informasi Anda di bawah ini. Petugas kami siap merespons secara real-time.</p>
+                <span class="chat-time">Respon Otomatis</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Chat Input Bar -->
+          <footer class="cs-bottom-bar">
+            <form id="formKirimBantuanCS" class="cs-form-wrap" onsubmit="handleKirimPesanCS(event)">
+              <% if (!isLoggedIn) { %>
+                <div class="cs-guest-fields">
+                  <div class="cs-input-field-wrap">
+                    <i class="fas fa-user cs-field-icon"></i>
+                    <input type="text" id="csInputNama" placeholder="Nama Lengkap Anda *" required class="cs-input-guest">
+                  </div>
+                  <div class="cs-input-field-wrap">
+                    <i class="fas fa-phone-alt cs-field-icon"></i>
+                    <input type="text" id="csInputKontak" placeholder="No HP / WhatsApp / Register *" required class="cs-input-guest">
+                  </div>
+                </div>
+              <% } else { %>
+                <input type="hidden" id="csInputNama" value="<%= user ? (user.nama_lengkap || user.username) : 'Pengguna' %>">
+                <input type="hidden" id="csInputKontak" value="<%= user ? (user.no_telepon || user.no_register || user.email || '-') : '-' %>">
+              <% } %>
+
+              <div class="cs-input-action-row">
+                <input 
+                  type="text" 
+                  id="csInputPesan" 
+                  placeholder="Ketik pesan atau pertanyaan bantuan Anda di sini..." 
+                  required 
+                  class="cs-main-input"
+                  autocomplete="off"
+                >
+                <button type="submit" id="btnKirimCS" class="cs-btn-send" aria-label="Kirim Pesan Bantuan">
+                  <i class="fas fa-paper-plane"></i>
+                  <span class="btn-send-label">Kirim</span>
+                </button>
+              </div>
+              <div class="cs-security-footnote">
+                <i class="fas fa-lock" style="color:#0284c7;"></i>
+                <span>Percakapan tersimpan aman di server BAPAS Kelas I Medan & terhubung langsung ke panel petugas.</span>
+              </div>
+            </form>
+          </footer>
+
         </div>
+      </section>
 
-        <!-- Chat Stream Area -->
-        <div id="chatStreamBox" class="chat-stream-box">
-          <div class="chat-msg chat-msg-bot">
-            <div class="chat-avatar"><i class="fas fa-user-shield"></i></div>
-            <div class="chat-bubble">
-              <strong>Asisten Layanan BAPAS:</strong>
-              <p>Halo! Selamat datang di Customer Service Resmi BAPAS Kelas I Medan. Silakan tuliskan pertanyaan, kendala login, atau pertanyaan wajib lapor Anda di bawah ini. Petugas kami akan merespons percakapan Anda secara real-time.</p>
-              <span class="chat-time">Respon Otomatis</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Chat Input Form -->
-        <form id="formKirimBantuanCS" class="chat-input-form" onsubmit="handleKirimPesanCS(event)">
-          <% if (!isLoggedIn) { %>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:8px;">
-              <input type="text" id="csInputNama" placeholder="Nama Anda *" required style="padding:8px 10px; border:1px solid #cbd5e1; border-radius:6px; font-size:12.5px;">
-              <input type="text" id="csInputKontak" placeholder="No WhatsApp / Register *" required style="padding:8px 10px; border:1px solid #cbd5e1; border-radius:6px; font-size:12.5px;">
-            </div>
-          <% } else { %>
-            <input type="hidden" id="csInputNama" value="<%= user ? (user.nama_lengkap || user.username) : 'Pengguna' %>">
-            <input type="hidden" id="csInputKontak" value="<%= user ? (user.no_telepon || user.no_register || user.email || '-') : '-' %>">
-          <% } %>
-
-          <div style="display:flex; gap:8px;">
-            <input type="text" id="csInputPesan" placeholder="Ketik pesan atau kendala Anda di sini..." required style="flex:1; padding:10px 14px; border:1.5px solid #cbd5e1; border-radius:8px; font-size:13.5px;" autocomplete="off">
-            <button type="submit" id="btnKirimCS" class="btn-kirim-chat" aria-label="Kirim Pesan">
-              <i class="fas fa-paper-plane"></i>
-            </button>
-          </div>
-          <small style="color:#64748b; font-size:11px; display:block; margin-top:6px;">
-            <i class="fas fa-lock" style="color:#0284c7;"></i> Percakapan dilindungi sistem keamanan data resmi BAPAS Kelas I Medan.
-          </small>
-        </form>
-
-      </div>
-
-    </div>
+    </main>
 
   </div>
 </div>
 
-<!-- STYLING PUSAT BANTUAN -->
+<!-- ==============================================
+     STYLING PUSAT BANTUAN (RESPONSIF & LAYAR PENUH)
+     ============================================== -->
 <style>
-/* Floating Button */
+/* Floating Trigger Button */
 .btn-pusat-bantuan-floating {
   position: fixed;
   bottom: 24px;
@@ -241,269 +282,372 @@
   color: #ffffff;
   border: 2px solid #f59e0b;
   border-radius: 50px;
-  padding: 11px 18px;
+  padding: 12px 20px;
   cursor: pointer;
-  box-shadow: 0 8px 24px rgba(0, 30, 80, 0.4);
+  box-shadow: 0 8px 25px rgba(0, 30, 80, 0.45);
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   font-family: inherit;
 }
 .btn-pusat-bantuan-floating:hover {
   transform: translateY(-3px) scale(1.02);
   background: linear-gradient(135deg, #002b66 0%, #0045a5 100%);
-  box-shadow: 0 12px 28px rgba(0, 30, 80, 0.55);
+  box-shadow: 0 12px 30px rgba(0, 30, 80, 0.6);
 }
 .btn-pusat-bantuan-floating i {
-  font-size: 18px;
+  font-size: 19px;
   color: #f59e0b;
 }
 .btn-bantuan-text {
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 700;
   letter-spacing: 0.3px;
   color: #ffffff;
 }
 .pulse-online-badge {
+  width: 10px;
+  height: 10px;
+  background: #10b981;
+  border-radius: 50%;
+  box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  animation: pulseGreenGlow 1.8s infinite;
+}
+@keyframes pulseGreenGlow {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 9px rgba(16, 185, 129, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+/* FULLSCREEN OVERLAY & WRAPPER */
+.fullscreen-bantuan-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #f8fafc;
+  z-index: 999999;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+  animation: fadeInFullscreen 0.22s ease-out;
+}
+@keyframes fadeInFullscreen {
+  from { opacity: 0; transform: scale(0.99); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.fullscreen-bantuan-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #f8fafc;
+}
+
+/* Header */
+.fullscreen-bantuan-header {
+  background: linear-gradient(135deg, #001938 0%, #002b66 100%);
+  color: #ffffff;
+  padding: 14px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 3px solid #f59e0b;
+  flex-shrink: 0;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.15);
+}
+.header-brand-wrap {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.header-logo-img {
+  height: 42px;
+  width: auto;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.25));
+}
+.header-title-text {
+  margin: 0;
+  font-size: 19px;
+  color: #ffffff;
+  font-family: 'Playfair Display', serif;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+}
+.header-subtitle-text {
+  font-size: 12px;
+  color: #fde68a;
+  display: block;
+  margin-top: 2px;
+  font-weight: 600;
+}
+
+.btn-close-fullscreen {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  font-size: 13.5px;
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: 30px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+.btn-close-fullscreen:hover {
+  background: #dc2626;
+  border-color: #dc2626;
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+.btn-close-fullscreen i {
+  font-size: 15px;
+}
+
+/* Tabs Navigation */
+.bantuan-tabs-nav {
+  display: flex;
+  background: #ffffff;
+  border-bottom: 2px solid #e2e8f0;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+}
+.bantuan-tab-btn {
+  flex: 1;
+  padding: 14px 20px;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.2s ease;
+  border-bottom: 3px solid transparent;
+}
+.bantuan-tab-btn:hover {
+  color: #003580;
+  background: #f8fafc;
+}
+.bantuan-tab-btn.active {
+  color: #003580;
+  border-bottom-color: #003580;
+  background: #ffffff;
+}
+.cs-indicator-dot {
   width: 9px;
   height: 9px;
   background: #10b981;
   border-radius: 50%;
-  box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
-  animation: pulseGreen 1.8s infinite;
-}
-@keyframes pulseGreen {
-  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-  70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
-  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.25);
 }
 
-/* Modal Backdrop */
-.modal-bantuan-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 15, 40, 0.75);
-  backdrop-filter: blur(4px);
-  z-index: 99995;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 15px;
-  box-sizing: border-box;
-  animation: fadeInHelp 0.2s ease;
-}
-@keyframes fadeInHelp {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-/* Modal Card */
-.modal-bantuan-card {
-  background: #ffffff;
-  border-radius: 14px;
-  max-width: 660px;
-  width: 100%;
-  max-height: 90vh;
+/* Content Area */
+.fullscreen-bantuan-content {
+  flex: 1;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45);
-  animation: slideUpCard 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-}
-@keyframes slideUpCard {
-  from { transform: translateY(20px) scale(0.97); opacity: 0; }
-  to { transform: translateY(0) scale(1); opacity: 1; }
-}
-
-/* Header */
-.modal-bantuan-header {
-  background: linear-gradient(135deg, #001938 0%, #002b66 100%);
-  padding: 16px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 2px solid #f59e0b;
-}
-.btn-close-bantuan {
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  color: #ffffff;
-  font-size: 26px;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s;
-  line-height: 1;
-}
-.btn-close-bantuan:hover {
-  background: #dc2626;
-  color: #ffffff;
-}
-
-/* Navigation Tabs (2 Kategori) */
-.bantuan-tabs-nav {
-  display: flex;
-  background: #f1f5f9;
-  border-bottom: 1.5px solid #cbd5e1;
-}
-.bantuan-tab-btn {
-  flex: 1;
-  padding: 13px 16px;
-  border: none;
-  background: transparent;
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 700;
-  color: #475569;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  transition: all 0.2s;
   position: relative;
-}
-.bantuan-tab-btn.active {
-  background: #ffffff;
-  color: #003580;
-  border-bottom: 3px solid #003580;
-}
-.cs-indicator-dot {
-  width: 8px;
-  height: 8px;
-  background: #10b981;
-  border-radius: 50%;
-}
-
-/* Modal Body */
-.modal-bantuan-body {
-  padding: 18px 20px;
-  overflow-y: auto;
-  flex: 1;
-  max-height: 65vh;
+  background: #f8fafc;
 }
 .kategori-pane {
   display: none;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
 }
 .kategori-pane.active {
-  display: block;
+  display: flex;
 }
 
-/* Accordion Styling */
+/* Kategori 1: Langkah-Langkah Panduan */
+.kategori-inner-container {
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 24px 20px 40px;
+  overflow-y: auto;
+  box-sizing: border-box;
+  flex: 1;
+}
+.banner-panduan-info {
+  margin-bottom: 18px;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-left: 5px solid #16a34a;
+  padding: 14px 18px;
+  border-radius: 0 10px 10px 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #166534;
+}
+.banner-info-icon {
+  font-size: 24px;
+  color: #16a34a;
+  flex-shrink: 0;
+}
 .faq-accordion-group {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 .bantuan-item {
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  background: #ffffff;
   overflow: hidden;
-  transition: all 0.2s;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  transition: all 0.2s ease;
 }
 .bantuan-item summary {
-  padding: 12px 16px;
+  padding: 15px 18px;
   font-weight: 700;
-  font-size: 13.5px;
+  font-size: 14.5px;
   color: #1e293b;
   cursor: pointer;
   list-style: none;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  transition: background 0.2s;
 }
 .bantuan-item summary::-webkit-details-marker {
   display: none;
 }
+.bantuan-item summary:hover {
+  background: #f1f5f9;
+}
 .bantuan-item[open] summary {
-  background: #e0f2fe;
+  background: #eff6ff;
   color: #003580;
-  border-bottom: 1px solid #bae6fd;
+  border-bottom: 1px solid #bfdbfe;
 }
-.bantuan-item summary .arrow-icon {
-  font-size: 12px;
+.arrow-icon {
+  font-size: 13px;
   color: #64748b;
-  transition: transform 0.2s;
+  transition: transform 0.25s ease;
 }
-.bantuan-item[open] summary .arrow-icon {
+.bantuan-item[open] .arrow-icon {
   transform: rotate(180deg);
+  color: #003580;
 }
 .bantuan-content {
-  padding: 14px 18px;
-  font-size: 13px;
-  line-height: 1.7;
+  padding: 18px 22px;
+  font-size: 14px;
+  line-height: 1.75;
   color: #334155;
   background: #ffffff;
 }
 .bantuan-content ol, .bantuan-content ul {
-  padding-left: 20px;
-  margin: 8px 0;
+  padding-left: 22px;
+  margin: 10px 0;
 }
-.text-primary {
-  color: #003580;
-  margin-right: 6px;
+.bantuan-content li {
+  margin-bottom: 6px;
+}
+.note-tips {
+  margin-top: 12px;
+  background: #fefce8;
+  border: 1px solid #fef08a;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #854d0e;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.jadwal-badge-box {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-left: 4px solid #003580;
+  padding: 12px 16px;
+  border-radius: 0 8px 8px 0;
+  margin-bottom: 12px;
 }
 
-/* Category 2 (CS Real-Time) */
-.cs-top-bar {
+/* Kategori 2: Customer Service Layout */
+.cs-full-container {
+  max-width: 960px;
+  width: 100%;
+  margin: 0 auto;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 14px 18px 18px;
+  box-sizing: border-box;
+  flex: 1;
+  min-height: 0;
+}
+.cs-status-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   background: #ecfdf5;
-  border: 1px solid #a7f3d0;
-  padding: 10px 14px;
-  border-radius: 8px;
-  margin-bottom: 14px;
+  border: 1.5px solid #a7f3d0;
+  padding: 12px 18px;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  flex-shrink: 0;
 }
-.pulse-green-dot {
-  width: 9px;
-  height: 9px;
-  background: #059669;
-  border-radius: 50%;
-  box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.2);
+.cs-status-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
-.btn-wa-direct-help {
-  background: #25d366;
-  color: #ffffff;
-  text-decoration: none;
+.cs-badge-secure {
   font-size: 12px;
   font-weight: 700;
-  padding: 6px 12px;
+  color: #047857;
+  background: #d1fae5;
+  padding: 5px 12px;
   border-radius: 20px;
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  transition: all 0.2s;
 }
-.btn-wa-direct-help:hover {
-  background: #1eb857;
-  color: #ffffff;
+.pulse-green-dot {
+  width: 10px;
+  height: 10px;
+  background: #059669;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.2);
 }
 
-/* Chat Stream Box */
-.chat-stream-box {
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  padding: 14px;
-  min-height: 220px;
-  max-height: 300px;
+/* Chat Stream */
+.cs-chat-stream {
+  flex: 1;
+  min-height: 0;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 18px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-bottom: 14px;
+  gap: 14px;
+  margin-bottom: 12px;
+  scroll-behavior: smooth;
 }
 .chat-msg {
   display: flex;
   gap: 10px;
-  max-width: 85%;
+  max-width: 82%;
 }
 .chat-msg-bot, .chat-msg-admin {
   align-self: flex-start;
@@ -513,83 +657,238 @@
   flex-direction: row-reverse;
 }
 .chat-avatar {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   background: #003580;
   color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 13px;
+  font-size: 14px;
   flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 }
 .chat-bubble {
   background: #ffffff;
   border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  padding: 10px 14px;
-  font-size: 13px;
-  line-height: 1.5;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 14px;
+  line-height: 1.55;
   color: #1e293b;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
 }
 .chat-msg-user .chat-bubble {
-  background: #003580;
+  background: linear-gradient(135deg, #003580 0%, #002255 100%);
   color: #ffffff;
   border-color: #003580;
+  border-bottom-right-radius: 2px;
+}
+.chat-msg-bot .chat-bubble {
+  border-left: 4px solid #003580;
+  border-bottom-left-radius: 2px;
+}
+.chat-msg-admin .chat-bubble {
+  border-left: 4px solid #16a34a;
+  border-bottom-left-radius: 2px;
+}
+.chat-sender-name {
+  font-weight: 700;
+  font-size: 12px;
+  color: #003580;
+  margin-bottom: 4px;
+}
+.chat-msg-admin .chat-sender-name {
+  color: #15803d;
+}
+.chat-text {
+  margin: 0;
+  font-size: 14px;
+  word-break: break-word;
 }
 .chat-time {
   display: block;
-  font-size: 10.5px;
+  font-size: 11px;
   color: #94a3b8;
-  margin-top: 4px;
+  margin-top: 6px;
   text-align: right;
 }
 .chat-msg-user .chat-time {
   color: #cbd5e1;
 }
 
-/* Chat Input */
-.btn-kirim-chat {
+/* Bottom Chat Input */
+.cs-bottom-bar {
+  flex-shrink: 0;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 14px 16px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+}
+.cs-guest-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.cs-input-field-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.cs-field-icon {
+  position: absolute;
+  left: 12px;
+  color: #64748b;
+  font-size: 13px;
+  pointer-events: none;
+}
+.cs-input-guest {
+  width: 100%;
+  padding: 9px 12px 9px 34px;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: inherit;
+  color: #1e293b;
+  background: #f8fafc;
+  box-sizing: border-box;
+}
+.cs-input-guest:focus {
+  outline: none;
+  border-color: #003580;
+  background: #ffffff;
+}
+
+.cs-input-action-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.cs-main-input {
+  flex: 1;
+  padding: 12px 18px;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 30px;
+  font-size: 14px;
+  font-family: inherit;
+  color: #1e293b;
+  background: #f8fafc;
+  transition: all 0.2s;
+  box-sizing: border-box;
+}
+.cs-main-input:focus {
+  outline: none;
+  border-color: #003580;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(0,53,128,0.12);
+}
+.cs-btn-send {
   background: linear-gradient(135deg, #003580 0%, #002255 100%);
   color: #ffffff;
   border: none;
-  border-radius: 8px;
-  padding: 0 18px;
-  font-size: 15px;
+  border-radius: 30px;
+  padding: 12px 22px;
+  font-size: 14px;
+  font-weight: 700;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   transition: all 0.2s;
+  box-shadow: 0 3px 10px rgba(0,53,128,0.25);
+  font-family: inherit;
+  flex-shrink: 0;
 }
-.btn-kirim-chat:hover {
-  background: #f59e0b;
-  color: #001e4d;
+.cs-btn-send:hover {
+  background: linear-gradient(135deg, #002255 0%, #001938 100%);
+  transform: translateY(-1px);
+}
+.cs-security-footnote {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 11.5px;
+  color: #64748b;
 }
 
-@media (max-width: 600px) {
-  .btn-pusat-bantuan-floating {
-    bottom: 16px;
-    right: 16px;
-    padding: 9px 14px;
+/* RESPONSIVE DESIGN UNTUK MOBILE */
+@media (max-width: 768px) {
+  .fullscreen-bantuan-header {
+    padding: 12px 14px;
   }
-  .btn-bantuan-text {
+  .header-logo-img {
+    height: 34px;
+  }
+  .header-title-text {
+    font-size: 16px;
+  }
+  .header-subtitle-text {
+    font-size: 11px;
+  }
+  .btn-close-fullscreen {
+    padding: 6px 12px;
     font-size: 12px;
   }
   .bantuan-tab-btn {
-    font-size: 11.5px;
-    padding: 11px 8px;
+    font-size: 12px;
+    padding: 12px 8px;
+    gap: 6px;
+  }
+  .kategori-inner-container {
+    padding: 14px 12px 30px;
+  }
+  .cs-full-container {
+    padding: 10px 10px 14px;
+  }
+  .cs-status-bar {
+    padding: 10px 12px;
+  }
+  .cs-badge-secure {
+    display: none;
+  }
+  .cs-guest-fields {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .btn-send-label {
+    display: none;
+  }
+  .cs-btn-send {
+    padding: 12px 16px;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    justify-content: center;
+  }
+  .chat-msg {
+    max-width: 92%;
+  }
+  .btn-pusat-bantuan-floating {
+    bottom: 16px;
+    right: 16px;
+    padding: 10px 15px;
+  }
+  .btn-bantuan-text {
+    font-size: 12.5px;
   }
 }
 </style>
 
-<!-- SCRIPT PUSAT BANTUAN -->
+<!-- ==============================================
+     LOGIKA REAL-TIME SCRIPT PUSAT BANTUAN
+     ============================================== -->
 <script>
 let bapasChatPollTimer = null;
+let lastRenderedChatJson = '';
 
 function getBapasSessionId() {
   let sId = localStorage.getItem('bapas_cs_session');
   if (!sId) {
-    sId = 'cs_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7);
+    sId = 'cs_' + Date.now() + '_' + Math.random().toString(36).substring(2, 8);
     localStorage.setItem('bapas_cs_session', sId);
   }
   return sId;
@@ -600,7 +899,8 @@ function bukaPusatBantuan() {
   if (modal) {
     modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
-    // Jika tab CS aktif, muat riwayat pesan
+    
+    // Jika tab CS sedang aktif, mulai polling chat secara berkala
     if (document.getElementById('kategoriCS').classList.contains('active')) {
       startChatPolling();
     }
@@ -614,12 +914,6 @@ function tutupPusatBantuan() {
     document.body.style.overflow = '';
   }
   stopChatPolling();
-}
-
-function handleBackdropClick(e) {
-  if (e.target.id === 'modalPusatBantuan') {
-    tutupPusatBantuan();
-  }
 }
 
 function switchKategoriBantuan(kat) {
@@ -647,12 +941,17 @@ async function loadChatMessages() {
   const sId = getBapasSessionId();
   try {
     const res = await fetch('/api/pusat-bantuan/pesan/' + sId);
+    if (!res.ok) return;
     const data = await res.json();
     if (data.success && Array.isArray(data.data)) {
-      renderChatStream(data.data);
+      const currentJson = JSON.stringify(data.data);
+      if (currentJson !== lastRenderedChatJson) {
+        lastRenderedChatJson = currentJson;
+        renderChatStream(data.data);
+      }
     }
   } catch (err) {
-    console.warn('Gagal memuat chat bantuan:', err);
+    console.warn('Gagal memuat pesan chat bantuan:', err);
   }
 }
 
@@ -664,8 +963,8 @@ function renderChatStream(messages) {
     <div class="chat-msg chat-msg-bot">
       <div class="chat-avatar"><i class="fas fa-user-shield"></i></div>
       <div class="chat-bubble">
-        <strong>Asisten Layanan BAPAS:</strong>
-        <p>Halo! Selamat datang di Customer Service Resmi BAPAS Kelas I Medan. Silakan tuliskan pertanyaan atau kendala wajib lapor Anda di bawah ini.</p>
+        <div class="chat-sender-name">Asisten Layanan BAPAS:</div>
+        <p class="chat-text">Halo! Selamat datang di Customer Service Resmi BAPAS Kelas I Medan. Silakan tuliskan kendala login, pertanyaan wajib lapor, atau permohonan informasi Anda di bawah ini. Petugas kami siap merespons secara real-time.</p>
         <span class="chat-time">Respon Otomatis</span>
       </div>
     </div>
@@ -680,7 +979,7 @@ function renderChatStream(messages) {
       html += `
         <div class="chat-msg chat-msg-user">
           <div class="chat-bubble">
-            <p style="margin:0;">${escapeHtml(m.pesan)}</p>
+            <p class="chat-text">${escapeHtml(m.pesan)}</p>
             <span class="chat-time">${timeFormatted} &bull; Anda</span>
           </div>
         </div>
@@ -688,11 +987,13 @@ function renderChatStream(messages) {
     } else {
       const senderTitle = isBot ? 'Asisten Virtual BAPAS' : (m.admin_name || 'Petugas CS BAPAS');
       html += `
-        <div class="chat-msg chat-msg-admin">
-          <div class="chat-avatar" style="${isBot ? '' : 'background:#16a34a;'}"><i class="fas ${isBot ? 'fa-robot' : 'fa-headset'}"></i></div>
+        <div class="chat-msg ${isBot ? 'chat-msg-bot' : 'chat-msg-admin'}">
+          <div class="chat-avatar" style="${isBot ? '' : 'background:#16a34a;'}">
+            <i class="fas ${isBot ? 'fa-robot' : 'fa-headset'}"></i>
+          </div>
           <div class="chat-bubble">
-            <strong style="color:${isBot ? '#003580' : '#15803d'}; font-size:12px;">${escapeHtml(senderTitle)}:</strong>
-            <p style="margin:4px 0 0;">${escapeHtml(m.pesan)}</p>
+            <div class="chat-sender-name">${escapeHtml(senderTitle)}:</div>
+            <p class="chat-text">${escapeHtml(m.pesan)}</p>
             <span class="chat-time">${timeFormatted}</span>
           </div>
         </div>
@@ -707,7 +1008,8 @@ function renderChatStream(messages) {
 function startChatPolling() {
   loadChatMessages();
   if (!bapasChatPollTimer) {
-    bapasChatPollTimer = setInterval(loadChatMessages, 3500);
+    // Polling setiap 3 detik agar pesan respon dari admin tampil secara real-time
+    bapasChatPollTimer = setInterval(loadChatMessages, 3000);
   }
 }
 
@@ -726,8 +1028,8 @@ async function handleKirimPesanCS(e) {
   const btnKirim = document.getElementById('btnKirimCS');
 
   const pesan = (inputPesan.value || '').trim();
-  const nama = (inputNama.value || '').trim();
-  const kontak = (inputKontak.value || '').trim();
+  const nama = inputNama ? (inputNama.value || '').trim() : 'Pengunjung';
+  const kontak = inputKontak ? (inputKontak.value || '').trim() : '-';
   const sId = getBapasSessionId();
 
   if (!pesan) return;
@@ -751,13 +1053,13 @@ async function handleKirimPesanCS(e) {
       inputPesan.value = '';
       loadChatMessages();
     } else {
-      alert(result.message || 'Gagal mengirim pesan');
+      alert(result.message || 'Gagal mengirim pesan bantuan.');
     }
   } catch (err) {
-    alert('Terjadi kesalahan jaringan: ' + err.message);
+    alert('Terjadi kendala jaringan saat mengirim pesan: ' + err.message);
   } finally {
     btnKirim.disabled = false;
-    btnKirim.innerHTML = '<i class="fas fa-paper-plane"></i>';
+    btnKirim.innerHTML = '<i class="fas fa-paper-plane"></i> <span class="btn-send-label">Kirim</span>';
   }
 }
 
