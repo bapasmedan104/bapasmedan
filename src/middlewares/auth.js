@@ -44,24 +44,7 @@ function requireAdmin(req, res, next) {
     return res.redirect('/administrator?pesan=login_required');
   }
 
-  const now = Date.now();
-  const INACTIVITY_TIMEOUT = 2 * 60 * 1000; // 2 Menit (120.000 ms)
-  const lastActivity = req.session.lastAdminActivity || now;
-
-  if (now - lastActivity > INACTIVITY_TIMEOUT) {
-    delete req.session.adminUser;
-    if (req.session.userType === 'admin') {
-      delete req.session.user;
-      delete req.session.userType;
-      if (!req.session.clientUser) {
-        req.session.isLoggedIn = false;
-      }
-    }
-    return res.redirect('/administrator?pesan=timeout');
-  }
-
-  // Perbarui waktu aktivitas terakhir & sinkronkan session context admin
-  req.session.lastAdminActivity = now;
+  // Sinkronkan session context admin
   req.session.adminUser = admin;
   req.session.user = admin;
   req.session.userType = 'admin';

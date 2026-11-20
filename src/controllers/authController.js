@@ -44,8 +44,6 @@ async function getAdminLoginPage(req, res) {
     error = 'Akses Terbatas: Silakan login sebagai Administrator terlebih dahulu.';
   } else if (pesan === 'logout_sukses') {
     req.session.successMessage = 'Anda telah berhasil logout dari Panel Admin.';
-  } else if (pesan === 'timeout') {
-    error = 'Sesi Admin telah berakhir otomatis karena tidak ada aktivitas selama 2 menit. Silakan login kembali.';
   }
 
   res.render('auth/admin_login', {
@@ -140,7 +138,6 @@ async function postAdminLogin(req, res) {
     req.session.user = req.session.adminUser;
     req.session.userType = 'admin';
     req.session.isLoggedIn = true;
-    req.session.lastAdminActivity = Date.now();
     req.session.successMessage = `Selamat datang kembali, ${adminUser.nama_lengkap}!`;
     return res.redirect('/admin/dashboard');
   } catch (err) {
