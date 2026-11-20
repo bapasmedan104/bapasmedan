@@ -243,6 +243,31 @@
       <form action="/client/lapor" method="POST" id="formLapor">
         <input type="hidden" name="bulan" value="<%= bulanIni %>">
         <input type="hidden" name="tahun" value="<%= tahunIni %>">
+        <input type="hidden" name="latitude" id="hiddenLatitude">
+        <input type="hidden" name="longitude" id="hiddenLongitude">
+        <input type="hidden" name="altitude" id="hiddenAltitude">
+        <input type="hidden" name="accuracy" id="hiddenAccuracy">
+        <input type="hidden" name="gps_timestamp" id="hiddenGpsTimestamp">
+
+        <!-- INDIKATOR LOKASI GPS AKURAT (ANTI-KAMUFLASE) -->
+        <div id="gpsStatusBox" style="margin-bottom:18px; padding:12px 16px; border-radius:10px; border:1.5px solid #cbd5e1; background:#f8fafc; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+          <div style="display:flex; align-items:center; gap:10px; min-width:0; flex:1;">
+            <div id="gpsStatusIcon" style="width:36px; height:36px; border-radius:50%; background:#e0f2fe; color:#0284c7; display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0;">
+              <i class="fas fa-satellite-dish fa-spin"></i>
+            </div>
+            <div style="min-width:0;">
+              <div id="gpsStatusTitle" style="font-size:13.5px; font-weight:700; color:#0f172a;">
+                Mendeteksi Lokasi GPS Akurat...
+              </div>
+              <div id="gpsStatusDesc" style="font-size:11.5px; color:#64748b; line-height:1.4;">
+                Mohon izinkan akses lokasi pada browser Anda untuk stempel presensi resmi anti-kamuflase.
+              </div>
+            </div>
+          </div>
+          <button type="button" id="btnRefreshGps" onclick="requestGpsPermission(true)" style="background:#ffffff; border:1.5px solid #cbd5e1; border-radius:6px; padding:6px 12px; font-size:12px; font-weight:700; color:#003580; cursor:pointer; display:inline-flex; align-items:center; gap:6px; flex-shrink:0;">
+            <i class="fas fa-crosshairs"></i> Refresh Lokasi
+          </button>
+        </div>
 
         <div class="form-group">
           <label for="aktivitas_harian"><i class="fas fa-briefcase"></i> Aktivitas / Pekerjaan Harian Bulan Ini *</label>
@@ -260,7 +285,7 @@
             <i class="fas fa-camera"></i> Foto Bukti Lapor Diri (Wajib Selfie / Foto Terkini via Kamera)
           </label>
           <p style="font-size:12.5px; color:#64748b; margin-bottom:14px; line-height:1.5;">
-            Demi keabsahan dan keaslian presensi bimbingan, foto bukti lapor diri wajib diambil langsung melalui kamera ponsel (bisa kamera depan/selfie atau kamera belakang).
+            Demi keabsahan dan keaslian presensi bimbingan, foto bukti lapor diri wajib diambil langsung melalui kamera ponsel. Foto otomatis dicap stempel digital berisi <strong>Nama, Tanggal, Jam, Koordinat GPS, dan Altitude</strong> resmi untuk mencegah kamuflase data.
           </p>
 
           <!-- KAMERA LANGSUNG (BISA DEPAN & BELAKANG) -->
@@ -279,6 +304,21 @@
               <div id="camBadge" style="position:absolute; top:10px; left:10px; background:rgba(0,0,0,0.7); color:#fff; padding:4px 10px; border-radius:20px; font-size:11.5px; font-weight:700; display:flex; align-items:center; gap:6px;">
                 <span style="width:8px; height:8px; border-radius:50%; background:#10b981; display:inline-block;"></span>
                 <span id="camBadgeText">Kamera Depan (Selfie)</span>
+              </div>
+              <!-- LIVE VIEWFINDER WATERMARK PREVIEW -->
+              <div id="camLiveStampOverlay" style="position:absolute; bottom:8px; left:8px; right:8px; background:rgba(3,15,38,0.88); color:#f8fafc; padding:8px 10px; border-radius:6px; font-size:11px; display:flex; flex-direction:column; gap:3px; border-left:3.5px solid #f59e0b; backdrop-filter:blur(3px); pointer-events:none; box-sizing:border-box;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <strong style="color:#93c5fd; font-size:11px;">🏛️ BAPAS KELAS I MEDAN</strong>
+                  <span id="camLiveClock" style="color:#fef08a; font-weight:700; font-size:11px;">--:--:-- WIB</span>
+                </div>
+                <div style="font-size:10px; color:#ffffff; font-weight:700;">
+                  <span><%= client ? client.nama_lengkap.toUpperCase() : 'KLIEN' %></span> &bull; 
+                  <span>REG: <%= client ? (client.no_register || '-') : '-' %></span>
+                </div>
+                <div style="font-size:10px; color:#e2e8f0; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:4px;">
+                  <span id="camLiveGps"><i class="fas fa-map-marker-alt" style="color:#ef4444;"></i> GPS: Mendeteksi...</span>
+                  <span id="camLiveAltAcc" style="color:#94a3b8;">Alt / Akurasi: -</span>
+                </div>
               </div>
             </div>
             <canvas id="photoCanvas" style="display:none;"></canvas>
@@ -381,6 +421,177 @@
 <script>
   let videoStream = null;
   let currentFacingMode = 'user'; // 'user' (depan/selfie) atau 'environment' (belakang)
+  let camLiveTimer = null;
+  window.clientGpsData = null;
+  let gpsWatchId = null;
+
+  // 1. Inisialisasi Deteksi Lokasi Akurat (GPS) saat halaman dibuka
+  function initClientLocation() {
+    if (!('geolocation' in navigator)) {
+      updateGpsUi('error', 'Perangkat atau browser ini tidak mendukung fitur lokasi GPS.');
+      return;
+    }
+
+    updateGpsUi('detecting', 'Mendeteksi koordinat GPS akurat perangkat...');
+
+    const options = {
+      enableHighAccuracy: true,
+      timeout: 15000,
+      maximumAge: 0
+    };
+
+    navigator.geolocation.getCurrentPosition(
+      (pos) => handleGpsPosition(pos, true),
+      (err) => handleGpsError(err),
+      options
+    );
+
+    // Watch position secara continuous agar sinyal GPS semakin presisi
+    try {
+      gpsWatchId = navigator.geolocation.watchPosition(
+        (pos) => handleGpsPosition(pos, false),
+        (err) => console.warn('GPS Watch warning:', err.message),
+        { enableHighAccuracy: true, maximumAge: 5000, timeout: 20000 }
+      );
+    } catch (wErr) {
+      console.warn('WatchPosition error:', wErr);
+    }
+  }
+
+  function handleGpsPosition(position, isFirst) {
+    const coords = position.coords;
+    window.clientGpsData = {
+      latitude: coords.latitude,
+      longitude: coords.longitude,
+      altitude: coords.altitude,
+      accuracy: coords.accuracy,
+      altitudeAccuracy: coords.altitudeAccuracy,
+      timestamp: new Date(position.timestamp).toISOString(),
+      locked: true
+    };
+
+    // Update input form tersembunyi
+    const hLat = document.getElementById('hiddenLatitude');
+    const hLng = document.getElementById('hiddenLongitude');
+    const hAlt = document.getElementById('hiddenAltitude');
+    const hAcc = document.getElementById('hiddenAccuracy');
+    const hTime = document.getElementById('hiddenGpsTimestamp');
+
+    if (hLat) hLat.value = coords.latitude;
+    if (hLng) hLng.value = coords.longitude;
+    if (hAlt) hAlt.value = (coords.altitude !== null && !isNaN(coords.altitude)) ? coords.altitude : '';
+    if (hAcc) hAcc.value = coords.accuracy || '';
+    if (hTime) hTime.value = window.clientGpsData.timestamp;
+
+    const latStr = coords.latitude.toFixed(6);
+    const lngStr = coords.longitude.toFixed(6);
+    const accStr = coords.accuracy ? '±' + Math.round(coords.accuracy) + 'm' : '';
+    const altStr = (coords.altitude !== null && !isNaN(coords.altitude)) ? `Alt: ${coords.altitude.toFixed(1)}m` : 'Elevasi Normal';
+
+    updateGpsUi('locked', `Koordinat: ${latStr}, ${lngStr} &bull; Akurasi: ${accStr} &bull; ${altStr}`);
+
+    // Update overlay pada viewfinder kamera jika kamera sedang aktif
+    const camLiveGps = document.getElementById('camLiveGps');
+    const camLiveAltAcc = document.getElementById('camLiveAltAcc');
+    if (camLiveGps) {
+      camLiveGps.innerHTML = `<i class="fas fa-map-marker-alt" style="color:#10b981;"></i> Lat: ${coords.latitude.toFixed(5)}, Long: ${coords.longitude.toFixed(5)}`;
+    }
+    if (camLiveAltAcc) {
+      camLiveAltAcc.innerText = `Akurasi: ${accStr} | ${altStr}`;
+    }
+  }
+
+  function handleGpsError(err) {
+    console.warn('GPS Error:', err);
+    let msg = 'Izin lokasi belum aktif. Silakan izinkan akses lokasi pada browser Anda.';
+    if (err.code === 1) {
+      msg = 'Akses lokasi ditolak. Harap klik perizinan browser dan izinkan lokasi perangkat agar presensi sah.';
+    } else if (err.code === 2) {
+      msg = 'Sinyal lokasi tidak terdeteksi. Pastikan GPS/Location perangkat Anda aktif.';
+    } else if (err.code === 3) {
+      msg = 'Waktu deteksi GPS habis. Silakan klik Refresh Lokasi.';
+    }
+    updateGpsUi('error', msg);
+  }
+
+  function requestGpsPermission(forceRefresh = false) {
+    if (!('geolocation' in navigator)) {
+      alert('Perangkat Anda tidak mendukung fitur lokasi GPS.');
+      return;
+    }
+    updateGpsUi('detecting', 'Menghubungkan ke satelit GPS perangkat...');
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        handleGpsPosition(pos, true);
+        if (forceRefresh && typeof showToast === 'function') {
+          showToast('Lokasi GPS berhasil dikunci secara akurat!', 'success');
+        }
+      },
+      (err) => {
+        handleGpsError(err);
+        if (typeof Swal !== 'undefined') {
+          Swal.fire({
+            title: 'Izin Lokasi Dibutuhkan',
+            text: 'Untuk menjamin keabsahan dan keaslian bukti lapor (anti-kamuflase), mohon izinkan akses lokasi akurat pada perizinan browser Anda.',
+            icon: 'warning',
+            confirmButtonColor: '#003580'
+          });
+        }
+      },
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+    );
+  }
+
+  function updateGpsUi(status, message) {
+    const box = document.getElementById('gpsStatusBox');
+    const icon = document.getElementById('gpsStatusIcon');
+    const title = document.getElementById('gpsStatusTitle');
+    const desc = document.getElementById('gpsStatusDesc');
+    if (!box || !title || !desc) return;
+
+    if (status === 'locked') {
+      box.style.borderColor = '#86efac';
+      box.style.background = '#f0fdf4';
+      if (icon) {
+        icon.style.background = '#dcfce7';
+        icon.style.color = '#16a34a';
+        icon.innerHTML = '<i class="fas fa-check-circle"></i>';
+      }
+      title.innerHTML = '<span style="color:#15803d;"><i class="fas fa-satellite"></i> Lokasi GPS Terkunci Akurat</span>';
+      desc.innerHTML = message;
+    } else if (status === 'detecting') {
+      box.style.borderColor = '#bae6fd';
+      box.style.background = '#f0f9ff';
+      if (icon) {
+        icon.style.background = '#e0f2fe';
+        icon.style.color = '#0284c7';
+        icon.innerHTML = '<i class="fas fa-satellite-dish fa-spin"></i>';
+      }
+      title.innerText = 'Mendeteksi Lokasi GPS Akurat...';
+      desc.innerText = message || 'Mohon tunggu, sistem sedang mengunci sinyal GPS akurat...';
+    } else {
+      box.style.borderColor = '#fde68a';
+      box.style.background = '#fffbeb';
+      if (icon) {
+        icon.style.background = '#fef3c7';
+        icon.style.color = '#d97706';
+        icon.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
+      }
+      title.innerHTML = '<span style="color:#b45309;"><i class="fas fa-map-marker-slash"></i> Lokasi GPS Belum Terkunci</span>';
+      desc.innerText = message;
+    }
+  }
+
+  // 2. Kontrol Kamera & Live Viewfinder Clock
+  function updateCamLiveClock() {
+    const clockEl = document.getElementById('camLiveClock');
+    if (!clockEl) return;
+    const now = new Date();
+    const jam = String(now.getHours()).padStart(2, '0');
+    const menit = String(now.getMinutes()).padStart(2, '0');
+    const detik = String(now.getSeconds()).padStart(2, '0');
+    clockEl.innerText = `${jam}:${menit}:${detik} WIB`;
+  }
 
   async function startCamera(facing = currentFacingMode) {
     const video = document.getElementById('videoElement');
@@ -403,6 +614,11 @@
     }
     if (badgeText) {
       badgeText.innerText = (facing === 'user') ? 'Kamera Depan (Selfie)' : 'Kamera Belakang';
+    }
+
+    // Jika GPS belum terkunci, coba perbarui secara paralel
+    if (!window.clientGpsData || !window.clientGpsData.locked) {
+      requestGpsPermission(false);
     }
 
     try {
@@ -429,6 +645,12 @@
       if (switchBtn) switchBtn.style.display = 'inline-flex';
       snapBtn.style.display = 'inline-flex';
       stopBtn.style.display = 'inline-flex';
+
+      // Jalankan timer jam live di overlay kamera
+      if (!camLiveTimer) {
+        updateCamLiveClock();
+        camLiveTimer = setInterval(updateCamLiveClock, 1000);
+      }
     } catch (err) {
       if (typeof Swal !== 'undefined') {
         Swal.fire({
@@ -449,6 +671,10 @@
   }
 
   function stopCamera() {
+    if (camLiveTimer) {
+      clearInterval(camLiveTimer);
+      camLiveTimer = null;
+    }
     if (videoStream) {
       videoStream.getTracks().forEach(track => track.stop());
       videoStream = null;
@@ -468,6 +694,7 @@
     if (stopBtn) stopBtn.style.display = 'none';
   }
 
+  // 3. Jepret Foto & Cetak Stempel Digital GPS Anti-Kamuflase ke Kanvas
   async function takeSnapshot() {
     const video = document.getElementById('videoElement');
     const canvas = document.getElementById('photoCanvas');
@@ -475,14 +702,142 @@
 
     canvas.width = video.videoWidth || 640;
     canvas.height = video.videoHeight || 480;
+
+    // A. Gambar foto kamera langsung
     context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-    const base64Data = canvas.toDataURL('image/jpeg', 0.85);
+    // B. Siapkan data waktu dan stempel anti-kamuflase
+    const now = new Date();
+    const hariList = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+    const bulanList = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+
+    const namaHari = hariList[now.getDay()];
+    const tglStr = String(now.getDate()).padStart(2, '0') + ' ' + bulanList[now.getMonth()] + ' ' + now.getFullYear();
+    const jamStr = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0') + ':' + String(now.getSeconds()).padStart(2, '0') + ' WIB';
+
+    const clientNama = '<%= client ? (client.nama_lengkap || "").replace(/'/g, "\\'") : "KLIEN" %>';
+    const clientNoReg = '<%= client ? (client.no_register || "").replace(/'/g, "\\'") : "-" %>';
+
+    let latStr = '-';
+    let lngStr = '-';
+    let altStr = 'Elevasi Standar';
+    let accStr = '-';
+
+    if (window.clientGpsData && window.clientGpsData.latitude) {
+      latStr = window.clientGpsData.latitude.toFixed(6) + '°';
+      lngStr = window.clientGpsData.longitude.toFixed(6) + '°';
+      if (window.clientGpsData.altitude !== null && !isNaN(window.clientGpsData.altitude)) {
+        altStr = window.clientGpsData.altitude.toFixed(1) + ' m';
+      }
+      if (window.clientGpsData.accuracy) {
+        accStr = '±' + Math.round(window.clientGpsData.accuracy) + ' m';
+      }
+    }
+
+    // C. Lukis Watermark Stempel Resmi pada Pixel Gambar (Anti-Kamuflase)
+    const cw = canvas.width;
+    const ch = canvas.height;
+    const scale = Math.max(0.65, Math.min(cw / 720, 2.0));
+
+    const bannerHeight = Math.round(140 * scale);
+    const startY = ch - bannerHeight;
+
+    // Background gradient gelap transparan
+    const grad = context.createLinearGradient(0, startY, 0, ch);
+    grad.addColorStop(0, 'rgba(3, 15, 38, 0.88)');
+    grad.addColorStop(1, 'rgba(2, 6, 23, 0.96)');
+    context.fillStyle = grad;
+    context.fillRect(0, startY, cw, bannerHeight);
+
+    // Garis emas aksen pembatas atas banner
+    const stripeHeight = Math.round(4 * scale);
+    context.fillStyle = '#f59e0b';
+    context.fillRect(0, startY, cw, stripeHeight);
+
+    // Shadow untuk teks
+    context.shadowColor = 'rgba(0, 0, 0, 0.9)';
+    context.shadowBlur = Math.round(3 * scale);
+    context.shadowOffsetX = 1;
+    context.shadowOffsetY = 1;
+
+    const padLeft = Math.round(16 * scale);
+    let curY = startY + stripeHeight + Math.round(18 * scale);
+
+    // Baris Header: Lembaga & Status Anti-Kamuflase
+    context.font = 'bold ' + Math.round(12 * scale) + 'px "Source Sans 3", Arial, sans-serif';
+    context.fillStyle = '#93c5fd';
+    context.fillText('BAPAS KELAS I MEDAN • KEMENIMIPAS RI', padLeft, curY);
+
+    const tagText = 'BUKTI PRESENSI ASLI (ANTI-KAMUFLASE)';
+    const tagWidth = context.measureText(tagText).width;
+    context.fillStyle = '#34d399';
+    context.fillText(tagText, cw - padLeft - tagWidth, curY);
+
+    // Baris 1: Identitas Klien & Register
+    curY += Math.round(22 * scale);
+    context.font = 'bold ' + Math.round(15 * scale) + 'px "Source Sans 3", Arial, sans-serif';
+    context.fillStyle = '#ffffff';
+    context.fillText('KLIEN: ' + clientNama.toUpperCase() + '  |  NO. REG: ' + clientNoReg, padLeft, curY);
+
+    // Baris 2: Hari, Tanggal, & Jam Akurat
+    curY += Math.round(20 * scale);
+    context.font = 'bold ' + Math.round(13.5 * scale) + 'px "Source Sans 3", Arial, sans-serif';
+    context.fillStyle = '#fef08a';
+    context.fillText('HARI & TGL: ' + namaHari + ', ' + tglStr + '  •  WAKTU: ' + jamStr, padLeft, curY);
+
+    // Baris 3: Koordinat GPS Akurat
+    curY += Math.round(19 * scale);
+    context.font = '600 ' + Math.round(12.5 * scale) + 'px "Source Sans 3", Arial, sans-serif';
+    context.fillStyle = '#e2e8f0';
+    context.fillText('KOORDINAT GPS: Lat ' + latStr + ' , Long ' + lngStr, padLeft, curY);
+
+    // Baris 4: Altitude, Akurasi, & Stempel Digital
+    curY += Math.round(18 * scale);
+    context.font = '500 ' + Math.round(11.5 * scale) + 'px "Source Sans 3", Arial, sans-serif';
+    context.fillStyle = '#94a3b8';
+    context.fillText('ALTITUDE: ' + altStr + '  |  AKURASI: ' + accStr + '  |  STEMPEL DIGITAL REAL-TIME', padLeft, curY);
+
+    // Reset shadow
+    context.shadowColor = 'transparent';
+    context.shadowBlur = 0;
+    context.shadowOffsetX = 0;
+    context.shadowOffsetY = 0;
+
+    // Stempel Bulat "VERIFIED BAPAS" di sebelah kanan
+    if (cw > 460) {
+      const stampRadius = Math.round(28 * scale);
+      const stampX = cw - padLeft - stampRadius - Math.round(10 * scale);
+      const stampY = startY + stripeHeight + Math.round(bannerHeight / 2) + Math.round(6 * scale);
+
+      context.save();
+      context.beginPath();
+      context.arc(stampX, stampY, stampRadius, 0, Math.PI * 2);
+      context.strokeStyle = 'rgba(245, 158, 11, 0.9)';
+      context.lineWidth = Math.round(2 * scale);
+      context.stroke();
+
+      context.beginPath();
+      context.arc(stampX, stampY, stampRadius - Math.round(3.5 * scale), 0, Math.PI * 2);
+      context.strokeStyle = 'rgba(245, 158, 11, 0.5)';
+      context.lineWidth = Math.round(1 * scale);
+      context.stroke();
+
+      context.font = 'bold ' + Math.round(7.5 * scale) + 'px Arial, sans-serif';
+      context.fillStyle = '#f59e0b';
+      context.textAlign = 'center';
+      context.textBaseline = 'middle';
+      context.fillText('BAPAS MEDAN', stampX, stampY - Math.round(7 * scale));
+      context.fillText('VERIFIED', stampX, stampY);
+      context.fillText('PRESENSI', stampX, stampY + Math.round(7 * scale));
+      context.restore();
+    }
+
+    const base64Data = canvas.toDataURL('image/jpeg', 0.88);
 
     stopCamera();
 
-    // Upload via AJAX
-    document.getElementById('uploadStatusText').innerText = 'Mengunggah foto...';
+    // Upload via AJAX lengkap dengan data koordinat GPS
+    document.getElementById('uploadStatusText').innerText = 'Mengunggah foto dan memverifikasi stempel lokasi...';
     try {
       const res = await fetch('/client/upload-foto', {
         method: 'POST',
@@ -491,7 +846,12 @@
           action: 'capture',
           foto_base64: base64Data,
           bulan: '<%= bulanIni %>',
-          tahun: '<%= tahunIni %>'
+          tahun: '<%= tahunIni %>',
+          latitude: window.clientGpsData ? window.clientGpsData.latitude : null,
+          longitude: window.clientGpsData ? window.clientGpsData.longitude : null,
+          altitude: window.clientGpsData ? window.clientGpsData.altitude : null,
+          accuracy: window.clientGpsData ? window.clientGpsData.accuracy : null,
+          gps_timestamp: window.clientGpsData ? window.clientGpsData.timestamp : new Date().toISOString()
         })
       });
       const data = await res.json();
@@ -499,7 +859,7 @@
         document.getElementById('imgPreview').src = data.foto_url;
         document.getElementById('fotoPreviewContainer').style.display = 'block';
         document.getElementById('uploadStatusText').innerText = '';
-        showToast('Foto berhasil diunggah!', 'success');
+        showToast('Foto bukti lapor dengan stempel lokasi akurat berhasil diunggah!', 'success');
       } else {
         if (typeof Swal !== 'undefined') {
           Swal.fire('Gagal Unggah Foto', data.message || 'Gagal memproses foto kamera.', 'error');
@@ -518,6 +878,7 @@
     }
   }
 
+  // 4. Konfirmasi Kirim Laporan
   function confirmSubmitLapor() {
     const form = document.getElementById('formLapor');
     const aktivitas = document.getElementById('aktivitas_harian');
@@ -554,6 +915,13 @@
         form.submit();
       }
     });
+  }
+
+  // Jalankan deteksi lokasi otomatis saat halaman dimuat
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initClientLocation);
+  } else {
+    initClientLocation();
   }
 </script>
 

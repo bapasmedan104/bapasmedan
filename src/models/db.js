@@ -713,11 +713,19 @@ async function saveDraftLapor(clientId, data) {
   const col = db.collection('wajib_lapor');
   const existing = await getLaporBulanIni(clientId, bulan, tahun);
 
+  const gpsPayload = {};
+  if (data.latitude !== undefined && data.latitude !== null && !isNaN(Number(data.latitude))) gpsPayload.latitude = Number(data.latitude);
+  if (data.longitude !== undefined && data.longitude !== null && !isNaN(Number(data.longitude))) gpsPayload.longitude = Number(data.longitude);
+  if (data.altitude !== undefined && data.altitude !== null && !isNaN(Number(data.altitude))) gpsPayload.altitude = Number(data.altitude);
+  if (data.accuracy !== undefined && data.accuracy !== null && !isNaN(Number(data.accuracy))) gpsPayload.accuracy = Number(data.accuracy);
+  if (data.gps_timestamp) gpsPayload.gps_timestamp = data.gps_timestamp;
+
   if (existing) {
     const docRef = col.doc(existing.id);
     await docRef.set({
       aktivitas_harian: aktivitasHarian,
       rencana_mendatang: rencanaMendatang,
+      ...gpsPayload,
       updated_at: new Date().toISOString()
     }, { merge: true });
 
@@ -729,6 +737,7 @@ async function saveDraftLapor(clientId, data) {
       tahun,
       aktivitas_harian: aktivitasHarian,
       rencana_mendatang: rencanaMendatang,
+      ...gpsPayload,
       foto_bukti: null,
       foto_uploaded_at: null,
       tanggal_submit: null,
@@ -744,13 +753,30 @@ async function saveDraftLapor(clientId, data) {
   }
 }
 
-async function updateLaporPhoto(laporId, photoPath) {
+async function updateLaporPhoto(laporId, photoPath, gpsData = {}) {
   const docRef = db.collection('wajib_lapor').doc(laporId);
-  await docRef.set({
+  const updatePayload = {
     foto_bukti: photoPath,
     foto_uploaded_at: new Date().toISOString(),
     updated_at: new Date().toISOString()
-  }, { merge: true });
+  };
+  if (gpsData.latitude !== undefined && gpsData.latitude !== null && !isNaN(Number(gpsData.latitude))) {
+    updatePayload.latitude = Number(gpsData.latitude);
+  }
+  if (gpsData.longitude !== undefined && gpsData.longitude !== null && !isNaN(Number(gpsData.longitude))) {
+    updatePayload.longitude = Number(gpsData.longitude);
+  }
+  if (gpsData.altitude !== undefined && gpsData.altitude !== null && !isNaN(Number(gpsData.altitude))) {
+    updatePayload.altitude = Number(gpsData.altitude);
+  }
+  if (gpsData.accuracy !== undefined && gpsData.accuracy !== null && !isNaN(Number(gpsData.accuracy))) {
+    updatePayload.accuracy = Number(gpsData.accuracy);
+  }
+  if (gpsData.gps_timestamp) {
+    updatePayload.gps_timestamp = gpsData.gps_timestamp;
+  }
+
+  await docRef.set(updatePayload, { merge: true });
 }
 
 async function submitLapor(clientId, laporId) {

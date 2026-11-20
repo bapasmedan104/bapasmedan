@@ -75,7 +75,12 @@ async function postLaporBaru(req, res) {
       bulan,
       tahun,
       aktivitas_harian: req.body.aktivitas_harian || '',
-      rencana_mendatang: req.body.rencana_mendatang || ''
+      rencana_mendatang: req.body.rencana_mendatang || '',
+      latitude: req.body.latitude,
+      longitude: req.body.longitude,
+      altitude: req.body.altitude,
+      accuracy: req.body.accuracy,
+      gps_timestamp: req.body.gps_timestamp
     });
 
     if (!draftResult.success) {
@@ -174,7 +179,15 @@ async function postUploadFoto(req, res) {
       return res.status(400).json({ success: false, message: 'Tidak ada data foto/video yang diterima' });
     }
 
-    await updateLaporPhoto(laporId, savedPathOrUrl);
+    const gpsData = {
+      latitude: req.body.latitude,
+      longitude: req.body.longitude,
+      altitude: req.body.altitude,
+      accuracy: req.body.accuracy,
+      gps_timestamp: req.body.gps_timestamp
+    };
+
+    await updateLaporPhoto(laporId, savedPathOrUrl, gpsData);
 
     const fullUrl = getFileUrl(savedPathOrUrl, 'wajib_lapor');
 

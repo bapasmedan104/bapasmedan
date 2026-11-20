@@ -641,6 +641,13 @@
                       <button type="button" class="btn btn-sm" style="color:#0052a3; font-weight:700; background:#e8f0fe; border:1px solid #b3d1ff; cursor:pointer; padding:5px 10px; border-radius:4px; display:inline-flex; align-items:center; gap:5px;" onclick="bukaModalFoto('<%= getFileUrl(lapor.foto_bukti, 'wajib_lapor') %>', '<%= lapor.nama_lengkap %>', '<%= getNamaBulan(lapor.bulan) %> <%= lapor.tahun %>')">
                         <i class="fas fa-image"></i> Lihat Foto
                       </button>
+                      <% if (lapor.latitude && lapor.longitude) { %>
+                        <div style="margin-top:4px; font-size:11px;">
+                          <a href="https://www.google.com/maps?q=<%= lapor.latitude %>,<%= lapor.longitude %>" target="_blank" style="color:#0284c7; text-decoration:underline; display:inline-flex; align-items:center; gap:3px; font-weight:600;" title="Buka Koordinat GPS di Google Maps">
+                            <i class="fas fa-map-marker-alt" style="color:#ef4444;"></i> GPS: <%= Number(lapor.latitude).toFixed(4) %>, <%= Number(lapor.longitude).toFixed(4) %> ↗
+                          </a>
+                        </div>
+                      <% } %>
                     <% } else { %>
                       <span style="color:#dc3545; font-size:12px;"><i class="fas fa-times-circle"></i> Tanpa Foto</span>
                     <% } %>

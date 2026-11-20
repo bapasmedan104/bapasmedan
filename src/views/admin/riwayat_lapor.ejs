@@ -311,6 +311,13 @@
                   <button type="button" class="btn btn-sm" style="color:#0052a3; font-weight:700; background:#e8f0fe; border:1px solid #b3d1ff; cursor:pointer; padding:4px 8px; border-radius:4px; font-size:12px; display:inline-flex; align-items:center; gap:4px;" onclick="bukaModalFoto('<%= getFileUrl(lapor.foto_bukti, 'wajib_lapor') %>', '<%= lapor.nama_lengkap %>', '<%= getNamaBulan(lapor.bulan) %> <%= lapor.tahun %>')">
                     <i class="fas fa-image"></i> Ada Foto
                   </button>
+                  <% if (lapor.latitude && lapor.longitude) { %>
+                    <div style="margin-top:3px; font-size:10.5px;">
+                      <a href="https://www.google.com/maps?q=<%= lapor.latitude %>,<%= lapor.longitude %>" target="_blank" style="color:#0284c7; text-decoration:underline; font-weight:600; display:inline-flex; align-items:center; gap:2px;" title="Lihat di Google Maps">
+                        <i class="fas fa-map-marker-alt" style="color:#ef4444;"></i> Maps ↗
+                      </a>
+                    </div>
+                  <% } %>
                 <% } else { %>
                   <span style="color:#94a3b8; font-size:13px;">Tanpa Foto</span>
                 <% } %>
@@ -410,6 +417,24 @@
           <button type="button" class="btn btn-sm" style="font-size:12px; padding:5px 14px; background:#e8f0fe; color:#0052a3; border:1px solid #b3d1ff; cursor:pointer;" onclick="bukaModalFoto(document.getElementById('dFotoImg').src, document.getElementById('dNama').innerText, document.getElementById('dPeriode').innerText)">
             <i class="fas fa-search-plus"></i> Klik untuk Perbesar Layar Penuh
           </button>
+        </div>
+      </div>
+
+      <!-- DATA LOKASI GPS TERVERIFIKASI -->
+      <div id="dGpsBox" style="display:none; margin-bottom:15px; background:#f0fdf4; border:1.5px solid #86efac; border-radius:8px; padding:12px 14px; font-size:13px; color:#166534;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+          <div>
+            <strong style="color:#15803d; display:flex; align-items:center; gap:6px; font-size:13px;">
+              <i class="fas fa-satellite" style="color:#16a34a;"></i> Koordinat GPS Presensi (Stempel Digital Sah)
+            </strong>
+            <div style="margin-top:4px; color:#1e293b; font-size:12.5px;">
+              <span id="dGpsCoord" style="font-weight:700;">-</span> &bull; 
+              <span id="dGpsAltAcc" style="color:#475569;">-</span>
+            </div>
+          </div>
+          <a id="dGpsMapLink" href="#" target="_blank" class="btn btn-sm" style="background:#003580; color:#fff; font-size:11.5px; padding:6px 12px; border-radius:6px; text-decoration:none; display:inline-flex; align-items:center; gap:5px;">
+            <i class="fas fa-map-marked-alt"></i> Buka Google Maps ↗
+          </a>
         </div>
       </div>
 
@@ -573,6 +598,19 @@
           document.getElementById('dCatatanBox').style.display = 'block';
         } else {
           document.getElementById('dCatatanBox').style.display = 'none';
+        }
+
+        // Tampilkan Data GPS jika ada
+        if (item.latitude && item.longitude) {
+          document.getElementById('dGpsCoord').innerText = `Lat: ${Number(item.latitude).toFixed(6)}°, Long: ${Number(item.longitude).toFixed(6)}°`;
+          let extra = [];
+          if (item.accuracy) extra.push(`Akurasi: ±${Math.round(item.accuracy)}m`);
+          if (item.altitude !== null && item.altitude !== undefined && !isNaN(item.altitude)) extra.push(`Alt: ${Number(item.altitude).toFixed(1)}m`);
+          document.getElementById('dGpsAltAcc').innerText = extra.join(' | ') || 'GPS Terkunci';
+          document.getElementById('dGpsMapLink').href = `https://www.google.com/maps?q=${item.latitude},${item.longitude}`;
+          document.getElementById('dGpsBox').style.display = 'block';
+        } else {
+          document.getElementById('dGpsBox').style.display = 'none';
         }
 
         loading.style.display = 'none';
