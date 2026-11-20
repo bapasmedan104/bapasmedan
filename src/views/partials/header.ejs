@@ -148,10 +148,40 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link rel="stylesheet" href="/css/style.css?v=20261120_5">
-  <link rel="stylesheet" href="/css/responsive.css?v=20261120_5">
+  <link rel="stylesheet" href="/css/style.css?v=20261121_1">
+  <link rel="stylesheet" href="/css/responsive.css?v=20261121_1">
   <style>
     @media (max-width: 992px) {
+      body.has-public-navbar {
+        padding-top: 54px !important;
+      }
+      nav.navbar {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        height: 54px !important;
+        box-sizing: border-box !important;
+        z-index: 100000 !important;
+        background: linear-gradient(135deg, #001e4d 0%, #002b66 60%, #003580 100%) !important;
+        border-bottom: 2px solid #f59e0b !important;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35) !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+      }
+      nav.navbar .nav-container {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        padding: 0 16px !important;
+        width: 100% !important;
+        height: 100% !important;
+        box-sizing: border-box !important;
+        position: relative !important;
+      }
       nav.navbar .nav-menu {
         display: none;
       }
@@ -161,23 +191,25 @@
         display: flex !important;
         flex-direction: column !important;
         position: fixed !important;
-        top: 52px !important;
+        top: 54px !important;
         left: 0 !important;
         right: 0 !important;
+        bottom: 0 !important;
         width: 100vw !important;
         max-width: 100vw !important;
+        height: calc(100vh - 54px) !important;
+        max-height: calc(100vh - 54px) !important;
         box-sizing: border-box !important;
         background: #001938 !important;
         border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
         border-bottom: 3px solid #f59e0b !important;
         box-shadow: 0 16px 40px rgba(0, 0, 0, 0.85) !important;
-        max-height: calc(100vh - 52px) !important;
         overflow-y: auto !important;
         -webkit-overflow-scrolling: touch !important;
-        padding: 8px 0 24px 0 !important;
+        padding: 10px 0 32px 0 !important;
         margin: 0 !important;
         list-style: none !important;
-        z-index: 9999999 !important;
+        z-index: 99999 !important;
         visibility: visible !important;
         opacity: 1 !important;
         pointer-events: auto !important;
@@ -190,15 +222,18 @@
       #navMenu .nav-item > a {
         display: flex !important;
         align-items: center !important;
-        justify-content: space-between !important;
-        padding: 13px 20px !important;
-        min-height: 48px !important;
+        justify-content: flex-start !important;
+        gap: 14px !important;
+        padding: 14px 20px !important;
+        min-height: 50px !important;
         border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
-        color: #ffffff !important;
+        color: #f1f5f9 !important;
         font-size: 15px !important;
         font-weight: 600 !important;
         text-decoration: none !important;
         background: transparent !important;
+        box-sizing: border-box !important;
+        width: 100% !important;
       }
       #navMenu .nav-item > a:hover,
       #navMenu .nav-item.active > a {
@@ -206,10 +241,19 @@
         color: #fef08a !important;
       }
       #navMenu .nav-item > a i:first-child {
-        margin-right: 10px !important;
+        margin: 0 !important;
         color: #f59e0b !important;
-        width: 20px !important;
+        width: 22px !important;
+        font-size: 16px !important;
         text-align: center !important;
+        flex-shrink: 0 !important;
+      }
+      #navMenu .nav-item > a i.arrow {
+        margin-left: auto !important;
+        font-size: 12px !important;
+        color: rgba(255, 255, 255, 0.6) !important;
+        transition: transform 0.2s ease !important;
+        flex-shrink: 0 !important;
       }
       #navMenu .dropdown {
         display: none;
@@ -226,22 +270,30 @@
       #navMenu .dropdown li a {
         display: flex !important;
         align-items: center !important;
-        gap: 10px !important;
-        padding: 11px 16px !important;
+        gap: 12px !important;
+        padding: 12px 16px !important;
         color: #cbd5e1 !important;
         font-size: 13.5px !important;
         text-decoration: none !important;
         min-height: 44px !important;
         border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+        box-sizing: border-box !important;
       }
       #navMenu .dropdown li a:hover {
         background: rgba(255, 255, 255, 0.08) !important;
         color: #ffffff !important;
       }
+      #navMenu .dropdown li a i {
+        color: #f59e0b !important;
+        width: 18px !important;
+        font-size: 14px !important;
+        text-align: center !important;
+        flex-shrink: 0 !important;
+      }
     }
   </style>
 </head>
-<body>
+<body class="has-public-navbar">
 
 <!-- TOPBAR RESMI INSTANSI -->
 <div class="topbar">
@@ -375,23 +427,20 @@
     }
 
     if (isOpen) {
-      var nav = document.querySelector('nav.navbar');
-      var topOffset = 52;
-      if (nav) {
-        var rect = nav.getBoundingClientRect();
-        if (rect && rect.bottom > 0) {
-          topOffset = Math.round(rect.bottom);
-        }
-      }
-      menu.style.top = topOffset + 'px';
-      menu.style.maxHeight = 'calc(100vh - ' + topOffset + 'px)';
+      menu.style.top = '54px';
+      menu.style.height = 'calc(100vh - 54px)';
+      menu.style.maxHeight = 'calc(100vh - 54px)';
       menu.style.setProperty('display', 'flex', 'important');
       menu.style.setProperty('visibility', 'visible', 'important');
       menu.style.setProperty('opacity', '1', 'important');
+      try { document.body.style.overflow = 'hidden'; } catch (err) {}
     } else {
       menu.style.removeProperty('display');
       menu.style.removeProperty('visibility');
       menu.style.removeProperty('opacity');
+      menu.style.removeProperty('height');
+      menu.style.removeProperty('max-height');
+      try { document.body.style.overflow = ''; } catch (err) {}
     }
   }
   window.toggleMobileNav = toggleMobileNav;
