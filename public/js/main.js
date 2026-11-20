@@ -56,24 +56,6 @@ if (hamburger && navMenu && !hamburger.hasAttribute('onclick')) {
   });
 }
 
-// Mobile dropdown toggle
-document.querySelectorAll('.has-dropdown > a').forEach(link => {
-  link.addEventListener('click', (e) => {
-    if (window.innerWidth <= 992) {
-      e.preventDefault();
-      const dropdown = link.nextElementSibling;
-      if (dropdown) {
-        const isShown = dropdown.style.display === 'block';
-        dropdown.style.display = isShown ? 'none' : 'block';
-        const arrow = link.querySelector('i.arrow');
-        if (arrow) {
-          arrow.style.transform = isShown ? 'rotate(0deg)' : 'rotate(180deg)';
-        }
-      }
-    }
-  });
-});
-
 // ============ COUNTER ANIMATION ============
 function animateCount(el, target, suffix='') {
   let count = 0;

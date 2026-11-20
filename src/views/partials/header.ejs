@@ -148,8 +148,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link rel="stylesheet" href="/css/style.css?v=20261121_1">
-  <link rel="stylesheet" href="/css/responsive.css?v=20261121_1">
+  <link rel="stylesheet" href="/css/style.css?v=20261121_2">
+  <link rel="stylesheet" href="/css/responsive.css?v=20261121_2">
   <style>
     @media (max-width: 992px) {
       body.has-public-navbar {
@@ -209,15 +209,20 @@
         padding: 10px 0 32px 0 !important;
         margin: 0 !important;
         list-style: none !important;
-        z-index: 99999 !important;
+        z-index: 9999999 !important;
         visibility: visible !important;
         opacity: 1 !important;
+        pointer-events: auto !important;
+      }
+      #navMenu,
+      #navMenu * {
         pointer-events: auto !important;
       }
       #navMenu .nav-item {
         width: 100% !important;
         display: block !important;
         margin: 0 !important;
+        pointer-events: auto !important;
       }
       #navMenu .nav-item > a {
         display: flex !important;
@@ -234,6 +239,10 @@
         background: transparent !important;
         box-sizing: border-box !important;
         width: 100% !important;
+        pointer-events: auto !important;
+        cursor: pointer !important;
+        touch-action: manipulation !important;
+        -webkit-tap-highlight-color: rgba(255, 255, 255, 0.15) !important;
       }
       #navMenu .nav-item > a:hover,
       #navMenu .nav-item.active > a {
@@ -267,6 +276,14 @@
         padding: 4px 0 !important;
         list-style: none !important;
       }
+      #navMenu .has-dropdown.active-dropdown > .dropdown {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+      }
+      #navMenu .has-dropdown.active-dropdown > a i.arrow {
+        transform: rotate(180deg) !important;
+      }
       #navMenu .dropdown li a {
         display: flex !important;
         align-items: center !important;
@@ -278,6 +295,10 @@
         min-height: 44px !important;
         border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
         box-sizing: border-box !important;
+        pointer-events: auto !important;
+        cursor: pointer !important;
+        touch-action: manipulation !important;
+        -webkit-tap-highlight-color: rgba(255, 255, 255, 0.15) !important;
       }
       #navMenu .dropdown li a:hover {
         background: rgba(255, 255, 255, 0.08) !important;
@@ -433,14 +454,14 @@
       menu.style.setProperty('display', 'flex', 'important');
       menu.style.setProperty('visibility', 'visible', 'important');
       menu.style.setProperty('opacity', '1', 'important');
-      try { document.body.style.overflow = 'hidden'; } catch (err) {}
+      menu.style.setProperty('pointer-events', 'auto', 'important');
     } else {
       menu.style.removeProperty('display');
       menu.style.removeProperty('visibility');
       menu.style.removeProperty('opacity');
       menu.style.removeProperty('height');
       menu.style.removeProperty('max-height');
-      try { document.body.style.overflow = ''; } catch (err) {}
+      menu.style.removeProperty('pointer-events');
     }
   }
   window.toggleMobileNav = toggleMobileNav;
@@ -448,25 +469,44 @@
   // Handle dropdown toggle & click outside
   (function() {
     function initNavActions() {
+      // Handle dropdown toggle on mobile
       var dropdownLinks = document.querySelectorAll('.has-dropdown > a');
       dropdownLinks.forEach(function(link) {
-        link.addEventListener('click', function(e) {
+        link.onclick = function(e) {
           if (window.innerWidth <= 992) {
-            e.preventDefault();
-            e.stopPropagation();
-            var dd = this.nextElementSibling;
-            if (dd) {
-              var isShown = dd.style.display === 'block';
-              dd.style.display = isShown ? 'none' : 'block';
+            if (e) {
+              if (typeof e.preventDefault === 'function') e.preventDefault();
+              if (typeof e.stopPropagation === 'function') e.stopPropagation();
+            }
+            var li = this.closest('.has-dropdown') || this.parentElement;
+            if (li) {
+              var isOpen = li.classList.toggle('active-dropdown');
+              var dd = li.querySelector('.dropdown');
+              if (dd) {
+                dd.style.setProperty('display', isOpen ? 'block' : 'none', 'important');
+              }
               var arrow = this.querySelector('i.arrow');
               if (arrow) {
-                arrow.style.transform = isShown ? 'rotate(0deg)' : 'rotate(180deg)';
+                arrow.style.transform = isOpen ? 'rotate(180deg)' : 'rotate(0deg)';
               }
             }
+            return false;
+          }
+        };
+      });
+
+      // Allow navigation and close menu when regular links are clicked
+      var navLinks = document.querySelectorAll('#navMenu a:not(.has-dropdown > a)');
+      navLinks.forEach(function(link) {
+        link.addEventListener('click', function() {
+          var menu = document.getElementById('navMenu');
+          if (menu && menu.classList.contains('open')) {
+            toggleMobileNav();
           }
         });
       });
 
+      // Handle click outside to close menu
       document.addEventListener('click', function(e) {
         var menu = document.getElementById('navMenu');
         var btn = document.getElementById('hamburger');
