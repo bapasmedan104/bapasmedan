@@ -80,7 +80,7 @@
     </div>
 
     <form action="/client/profil" method="POST" enctype="multipart/form-data" onsubmit="return validateProfilForm(event)">
-      <div style="display:flex; gap:30px; margin-bottom:25px; flex-wrap:wrap; align-items:center;">
+      <div class="profil-avatar-row" style="display:flex; gap:30px; margin-bottom:25px; flex-wrap:wrap; align-items:center;">
         <div>
           <% if (client && client.foto_profil) { %>
             <img id="previewFotoProfil" src="<%= getFileUrl(client.foto_profil, 'profil') %>" alt="Foto Profil" style="width:120px; height:120px; border-radius:50%; object-fit:cover; border:3px solid #003580; box-shadow:0 4px 10px rgba(0,0,0,0.15);" onerror="this.onerror=null; this.src='/logo_pemasyarakatan-removebg-preview.png';">
@@ -99,7 +99,7 @@
         </div>
       </div>
 
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+      <div class="form-row-2col" style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
         <div class="form-group">
           <label>Nomor Register Klien</label>
           <input type="text" value="<%= client ? client.no_register : '' %>" readonly style="background:#f1f5f9; color:#64748b;">
@@ -134,7 +134,7 @@
         </small>
       </div>
 
-      <div style="display:flex; gap:12px; margin-top:30px;">
+      <div class="profil-action-buttons" style="display:flex; gap:12px; margin-top:30px;">
         <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Simpan & Perbarui Profil</button>
         <% if (client && client.profil_lengkap) { %>
           <a href="/client/dashboard" class="btn btn-secondary">Kembali ke Dashboard</a>

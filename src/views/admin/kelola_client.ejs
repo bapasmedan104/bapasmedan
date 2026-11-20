@@ -109,7 +109,7 @@
   <!-- PANEL FILTER & SEARCH -->
   <div class="filter-panel">
     <form method="GET" action="/admin/kelola-client" style="display:flex; gap:15px; align-items:center; flex-wrap:wrap; justify-content:space-between;">
-      <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+      <div class="filter-inputs-row" style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
         <input type="text" name="search" placeholder="Cari nama, register, telepon..." value="<%= filterOptions.search %>" style="padding:9px 12px; border:1px solid #cbd5e1; border-radius:6px; font-size:14px; min-width:240px;">
 
         <select name="status" onchange="this.form.submit()" style="padding:9px 12px; border:1px solid #cbd5e1; border-radius:6px; font-size:14px;">
@@ -125,13 +125,15 @@
           <option value="0" <%= filterOptions.profil_lengkap === '0' ? 'selected' : '' %>>Profil Belum Lengkap</option>
         </select>
 
-        <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Cari</button>
-        <% if (filterOptions.search || filterOptions.status !== 'all' || filterOptions.profil_lengkap !== 'all') { %>
-          <a href="/admin/kelola-client" class="btn btn-secondary"><i class="fas fa-undo"></i> Reset</a>
-        <% } %>
+        <div class="filter-btn-pair" style="display:flex; gap:8px;">
+          <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Cari</button>
+          <% if (filterOptions.search || filterOptions.status !== 'all' || filterOptions.profil_lengkap !== 'all') { %>
+            <a href="/admin/kelola-client" class="btn btn-secondary"><i class="fas fa-undo"></i> Reset</a>
+          <% } %>
+        </div>
       </div>
 
-      <div style="display:flex; gap:10px;">
+      <div class="filter-actions-row" style="display:flex; gap:10px;">
         <% const queryParams = new URLSearchParams(filterOptions).toString(); %>
         <a href="/admin/kelola-client/export-csv?<%= queryParams %>" class="btn btn-success" title="Ekspor daftar klien ke CSV">
           <i class="fas fa-file-excel"></i> Ekspor CSV

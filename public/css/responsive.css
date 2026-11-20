@@ -54,24 +54,42 @@ img, video, canvas {
   div.navbar > div:first-child {
     display: flex !important;
     align-items: center !important;
-    justify-content: space-between !important;
+    justify-content: flex-start !important;
+    gap: 8px !important;
     font-size: 13.5px !important;
     font-weight: 800 !important;
     color: #ffffff !important;
     letter-spacing: 0.3px !important;
     width: 100% !important;
+    box-sizing: border-box !important;
+    padding: 0 2px !important;
+  }
+  div.navbar > div:first-child i {
+    color: #f59e0b !important;
+    font-size: 15px !important;
+    flex-shrink: 0 !important;
+    margin: 0 !important;
+  }
+  div.navbar > div:first-child span {
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    color: #ffffff !important;
+    font-weight: 800 !important;
   }
   div.navbar > div:last-child {
     display: flex !important;
     align-items: center !important;
+    justify-content: flex-start !important;
     gap: 8px !important;
     overflow-x: auto !important;
     -webkit-overflow-scrolling: touch !important;
     scrollbar-width: none !important;
     width: 100% !important;
-    padding: 2px 0 4px !important;
+    padding: 3px 2px 5px !important;
     margin-left: 0 !important;
     border-top: 1px solid rgba(255, 255, 255, 0.15) !important;
+    box-sizing: border-box !important;
   }
   div.navbar > div:last-child::-webkit-scrollbar {
     display: none !important;
@@ -79,9 +97,10 @@ img, video, canvas {
   div.navbar a {
     margin-left: 0 !important;
     font-size: 12px !important;
+    font-weight: 700 !important;
     padding: 7px 14px !important;
     background: rgba(255, 255, 255, 0.12) !important;
-    border: 1px solid rgba(255, 255, 255, 0.18) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
     border-radius: 20px !important;
     display: inline-flex !important;
     flex-direction: row !important;
@@ -91,7 +110,7 @@ img, video, canvas {
     min-height: 34px !important;
     text-align: center !important;
     white-space: nowrap !important;
-    color: #f1f5f9 !important;
+    color: #f8fafc !important;
     text-decoration: none !important;
     flex-shrink: 0 !important;
     box-sizing: border-box !important;
@@ -105,9 +124,13 @@ img, video, canvas {
   div.navbar a[style*="border-bottom:2px solid"] {
     background: #f59e0b !important;
     color: #001e4d !important;
-    font-weight: 700 !important;
-    border-color: #f59e0b !important;
+    font-weight: 800 !important;
+    border-color: #fbbf24 !important;
     box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4) !important;
+  }
+  div.navbar a.active i,
+  div.navbar a.active span {
+    color: #001e4d !important;
   }
   div.navbar a[href*="logout"],
   div.navbar a.nav-logout {
@@ -139,9 +162,15 @@ img, video, canvas {
   }
 
   /* Jarak Konten Khusus Dashboard Normal (Sticky Navbar) */
-  body > div.container {
-    margin-top: 18px !important;
+  body > div.container,
+  .container {
+    margin-top: 16px !important;
+    margin-bottom: 25px !important;
     padding: 0 14px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
   }
 
   .header h1 {
@@ -187,11 +216,22 @@ img, video, canvas {
     font-size: 11px !important;
   }
 
+  .stat-chips {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    margin-bottom: 16px !important;
+  }
   .stat-chips > div {
-    flex: 1 1 calc(50% - 6px) !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
     text-align: center !important;
     padding: 8px 10px !important;
     font-size: 12px !important;
+    border-radius: 6px !important;
+    margin: 0 !important;
   }
 
   /* Grid Panel Admin */
@@ -202,25 +242,123 @@ img, video, canvas {
   .form-row-2col {
     grid-template-columns: 1fr !important;
     gap: 12px !important;
+    width: 100% !important;
   }
 
   /* Filter Panel Responsif */
+  .filter-panel {
+    padding: 14px !important;
+    border-radius: 10px !important;
+    margin-bottom: 16px !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+  }
   .filter-panel form {
+    display: flex !important;
     flex-direction: column !important;
     align-items: stretch !important;
     gap: 12px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
   }
-  .filter-panel form > div {
+  .filter-panel form > div:first-child,
+  .filter-inputs-row {
     width: 100% !important;
     display: flex !important;
     flex-direction: column !important;
-    gap: 10px !important;
+    gap: 8px !important;
+    box-sizing: border-box !important;
+  }
+  .filter-panel form > div:last-child,
+  .filter-actions-row {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 8px !important;
+    box-sizing: border-box !important;
+  }
+  .filter-panel form > div:last-child .btn,
+  .filter-actions-row .btn {
+    flex: 1 !important;
+    justify-content: center !important;
+    padding: 9px 10px !important;
+    font-size: 13px !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+    box-sizing: border-box !important;
   }
   .filter-panel input,
-  .filter-panel select,
-  .filter-panel .btn {
+  .filter-panel select {
     width: 100% !important;
     min-width: 0 !important;
+    box-sizing: border-box !important;
+    padding: 9px 12px !important;
+    font-size: 14px !important;
+  }
+  .filter-btn-pair {
+    display: flex !important;
+    gap: 8px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  .filter-btn-pair .btn {
+    flex: 1 !important;
+    justify-content: center !important;
+    padding: 9px 12px !important;
+    font-size: 13px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Client Profil Responsif */
+  .profil-avatar-row {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 16px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    margin-bottom: 20px !important;
+  }
+  .profil-avatar-row > div:first-child {
+    display: flex !important;
+    justify-content: center !important;
+  }
+  .profil-avatar-row > div:last-child {
+    min-width: 0 !important;
+    width: 100% !important;
+    text-align: center !important;
+    box-sizing: border-box !important;
+  }
+  .profil-avatar-row input[type="file"] {
+    width: 100% !important;
+    max-width: 280px !important;
+    margin: 8px auto !important;
+    box-sizing: border-box !important;
+    display: block !important;
+  }
+  .profil-action-buttons {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 10px !important;
+    box-sizing: border-box !important;
+    margin-top: 20px !important;
+  }
+  .profil-action-buttons .btn {
+    width: 100% !important;
+    justify-content: center !important;
+    padding: 12px 18px !important;
+    font-size: 14px !important;
+    box-sizing: border-box !important;
+  }
+  .alert {
+    padding: 12px 14px !important;
+    font-size: 13px !important;
+    border-radius: 8px !important;
+    gap: 10px !important;
+    margin-bottom: 16px !important;
+    box-sizing: border-box !important;
   }
 
   /* Statistik: 2 kolom di tablet / HP */
@@ -240,13 +378,13 @@ img, video, canvas {
 
   /* Card & Tabel Responsif (Mencegah card serak, tabel bisa digeser halus) */
   .card {
-    padding: 18px 16px !important;
-    margin-bottom: 20px !important;
+    padding: 16px 14px !important;
+    margin-bottom: 18px !important;
     box-sizing: border-box !important;
     width: 100% !important;
     max-width: 100% !important;
     border-radius: 10px !important;
-    overflow: visible !important;
+    overflow: hidden !important;
   }
   .card-title {
     font-size: 15px !important;
@@ -982,10 +1120,14 @@ table.table tbody tr:hover {
 }
 
 @media (max-width: 992px) {
-  body {
+  body:has(nav.navbar) {
     display: flex !important;
     flex-direction: column !important;
     min-height: 100vh !important;
+  }
+  body:has(nav.navbar) > * {
+    min-width: 0 !important;
+    max-width: 100% !important;
   }
 
   nav.navbar {
