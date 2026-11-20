@@ -3,7 +3,12 @@
  * Mengelola halaman publik dengan optimasi SEO & Metadata
  */
 
-const { kirimPesanBantuan, getPesanBantuanBySession } = require('../models/db');
+const {
+  kirimPesanBantuan,
+  getPesanBantuanBySession,
+  getClientByRegister
+} = require('../models/db');
+const { getNamaBulan } = require('../utils/helpers');
 
 function getHomePage(req, res) {
   res.render('public/beranda', {
@@ -216,9 +221,48 @@ function getSitemapXml(req, res) {
 </urlset>`);
 }
 
+async function postCekRegistrasiClient(req, res) {
+  try {
+    const { no_register } = req.body;
+    if (!no_register || !no_register.trim()) {
+      return res.status(400).json({ success: false, message: 'Harap masukkan nomor registrasi klien.' });
+    }
+
+    const client = await getClientByRegister(no_register.trim());
+    if (!client) {
+      return res.json({
+        success: true,
+        found: false,
+        message: 'Nomor register tidak ditemukan dalam database BAPAS Medan. Silakan periksa kembali nomor register Anda (contoh: REG-2026).'
+      });
+    }
+
+    let masaLapor = client.masa_wajib_lapor;
+    if (!masaLapor && client.bulan_wajib_lapor_mulai && client.tahun_wajib_lapor_mulai) {
+      masaLapor = `${getNamaBulan(client.bulan_wajib_lapor_mulai)} ${client.tahun_wajib_lapor_mulai} s/d ${getNamaBulan(client.bulan_wajib_lapor_akhir)} ${client.tahun_wajib_lapor_akhir}`;
+    }
+
+    return res.json({
+      success: true,
+      found: true,
+      client: {
+        id: client.id,
+        nama_lengkap: client.nama_lengkap || 'Klien Binaan',
+        no_register: client.no_register,
+        status: client.status || 'aktif',
+        no_telepon: client.no_telepon || '-',
+        masa_wajib_lapor: masaLapor || 'Belum diatur',
+        alamat: client.alamat_sekarang || client.alamat || '-'
+      }
+    });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: 'Terjadi kesalahan sistem: ' + err.message });
+  }
+}
+
 async function postKirimPesanBantuan(req, res) {
   try {
-    const { session_id, nama, kontak, pesan } = req.body;
+    const { session_id, nama, kontak, pesan, is_verified, detail_klien, tipe_pesan } = req.body;
     if (!pesan || !pesan.trim()) {
       return res.status(400).json({ success: false, message: 'Pesan tidak boleh kosong.' });
     }
@@ -231,8 +275,11 @@ async function postKirimPesanBantuan(req, res) {
       nama: senderName,
       kontak: senderKontak,
       pesan: pesan.trim(),
-      pengirim: req.session && req.session.adminUser ? 'admin' : 'user',
-      admin_name: req.session && req.session.adminUser ? req.session.adminUser.nama_lengkap : ''
+      pengirim: req.session && req.session.adminUser ? 'admin' : (req.body.pengirim || 'user'),
+      admin_name: req.session && req.session.adminUser ? req.session.adminUser.nama_lengkap : '',
+      is_verified: Boolean(is_verified),
+      detail_klien: detail_klien || null,
+      tipe_pesan: tipe_pesan || 'text'
     });
 
     // Balasan otomatis instan dari Asisten BAPAS pada pesan pertama sesi
@@ -240,11 +287,15 @@ async function postKirimPesanBantuan(req, res) {
     if (existingMessages.length <= 1) {
       setTimeout(async () => {
         try {
+          const sambutan = is_verified && detail_klien
+            ? `Halo ${senderName}! Identitas registrasi Anda (${detail_klien.no_register || '-'}) telah terverifikasi resmi oleh sistem BAPAS Medan. Petugas Customer Service kami telah menerima rincian data Anda dan siap melayani kendala wajib lapor Anda.`
+            : `Halo ${senderName}! Terima kasih telah menghubungi Customer Service Resmi BAPAS Kelas I Medan. Pesan Anda telah kami terima dan terhubung ke petugas kami. Petugas kami siap merespons percakapan Anda secara langsung di sini.`;
+
           await kirimPesanBantuan({
             session_id: cleanSessionId,
             nama: 'Asisten Layanan BAPAS',
             kontak: 'BAPAS Kelas I Medan',
-            pesan: `Halo ${senderName}! Terima kasih telah menghubungi Pusat Bantuan Resmi BAPAS Kelas I Medan. Pesan Anda telah kami terima. Petugas kami akan segera merespons Anda melalui ruang chat ini. Untuk layanan instan melalui WhatsApp, Anda juga dapat menghubungi narahubung resmi kami.`,
+            pesan: sambutan,
             pengirim: 'bot',
             admin_name: 'Asisten Virtual BAPAS'
           });
@@ -280,6 +331,7 @@ module.exports = {
   getSyaratKetentuanPage,
   getRobotsTxt,
   getSitemapXml,
+  postCekRegistrasiClient,
   postKirimPesanBantuan,
   getPesanBantuanJson
 };

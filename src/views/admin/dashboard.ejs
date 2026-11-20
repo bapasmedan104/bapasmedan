@@ -397,10 +397,16 @@
                   </td>
                   <td>
                     <strong><%= p.nama %></strong>
-                    <% if (p.pengirim === 'admin') { %>
+                    <% if (p.is_verified || (p.detail_klien && p.detail_klien.no_register)) { %>
+                      <span class="badge badge-success" style="font-size:10.5px; margin-left:4px; background:#16a34a; color:#fff;" title="Klien Terverifikasi Database Resmi">
+                        <i class="fas fa-check-circle"></i> Klien (<%= (p.detail_klien && p.detail_klien.no_register) ? p.detail_klien.no_register : 'Terverifikasi' %>)
+                      </span>
+                    <% } else if (p.pengirim === 'admin') { %>
                       <span class="badge badge-primary" style="font-size:10px; margin-left:4px;">Admin</span>
                     <% } else if (p.pengirim === 'bot') { %>
                       <span class="badge badge-warning" style="font-size:10px; margin-left:4px;">Virtual CS</span>
+                    <% } else { %>
+                      <span class="badge" style="font-size:10px; margin-left:4px; background:#e2e8f0; color:#475569;">Umum</span>
                     <% } %>
                   </td>
                   <td><%= p.kontak || '-' %></td>
@@ -609,10 +615,39 @@
           const time = m.created_at ? new Date(m.created_at).toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit' }) : '';
           
           if (isUser) {
+            let userContentHtml = '';
+            if (m.tipe_pesan === 'client_card' && m.detail_klien) {
+              userContentHtml = `
+                <div style="background:#f0fdf4; border:1.5px solid #86efac; border-radius:8px; padding:10px 12px; margin-top:6px; color:#1e293b;">
+                  <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #bbf7d0; padding-bottom:5px; margin-bottom:6px;">
+                    <strong style="color:#15803d; font-size:12px;"><i class="fas fa-shield-alt"></i> DATA KLIEN TERVERIFIKASI RESMI</strong>
+                    <span style="background:#16a34a; color:#fff; font-size:10px; padding:1px 6px; border-radius:10px; font-weight:700;">DATABASE BAPAS</span>
+                  </div>
+                  <table style="width:100%; font-size:12px; border-collapse:collapse; line-height:1.4;">
+                    <tr><td style="width:115px; font-weight:600; color:#475569; padding:2px 0;">No. Register:</td><td style="color:#003580; font-weight:700;">${escapeAdminHtml(m.detail_klien.no_register || '-')}</td></tr>
+                    <tr><td style="font-weight:600; color:#475569; padding:2px 0;">Nama Lengkap:</td><td style="font-weight:700;">${escapeAdminHtml(m.detail_klien.nama_lengkap || m.nama)}</td></tr>
+                    <tr><td style="font-weight:600; color:#475569; padding:2px 0;">Status Binaan:</td><td><span style="background:#dbeafe; color:#1e40af; padding:1px 5px; border-radius:4px; font-weight:600; font-size:11px;">${escapeAdminHtml(m.detail_klien.status || 'aktif')}</span></td></tr>
+                    <tr><td style="font-weight:600; color:#475569; padding:2px 0;">Masa Wajib Lapor:</td><td style="color:#b45309; font-weight:600;">${escapeAdminHtml(m.detail_klien.masa_wajib_lapor || '-')}</td></tr>
+                    <tr><td style="font-weight:600; color:#475569; padding:2px 0;">No. Telepon / HP:</td><td>${escapeAdminHtml(m.detail_klien.no_telepon || m.kontak || '-')}</td></tr>
+                    <tr><td style="font-weight:600; color:#475569; padding:2px 0;">Alamat:</td><td>${escapeAdminHtml(m.detail_klien.alamat || '-')}</td></tr>
+                  </table>
+                  <div style="margin-top:6px; font-size:11px; color:#15803d; font-style:italic;">
+                    <i class="fas fa-check-circle"></i> ${escapeAdminHtml(m.pesan)}
+                  </div>
+                </div>
+              `;
+            } else {
+              userContentHtml = `<div style="font-size:13.5px; color:#1e293b; line-height:1.5; word-break:break-word;">${escapeAdminHtml(m.pesan)}</div>`;
+            }
+
             html += `
-              <div style="align-self:flex-start; max-width:82%; background:#ffffff; border:1px solid #cbd5e1; border-left:4px solid #003580; border-radius:8px; padding:10px 14px; box-shadow:0 1px 3px rgba(0,0,0,0.04);">
-                <div style="font-size:11.5px; font-weight:700; color:#003580; margin-bottom:3px;"><i class="fas fa-user"></i> ${escapeAdminHtml(m.nama || 'Pengguna')} (${escapeAdminHtml(m.kontak || '-')})</div>
-                <div style="font-size:13.5px; color:#1e293b; line-height:1.5; word-break:break-word;">${escapeAdminHtml(m.pesan)}</div>
+              <div style="align-self:flex-start; max-width:85%; background:#ffffff; border:1px solid #cbd5e1; border-left:4px solid #003580; border-radius:8px; padding:10px 14px; box-shadow:0 1px 3px rgba(0,0,0,0.04);">
+                <div style="font-size:11.5px; font-weight:700; color:#003580; margin-bottom:4px; display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+                  <i class="fas ${m.is_verified ? 'fa-id-badge text-success' : 'fa-user'}"></i> 
+                  <span>${escapeAdminHtml(m.nama || 'Pengguna')} (${escapeAdminHtml(m.kontak || '-')})</span>
+                  ${m.is_verified ? '<span style="background:#16a34a; color:#fff; font-size:9.5px; padding:1px 6px; border-radius:10px; font-weight:700;"><i class="fas fa-check"></i> Klien Terverifikasi</span>' : '<span style="background:#e2e8f0; color:#475569; font-size:9.5px; padding:1px 6px; border-radius:10px;">Umum</span>'}
+                </div>
+                ${userContentHtml}
                 <div style="font-size:10.5px; color:#94a3b8; margin-top:4px; text-align:right;">${time}</div>
               </div>
             `;

@@ -647,5 +647,39 @@
       "created_at": "2026-11-19T16:27:12.707Z",
       "id": "doc_1795105632707_y5063o"
     }
+  },
+  "pusat_bantuan_chat": {
+    "doc_1795152110383_7h3uv9": {
+      "session_id": "test_session_1795152110381",
+      "nama": "Bj",
+      "kontak": "081275623551",
+      "pesan": "Test pesan verifikasi",
+      "pengirim": "user",
+      "admin_name": "",
+      "status": "baru",
+      "is_verified": true,
+      "detail_klien": {
+        "no_register": "REG-2026",
+        "nama_lengkap": "Bj",
+        "status": "aktif"
+      },
+      "tipe_pesan": "client_card",
+      "created_at": "2026-11-20T05:21:50.381Z",
+      "id": "doc_1795152110383_7h3uv9"
+    },
+    "doc_1795152111130_b8sonr": {
+      "session_id": "test_session_1795152110381",
+      "nama": "Asisten Layanan BAPAS",
+      "kontak": "BAPAS Kelas I Medan",
+      "pesan": "Halo Bj! Identitas registrasi Anda (REG-2026) telah terverifikasi resmi oleh sistem BAPAS Medan. Petugas Customer Service kami telah menerima rincian data Anda dan siap melayani kendala wajib lapor Anda.",
+      "pengirim": "bot",
+      "admin_name": "Asisten Virtual BAPAS",
+      "status": "baru",
+      "is_verified": false,
+      "detail_klien": null,
+      "tipe_pesan": "text",
+      "created_at": "2026-11-20T05:21:51.130Z",
+      "id": "doc_1795152111130_b8sonr"
+    }
   }
 }

@@ -1048,6 +1048,9 @@ async function kirimPesanBantuan(data) {
     pengirim: data.pengirim || 'user', // 'user' | 'admin' | 'bot'
     admin_name: data.admin_name || '',
     status: data.status || 'baru',
+    is_verified: Boolean(data.is_verified),
+    detail_klien: data.detail_klien || null,
+    tipe_pesan: data.tipe_pesan || 'text',
     created_at: new Date().toISOString()
   };
   const ref = await col.add(payload);
