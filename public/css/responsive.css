@@ -1198,6 +1198,9 @@ table.table tbody tr:hover {
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
     margin: 0 !important;
     min-height: 38px !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+    user-select: none !important;
   }
 
   .hamburger .hamburger-label {
@@ -1208,12 +1211,14 @@ table.table tbody tr:hover {
     text-transform: uppercase !important;
     color: #001e4d !important;
     line-height: 1 !important;
+    pointer-events: none !important;
   }
 
   .hamburger i {
     font-size: 14px !important;
     color: #001e4d !important;
     line-height: 1 !important;
+    pointer-events: none !important;
   }
 
   .hamburger:hover, .hamburger:active {
@@ -1250,8 +1255,12 @@ table.table tbody tr:hover {
     z-index: 99999 !important;
   }
 
-  nav.navbar .nav-menu.open {
+  nav.navbar .nav-menu.open,
+  .nav-menu.open {
     display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
   }
 
   nav.navbar .nav-item > a {

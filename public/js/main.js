@@ -40,14 +40,19 @@
 // ============ HAMBURGER ============
 const hamburger = document.getElementById('hamburger');
 const navMenu = document.getElementById('navMenu');
-if (hamburger && navMenu) {
-  hamburger.addEventListener('click', () => {
-    navMenu.classList.toggle('open');
-    const isOpen = navMenu.classList.contains('open');
-    hamburger.setAttribute('aria-expanded', isOpen);
-    hamburger.innerHTML = isOpen
-      ? '<span class="hamburger-label">Tutup</span><i class="fas fa-times"></i>'
-      : '<span class="hamburger-label">Menu</span><i class="fas fa-bars"></i>';
+if (hamburger && navMenu && !hamburger.hasAttribute('onclick')) {
+  hamburger.addEventListener('click', (e) => {
+    if (typeof window.toggleMobileNav === 'function') {
+      window.toggleMobileNav(e);
+    } else {
+      navMenu.classList.toggle('open');
+      const isOpen = navMenu.classList.contains('open');
+      hamburger.setAttribute('aria-expanded', isOpen);
+      const label = document.getElementById('hamburgerLabel') || hamburger.querySelector('.hamburger-label');
+      const icon = document.getElementById('hamburgerIcon') || hamburger.querySelector('i');
+      if (label) label.textContent = isOpen ? 'Tutup' : 'Menu';
+      if (icon) icon.className = isOpen ? 'fas fa-times' : 'fas fa-bars';
+    }
   });
 }
 
