@@ -203,10 +203,16 @@
             </div>
             <div class="cs-status-actions">
               <div id="csIdentityPill" class="cs-identity-pill" style="display:none;"></div>
-              <button type="button" id="btnGantiIdentitasCS" class="btn-ganti-identitas" onclick="resetCsSession()" title="Ganti identitas atau nomor registrasi obrolan" style="display:none;">
-                <i class="fas fa-sync-alt"></i> Ganti Identitas
+              <button type="button" id="btnGantiIdentitasCS" class="btn-cs-action btn-cs-ganti" onclick="gantiIdentitasCS()" title="Ganti identitas atau nomor registrasi obrolan" style="display:none;">
+                <i class="fas fa-user-edit"></i> <span>Ganti Identitas</span>
               </button>
-              <div class="cs-badge-secure">
+              <button type="button" id="btnKeluarCS" class="btn-cs-action btn-cs-keluar" onclick="keluarPercakapanCS()" title="Tutup / keluar dari percakapan tanpa menghapus riwayat obrolan" style="display:none;">
+                <i class="fas fa-sign-out-alt"></i> <span>Keluar Percakapan</span>
+              </button>
+              <button type="button" id="btnAkhiriCS" class="btn-cs-action btn-cs-akhiri" onclick="akhiriPercakapanCS()" title="Akhiri sesi percakapan bantuan ini secara tuntas" style="display:none;">
+                <i class="fas fa-stop-circle"></i> <span>Akhiri Percakapan</span>
+              </button>
+              <div class="cs-badge-secure" id="csBadgeSecure">
                 <i class="fas fa-shield-alt"></i> Obrolan Resmi
               </div>
             </div>
@@ -391,6 +397,28 @@
                   <p class="chat-text">Halo! Selamat datang di Customer Service Resmi BAPAS Kelas I Medan. Silakan tuliskan kendala login, pertanyaan wajib lapor, atau permohonan informasi Anda di bawah ini. Petugas kami siap merespons secara real-time.</p>
                   <span class="chat-time">Respon Otomatis</span>
                 </div>
+              </div>
+            </div>
+
+            <!-- Quick Action Catalog Bar (Khusus Klien Terverifikasi & Pertanyaan Populer) -->
+            <div id="csQuickKatalogBar" class="cs-quick-katalog-bar" style="display:none;">
+              <span class="quick-katalog-title"><i class="fas fa-bolt"></i> Bantuan Cepat:</span>
+              <div class="quick-katalog-chips">
+                <button type="button" class="katalog-chip-pill" onclick="pilihTopikKatalog('lupa_sandi')">
+                  <i class="fas fa-key"></i> <span>Lupa Sandi Login</span>
+                </button>
+                <button type="button" class="katalog-chip-pill" onclick="pilihTopikKatalog('kendala_kamera')">
+                  <i class="fas fa-camera"></i> <span>Kendala Kamera</span>
+                </button>
+                <button type="button" class="katalog-chip-pill" onclick="pilihTopikKatalog('jadwal_lapor')">
+                  <i class="fas fa-calendar-alt"></i> <span>Jadwal Lapor</span>
+                </button>
+                <button type="button" class="katalog-chip-pill" onclick="pilihTopikKatalog('litmas_integrasi')">
+                  <i class="fas fa-balance-scale"></i> <span>Litmas &amp; PB</span>
+                </button>
+                <button type="button" class="katalog-chip-pill" onclick="pilihTopikKatalog('chat_petugas')">
+                  <i class="fas fa-headset"></i> <span>Tanya Petugas</span>
+                </button>
               </div>
             </div>
 
@@ -809,11 +837,11 @@
   color: #0369a1;
   border: 1px solid #7dd3fc;
 }
-.btn-ganti-identitas {
+.btn-cs-action {
   background: #ffffff;
-  border: 1px solid #cbd5e1;
-  color: #475569;
-  padding: 5px 11px;
+  border: 1.5px solid #cbd5e1;
+  color: #334155;
+  padding: 6px 12px;
   border-radius: 6px;
   font-size: 11.5px;
   font-weight: 700;
@@ -821,13 +849,46 @@
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  transition: all 0.2s;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   font-family: inherit;
+  white-space: nowrap;
 }
-.btn-ganti-identitas:hover {
-  background: #fee2e2;
+.btn-cs-action:hover {
+  transform: translateY(-1px);
+}
+.btn-cs-ganti {
+  border-color: #94a3b8;
+  color: #003580;
+  background: #f8fafc;
+}
+.btn-cs-ganti:hover {
+  background: #eff6ff;
+  border-color: #003580;
+  color: #002255;
+}
+.btn-cs-keluar {
+  border-color: #cbd5e1;
+  color: #475569;
+  background: #ffffff;
+}
+.btn-cs-keluar:hover {
+  background: #f1f5f9;
+  border-color: #64748b;
+  color: #0f172a;
+}
+.btn-cs-akhiri {
   border-color: #fca5a5;
   color: #b91c1c;
+  background: #fef2f2;
+}
+.btn-cs-akhiri:hover {
+  background: #fee2e2;
+  border-color: #ef4444;
+  color: #991b1b;
+  box-shadow: 0 2px 6px rgba(239, 68, 68, 0.2);
+}
+.btn-ganti-identitas {
+  display: none;
 }
 .cs-badge-secure {
   font-size: 12px;
@@ -1387,6 +1448,185 @@
   padding-top: 6px;
 }
 
+/* KATALOG BANTUAN INTERAKTIF & QUICK BAR */
+.cs-quick-katalog-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 7px 10px;
+  margin-bottom: 10px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  flex-shrink: 0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+}
+.cs-quick-katalog-bar::-webkit-scrollbar {
+  display: none;
+}
+.quick-katalog-title {
+  font-size: 11.5px;
+  font-weight: 800;
+  color: #003580;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.quick-katalog-title i {
+  color: #f59e0b;
+}
+.quick-katalog-chips {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.katalog-chip-pill {
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  color: #1e293b;
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 5px 11px;
+  border-radius: 20px;
+  cursor: pointer;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: inherit;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}
+.katalog-chip-pill:hover {
+  background: #003580;
+  color: #ffffff;
+  border-color: #003580;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0, 53, 128, 0.2);
+}
+.katalog-chip-pill i {
+  color: #d97706;
+}
+.katalog-chip-pill:hover i {
+  color: #fde68a;
+}
+
+/* Chat Stream: Bubble Katalog & System Messages */
+.chat-msg-katalog {
+  max-width: 95% !important;
+}
+.chat-bubble-katalog {
+  background: #ffffff;
+  border: 1.5px solid #fde68a;
+  border-left: 4px solid #f59e0b !important;
+  box-shadow: 0 3px 10px rgba(245, 158, 11, 0.12);
+  width: 100%;
+  box-sizing: border-box;
+}
+.katalog-options-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  margin: 10px 0 6px;
+}
+.katalog-opt-btn {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: inherit;
+  width: 100%;
+  box-sizing: border-box;
+}
+.katalog-opt-btn:hover {
+  background: #eff6ff;
+  border-color: #003580;
+  transform: translateX(3px);
+  box-shadow: 0 3px 10px rgba(0, 53, 128, 0.1);
+}
+.katalog-opt-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+.katalog-opt-icon.icon-key { background: #fef3c7; color: #b45309; }
+.katalog-opt-icon.icon-camera { background: #e0e7ff; color: #4338ca; }
+.katalog-opt-icon.icon-calendar { background: #dcfce7; color: #15803d; }
+.katalog-opt-icon.icon-litmas { background: #f1f5f9; color: #334155; }
+.katalog-opt-icon.icon-headset { background: #ffedd5; color: #c2410c; }
+
+.katalog-opt-text {
+  flex: 1;
+  min-width: 0;
+}
+.katalog-opt-text strong {
+  display: block;
+  font-size: 13.5px;
+  color: #0f172a;
+  margin-bottom: 2px;
+  font-weight: 700;
+}
+.katalog-opt-text small {
+  display: block;
+  font-size: 12px;
+  color: #64748b;
+  line-height: 1.4;
+}
+.opt-arrow {
+  color: #94a3b8;
+  font-size: 13px;
+  flex-shrink: 0;
+  transition: transform 0.2s;
+}
+.katalog-opt-btn:hover .opt-arrow {
+  color: #003580;
+  transform: translateX(3px);
+}
+.badge-katalog-inquiry {
+  background: #f59e0b;
+  color: #001e4d;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-right: 6px;
+  letter-spacing: 0.3px;
+}
+.chat-system-ended-banner {
+  align-self: center;
+  background: #f1f5f9;
+  border: 1.5px dashed #94a3b8;
+  border-radius: 20px;
+  padding: 8px 18px;
+  font-size: 12.5px;
+  color: #475569;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 10px auto;
+  text-align: center;
+}
+
 /* Bottom Chat Input */
 .cs-bottom-bar {
   flex-shrink: 0;
@@ -1483,6 +1723,44 @@
     padding: 10px 12px;
     gap: 8px;
   }
+  .cs-status-actions {
+    gap: 6px;
+    width: 100%;
+    justify-content: flex-start;
+    margin-top: 2px;
+  }
+  .btn-cs-action {
+    padding: 5px 9px;
+    font-size: 11px;
+    border-radius: 5px;
+  }
+  .cs-quick-katalog-bar {
+    padding: 5px 8px;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+  .quick-katalog-title {
+    font-size: 11px;
+  }
+  .katalog-chip-pill {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+  .katalog-opt-btn {
+    padding: 8px 10px;
+    gap: 10px;
+  }
+  .katalog-opt-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 13px;
+  }
+  .katalog-opt-text strong {
+    font-size: 12.5px;
+  }
+  .katalog-opt-text small {
+    font-size: 11px;
+  }
   .cs-badge-secure {
     display: none;
   }
@@ -1551,12 +1829,13 @@ function getBapasSessionId() {
 }
 
 function initCsViewState() {
-  // Jika sedang login sebagai klien binaan di portal, otomatis gunakan identitas klien
+  // Jika sedang login sebagai klien binaan di portal, otomatis gunakan identitas klien (kecuali jika sedang ganti identitas)
   <% if (isLoggedIn && user && (user.no_register || userType === 'client')) { %>
     const loggedInReg = '<%= user.no_register || "" %>';
     const loggedInName = '<%= user.nama_lengkap || user.username || "Klien BAPAS" %>';
     const loggedInPhone = '<%= user.no_telepon || "-" %>';
-    if (!localStorage.getItem('bapas_cs_nama') && loggedInReg) {
+    const isForcedSelect = localStorage.getItem('bapas_cs_force_select');
+    if (!isForcedSelect && !localStorage.getItem('bapas_cs_nama') && loggedInReg) {
       localStorage.setItem('bapas_cs_type', 'registered');
       localStorage.setItem('bapas_cs_nama', loggedInName);
       localStorage.setItem('bapas_cs_register', loggedInReg);
@@ -1571,7 +1850,10 @@ function initCsViewState() {
   const prechatContainer = document.getElementById('csPrechatContainer');
   const activeChatContainer = document.getElementById('csChatActiveContainer');
   const identityPill = document.getElementById('csIdentityPill');
-  const btnReset = document.getElementById('btnGantiIdentitasCS');
+  const btnGanti = document.getElementById('btnGantiIdentitasCS');
+  const btnKeluar = document.getElementById('btnKeluarCS');
+  const btnAkhiri = document.getElementById('btnAkhiriCS');
+  const quickKatalogBar = document.getElementById('csQuickKatalogBar');
 
   if (csNama && (csType === 'guest' || (csType === 'registered' && csRegister))) {
     // Sesi sudah memiliki identitas, buka percakapan aktif
@@ -1587,14 +1869,101 @@ function initCsViewState() {
         identityPill.className = 'cs-identity-pill pill-guest';
       }
     }
-    if (btnReset) btnReset.style.display = 'inline-flex';
+    if (btnGanti) btnGanti.style.display = 'inline-flex';
+    if (btnKeluar) btnKeluar.style.display = 'inline-flex';
+    if (btnAkhiri) btnAkhiri.style.display = 'inline-flex';
+    if (quickKatalogBar) {
+      quickKatalogBar.style.display = (csType === 'registered') ? 'flex' : 'none';
+    }
   } else {
     // Tampilkan layar pre-chat selection
     if (prechatContainer) prechatContainer.style.display = 'flex';
     if (activeChatContainer) activeChatContainer.style.display = 'none';
     if (identityPill) identityPill.style.display = 'none';
-    if (btnReset) btnReset.style.display = 'none';
+    if (btnGanti) btnGanti.style.display = 'none';
+    if (btnKeluar) btnKeluar.style.display = 'none';
+    if (btnAkhiri) btnAkhiri.style.display = 'none';
+    if (quickKatalogBar) quickKatalogBar.style.display = 'none';
   }
+}
+
+function gantiIdentitasCS() {
+  if (!confirm('Apakah Anda ingin mengganti identitas obrolan Customer Service? Anda dapat memilih masuk sebagai Klien Binaan lain atau Pengunjung Umum.')) {
+    return;
+  }
+  // Tandai flag force_select agar sesi login tidak langsung mengisi identitas lama
+  localStorage.setItem('bapas_cs_force_select', 'true');
+  localStorage.removeItem('bapas_cs_type');
+  localStorage.removeItem('bapas_cs_nama');
+  localStorage.removeItem('bapas_cs_register');
+  localStorage.removeItem('bapas_cs_kontak');
+  localStorage.removeItem('bapas_cs_detail');
+  localStorage.removeItem('bapas_cs_session');
+  stopChatPolling();
+  lastRenderedChatJson = '';
+  verifiedClientData = null;
+
+  // Bersihkan input formulir
+  const inputReg = document.getElementById('inputCsNoRegister');
+  if (inputReg) inputReg.value = '';
+  const inputGuest = document.getElementById('inputCsNamaGuest');
+  if (inputGuest) inputGuest.value = '';
+  const inputGuestPhone = document.getElementById('inputCsKontakGuest');
+  if (inputGuestPhone) inputGuestPhone.value = '';
+
+  const alertRegErr = document.getElementById('alertRegisterError');
+  if (alertRegErr) { alertRegErr.style.display = 'none'; alertRegErr.innerHTML = ''; }
+  const previewBox = document.getElementById('previewRegisterSuccess');
+  if (previewBox) { previewBox.style.display = 'none'; }
+  const alertGuestErr = document.getElementById('alertGuestError');
+  if (alertGuestErr) { alertGuestErr.style.display = 'none'; alertGuestErr.innerHTML = ''; }
+
+  initCsViewState();
+  selectCsOption('registered');
+}
+
+function keluarPercakapanCS() {
+  // Tutup antarmuka Pusat Bantuan tanpa menghapus obrolan
+  tutupPusatBantuan();
+}
+
+async function akhiriPercakapanCS() {
+  if (!confirm('Apakah Anda yakin ingin mengakhiri sesi percakapan Customer Service ini? Percakapan yang sedang berjalan akan diselesaikan.')) {
+    return;
+  }
+  const sId = getBapasSessionId();
+  const nama = localStorage.getItem('bapas_cs_nama') || 'Pengguna';
+  
+  try {
+    await fetch('/api/pusat-bantuan/akhiri', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        session_id: sId,
+        nama: nama,
+        pesan: `[SESI SELESAI] Sesi percakapan bantuan telah diselesaikan oleh ${nama}.`
+      })
+    });
+  } catch (err) {
+    console.warn('Gagal memproses akhir sesi:', err);
+  }
+
+  stopChatPolling();
+  localStorage.setItem('bapas_cs_force_select', 'true');
+  localStorage.removeItem('bapas_cs_session');
+  localStorage.removeItem('bapas_cs_nama');
+  localStorage.removeItem('bapas_cs_register');
+  localStorage.removeItem('bapas_cs_kontak');
+  localStorage.removeItem('bapas_cs_detail');
+  localStorage.removeItem('bapas_cs_type');
+  lastRenderedChatJson = '';
+  verifiedClientData = null;
+  initCsViewState();
+  selectCsOption('registered');
+}
+
+function resetCsSession() {
+  gantiIdentitasCS();
 }
 
 function selectCsOption(type) {
@@ -1716,6 +2085,7 @@ async function mulaiChatTerverifikasi() {
   const sId = getBapasSessionId();
   const client = verifiedClientData;
 
+  localStorage.removeItem('bapas_cs_force_select');
   localStorage.setItem('bapas_cs_type', 'registered');
   localStorage.setItem('bapas_cs_nama', client.nama_lengkap);
   localStorage.setItem('bapas_cs_register', client.no_register);
@@ -1744,6 +2114,22 @@ async function mulaiChatTerverifikasi() {
     console.warn('Gagal memposting data verifikasi awal:', e);
   }
 
+  // Kirimkan pesan sambutan sekaligus Katalog Bantuan Cepat interaktif
+  try {
+    await fetch('/api/pusat-bantuan/bot', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        session_id: sId,
+        pesan: `Halo ${client.nama_lengkap}! Identitas registrasi Anda (${client.no_register}) telah terverifikasi resmi oleh sistem BAPAS Medan. Silakan pilih topik kendala atau pertanyaan yang Anda butuhkan melalui Katalog Bantuan Cepat di bawah ini:`,
+        topik: 'welcome',
+        detail_klien: client
+      })
+    });
+  } catch (e) {
+    console.warn('Gagal memposting katalog bot awal:', e);
+  }
+
   startChatPolling();
 }
 
@@ -1766,6 +2152,7 @@ function mulaiChatPengunjung() {
     return;
   }
 
+  localStorage.removeItem('bapas_cs_force_select');
   localStorage.setItem('bapas_cs_type', 'guest');
   localStorage.setItem('bapas_cs_nama', nama);
   localStorage.setItem('bapas_cs_kontak', kontak || '-');
@@ -1776,19 +2163,88 @@ function mulaiChatPengunjung() {
   startChatPolling();
 }
 
-function resetCsSession() {
-  if (confirm('Apakah Anda ingin mengganti identitas / nomor registrasi obrolan Customer Service?')) {
-    localStorage.removeItem('bapas_cs_type');
-    localStorage.removeItem('bapas_cs_nama');
-    localStorage.removeItem('bapas_cs_register');
-    localStorage.removeItem('bapas_cs_kontak');
-    localStorage.removeItem('bapas_cs_detail');
-    localStorage.removeItem('bapas_cs_session'); // Buat sesi baru
-    stopChatPolling();
-    lastRenderedChatJson = '';
-    verifiedClientData = null;
-    initCsViewState();
+async function pilihTopikKatalog(topikKey) {
+  const sId = getBapasSessionId();
+  const nama = localStorage.getItem('bapas_cs_nama') || 'Klien BAPAS';
+  const noReg = localStorage.getItem('bapas_cs_register') || '-';
+  const kontak = localStorage.getItem('bapas_cs_kontak') || noReg;
+  const rawDetail = localStorage.getItem('bapas_cs_detail');
+  let detailKlien = null;
+  if (rawDetail) {
+    try { detailKlien = JSON.parse(rawDetail); } catch (_) {}
   }
+
+  let topikTitle = '';
+  let botAnswer = '';
+
+  switch (topikKey) {
+    case 'lupa_sandi':
+      topikTitle = 'Lupa Sandi Login Klien';
+      botAnswer = `🔑 PANDUAN PEMULIHAN KATA SANDI PORTAL KLIEN:\n\n1. Pemulihan Mandiri:\nKunjungi halaman Lupa Sandi di Portal Klien (https://bapas1medan.com/client/lupa-sandi). Masukkan No. Register (${noReg}) atau Username Anda, lalu ikuti instruksi reset sandi.\n\n2. Bantuan Reset oleh Petugas CS:\nJika Anda mengalami kendala saat reset mandiri, Petugas Administrator kami di panel Customer Service dapat mereset kata sandi Anda ke sandi default bimbingan.\n\nNotifikasi kebutuhan reset sandi Anda telah disampaikan ke petugas kami. Petugas akan segera membalas percakapan Anda di sini.`;
+      break;
+
+    case 'kendala_kamera':
+      topikTitle = 'Kendala Kamera / Presensi Foto Wajib Lapor';
+      botAnswer = `📷 PANDUAN MENGATASI KENDALA KAMERA WAJIB LAPOR:\n\n1. Izin Kamera Browser:\nPastikan izin akses kamera pada browser (Chrome / Safari) telah diizinkan ('Allow'). Jika diblokir, ketuk ikon gembok pada URL bar > Izin Situs > Kamera > Izinkan.\n\n2. Ketentuan Bukti Foto:\nDemi integritas dan keabsahan pelaporan bimbingan, sistem BAPAS Kelas I Medan mewajibkan pengambilan foto langsung melalui kamera (fitur unggah galeri dinonaktifkan). Pastikan wajah terlihat jelas dan pencahayaan memadai.\n\n3. Jika Kamera Tidak Terbuka:\nTutup tab lain atau aplikasi yang sedang menggunakan kamera, lalu muat ulang halaman. Petugas kami siap membantu jika kendala berlanjut.`;
+      break;
+
+    case 'jadwal_lapor':
+      topikTitle = 'Jadwal & Periode Wajib Lapor Bulan Ini';
+      botAnswer = `📅 INFORMASI JADWAL WAJIB LAPOR KLIEN:\n\n1. Periode Pembukaan Layanan:\nLayanan Wajib Lapor Online dibuka setiap bulan sesuai rentang tanggal pengumuman resmi yang tertera pada Beranda (https://bapas1medan.com/).\n\n2. Ketentuan Pelaporan:\nKlien Binaan aktif wajib melapor 1 (satu) kali setiap bulan bimbingan yang sedang berjalan.\n\n3. Syarat Pelaporan:\nPastikan Anda telah melengkapi Profil Klien (alamat domisili, nomor HP aktif, masa wajib lapor, dan foto profil terbaru) sebelum mengisi formulir wajib lapor.`;
+      break;
+
+    case 'litmas_integrasi':
+      topikTitle = 'Layanan Litmas & Integrasi (PB/CB/CMB)';
+      botAnswer = `⚖️ INFORMASI LAYANAN LITMAS & PROGRAM INTEGRASI:\n\n1. Pelayanan GRATIS (Rp 0 / Nol Pungli):\nSeluruh pelayanan bimbingan kemasyarakatan, pembuatan Litmas (Penelitian Kemasyarakatan), serta program Pembebasan Bersyarat (PB), Cuti Bersyarat (CB), Cuti Menjelang Bebas (CMB), dan Asimilasi di BAPAS Kelas I Medan adalah GRATIS tanpa dipungut biaya apapun.\n\n2. Konsultasi Berkas & Pembimbing Kemasyarakatan (PK):\nUntuk menanyakan perkembangan berkas integrasi atau nama PK pembimbing Anda, silakan ketik pertanyaan spesifik Anda di kolom pesan di bawah.`;
+      break;
+
+    case 'chat_petugas':
+      topikTitle = 'Hubungi Petugas CS Langsung';
+      botAnswer = `💬 LAYANAN PERCAKAPAN LANGSUNG DENGAN PETUGAS:\n\nPesan konsultasi Anda telah diteruskan ke Petugas Customer Service BAPAS Kelas I Medan yang sedang bertugas.\nSilakan ketikkan pertanyaan atau kendala bimbingan Anda secara lengkap pada kolom chat di bawah. Petugas kami akan segera merespons percakapan Anda.`;
+      break;
+
+    default:
+      topikTitle = topikKey;
+      botAnswer = 'Pertanyaan Anda telah kami terima dan diteruskan ke Petugas Customer Service BAPAS Medan.';
+  }
+
+  // 1. Kirim pesan pertanyaan pengguna ke log chat
+  try {
+    await fetch('/api/pusat-bantuan/kirim', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        session_id: sId,
+        nama: nama,
+        kontak: kontak,
+        pesan: `[KATALOG BANTUAN] Saya memerlukan bantuan mengenai: ${topikTitle}`,
+        is_verified: true,
+        detail_klien: detailKlien,
+        tipe_pesan: 'katalog_inquiry'
+      })
+    });
+  } catch (err) {
+    console.warn('Gagal mengirim permintaan topik katalog:', err);
+  }
+
+  // 2. Kirim respon resmi bot
+  try {
+    await fetch('/api/pusat-bantuan/bot', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        session_id: sId,
+        pesan: botAnswer,
+        topik: topikKey,
+        detail_klien: detailKlien
+      })
+    });
+  } catch (err) {
+    console.warn('Gagal mengirim jawaban bot katalog:', err);
+  }
+
+  // Segarkan pesan percakapan
+  loadChatMessages();
 }
 
 function bukaPusatBantuan() {
@@ -1879,6 +2335,75 @@ function renderChatStream(messages) {
   `;
 
   messages.forEach(m => {
+    // 1. Session Ended Message
+    if (m.tipe_pesan === 'session_ended') {
+      html += `
+        <div class="chat-system-ended-banner">
+          <i class="fas fa-flag-checkered" style="color:#10b981;"></i>
+          <span>${escapeHtml(m.pesan)}</span>
+        </div>
+      `;
+      return;
+    }
+
+    // 2. Interactive Welcome Catalog Card
+    if (m.tipe_pesan === 'katalog_welcome') {
+      const timeFormatted = m.created_at ? new Date(m.created_at).toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit' }) : '';
+      html += `
+        <div class="chat-msg chat-msg-bot chat-msg-katalog">
+          <div class="chat-avatar" style="background:linear-gradient(135deg, #003580 0%, #001938 100%);"><i class="fas fa-robot"></i></div>
+          <div class="chat-bubble chat-bubble-katalog">
+            <div class="chat-sender-name"><i class="fas fa-robot"></i> Asisten Virtual BAPAS Kelas I Medan:</div>
+            <p class="chat-text" style="color:#0f172a; margin-bottom:10px;">${escapeHtml(m.pesan)}</p>
+            <div class="katalog-options-grid">
+              <button type="button" class="katalog-opt-btn" onclick="pilihTopikKatalog('lupa_sandi')">
+                <div class="katalog-opt-icon icon-key"><i class="fas fa-key"></i></div>
+                <div class="katalog-opt-text">
+                  <strong>1. Lupa Sandi Login Klien</strong>
+                  <small>Panduan reset kata sandi mandiri atau bantuan reset oleh petugas CS</small>
+                </div>
+                <i class="fas fa-chevron-right opt-arrow"></i>
+              </button>
+              <button type="button" class="katalog-opt-btn" onclick="pilihTopikKatalog('kendala_kamera')">
+                <div class="katalog-opt-icon icon-camera"><i class="fas fa-camera"></i></div>
+                <div class="katalog-opt-text">
+                  <strong>2. Kendala Kamera / Presensi Foto</strong>
+                  <small>Solusi izin kamera browser dan panduan pengambilan foto bukti lapor</small>
+                </div>
+                <i class="fas fa-chevron-right opt-arrow"></i>
+              </button>
+              <button type="button" class="katalog-opt-btn" onclick="pilihTopikKatalog('jadwal_lapor')">
+                <div class="katalog-opt-icon icon-calendar"><i class="fas fa-calendar-alt"></i></div>
+                <div class="katalog-opt-text">
+                  <strong>3. Jadwal &amp; Periode Wajib Lapor</strong>
+                  <small>Rentang tanggal buka layanan lapor online dan ketentuan lapor bulanan</small>
+                </div>
+                <i class="fas fa-chevron-right opt-arrow"></i>
+              </button>
+              <button type="button" class="katalog-opt-btn" onclick="pilihTopikKatalog('litmas_integrasi')">
+                <div class="katalog-opt-icon icon-litmas"><i class="fas fa-balance-scale"></i></div>
+                <div class="katalog-opt-text">
+                  <strong>4. Layanan Litmas &amp; Integrasi (PB/CB/CMB)</strong>
+                  <small>Informasi pengurusan bimbingan dan layanan integrasi 100% GRATIS</small>
+                </div>
+                <i class="fas fa-chevron-right opt-arrow"></i>
+              </button>
+              <button type="button" class="katalog-opt-btn" onclick="pilihTopikKatalog('chat_petugas')">
+                <div class="katalog-opt-icon icon-headset"><i class="fas fa-headset"></i></div>
+                <div class="katalog-opt-text">
+                  <strong>5. Hubungi Petugas CS Langsung</strong>
+                  <small>Konsultasi langsung dengan petugas Customer Service BAPAS Medan</small>
+                </div>
+                <i class="fas fa-chevron-right opt-arrow"></i>
+              </button>
+            </div>
+            <span class="chat-time">${timeFormatted} &bull; Katalog Bantuan Interaktif</span>
+          </div>
+        </div>
+      `;
+      return;
+    }
+
     const isBot = m.pengirim === 'bot' || m.nama === 'Asisten Layanan BAPAS';
     let isUser = false;
     if (!isBot) {
@@ -1912,7 +2437,8 @@ function renderChatStream(messages) {
         }
         contentHtml = renderVerifiedClientCardHtml(clientData, m.pesan);
       } else {
-        contentHtml = `<p class="chat-text">${escapeHtml(m.pesan)}</p>`;
+        const isKatalogInquiry = m.tipe_pesan === 'katalog_inquiry';
+        contentHtml = `<p class="chat-text">${isKatalogInquiry ? '<span class="badge-katalog-inquiry"><i class="fas fa-bolt"></i> Bantuan Cepat</span>' : ''}${escapeHtml(m.pesan)}</p>`;
       }
 
       const displayName = m.nama || localStorage.getItem('bapas_cs_nama') || 'Anda';
@@ -1933,6 +2459,9 @@ function renderChatStream(messages) {
       `;
     } else {
       const senderTitle = isBot ? 'Asisten Layanan BAPAS' : (m.admin_name || m.nama || 'Petugas CS BAPAS');
+      const isAutoAnswer = m.tipe_pesan && m.tipe_pesan.startsWith('katalog_jawaban');
+      const formattedBotText = escapeHtml(m.pesan).replace(/\n/g, '<br>');
+
       html += `
         <div class="chat-msg ${isBot ? 'chat-msg-bot' : 'chat-msg-admin'}">
           <div class="chat-avatar" style="${isBot ? '' : 'background:linear-gradient(135deg, #10b981 0%, #059669 100%);'}">
@@ -1942,8 +2471,9 @@ function renderChatStream(messages) {
             <div class="chat-sender-name">
               <i class="fas ${isBot ? 'fa-robot' : 'fa-headset'}"></i> 
               <span>${escapeHtml(senderTitle)}:</span>
+              ${isAutoAnswer ? '<span class="badge-katalog-inquiry" style="background:#003580; color:#fff; font-size:9.5px; margin-left:6px;"><i class="fas fa-check"></i> Jawaban Resmi</span>' : ''}
             </div>
-            <p class="chat-text">${escapeHtml(m.pesan)}</p>
+            <p class="chat-text">${formattedBotText}</p>
             <span class="chat-time">${timeFormatted}</span>
           </div>
         </div>

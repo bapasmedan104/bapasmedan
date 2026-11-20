@@ -611,6 +611,15 @@
         html = '<div style="text-align:center; color:#94a3b8; font-size:12.5px; margin:auto;">Belum ada riwayat pesan dalam sesi ini.</div>';
       } else {
         json.data.forEach(m => {
+          if (m.tipe_pesan === 'session_ended') {
+            html += `
+              <div style="text-align:center; padding:8px 14px; background:#f1f5f9; border:1px dashed #94a3b8; border-radius:6px; color:#475569; font-size:12px; margin:8px auto; width:90%;">
+                <i class="fas fa-flag-checkered" style="color:#10b981;"></i> <strong>${escapeAdminHtml(m.pesan)}</strong>
+              </div>
+            `;
+            return;
+          }
+
           const isBot = m.pengirim === 'bot' || m.nama === 'Asisten Layanan BAPAS';
           const isUser = !isBot && (m.pengirim === 'user' || m.tipe_pesan === 'client_card');
           const time = m.created_at ? new Date(m.created_at).toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit' }) : '';
@@ -638,7 +647,8 @@
                 </div>
               `;
             } else {
-              userContentHtml = `<div style="font-size:13.5px; color:#1e293b; line-height:1.5; word-break:break-word;">${escapeAdminHtml(m.pesan)}</div>`;
+              const isKatalog = m.tipe_pesan === 'katalog_inquiry';
+              userContentHtml = `<div style="font-size:13.5px; color:#1e293b; line-height:1.5; word-break:break-word;">${isKatalog ? '<span style="background:#f59e0b; color:#001e4d; font-size:9.5px; padding:1px 6px; border-radius:10px; font-weight:800; margin-right:4px;"><i class="fas fa-bolt"></i> Bantuan Cepat</span>' : ''}${escapeAdminHtml(m.pesan)}</div>`;
             }
 
             html += `
@@ -653,11 +663,18 @@
               </div>
             `;
           } else if (isBot) {
+            const isAutoAnswer = m.tipe_pesan && m.tipe_pesan.startsWith('katalog_jawaban');
+            const formattedBot = escapeAdminHtml(m.pesan).replace(/\n/g, '<br>');
             html += `
-              <div style="align-self:flex-start; max-width:82%; background:#fefce8; border:1px solid #fef08a; border-left:4px solid #eab308; border-radius:8px; padding:10px 14px;">
-                <div style="font-size:11.5px; font-weight:700; color:#854d0e; margin-bottom:3px;"><i class="fas fa-robot"></i> Asisten Virtual BAPAS:</div>
-                <div style="font-size:13px; color:#713f12; line-height:1.5; word-break:break-word;">${escapeAdminHtml(m.pesan)}</div>
+              <div style="align-self:flex-start; max-width:85%; background:#fefce8; border:1px solid #fef08a; border-left:4px solid #eab308; border-radius:8px; padding:10px 14px;">
+                <div style="font-size:11.5px; font-weight:700; color:#854d0e; margin-bottom:4px; display:flex; align-items:center; gap:6px;">
+                  <i class="fas fa-robot"></i> <span>Asisten Virtual BAPAS:</span>
+                  ${isAutoAnswer ? '<span style="background:#003580; color:#fff; font-size:9.5px; padding:1px 6px; border-radius:10px; font-weight:700;"><i class="fas fa-check"></i> Respon Katalog</span>' : ''}
+                </div>
+                <div style="font-size:13px; color:#713f12; line-height:1.55; word-break:break-word;">${formattedBot}</div>
                 <div style="font-size:10.5px; color:#a16207; margin-top:4px; text-align:right;">${time} &bull; Otomatis</div>
+              </div>
+            `;
               </div>
             `;
           } else {

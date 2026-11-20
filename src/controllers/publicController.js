@@ -303,8 +303,9 @@ async function postKirimPesanBantuan(req, res) {
     if (existingMessages.length <= 1) {
       setTimeout(async () => {
         try {
-          const sambutan = is_verified && detail_klien
-            ? `Halo ${senderName}! Identitas registrasi Anda (${detail_klien.no_register || '-'}) telah terverifikasi resmi oleh sistem BAPAS Medan. Petugas Customer Service kami telah menerima rincian data Anda dan siap melayani kendala wajib lapor Anda.`
+          const isClientVerif = is_verified && detail_klien;
+          const sambutan = isClientVerif
+            ? `Halo ${senderName}! Identitas registrasi Anda (${detail_klien.no_register || '-'}) telah terverifikasi resmi oleh sistem BAPAS Medan. Silakan pilih topik kendala atau informasi yang Anda butuhkan melalui Katalog Bantuan Cepat di bawah ini:`
             : `Halo ${senderName}! Terima kasih telah menghubungi Customer Service Resmi BAPAS Kelas I Medan. Pesan Anda telah kami terima dan terhubung ke petugas kami. Petugas kami siap merespons percakapan Anda secara langsung di sini.`;
 
           await kirimPesanBantuan({
@@ -313,7 +314,9 @@ async function postKirimPesanBantuan(req, res) {
             kontak: 'BAPAS Kelas I Medan',
             pesan: sambutan,
             pengirim: 'bot',
-            admin_name: 'Asisten Virtual BAPAS'
+            admin_name: 'Asisten Virtual BAPAS',
+            tipe_pesan: isClientVerif ? 'katalog_welcome' : 'bot_text',
+            detail_klien: detail_klien || null
           });
         } catch (e) {}
       }, 700);
@@ -322,6 +325,56 @@ async function postKirimPesanBantuan(req, res) {
     return res.json({ success: true, message: 'Pesan berhasil dikirim', data: pesanData, session_id: cleanSessionId });
   } catch (err) {
     return res.status(500).json({ success: false, message: 'Gagal mengirim pesan: ' + err.message });
+  }
+}
+
+async function postKirimBotBantuan(req, res) {
+  try {
+    const { session_id, pesan, topik, detail_klien } = req.body;
+    if (!session_id || !pesan) {
+      return res.status(400).json({ success: false, message: 'Data pesan bot tidak lengkap.' });
+    }
+    const cleanSessionId = session_id;
+    const botMsg = await kirimPesanBantuan({
+      session_id: cleanSessionId,
+      nama: 'Asisten Layanan BAPAS',
+      kontak: 'BAPAS Kelas I Medan',
+      pesan: pesan.trim(),
+      pengirim: 'bot',
+      admin_name: 'Asisten Virtual BAPAS',
+      is_verified: true,
+      detail_klien: detail_klien || null,
+      tipe_pesan: topik ? `katalog_jawaban_${topik}` : 'bot_text',
+      status: 'bot_replied'
+    });
+    return res.json({ success: true, message: 'Respon bot berhasil disimpan', data: botMsg });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: 'Gagal mengirim pesan bot: ' + err.message });
+  }
+}
+
+async function postAkhiriSesiBantuan(req, res) {
+  try {
+    const { session_id, nama, pesan } = req.body;
+    if (!session_id) {
+      return res.status(400).json({ success: false, message: 'Session ID diperlukan.' });
+    }
+    const senderName = nama || 'Pengguna';
+    const cleanSessionId = session_id;
+    const endNotice = pesan || `[SESI SELESAI] Sesi percakapan bantuan telah diselesaikan oleh ${senderName}.`;
+    const endMsg = await kirimPesanBantuan({
+      session_id: cleanSessionId,
+      nama: senderName,
+      kontak: 'Sesi Selesai',
+      pesan: endNotice,
+      pengirim: 'bot',
+      admin_name: 'Sistem Layanan BAPAS',
+      tipe_pesan: 'session_ended',
+      status: 'selesai'
+    });
+    return res.json({ success: true, message: 'Sesi bantuan berhasil diakhiri', data: endMsg });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: 'Gagal mengakhiri sesi: ' + err.message });
   }
 }
 
@@ -349,5 +402,7 @@ module.exports = {
   getSitemapXml,
   postCekRegistrasiClient,
   postKirimPesanBantuan,
+  postKirimBotBantuan,
+  postAkhiriSesiBantuan,
   getPesanBantuanJson
 };
