@@ -74,7 +74,9 @@
   </div>
 </footer>
 
-<%- include('pusat_bantuan') %>
+<% if (typeof activePage !== 'undefined' && activePage === 'beranda') { %>
+  <%- include('pusat_bantuan') %>
+<% } %>
 
 <script src="/js/main.js"></script>
 </body>
