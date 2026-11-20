@@ -31,9 +31,10 @@ const { getNamaBulan, formatTanggal, formatTanggalWaktu, getFileUrl, getWibNow }
 async function getDashboard(req, res) {
   try {
     const tab = req.query.tab || 'overview';
-    const stat = await getStatistikAdmin();
-    const laporMenunggu = await getLaporMenungguVerifikasi();
-    const recentClients = await getAllClients();
+    const currentAdmin = req.session.adminUser || req.session.user;
+    const stat = await getStatistikAdmin(currentAdmin);
+    const laporMenunggu = await getLaporMenungguVerifikasi(currentAdmin);
+    const recentClients = await getAllClients({}, currentAdmin);
     const config = await getKonfigurasi();
     const pesanBantuan = await getAllPesanBantuan(50);
 
@@ -45,7 +46,7 @@ async function getDashboard(req, res) {
       clients: recentClients.slice(0, 10),
       config,
       pesanBantuan: pesanBantuan || [],
-      currentAdmin: req.session.adminUser,
+      currentAdmin,
       getNamaBulan,
       formatTanggal,
       formatTanggalWaktu
@@ -58,8 +59,10 @@ async function getDashboard(req, res) {
 
 async function getRiwayatLapor(req, res) {
   try {
+    const currentAdmin = req.session.adminUser || req.session.user;
     const filters = {
       status: req.query.status || 'all',
+      pos_wilayah: req.query.pos_wilayah || 'all',
       client: req.query.client || '',
       bulan: req.query.bulan || 'all',
       tahun: req.query.tahun || 'all',
@@ -69,8 +72,8 @@ async function getRiwayatLapor(req, res) {
       sort: req.query.sort || 'tanggal_submit_desc'
     };
 
-    const laporList = await getAllLaporAdmin(filters);
-    const globalStat = await getStatistikAdmin();
+    const laporList = await getAllLaporAdmin(filters, currentAdmin);
+    const globalStat = await getStatistikAdmin(currentAdmin);
 
     // Statistik lokal sesuai data yang terfilter saat ini
     const filterStat = {
@@ -106,8 +109,10 @@ async function getRiwayatLapor(req, res) {
 
 async function getExportLaporCsv(req, res) {
   try {
+    const currentAdmin = req.session.adminUser || req.session.user;
     const filters = {
       status: req.query.status || 'all',
+      pos_wilayah: req.query.pos_wilayah || 'all',
       client: req.query.client || '',
       bulan: req.query.bulan || 'all',
       tahun: req.query.tahun || 'all',
@@ -117,15 +122,16 @@ async function getExportLaporCsv(req, res) {
       sort: req.query.sort || 'tanggal_submit_desc'
     };
 
-    const laporList = await getAllLaporAdmin(filters);
+    const laporList = await getAllLaporAdmin(filters, currentAdmin);
 
     // Generate CSV Header & Rows
     let csv = '\uFEFF'; // BOM untuk UTF-8 di Excel
-    csv += 'No,Nama Klien,No Register,Periode Bulan,Periode Tahun,Tanggal Submit,Status,Foto Bukti,Verifikator,Catatan Admin\n';
+    csv += 'No,Nama Klien,No Register,Pos Wilayah,Periode Bulan,Periode Tahun,Tanggal Submit,Status,Foto Bukti,Verifikator,Catatan Admin\n';
 
     laporList.forEach((item, index) => {
       const nama = `"${(item.nama_lengkap || '').replace(/"/g, '""')}"`;
       const noReg = `"${(item.no_register || '').replace(/"/g, '""')}"`;
+      const pos = `"${(item.pos_wilayah || 'Pusat').replace(/"/g, '""')}"`;
       const bulan = `"${getNamaBulan(item.bulan)}"`;
       const tahun = `"${item.tahun}"`;
       const tglSubmit = `"${formatTanggalWaktu(item.tanggal_submit)}"`;
@@ -134,7 +140,7 @@ async function getExportLaporCsv(req, res) {
       const adminVerif = `"${(item.admin_verifikasi || '-').replace(/"/g, '""')}"`;
       const catatan = `"${(item.catatan_admin || '-').replace(/"/g, '""')}"`;
 
-      csv += `${index + 1},${nama},${noReg},${bulan},${tahun},${tglSubmit},${status},${foto},${adminVerif},${catatan}\n`;
+      csv += `${index + 1},${nama},${noReg},${pos},${bulan},${tahun},${tglSubmit},${status},${foto},${adminVerif},${catatan}\n`;
     });
 
     const filename = `Rekap_Wajib_Lapor_BAPAS_${Date.now()}.csv`;
@@ -149,14 +155,16 @@ async function getExportLaporCsv(req, res) {
 
 async function getKelolaClient(req, res) {
   try {
+    const currentAdmin = req.session.adminUser || req.session.user;
     const filterOptions = {
       status: req.query.status || 'all',
+      pos_wilayah: req.query.pos_wilayah || 'all',
       profil_lengkap: req.query.profil_lengkap || 'all',
       search: req.query.search || ''
     };
 
-    const clients = await getAllClients(filterOptions);
-    const allClients = await getAllClients({}); // Untuk statistik total
+    const clients = await getAllClients(filterOptions, currentAdmin);
+    const allClients = await getAllClients({}, currentAdmin); // Untuk statistik total khusus pos ini
 
     const stat = {
       total: allClients.length,
@@ -168,7 +176,7 @@ async function getKelolaClient(req, res) {
 
     res.render('admin/kelola_client', {
       pageTitle: 'Kelola Client - BAPAS Medan',
-      currentAdmin: req.session.adminUser,
+      currentAdmin,
       clients,
       filterOptions,
       stat,
@@ -183,19 +191,22 @@ async function getKelolaClient(req, res) {
 
 async function getExportClientsCsv(req, res) {
   try {
+    const currentAdmin = req.session.adminUser || req.session.user;
     const clients = await getAllClients({
       status: req.query.status || 'all',
+      pos_wilayah: req.query.pos_wilayah || 'all',
       profil_lengkap: req.query.profil_lengkap || 'all',
       search: req.query.search || ''
-    });
+    }, currentAdmin);
 
     let csv = '\uFEFF';
-    csv += 'No,Username,Nama Lengkap,No Register,No Telepon,Status,Masa Wajib Lapor,Total Bulan,Profil Lengkap,Tanggal Dibuat\n';
+    csv += 'No,Username,Nama Lengkap,No Register,Pos Wilayah,No Telepon,Status,Masa Wajib Lapor,Total Bulan,Profil Lengkap,Tanggal Dibuat\n';
 
     clients.forEach((c, idx) => {
       const uname = `"${(c.username || '').replace(/"/g, '""')}"`;
       const nama = `"${(c.nama_lengkap || '').replace(/"/g, '""')}"`;
       const reg = `"${(c.no_register || '').replace(/"/g, '""')}"`;
+      const pos = `"${(c.pos_wilayah || 'Semua Wilayah (Pusat)').replace(/"/g, '""')}"`;
       const telp = `"${(c.no_telepon || '').replace(/"/g, '""')}"`;
       const status = `"${c.status}"`;
       const masa = `"${getNamaBulan(c.bulan_wajib_lapor_mulai)} ${c.tahun_wajib_lapor_mulai} s/d ${getNamaBulan(c.bulan_wajib_lapor_akhir)} ${c.tahun_wajib_lapor_akhir}"`;
@@ -203,7 +214,7 @@ async function getExportClientsCsv(req, res) {
       const profil = `"${c.profil_lengkap ? 'Lengkap' : 'Belum Lengkap'}"`;
       const created = `"${formatTanggal(c.created_at)}"`;
 
-      csv += `${idx + 1},${uname},${nama},${reg},${telp},${status},${masa},${total},${profil},${created}\n`;
+      csv += `${idx + 1},${uname},${nama},${reg},${pos},${telp},${status},${masa},${total},${profil},${created}\n`;
     });
 
     const filename = `Daftar_Klien_BAPAS_${Date.now()}.csv`;
@@ -218,8 +229,8 @@ async function getExportClientsCsv(req, res) {
 
 async function postCreateClient(req, res) {
   try {
-    const adminId = req.session.user.id;
-    const result = await createClient(req.body, adminId);
+    const adminUser = req.session.adminUser || req.session.user;
+    const result = await createClient(req.body, adminUser.id, adminUser);
     if (result.success) {
       req.session.successMessage = result.message;
     } else {
@@ -233,9 +244,9 @@ async function postCreateClient(req, res) {
 
 async function postUpdateClient(req, res) {
   try {
-    const adminId = req.session.user.id;
+    const adminUser = req.session.adminUser || req.session.user;
     const clientId = req.body.client_id;
-    const result = await updateClient(clientId, req.body, adminId);
+    const result = await updateClient(clientId, req.body, adminUser.id, adminUser);
     if (result.success) {
       req.session.successMessage = result.message;
     } else {

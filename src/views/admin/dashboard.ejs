@@ -471,7 +471,13 @@
     <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
       <div>
         <h1>Dashboard Administrator</h1>
-        <p style="color:#666;">Pusat Manajemen Pelaporan Wajib Lapor Klien BAPAS Kelas I Medan</p>
+        <p style="color:#666;">
+          <% if (typeof currentAdmin !== 'undefined' && currentAdmin && !isSuperAdmin(currentAdmin)) { %>
+            Ruang Kerja Monitoring Khusus <strong><%= currentAdmin.pos_wilayah %></strong>
+          <% } else { %>
+            Pusat Manajemen Pelaporan Wajib Lapor Klien Seluruh Pos BAPAS Kelas I Medan
+          <% } %>
+        </p>
       </div>
       <% if (typeof currentAdmin !== 'undefined' && currentAdmin) { %>
         <div style="background:#ffffff; border:1px solid #cbd5e1; border-left:4px solid #f59e0b; border-radius:8px; padding:8px 14px; box-shadow:0 2px 6px rgba(0,0,0,0.04); display:flex; align-items:center; gap:10px;">
@@ -693,7 +699,7 @@
         <div style="text-align:center; padding:50px 20px; color:#94a3b8;">
           <i class="fas fa-check-circle" style="font-size:48px; color:#28a745; margin-bottom:12px;"></i>
           <p style="font-size:16px; font-weight:600; color:#334e68;">Semua laporan telah diverifikasi!</p>
-          <span style="font-size:13px;">Tidak ada antrean laporan yang menunggu verifikasi saat ini.</span>
+          <span style="font-size:13px;">Tidak ada antrean laporan yang menunggu verifikasi <%= (typeof currentAdmin !== 'undefined' && currentAdmin && !isSuperAdmin(currentAdmin)) ? 'untuk ' + currentAdmin.pos_wilayah : '' %> saat ini.</span>
         </div>
       <% } %>
     </div>
@@ -703,54 +709,65 @@
   <div class="tab-pane <%= activeTab === 'client' ? 'active' : '' %>" id="tab-client">
     <div class="card">
       <div class="card-title">
-        <i class="fas fa-users"></i> Daftar Klien Pemasyarakatan Terbaru
+        <i class="fas fa-users"></i> Daftar Klien Pemasyarakatan Terbaru <%= (typeof currentAdmin !== 'undefined' && currentAdmin && !isSuperAdmin(currentAdmin)) ? '(' + currentAdmin.pos_wilayah + ')' : '' %>
         <a href="/admin/kelola-client" class="btn btn-sm btn-primary" style="margin-left:auto;"><i class="fas fa-cog"></i> Buka Kelola Klien Lengkap</a>
       </div>
 
-      <div class="table-scroll-hint">
-        <i class="fas fa-arrows-alt-h" style="color:#003580;"></i>
-        <span>Tabel dapat digeser ke samping (&larr; &rarr;) untuk melihat seluruh data klien</span>
-      </div>
-      <div class="table-responsive">
-        <table class="table">
-          <thead>
-            <tr>
-              <th style="min-width:140px;">No Register</th>
-              <th style="min-width:180px;">Nama Lengkap</th>
-              <th style="min-width:110px;">Status Akun</th>
-              <th style="min-width:140px;">No Telepon</th>
-              <th style="min-width:130px;">Profil</th>
-              <th style="min-width:220px;">Masa Wajib Lapor</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% clients.forEach(function(c) { %>
+      <% if (clients && clients.length > 0) { %>
+        <div class="table-scroll-hint">
+          <i class="fas fa-arrows-alt-h" style="color:#003580;"></i>
+          <span>Tabel dapat digeser ke samping (&larr; &rarr;) untuk melihat seluruh data klien</span>
+        </div>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
               <tr>
-                <td><strong><%= c.no_register %></strong></td>
-                <td><%= c.nama_lengkap %></td>
-                <td>
-                  <% if (c.status === 'aktif') { %>
-                    <span class="badge badge-success">Aktif</span>
-                  <% } else if (c.status === 'selesai') { %>
-                    <span class="badge badge-warning">Selesai</span>
-                  <% } else { %>
-                    <span class="badge badge-danger">Nonaktif</span>
-                  <% } %>
-                </td>
-                <td><%= c.no_telepon || '-' %></td>
-                <td>
-                  <% if (c.profil_lengkap) { %>
-                    <span style="color:#28a745; font-size:12px; font-weight:700;"><i class="fas fa-check-circle"></i> Lengkap</span>
-                  <% } else { %>
-                    <span style="color:#e67e22; font-size:12px; font-weight:700;"><i class="fas fa-exclamation-circle"></i> Belum Lengkap</span>
-                  <% } %>
-                </td>
-                <td style="font-size:13px;"><%= getNamaBulan(c.bulan_wajib_lapor_mulai) %> <%= c.tahun_wajib_lapor_mulai %> s/d <%= getNamaBulan(c.bulan_wajib_lapor_akhir) %> <%= c.tahun_wajib_lapor_akhir %></td>
+                <th style="min-width:140px;">No Register</th>
+                <th style="min-width:180px;">Nama Lengkap</th>
+                <th style="min-width:110px;">Status Akun</th>
+                <th style="min-width:140px;">No Telepon</th>
+                <th style="min-width:130px;">Profil</th>
+                <th style="min-width:220px;">Masa Wajib Lapor</th>
               </tr>
-            <% }); %>
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              <% clients.forEach(function(c) { %>
+                <tr>
+                  <td><strong><%= c.no_register %></strong></td>
+                  <td><%= c.nama_lengkap %></td>
+                  <td>
+                    <% if (c.status === 'aktif') { %>
+                      <span class="badge badge-success">Aktif</span>
+                    <% } else if (c.status === 'selesai') { %>
+                      <span class="badge badge-warning">Selesai</span>
+                    <% } else { %>
+                      <span class="badge badge-danger">Nonaktif</span>
+                    <% } %>
+                  </td>
+                  <td><%= c.no_telepon || '-' %></td>
+                  <td>
+                    <% if (c.profil_lengkap) { %>
+                      <span style="color:#28a745; font-size:12px; font-weight:700;"><i class="fas fa-check-circle"></i> Lengkap</span>
+                    <% } else { %>
+                      <span style="color:#e67e22; font-size:12px; font-weight:700;"><i class="fas fa-exclamation-circle"></i> Belum Lengkap</span>
+                    <% } %>
+                  </td>
+                  <td style="font-size:13px;"><%= getNamaBulan(c.bulan_wajib_lapor_mulai) %> <%= c.tahun_wajib_lapor_mulai %> s/d <%= getNamaBulan(c.bulan_wajib_lapor_akhir) %> <%= c.tahun_wajib_lapor_akhir %></td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+      <% } else { %>
+        <div style="text-align:center; padding:50px 20px; color:#94a3b8;">
+          <i class="fas fa-user-slash" style="font-size:48px; color:#cbd5e1; margin-bottom:12px;"></i>
+          <h4 style="color:#334155; font-size:16px; margin-bottom:4px;">
+            Belum Ada Klien Terdaftar <%= (typeof currentAdmin !== 'undefined' && currentAdmin && !isSuperAdmin(currentAdmin)) ? 'di ' + currentAdmin.pos_wilayah : '' %>
+          </h4>
+          <p style="font-size:13px; color:#64748b; margin-bottom:15px;">Data klien di wilayah ini masih kosong. Silakan daftarkan klien baru.</p>
+          <a href="/admin/kelola-client" class="btn btn-primary btn-sm"><i class="fas fa-user-plus"></i> Tambah Klien Baru</a>
+        </div>
+      <% } %>
     </div>
   </div>
 

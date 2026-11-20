@@ -121,6 +121,89 @@ function getFileUrl(pathOrUrl, defaultSubdir = '') {
   return `/uploads/${cleanSubdir}${cleanPath}`;
 }
 
+function isSuperAdmin(adminUser) {
+  if (!adminUser) return false;
+  if (adminUser.role === 'super_admin') return true;
+  const pos = (adminUser.pos_wilayah || '').trim().toLowerCase();
+  if (pos === 'semua wilayah (pusat)' || pos === 'semua pos (pusat)' || pos === 'pusat' || pos.includes('semua wilayah') || pos.includes('semua pos')) {
+    return true;
+  }
+  const username = (adminUser.username || '').toLowerCase();
+  const email = (adminUser.email || '').toLowerCase();
+  if (username === 'admin' || username === 'bapasmedan104' || email === 'bapasmedan104@gmail.com') {
+    return true;
+  }
+  return false;
+}
+
+function normalizePosName(pos) {
+  if (!pos) return '';
+  return String(pos).trim().toLowerCase();
+}
+
+function isClientInAdminPos(client, adminUser) {
+  if (!adminUser) return false;
+  if (isSuperAdmin(adminUser)) return true;
+
+  let adminPos = normalizePosName(adminUser.pos_wilayah);
+  // Jika pos_wilayah kosong tapi username mengandung pos (misal: 'pos2', 'adminpos2', 'admin2', 'posdua')
+  if (!adminPos) {
+    const uMatch = (adminUser.username || '').match(/(?:pos|admin)\s*([0-9]+|[a-z]+)/i);
+    if (uMatch) {
+      adminPos = 'pos ' + uMatch[1];
+    }
+  }
+
+  // Jika bukan Super Admin dan tidak punya Pos Wilayah yang valid, tolak akses ke data klien
+  if (!adminPos) {
+    return false;
+  }
+
+  const clientPos = normalizePosName(client ? client.pos_wilayah : '');
+  if (!clientPos) {
+    // Klien legacy/lama yang belum memiliki data pos_wilayah hanya milik Super Admin / Pusat
+    return false;
+  }
+
+  if (clientPos === adminPos) return true;
+
+  // Kamus konversi kata angka ke digit
+  const wordToNum = {
+    '1': '1', '2': '2', '3': '3', '4': '4', '5': '5',
+    '6': '6', '7': '7', '8': '8', '9': '9', '10': '10',
+    'satu': '1', 'dua': '2', 'tiga': '3', 'empat': '4', 'lima': '5',
+    'enam': '6', 'tujuh': '7', 'delapan': '8', 'sembilan': '9', 'sepuluh': '10'
+  };
+
+  const extractPosNumber = (str) => {
+    const m = str.match(/(?:pos|admin)\s*([0-9]+|[a-z]+)/i);
+    if (!m) return null;
+    const val = m[1].toLowerCase();
+    return wordToNum[val] || (/^[0-9]+$/.test(val) ? val : null);
+  };
+
+  const numAdmin = extractPosNumber(adminPos);
+  const numClient = extractPosNumber(clientPos);
+
+  // Jika kedua pihak memiliki nomor Pos (misal: Pos 2 vs Pos 3 atau Pos 2 vs Pos 2 (Tebing Tinggi))
+  if (numAdmin && numClient) {
+    return numAdmin === numClient;
+  }
+
+  // Cek kata kunci wilayah
+  const wilayahKeywords = [
+    'tebing tinggi', 'kabanjahe', 'lubuk pakam', 'langkat', 'binjai',
+    'medan', 'siantar', 'tanjung balai', 'sibolga'
+  ];
+  for (const kw of wilayahKeywords) {
+    if (adminPos.includes(kw) && clientPos.includes(kw)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
 module.exports = {
   NAMA_BULAN,
   NAMA_HARI,
@@ -131,5 +214,8 @@ module.exports = {
   formatTanggalWaktu,
   hashPassword,
   verifyPassword,
-  getFileUrl
+  getFileUrl,
+  isSuperAdmin,
+  normalizePosName,
+  isClientInAdminPos
 };

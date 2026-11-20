@@ -1,5 +1,5 @@
 const { isProfilClientLengkap, getKonfigurasi } = require('../models/db');
-const { getFileUrl } = require('../utils/helpers');
+const { getFileUrl, isSuperAdmin } = require('../utils/helpers');
 
 let cachedConfig = null;
 let lastConfigFetch = 0;
@@ -51,6 +51,8 @@ function setLocals(req, res, next) {
 
   res.locals.user = currentUser;
   res.locals.userType = currentUserType;
+  res.locals.currentAdmin = sess.adminUser || null;
+  res.locals.isSuperAdmin = isSuperAdmin;
   res.locals.isLoggedIn = Boolean(currentUser);
   res.locals.successMessage = sess.successMessage || null;
   res.locals.errorMessage = sess.errorMessage || null;

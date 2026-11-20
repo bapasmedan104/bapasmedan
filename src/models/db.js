@@ -1,6 +1,6 @@
 const crypto = require('crypto');
 const { db, firebaseAuth } = require('../config/firebase');
-const { hashPassword, verifyPassword, getNamaBulan } = require('../utils/helpers');
+const { hashPassword, verifyPassword, getNamaBulan, isSuperAdmin, isClientInAdminPos } = require('../utils/helpers');
 
 // Helper to convert Firestore snapshot to array of objects
 function docsToArray(snapshot) {
@@ -492,7 +492,7 @@ async function updateProfilClient(clientId, data, fotoRelatif = null) {
   return { success: true, message: 'Profil berhasil disimpan' };
 }
 
-async function createClient(data, adminId) {
+async function createClient(data, adminId, currentAdmin = null) {
   let username = (data.username || '').trim();
   const password = (data.password || '').trim();
   const namaLengkap = (data.nama_lengkap || '').trim();
@@ -506,6 +506,15 @@ async function createClient(data, adminId) {
   }
   if (!password) {
     return { success: false, message: 'Kata sandi klien wajib diisi!' };
+  }
+
+  // Tentukan pos_wilayah klien secara ketat berdasarkan role admin pembuat
+  let posWilayah = 'Semua Wilayah (Pusat)';
+  if (currentAdmin && !isSuperAdmin(currentAdmin)) {
+    // Admin Pos hanya bisa membuat klien pada pos wilayahnya sendiri
+    posWilayah = (currentAdmin.pos_wilayah || 'Pos Wilayah').trim();
+  } else if (data.pos_wilayah && data.pos_wilayah.trim()) {
+    posWilayah = data.pos_wilayah.trim();
   }
 
   // Jika username tidak diisi admin, gunakan nomor register sebagai username default
@@ -537,6 +546,7 @@ async function createClient(data, adminId) {
     password_plain: password, // Menyimpan sandi awal agar admin dapat mengingatkan klien jika lupa
     nama_lengkap: namaLengkap,
     no_register: noRegister,
+    pos_wilayah: posWilayah,
     tanggal_lahir: data.tanggal_lahir || '',
     tempat_lahir: data.tempat_lahir || '',
     alamat: data.alamat || '',
@@ -559,15 +569,23 @@ async function createClient(data, adminId) {
   };
 
   const docRef = await db.collection('client').add(newClient);
-  await logActivity('admin', adminId, 'Buat Client', `Admin membuat client baru: ${namaLengkap} (${noRegister})`);
-  return { success: true, id: docRef.id, message: `Klien "${namaLengkap}" (${noRegister}) berhasil ditambahkan!` };
+  await logActivity('admin', adminId, 'Buat Client', `Admin membuat client baru: ${namaLengkap} (${noRegister}) di wilayah ${posWilayah}`);
+  return { success: true, id: docRef.id, message: `Klien "${namaLengkap}" (${noRegister}) berhasil didaftarkan di ${posWilayah}!` };
 }
 
-async function updateClient(clientId, data, adminId) {
+async function updateClient(clientId, data, adminId, currentAdmin = null) {
   const docRef = db.collection('client').doc(clientId);
   const snap = await docRef.get();
   if (!snap.exists) {
     return { success: false, message: 'Client tidak ditemukan' };
+  }
+
+  const existingClient = snap.data();
+  // Validasi akses Admin Pos: tidak boleh mengubah klien pos lain
+  if (currentAdmin && !isSuperAdmin(currentAdmin)) {
+    if (!isClientInAdminPos(existingClient, currentAdmin)) {
+      return { success: false, message: 'Anda tidak memiliki hak akses untuk mengedit klien di luar wilayah pos Anda.' };
+    }
   }
 
   const updatePayload = {
@@ -576,6 +594,12 @@ async function updateClient(clientId, data, adminId) {
     no_telepon: data.no_telepon !== undefined ? data.no_telepon : snap.data().no_telepon,
     status: data.status || snap.data().status
   };
+
+  if (data.pos_wilayah && data.pos_wilayah.trim()) {
+    if (!currentAdmin || isSuperAdmin(currentAdmin)) {
+      updatePayload.pos_wilayah = data.pos_wilayah.trim();
+    }
+  }
 
   if (data.password && data.password.trim()) {
     updatePayload.password = await hashPassword(data.password.trim());
@@ -811,7 +835,7 @@ async function deleteLapor(laporId, adminId) {
   return { success: true, message: 'Laporan berhasil DIHAPUS PERMANEN dari Firebase' };
 }
 
-async function getAllClients(filterOptions = {}) {
+async function getAllClients(filterOptions = {}, currentAdmin = null) {
   const col = db.collection('client');
   const snap = await col.get();
   let clients = docsToArray(snap);
@@ -819,7 +843,17 @@ async function getAllClients(filterOptions = {}) {
   // Sorting default by created_at desc
   clients.sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
 
-  // Terapkan filter opsional
+  // 1. ISOLASI WILAYAH KLIEN:
+  // Jika admin bukan Super Admin (misal Admin Pos 2, Pos 3), HANYA tampilkan klien dari Pos tersebut.
+  // Jika Pos tersebut belum memiliki klien terdaftar, data klien KOSONG (0 klien).
+  if (currentAdmin && !isSuperAdmin(currentAdmin)) {
+    clients = clients.filter(c => isClientInAdminPos(c, currentAdmin));
+  } else if (filterOptions.pos_wilayah && filterOptions.pos_wilayah !== 'all') {
+    // Jika Super Admin memfilter khusus Pos Wilayah tertentu
+    clients = clients.filter(c => isClientInAdminPos(c, { pos_wilayah: filterOptions.pos_wilayah, role: 'admin_pos' }));
+  }
+
+  // 2. Terapkan filter opsional status, profil, dan search
   if (filterOptions.status && filterOptions.status !== 'all') {
     clients = clients.filter(c => c.status === filterOptions.status);
   }
@@ -835,6 +869,7 @@ async function getAllClients(filterOptions = {}) {
       (c.nama_lengkap && c.nama_lengkap.toLowerCase().includes(q)) ||
       (c.no_register && c.no_register.toLowerCase().includes(q)) ||
       (c.username && c.username.toLowerCase().includes(q)) ||
+      (c.pos_wilayah && c.pos_wilayah.toLowerCase().includes(q)) ||
       (c.no_telepon && c.no_telepon.toLowerCase().includes(q))
     );
   }
@@ -1044,7 +1079,7 @@ async function getInfoWajibLaporClient(clientId) {
 // ============================================
 // ADMIN WAJIB LAPOR & ADVANCED FILTERING
 // ============================================
-async function getAllLaporAdmin(filters = {}) {
+async function getAllLaporAdmin(filters = {}, currentAdmin = null) {
   const col = db.collection('wajib_lapor');
   const snap = await col.get();
   let allLapor = docsToArray(snap);
@@ -1070,11 +1105,28 @@ async function getAllLaporAdmin(filters = {}) {
       ...item,
       nama_lengkap: client.nama_lengkap || 'Klien Tidak Diketahui',
       no_register: client.no_register || '-',
+      pos_wilayah: client.pos_wilayah || 'Semua Wilayah (Pusat)',
       email: client.email || '',
       no_telepon: client.no_telepon || '',
-      admin_verifikasi: admin.nama_lengkap || '-'
+      admin_verifikasi: admin.nama_lengkap || admin.username || '-'
     };
   });
+
+  // 1. ISOLASI WILAYAH LAPORAN:
+  // Jika admin login adalah Admin Pos, HANYA tampilkan laporan dari klien yang terdaftar di Pos miliknya.
+  // Jika di Pos tersebut belum ada klien / belum ada laporan, data wajib lapor KOSONG.
+  if (currentAdmin && !isSuperAdmin(currentAdmin)) {
+    allLapor = allLapor.filter(item => {
+      const client = clientsMap[item.client_id] || {};
+      return isClientInAdminPos(client, currentAdmin);
+    });
+  } else if (filters.pos_wilayah && filters.pos_wilayah !== 'all') {
+    // Jika Super Admin memfilter khusus Pos Wilayah tertentu
+    allLapor = allLapor.filter(item => {
+      const client = clientsMap[item.client_id] || {};
+      return isClientInAdminPos(client, { pos_wilayah: filters.pos_wilayah, role: 'admin_pos' });
+    });
+  }
 
   // Terapkan Filter yang Lengkap:
   // 1. Filter Status
@@ -1082,12 +1134,13 @@ async function getAllLaporAdmin(filters = {}) {
     allLapor = allLapor.filter(item => item.status === filters.status);
   }
 
-  // 2. Filter Client Search (Nama, Register, ID)
+  // 2. Filter Client Search (Nama, Register, ID, Pos)
   if (filters.client && filters.client.trim()) {
     const q = filters.client.trim().toLowerCase();
     allLapor = allLapor.filter(item =>
       (item.nama_lengkap && item.nama_lengkap.toLowerCase().includes(q)) ||
       (item.no_register && item.no_register.toLowerCase().includes(q)) ||
+      (item.pos_wilayah && item.pos_wilayah.toLowerCase().includes(q)) ||
       (item.client_id && item.client_id.toLowerCase().includes(q))
     );
   }
@@ -1153,8 +1206,8 @@ async function getAllLaporAdmin(filters = {}) {
   return allLapor;
 }
 
-async function getLaporMenungguVerifikasi() {
-  return getAllLaporAdmin({ status: 'menunggu_verifikasi' });
+async function getLaporMenungguVerifikasi(currentAdmin = null) {
+  return getAllLaporAdmin({ status: 'menunggu_verifikasi' }, currentAdmin);
 }
 
 async function terimaLapor(laporId, adminId) {
@@ -1399,12 +1452,19 @@ async function balasPesanBantuanAdmin(sessionId, pesan, adminName) {
 // ============================================
 // STATISTIK
 // ============================================
-async function getStatistikAdmin() {
+async function getStatistikAdmin(currentAdmin = null) {
   const clientsSnap = await db.collection('client').get();
-  const clients = docsToArray(clientsSnap);
+  let clients = docsToArray(clientsSnap);
 
   const laporSnap = await db.collection('wajib_lapor').get();
-  const laporList = docsToArray(laporSnap);
+  let laporList = docsToArray(laporSnap);
+
+  // Jika login sebagai Admin Pos, hanya hitung data klien & laporan milik Pos tersebut
+  if (currentAdmin && !isSuperAdmin(currentAdmin)) {
+    clients = clients.filter(c => isClientInAdminPos(c, currentAdmin));
+    const clientIdsSet = new Set(clients.map(c => c.id));
+    laporList = laporList.filter(l => clientIdsSet.has(l.client_id));
+  }
 
   const stat = {
     total_client: clients.length,

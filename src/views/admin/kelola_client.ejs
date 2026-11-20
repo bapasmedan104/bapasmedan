@@ -91,6 +91,24 @@
 
   <%- include('../partials/alerts') %>
 
+  <!-- BADGE RUANG KERJA TERISOLASI (ADMIN POS) -->
+  <% if (typeof currentAdmin !== 'undefined' && currentAdmin && !isSuperAdmin(currentAdmin)) { %>
+    <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-left:4px solid #16a34a; border-radius:8px; padding:12px 18px; margin-bottom:20px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div style="width:38px; height:38px; border-radius:50%; background:#dcfce7; color:#15803d; display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0;">
+          <i class="fas fa-map-marker-alt"></i>
+        </div>
+        <div>
+          <div style="font-size:14px; font-weight:800; color:#166534;">Ruang Kerja Terisolasi: <%= currentAdmin.pos_wilayah %></div>
+          <div style="font-size:12px; color:#15803d;">Anda sedang mengelola data khusus wilayah <strong><%= currentAdmin.pos_wilayah %></strong>. Data Pos lain maupun Pusat tidak dicampur.</div>
+        </div>
+      </div>
+      <span class="badge badge-success" style="padding:6px 14px; font-size:12px; font-weight:800;">
+        <i class="fas fa-users"></i> Data Pos Anda: <%= clients.length %> Klien
+      </span>
+    </div>
+  <% } %>
+
   <!-- STATISTIK RINGKAS KLIEN -->
   <div class="stat-chips" style="display:flex; gap:12px; margin-bottom:20px; flex-wrap:wrap;">
     <div style="background:#eff6ff; border:1px solid #bfdbfe; padding:10px 16px; border-radius:6px; font-size:13px; color:#1e40af;">
@@ -113,6 +131,25 @@
       <div class="filter-inputs-row" style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
         <input type="text" name="search" placeholder="Cari nama, register, telepon..." value="<%= filterOptions.search %>" style="padding:9px 12px; border:1px solid #cbd5e1; border-radius:6px; font-size:14px; min-width:240px;">
 
+        <% if (typeof currentAdmin !== 'undefined' && currentAdmin && isSuperAdmin(currentAdmin)) { %>
+          <select name="pos_wilayah" onchange="this.form.submit()" style="padding:9px 12px; border:1px solid #cbd5e1; border-radius:6px; font-size:14px; font-weight:700; color:#003580;">
+            <option value="all" <%= (!filterOptions.pos_wilayah || filterOptions.pos_wilayah === 'all') ? 'selected' : '' %>>Semua Pos Wilayah (Pusat & Pos)</option>
+            <option value="Pos 1 (Pusat Medan)" <%= filterOptions.pos_wilayah === 'Pos 1 (Pusat Medan)' ? 'selected' : '' %>>Pos 1 (Pusat Medan)</option>
+            <option value="Pos 2 (Tebing Tinggi)" <%= filterOptions.pos_wilayah === 'Pos 2 (Tebing Tinggi)' ? 'selected' : '' %>>Pos 2 (Tebing Tinggi)</option>
+            <option value="Pos 3 (Kabanjahe)" <%= filterOptions.pos_wilayah === 'Pos 3 (Kabanjahe)' ? 'selected' : '' %>>Pos 3 (Kabanjahe)</option>
+            <option value="Pos 4 (Lubuk Pakam)" <%= filterOptions.pos_wilayah === 'Pos 4 (Lubuk Pakam)' ? 'selected' : '' %>>Pos 4 (Lubuk Pakam)</option>
+            <option value="Pos 5 (Langkat)" <%= filterOptions.pos_wilayah === 'Pos 5 (Langkat)' ? 'selected' : '' %>>Pos 5 (Langkat)</option>
+            <option value="Pos Medan" <%= filterOptions.pos_wilayah === 'Pos Medan' ? 'selected' : '' %>>Pos Medan</option>
+            <option value="Pos Tebing Tinggi" <%= filterOptions.pos_wilayah === 'Pos Tebing Tinggi' ? 'selected' : '' %>>Pos Tebing Tinggi</option>
+            <option value="Pos Kabanjahe" <%= filterOptions.pos_wilayah === 'Pos Kabanjahe' ? 'selected' : '' %>>Pos Kabanjahe</option>
+            <option value="Pos Lubuk Pakam" <%= filterOptions.pos_wilayah === 'Pos Lubuk Pakam' ? 'selected' : '' %>>Pos Lubuk Pakam</option>
+            <option value="Pos Tanjung Balai" <%= filterOptions.pos_wilayah === 'Pos Tanjung Balai' ? 'selected' : '' %>>Pos Tanjung Balai</option>
+            <option value="Pos Sibolga" <%= filterOptions.pos_wilayah === 'Pos Sibolga' ? 'selected' : '' %>>Pos Sibolga</option>
+            <option value="Pos Pematang Siantar" <%= filterOptions.pos_wilayah === 'Pos Pematang Siantar' ? 'selected' : '' %>>Pos Pematang Siantar</option>
+            <option value="Pos Binjai" <%= filterOptions.pos_wilayah === 'Pos Binjai' ? 'selected' : '' %>>Pos Binjai</option>
+          </select>
+        <% } %>
+
         <select name="status" onchange="this.form.submit()" style="padding:9px 12px; border:1px solid #cbd5e1; border-radius:6px; font-size:14px;">
           <option value="all" <%= filterOptions.status === 'all' ? 'selected' : '' %>>Semua Status</option>
           <option value="aktif" <%= filterOptions.status === 'aktif' ? 'selected' : '' %>>Aktif</option>
@@ -128,7 +165,7 @@
 
         <div class="filter-btn-pair" style="display:flex; gap:8px;">
           <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Cari</button>
-          <% if (filterOptions.search || filterOptions.status !== 'all' || filterOptions.profil_lengkap !== 'all') { %>
+          <% if (filterOptions.search || filterOptions.status !== 'all' || filterOptions.profil_lengkap !== 'all' || (filterOptions.pos_wilayah && filterOptions.pos_wilayah !== 'all')) { %>
             <a href="/admin/kelola-client" class="btn btn-secondary"><i class="fas fa-undo"></i> Reset</a>
           <% } %>
         </div>
@@ -149,7 +186,12 @@
   <!-- TABEL KLIEN -->
   <div class="card">
     <div class="card-title">
-      <i class="fas fa-address-book"></i> Daftar Seluruh Klien BAPAS (<%= clients.length %>)
+      <i class="fas fa-address-book"></i> 
+      <% if (typeof currentAdmin !== 'undefined' && currentAdmin && !isSuperAdmin(currentAdmin)) { %>
+        Daftar Klien Binaan <%= currentAdmin.pos_wilayah %> (<%= clients.length %>)
+      <% } else { %>
+        Daftar Seluruh Klien BAPAS (<%= clients.length %>)
+      <% } %>
     </div>
 
     <% if (clients && clients.length > 0) { %>
@@ -164,6 +206,7 @@
               <th style="width:50px;">No</th>
               <th style="min-width:180px;">No Register & Sandi Login</th>
               <th style="min-width:200px;">Nama Lengkap</th>
+              <th style="min-width:140px;">Pos Wilayah</th>
               <th style="min-width:130px;">Username</th>
               <th style="min-width:140px;">Kontak / Telp</th>
               <th style="min-width:110px;">Status Akun</th>
@@ -194,6 +237,11 @@
                       <% if (c.email) { %><br><span style="font-size:12px; color:#64748b;"><%= c.email %></span><% } %>
                     </div>
                   </div>
+                </td>
+                <td>
+                  <span class="badge" style="background:#eff6ff; color:#1e40af; border:1px solid #bfdbfe; font-size:11.5px; padding:4px 8px;">
+                    <i class="fas fa-map-marker-alt" style="color:#ef4444; font-size:10px;"></i> <%= c.pos_wilayah || 'Semua Wilayah (Pusat)' %>
+                  </span>
                 </td>
               <td><code><%= c.username %></code></td>
               <td><%= c.no_telepon || '-' %></td>
@@ -233,7 +281,15 @@
     <% } else { %>
       <div style="text-align:center; padding:50px 20px; color:#94a3b8;">
         <i class="fas fa-user-slash" style="font-size:48px; color:#cbd5e1; margin-bottom:12px;"></i>
-        <p>Tidak ada data klien yang cocok dengan filter yang dipilih.</p>
+        <% if (typeof currentAdmin !== 'undefined' && currentAdmin && !isSuperAdmin(currentAdmin)) { %>
+          <h3 style="font-size:17px; color:#334155; margin-bottom:6px;">Belum Ada Klien di <%= currentAdmin.pos_wilayah %></h3>
+          <p style="font-size:13.5px; color:#64748b; margin-bottom:18px;">Pos wilayah ini belum memiliki klien bimbingan yang terdaftar. Data dari Pos lain maupun Pusat tidak dicampur ke sini.</p>
+          <button type="button" class="btn btn-primary" onclick="openTambahModal()">
+            <i class="fas fa-user-plus"></i> Tambah Klien Baru di <%= currentAdmin.pos_wilayah %>
+          </button>
+        <% } else { %>
+          <p>Tidak ada data klien yang cocok dengan filter yang dipilih.</p>
+        <% } %>
       </div>
     <% } %>
   </div>
@@ -297,6 +353,35 @@
           <input type="date" name="tanggal_lahir" id="tanggal_lahir">
         </div>
       </div>
+
+      <!-- POS WILAYAH KERJA KLIEN -->
+      <% if (typeof currentAdmin !== 'undefined' && currentAdmin && !isSuperAdmin(currentAdmin)) { %>
+        <div class="form-group" style="background:#f0fdf4; border:1px solid #bbf7d0; padding:12px 14px; border-radius:6px; margin-bottom:18px;">
+          <label style="color:#166534; font-weight:700; font-size:13px; display:flex; align-items:center; gap:6px; margin-bottom:4px;">
+            <i class="fas fa-map-marker-alt" style="color:#16a34a;"></i> Pos Wilayah BAPAS Klien *
+          </label>
+          <input type="text" value="<%= currentAdmin.pos_wilayah %>" readonly style="background:#ffffff; border:1px solid #86efac; font-weight:800; color:#15803d; cursor:not-allowed;">
+          <input type="hidden" name="pos_wilayah" value="<%= currentAdmin.pos_wilayah %>">
+          <small style="color:#15803d; font-size:11px; display:block; margin-top:4px;"><i class="fas fa-lock"></i> Klien baru otomatis didaftarkan pada wilayah pos kerja Anda (<%= currentAdmin.pos_wilayah %>).</small>
+        </div>
+      <% } else { %>
+        <div class="form-group">
+          <label for="pos_wilayah" style="font-weight:700;"><i class="fas fa-map-marker-alt" style="color:#ef4444;"></i> Pos / Wilayah Kerja BAPAS *</label>
+          <select name="pos_wilayah" id="pos_wilayah" required style="font-weight:700; color:#003580;">
+            <option value="Semua Wilayah (Pusat)">Semua Wilayah (Pusat BAPAS Medan)</option>
+            <option value="Pos 1 (Pusat Medan)">Pos 1 (Pusat Medan)</option>
+            <option value="Pos 2 (Tebing Tinggi)">Pos 2 (Tebing Tinggi)</option>
+            <option value="Pos 3 (Kabanjahe)">Pos 3 (Kabanjahe)</option>
+            <option value="Pos 4 (Lubuk Pakam)">Pos 4 (Lubuk Pakam)</option>
+            <option value="Pos 5 (Langkat)">Pos 5 (Langkat)</option>
+            <option value="Pos Medan">Pos Medan</option>
+            <option value="Pos Tebing Tinggi">Pos Tebing Tinggi</option>
+            <option value="Pos Kabanjahe">Pos Kabanjahe</option>
+            <option value="Pos Lubuk Pakam">Pos Lubuk Pakam</option>
+          </select>
+          <small style="color:#64748b; font-size:11px; display:block; margin-top:4px;">Pilih Pos BAPAS tempat klien ini terdaftar dan dipantau oleh admin pos bersangkutan.</small>
+        </div>
+      <% } %>
 
       <!-- PERIODE WAJIB LAPOR -->
       <div style="background:#f8fafc; border:1px solid #cbd5e1; padding:14px; border-radius:8px; margin-bottom:18px;">
@@ -381,6 +466,27 @@
         <label for="editTanggalLahir">Tanggal Lahir</label>
         <input type="date" name="tanggal_lahir" id="editTanggalLahir">
       </div>
+
+      <% if (typeof currentAdmin !== 'undefined' && currentAdmin && isSuperAdmin(currentAdmin)) { %>
+        <div class="form-group">
+          <label for="editPosWilayah"><i class="fas fa-map-marker-alt" style="color:#ef4444;"></i> Pos / Wilayah Kerja BAPAS *</label>
+          <select name="pos_wilayah" id="editPosWilayah" style="font-weight:700; color:#003580;">
+            <option value="Semua Wilayah (Pusat)">Semua Wilayah (Pusat BAPAS Medan)</option>
+            <option value="Pos 1 (Pusat Medan)">Pos 1 (Pusat Medan)</option>
+            <option value="Pos 2 (Tebing Tinggi)">Pos 2 (Tebing Tinggi)</option>
+            <option value="Pos 3 (Kabanjahe)">Pos 3 (Kabanjahe)</option>
+            <option value="Pos 4 (Lubuk Pakam)">Pos 4 (Lubuk Pakam)</option>
+            <option value="Pos 5 (Langkat)">Pos 5 (Langkat)</option>
+            <option value="Pos Medan">Pos Medan</option>
+            <option value="Pos Tebing Tinggi">Pos Tebing Tinggi</option>
+            <option value="Pos Kabanjahe">Pos Kabanjahe</option>
+            <option value="Pos Lubuk Pakam">Pos Lubuk Pakam</option>
+          </select>
+          <small style="color:#64748b; font-size:11px; display:block; margin-top:3px;">Super Admin dapat memindahkan atau menetapkan pos wilayah untuk klien ini.</small>
+        </div>
+      <% } else { %>
+        <input type="hidden" name="pos_wilayah" id="editPosWilayah">
+      <% } %>
 
       <!-- KOTAK RESET SANDI KLIEN -->
       <div style="background:#fefce8; border:1px solid #fef08a; padding:14px; border-radius:6px; margin-bottom:18px;">
@@ -554,6 +660,10 @@
     document.getElementById('editStatus').value = c.status || 'aktif';
     document.getElementById('editTanggalLahir').value = c.tanggal_lahir || '';
     document.getElementById('editPassword').value = '';
+    const posEl = document.getElementById('editPosWilayah');
+    if (posEl) {
+      posEl.value = c.pos_wilayah || 'Semua Wilayah (Pusat)';
+    }
     document.getElementById('modalEdit').classList.add('active');
   }
   function closeEditModal() {
