@@ -879,3 +879,194 @@ table.table tbody tr:nth-child(even) {
 table.table tbody tr:hover {
   background-color: #f1f5f9 !important;
 }
+
+/* ==========================================================
+   PUBLIC NAVBAR & MOBILE HAMBURGER POSITIONING
+   Pindahkan navbar ke bagian paling atas layar mobile (sticky app-bar)
+   Lengkap dengan logo instansi dan tombol menu bergaya capsule modern
+   ========================================================== */
+.nav-brand-mobile {
+  display: none;
+}
+
+@media (max-width: 992px) {
+  body {
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 100vh !important;
+  }
+
+  nav.navbar {
+    order: -1 !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 10000 !important;
+    width: 100% !important;
+    background: linear-gradient(135deg, #001e4d 0%, #002b66 60%, #003580 100%) !important;
+    border-bottom: 2px solid #f59e0b !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35) !important;
+    padding: 8px 0 !important;
+    margin: 0 !important;
+  }
+
+  nav.navbar .nav-container {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 0 16px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    position: relative !important;
+  }
+
+  .nav-brand-mobile {
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  .nav-brand-mobile a {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    text-decoration: none !important;
+  }
+
+  .nav-brand-mobile img {
+    height: 32px !important;
+    width: auto !important;
+    filter: drop-shadow(0 1px 3px rgba(0,0,0,0.4)) !important;
+  }
+
+  .hamburger {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+    color: #001e4d !important;
+    border: 1.5px solid #fbbf24 !important;
+    border-radius: 8px !important;
+    padding: 7px 14px !important;
+    font-size: 13px !important;
+    font-weight: 800 !important;
+    cursor: pointer !important;
+    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.45) !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    margin: 0 !important;
+    min-height: 38px !important;
+  }
+
+  .hamburger .hamburger-label {
+    display: inline-block !important;
+    font-size: 12px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.5px !important;
+    text-transform: uppercase !important;
+    color: #001e4d !important;
+    line-height: 1 !important;
+  }
+
+  .hamburger i {
+    font-size: 14px !important;
+    color: #001e4d !important;
+    line-height: 1 !important;
+  }
+
+  .hamburger:hover, .hamburger:active {
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.55) !important;
+  }
+
+  .hamburger[aria-expanded="true"] {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+    border-color: #f87171 !important;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4) !important;
+  }
+
+  .hamburger[aria-expanded="true"] .hamburger-label,
+  .hamburger[aria-expanded="true"] i {
+    color: #ffffff !important;
+  }
+
+  nav.navbar .nav-menu {
+    display: none;
+    flex-direction: column !important;
+    position: absolute !important;
+    top: 100% !important;
+    left: 0 !important;
+    right: 0 !important;
+    background: #001938 !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-bottom: 3px solid #f59e0b !important;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6) !important;
+    max-height: calc(100vh - 70px) !important;
+    overflow-y: auto !important;
+    padding: 8px 0 !important;
+    z-index: 99999 !important;
+  }
+
+  nav.navbar .nav-menu.open {
+    display: flex !important;
+  }
+
+  nav.navbar .nav-item > a {
+    padding: 13px 20px !important;
+    min-height: 48px !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    color: #f1f5f9 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    text-decoration: none !important;
+    background: transparent !important;
+  }
+
+  nav.navbar .nav-item > a:hover,
+  nav.navbar .nav-item.active > a {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: #fef08a !important;
+  }
+
+  nav.navbar .nav-item > a i:first-child {
+    margin-right: 10px !important;
+    color: #f59e0b !important;
+    width: 20px !important;
+    text-align: center !important;
+  }
+
+  nav.navbar .dropdown {
+    position: static !important;
+    background: rgba(0, 0, 0, 0.25) !important;
+    box-shadow: none !important;
+    border-top: none !important;
+    border-left: 3px solid #f59e0b !important;
+    margin: 4px 14px 8px 14px !important;
+    border-radius: 6px !important;
+    padding: 4px 0 !important;
+  }
+
+  nav.navbar .dropdown li a {
+    padding: 11px 16px !important;
+    min-height: 44px !important;
+    color: #cbd5e1 !important;
+    font-size: 13px !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    text-decoration: none !important;
+  }
+
+  nav.navbar .dropdown li a:hover {
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: #ffffff !important;
+    padding-left: 20px !important;
+  }
+
+  nav.navbar .dropdown li a i {
+    color: #f59e0b !important;
+    width: 16px !important;
+  }
+}

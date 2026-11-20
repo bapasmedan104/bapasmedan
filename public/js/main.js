@@ -43,9 +43,11 @@ const navMenu = document.getElementById('navMenu');
 if (hamburger && navMenu) {
   hamburger.addEventListener('click', () => {
     navMenu.classList.toggle('open');
-    hamburger.innerHTML = navMenu.classList.contains('open')
-      ? '<i class="fas fa-times"></i>'
-      : '<i class="fas fa-bars"></i>';
+    const isOpen = navMenu.classList.contains('open');
+    hamburger.setAttribute('aria-expanded', isOpen);
+    hamburger.innerHTML = isOpen
+      ? '<span class="hamburger-label">Tutup</span><i class="fas fa-times"></i>'
+      : '<span class="hamburger-label">Menu</span><i class="fas fa-bars"></i>';
   });
 }
 

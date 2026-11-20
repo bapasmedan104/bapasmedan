@@ -81,7 +81,8 @@ function getPrivasiPage(req, res) {
     pageKeywords: 'kebijakan privasi bapas medan, pelindungan data pribadi klien pemasyarakatan, kerahasiaan wajib lapor bapas',
     canonicalUrl: '/privasi',
     activePage: 'privasi',
-    sub: ''
+    sub: '',
+    tahunBerlaku: new Date().getFullYear()
   });
 }
 
@@ -92,7 +93,8 @@ function getSyaratKetentuanPage(req, res) {
     pageKeywords: 'syarat ketentuan wajib lapor bapas medan, tata tertib klien pemasyarakatan, ketentuan integrasi bapas medan',
     canonicalUrl: '/syarat-ketentuan',
     activePage: 'syarat-ketentuan',
-    sub: ''
+    sub: '',
+    tahunBerlaku: new Date().getFullYear()
   });
 }
 
