@@ -21,6 +21,14 @@ router.post('/client/update', adminController.postUpdateClient);
 router.post('/client/reset-password', adminController.postResetClientPassword);
 router.post('/client/delete', adminController.postDeleteClient);
 
+// Kelola Admin & Petugas Pos BAPAS
+router.get('/kelola-admin', adminController.getKelolaAdmin);
+router.post('/admin-user/create', adminController.postCreateAdminUser);
+router.post('/admin-user/update', adminController.postUpdateAdminUser);
+router.post('/admin-user/reset-password', adminController.postResetAdminUserPassword);
+router.post('/admin-user/toggle-status', adminController.postToggleAdminUserStatus);
+router.post('/admin-user/delete', adminController.postDeleteAdminUser);
+
 // Reset Password Administrator
 router.post('/reset-password', adminController.postResetAdminPassword);
 

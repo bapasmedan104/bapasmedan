@@ -143,6 +143,203 @@ async function loginAdmin(identifier, password) {
 }
 
 // ============================================
+// MULTI-ADMIN & PETUGAS POS METHODS
+// ============================================
+async function getAllAdmins() {
+  const col = db.collection('admin');
+  const snap = await col.get();
+  const list = docsToArray(snap);
+  list.sort((a, b) => {
+    if (a.role === 'super_admin' || a.email === 'bapasmedan104@gmail.com') return -1;
+    if (b.role === 'super_admin' || b.email === 'bapasmedan104@gmail.com') return 1;
+    return (new Date(a.created_at || 0)) - (new Date(b.created_at || 0));
+  });
+  return list.map(item => {
+    const { password, reset_token, reset_code, ...safeData } = item;
+    return safeData;
+  });
+}
+
+async function createAdminUser(data) {
+  const username = (data.username || '').trim().toLowerCase();
+  const email = (data.email || '').trim().toLowerCase();
+  const namaLengkap = (data.nama_lengkap || '').trim();
+  const password = data.password ? data.password.trim() : '';
+  const posWilayah = (data.pos_wilayah || 'Semua Wilayah (Pusat)').trim();
+  const role = data.role === 'super_admin' ? 'super_admin' : 'admin_pos';
+  const noTelepon = (data.no_telepon || '').trim();
+  const status = data.status === 'nonaktif' ? 'nonaktif' : 'aktif';
+
+  if (!username) {
+    return { success: false, message: 'Username admin wajib diisi' };
+  }
+  if (!namaLengkap) {
+    return { success: false, message: 'Nama Lengkap / Nama Pos Petugas wajib diisi' };
+  }
+  if (!password || password.length < 5) {
+    return { success: false, message: 'Kata sandi minimal 5 karakter' };
+  }
+
+  // Cek duplikasi username
+  const existingUsername = await getAdminByUsername(username);
+  if (existingUsername) {
+    return { success: false, message: `Username "${username}" sudah digunakan oleh akun admin lain.` };
+  }
+
+  // Cek duplikasi email jika diisi
+  if (email) {
+    const existingEmail = await getAdminByEmail(email);
+    if (existingEmail) {
+      return { success: false, message: `Email "${email}" sudah terdaftar pada akun admin lain.` };
+    }
+  }
+
+  const hashedPassword = await hashPassword(password);
+  const newAdminDoc = {
+    username,
+    email: email || '',
+    nama_lengkap: namaLengkap,
+    pos_wilayah: posWilayah,
+    role,
+    no_telepon: noTelepon,
+    status,
+    password: hashedPassword,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    last_login: null
+  };
+
+  const docRef = await db.collection('admin').add(newAdminDoc);
+  await logActivity('admin', docRef.id, 'Tambah Admin', `Admin baru dibuat: ${username} (${namaLengkap} - ${posWilayah})`);
+
+  return {
+    success: true,
+    id: docRef.id,
+    message: `Akun admin ${username} (${namaLengkap}) berhasil dibuat!`
+  };
+}
+
+async function updateAdminUser(adminId, data) {
+  const docRef = db.collection('admin').doc(adminId);
+  const snap = await docRef.get();
+  if (!snap.exists) {
+    return { success: false, message: 'Akun admin tidak ditemukan' };
+  }
+
+  const existing = snap.data();
+  const username = (data.username || existing.username || '').trim().toLowerCase();
+  const email = (data.email !== undefined ? data.email : (existing.email || '')).trim().toLowerCase();
+  const namaLengkap = (data.nama_lengkap || existing.nama_lengkap || '').trim();
+  const posWilayah = (data.pos_wilayah || existing.pos_wilayah || 'Semua Wilayah (Pusat)').trim();
+  const role = (data.role || existing.role || 'admin_pos');
+  const noTelepon = (data.no_telepon !== undefined ? data.no_telepon : (existing.no_telepon || '')).trim();
+  const status = (data.status || existing.status || 'aktif');
+
+  const isPrimarySuperAdmin = existing.email === 'bapasmedan104@gmail.com' || existing.username === 'admin';
+
+  if (username !== existing.username) {
+    const checkUser = await getAdminByUsername(username);
+    if (checkUser && checkUser.id !== adminId) {
+      return { success: false, message: `Username "${username}" sudah digunakan akun lain.` };
+    }
+  }
+
+  if (email && email !== existing.email) {
+    const checkEmail = await getAdminByEmail(email);
+    if (checkEmail && checkEmail.id !== adminId) {
+      return { success: false, message: `Email "${email}" sudah digunakan akun lain.` };
+    }
+  }
+
+  const updatePayload = {
+    username,
+    email,
+    nama_lengkap: namaLengkap,
+    pos_wilayah: isPrimarySuperAdmin ? (existing.pos_wilayah || 'Semua Wilayah (Pusat)') : posWilayah,
+    role: isPrimarySuperAdmin ? 'super_admin' : role,
+    no_telepon: noTelepon,
+    status: isPrimarySuperAdmin ? 'aktif' : status,
+    updated_at: new Date().toISOString()
+  };
+
+  if (data.password && data.password.trim()) {
+    if (data.password.trim().length < 5) {
+      return { success: false, message: 'Kata sandi minimal 5 karakter' };
+    }
+    updatePayload.password = await hashPassword(data.password.trim());
+    updatePayload.password_reset_at = new Date().toISOString();
+  }
+
+  await docRef.set(updatePayload, { merge: true });
+  await logActivity('admin', adminId, 'Update Admin', `Akun admin ${username} diperbarui`);
+
+  return { success: true, message: `Data admin ${namaLengkap} berhasil diperbarui!` };
+}
+
+async function resetAdminUserPassword(adminId, newPassword) {
+  if (!newPassword || newPassword.trim().length < 5) {
+    return { success: false, message: 'Kata sandi baru minimal 5 karakter' };
+  }
+  const docRef = db.collection('admin').doc(adminId);
+  const snap = await docRef.get();
+  if (!snap.exists) {
+    return { success: false, message: 'Akun admin tidak ditemukan' };
+  }
+
+  const hashedPassword = await hashPassword(newPassword.trim());
+  await docRef.set({
+    password: hashedPassword,
+    password_reset_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  }, { merge: true });
+
+  await logActivity('admin', adminId, 'Reset Password Admin', `Sandi akun admin ID: ${adminId} direset`);
+  return { success: true, message: 'Kata sandi akun admin berhasil direset!' };
+}
+
+async function toggleAdminUserStatus(adminId, requesterAdminId) {
+  const docRef = db.collection('admin').doc(adminId);
+  const snap = await docRef.get();
+  if (!snap.exists) return { success: false, message: 'Akun admin tidak ditemukan' };
+
+  const existing = snap.data();
+  if (existing.email === 'bapasmedan104@gmail.com' || existing.username === 'admin') {
+    return { success: false, message: 'Akun Super Administrator Utama tidak dapat dinonaktifkan!' };
+  }
+  if (adminId === requesterAdminId) {
+    return { success: false, message: 'Anda tidak dapat menonaktifkan akun Anda sendiri yang sedang aktif!' };
+  }
+
+  const newStatus = existing.status === 'aktif' ? 'nonaktif' : 'aktif';
+  await docRef.set({
+    status: newStatus,
+    updated_at: new Date().toISOString()
+  }, { merge: true });
+
+  await logActivity('admin', requesterAdminId, 'Ubah Status Admin', `Status admin ${existing.username} diubah menjadi ${newStatus}`);
+  return { success: true, message: `Status akun admin ${existing.username} berhasil diubah menjadi ${newStatus.toUpperCase()}` };
+}
+
+async function deleteAdminUser(adminId, requesterAdminId) {
+  const docRef = db.collection('admin').doc(adminId);
+  const snap = await docRef.get();
+  if (!snap.exists) return { success: false, message: 'Akun admin tidak ditemukan' };
+
+  const existing = snap.data();
+  if (existing.email === 'bapasmedan104@gmail.com' || existing.username === 'admin') {
+    return { success: false, message: 'Akun Super Administrator Utama tidak boleh dihapus demi keamanan sistem!' };
+  }
+  if (adminId === requesterAdminId) {
+    return { success: false, message: 'Anda tidak dapat menghapus akun Anda sendiri saat sedang login!' };
+  }
+
+  await docRef.delete();
+  await logActivity('admin', requesterAdminId, 'Hapus Admin', `Akun admin ${existing.username} (${existing.nama_lengkap}) dihapus permanen`);
+
+  return { success: true, message: `Akun admin ${existing.username} berhasil dihapus!` };
+}
+
+// ============================================
 // CLIENT METHODS
 // ============================================
 async function getClientByUsername(username) {
@@ -1273,5 +1470,11 @@ module.exports = {
   getAllPesanBantuan,
   balasPesanBantuanAdmin,
   getStatistikAdmin,
-  getStatistikClient
+  getStatistikClient,
+  getAllAdmins,
+  createAdminUser,
+  updateAdminUser,
+  resetAdminUserPassword,
+  toggleAdminUserStatus,
+  deleteAdminUser
 };

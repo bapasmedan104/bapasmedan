@@ -139,7 +139,9 @@ async function postAdminLogin(req, res) {
       id: adminUser.id,
       username: adminUser.username,
       nama_lengkap: adminUser.nama_lengkap,
-      email: adminUser.email
+      email: adminUser.email,
+      pos_wilayah: adminUser.pos_wilayah || 'Semua Pos (Pusat)',
+      role: adminUser.role || (adminUser.email === 'bapasmedan104@gmail.com' ? 'super_admin' : 'admin_pos')
     };
     req.session.user = req.session.adminUser;
     req.session.userType = 'admin';

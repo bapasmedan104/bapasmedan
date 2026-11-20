@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= pageTitle %></title>
+  <!-- Favicon Icons -->
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family: 'Source Sans 3', sans-serif; background: #f8fafc; color: #1e293b; }
+    .navbar {
+      position: sticky; top: 0; left: 0; right: 0; width: 100%;
+      background: linear-gradient(135deg, #1a3a52 0%, #2d5f8d 100%);
+      color: white; padding: 15px 30px; z-index: 1000;
+      display: flex; justify-content: space-between; align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    }
+    .navbar a { color: white; text-decoration: none; font-size: 14px; margin-left: 20px; transition: color 0.2s; }
+    .navbar a:hover, .navbar a.active { color: #f59e0b; }
+    .container { max-width: 1400px; margin: 25px auto 40px; padding: 0 20px; }
+    .header { margin-bottom: 25px; }
+    .header h1 { font-family: 'Playfair Display', serif; color: #1a3a52; font-size: 30px; margin-bottom: 4px; }
+    .card { background: white; border-radius: 8px; padding: 25px; margin-bottom: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .card-title { font-size: 18px; font-weight: 700; color: #1a3a52; margin-bottom: 18px; display: flex; align-items: center; gap: 10px; }
+    
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 25px; }
+    .stat-card {
+      background: white; padding: 22px; border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06); border-left: 4px solid #0052a3;
+    }
+    .stat-label { color: #64748b; font-size: 12px; text-transform: uppercase; font-weight: 700; margin-bottom: 6px; }
+    .stat-number { font-size: 28px; font-weight: 800; color: #003580; }
+
+    .table { width: 100%; border-collapse: collapse; margin-top: 10px; border: 1px solid #cbd5e1; background: #fff; }
+    .table th { background: #f1f5f9; padding: 12px 14px; text-align: left; font-size: 13px; font-weight: 700; color: #1e293b; border: 1px solid #cbd5e1; }
+    .table td { padding: 12px 14px; border: 1px solid #cbd5e1; font-size: 14px; vertical-align: middle; }
+    .table tbody tr:nth-child(even) { background-color: #f8fafc; }
+    .table tbody tr:hover { background-color: #f1f5f9; }
+    
+    .badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 11.5px; font-weight: 700; }
+    .badge-success { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+    .badge-primary { background: #e0f2fe; color: #0369a1; border: 1px solid #7dd3fc; }
+    .badge-warning { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+    .badge-danger { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+
+    .btn {
+      padding: 9px 18px; border: none; border-radius: 6px; font-size: 13px; font-weight: 700;
+      cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;
+      font-family: inherit;
+    }
+    .btn-sm { padding: 6px 12px; font-size: 12px; }
+    .btn-primary { background: #003580; color: white; }
+    .btn-primary:hover { background: #002255; }
+    .btn-success { background: #16a34a; color: white; }
+    .btn-success:hover { background: #15803d; }
+    .btn-danger { background: #dc2626; color: white; }
+    .btn-danger:hover { background: #b91c1c; }
+    .btn-secondary { background: #64748b; color: white; }
+    .btn-secondary:hover { background: #475569; }
+    .btn-warning { background: #f59e0b; color: white; }
+    .btn-warning:hover { background: #d97706; }
+
+    .modal {
+      display: none; position: fixed; top:0; left:0; right:0; bottom:0;
+      background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center; padding: 20px;
+    }
+    .modal.active { display: flex; }
+    .modal-content { background: white; border-radius: 10px; padding: 26px; max-width: 620px; width: 100%; max-height: 90vh; overflow-y: auto; box-sizing:border-box; }
+    .swal2-container { z-index: 9999999 !important; }
+
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-weight: 700; font-size: 13px; color: #334e68; margin-bottom: 6px; }
+    .form-group input, .form-group select {
+      width: 100%; padding: 10px 12px; border: 1.5px solid #cbd5e1; border-radius: 6px; font-family: inherit; font-size: 14px; box-sizing: border-box;
+    }
+    .form-group input:focus, .form-group select:focus { outline: none; border-color: #003580; box-shadow: 0 0 0 3px rgba(0,53,128,0.1); }
+    
+    .admin-desktop-table { display: block; }
+    .admin-mobile-cards { display: none; }
+    @media (max-width: 768px) {
+      .admin-desktop-table { display: none !important; }
+      .admin-mobile-cards { display: flex !important; flex-direction: column !important; gap: 12px !important; }
+    }
+    .admin-card-item {
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 15px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+  <div style="font-weight:800; font-size:15px; display:flex; align-items:center; gap:8px;">
+    <i class="fas fa-shield-alt" style="color:#f59e0b;"></i>
+    <span>BAPAS MEDAN &bull; ADMIN</span>
+  </div>
+  <div>
+    <a href="/admin/dashboard"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
+    <a href="/admin/riwayat-lapor"><i class="fas fa-filter"></i> <span>Riwayat Lapor</span></a>
+    <a href="/admin/kelola-client"><i class="fas fa-users-cog"></i> <span>Kelola Klien</span></a>
+    <a href="/admin/kelola-admin" class="active"><i class="fas fa-user-shield"></i> <span>Kelola Admin Pos</span></a>
+    <a href="javascript:void(0)" onclick="openResetAdminModal()"><i class="fas fa-key"></i> <span>Sandi Saya</span></a>
+    <a href="/logout" class="nav-logout"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
+  </div>
+</div>
+
+<div class="container">
+  <div class="header">
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+      <div>
+        <h1><i class="fas fa-users-cog" style="color:#003580;"></i> Kelola Akun Admin & Petugas Pos</h1>
+        <p style="color:#64748b; font-size:14px; margin-top:4px;">
+          Manajemen akun Administrator Pusat dan Admin Pos BAPAS untuk monitoring mandiri dan verifikasi wajib lapor terpadu.
+        </p>
+      </div>
+      <div>
+        <button type="button" class="btn btn-primary" onclick="openCreateAdminModal()" style="padding:11px 20px; font-size:14px; box-shadow:0 3px 10px rgba(0,53,128,0.2);">
+          <i class="fas fa-user-plus"></i> Tambah Akun Admin Baru
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <%- include('../partials/alerts') %>
+
+  <!-- STATISTIK RINGKASAN -->
+  <div class="stat-grid">
+    <div class="stat-card" style="border-left-color:#003580;">
+      <div class="stat-label">Total Akun Admin</div>
+      <div class="stat-number"><%= stat.total_admin %></div>
+    </div>
+    <div class="stat-card" style="border-left-color:#16a34a;">
+      <div class="stat-label">Admin Aktif</div>
+      <div class="stat-number" style="color:#16a34a;"><%= stat.total_aktif %></div>
+    </div>
+    <div class="stat-card" style="border-left-color:#f59e0b;">
+      <div class="stat-label">Petugas Pos / Verifikator</div>
+      <div class="stat-number" style="color:#d97706;"><%= stat.total_pos %></div>
+    </div>
+  </div>
+
+  <!-- KOTAK PENCARIAN & FILTER ADMIN -->
+  <div class="card" style="padding:18px 22px; margin-bottom:20px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+      <div style="display:flex; align-items:center; gap:8px; flex:1; min-width:240px;">
+        <i class="fas fa-search" style="color:#64748b;"></i>
+        <input type="text" id="adminSearchInput" onkeyup="filterAdminList()" placeholder="Cari admin berdasarkan nama, username, pos wilayah, atau email..." style="width:100%; padding:10px 14px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13.5px; font-family:inherit;">
+      </div>
+      <div style="font-size:12.5px; color:#64748b;">
+        Menampilkan <strong id="adminCountText"><%= adminList.length %></strong> akun admin terdaftar
+      </div>
+    </div>
+  </div>
+
+  <!-- DAFTAR AKUN ADMIN (DESKTOP TABLE) -->
+  <div class="card">
+    <div class="card-title">
+      <i class="fas fa-shield-alt" style="color:#003580;"></i> Daftar Administrator & Petugas Pos BAPAS
+    </div>
+
+    <div class="admin-desktop-table table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th style="width:50px;">No</th>
+            <th style="min-width:200px;">Nama Petugas / Identitas</th>
+            <th style="min-width:140px;">Username</th>
+            <th style="min-width:160px;">Pos / Wilayah Kerja</th>
+            <th style="min-width:140px;">Role Akses</th>
+            <th style="min-width:120px;">Kontak / HP</th>
+            <th style="width:110px; text-align:center;">Status</th>
+            <th style="min-width:140px;">Terakhir Login</th>
+            <th style="min-width:180px; text-align:center;">Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="tableAdminBody">
+          <% if (adminList && adminList.length > 0) { %>
+            <% adminList.forEach(function(adm, idx) { %>
+              <% const isPrimary = adm.email === 'bapasmedan104@gmail.com' || adm.username === 'admin'; %>
+              <tr class="admin-data-row" data-search="<%= (adm.nama_lengkap + ' ' + adm.username + ' ' + (adm.email || '') + ' ' + (adm.pos_wilayah || '')).toLowerCase() %>">
+                <td><%= idx + 1 %></td>
+                <td>
+                  <div style="display:flex; align-items:center; gap:10px;">
+                    <div style="width:36px; height:36px; border-radius:50%; background:<%= isPrimary ? '#dbeafe' : '#fef3c7' %>; color:<%= isPrimary ? '#1e40af' : '#b45309' %>; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:14px; flex-shrink:0;">
+                      <i class="fas <%= isPrimary ? 'fa-user-cog' : 'fa-user-tie' %>"></i>
+                    </div>
+                    <div>
+                      <strong style="color:#0f172a; font-size:14px;"><%= adm.nama_lengkap %></strong>
+                      <div style="font-size:11.5px; color:#64748b;"><%= adm.email || 'Tanpa email terdaftar' %></div>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <code style="background:#f1f5f9; padding:2px 6px; border-radius:4px; font-weight:700; color:#003580; font-size:12.5px;"><%= adm.username %></code>
+                </td>
+                <td>
+                  <span style="font-weight:700; color:#1e293b; font-size:13px; display:inline-flex; align-items:center; gap:5px;">
+                    <i class="fas fa-map-marker-alt" style="color:#ef4444; font-size:11px;"></i> <%= adm.pos_wilayah || 'Semua Pos (Pusat)' %>
+                  </span>
+                </td>
+                <td>
+                  <% if (adm.role === 'super_admin' || isPrimary) { %>
+                    <span class="badge badge-primary"><i class="fas fa-crown text-warning"></i> Super Admin</span>
+                  <% } else { %>
+                    <span class="badge badge-warning"><i class="fas fa-user-check"></i> Petugas Pos</span>
+                  <% } %>
+                </td>
+                <td style="font-size:13px; color:#475569;">
+                  <%= adm.no_telepon || '-' %>
+                </td>
+                <td style="text-align:center;">
+                  <% if (adm.status === 'aktif') { %>
+                    <span class="badge badge-success"><i class="fas fa-check-circle"></i> Aktif</span>
+                  <% } else { %>
+                    <span class="badge badge-danger"><i class="fas fa-ban"></i> Nonaktif</span>
+                  <% } %>
+                </td>
+                <td style="font-size:12px; color:#64748b; white-space:nowrap;">
+                  <%= adm.last_login ? formatTanggalWaktu(adm.last_login) : 'Belum pernah login' %>
+                </td>
+                <td style="text-align:center;">
+                  <div style="display:inline-flex; gap:6px; align-items:center; justify-content:center;">
+                    <button type="button" class="btn btn-sm btn-primary" onclick="openEditAdminModal('<%= adm.id %>', '<%= (adm.username || '').replace(/'/g, "\\'") %>', '<%= (adm.nama_lengkap || '').replace(/'/g, "\\'") %>', '<%= (adm.email || '').replace(/'/g, "\\'") %>', '<%= (adm.pos_wilayah || '').replace(/'/g, "\\'") %>', '<%= adm.role || 'admin_pos' %>', '<%= adm.no_telepon || '' %>', '<%= adm.status || 'aktif' %>')" title="Edit Akun Admin">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button type="button" class="btn btn-sm btn-warning" onclick="openResetPasswordAdminModal('<%= adm.id %>', '<%= (adm.nama_lengkap || adm.username).replace(/'/g, "\\'") %>')" title="Atur Ulang Kata Sandi">
+                      <i class="fas fa-key"></i>
+                    </button>
+                    <% if (!isPrimary && adm.id !== currentAdmin.id) { %>
+                      <form action="/admin/admin-user/toggle-status" method="POST" style="display:inline; margin:0;">
+                        <input type="hidden" name="admin_id" value="<%= adm.id %>">
+                        <button type="button" class="btn btn-sm <%= adm.status === 'aktif' ? 'btn-secondary' : 'btn-success' %>" onclick="confirmToggleStatus(this.form, '<%= adm.username %>', '<%= adm.status %>')" title="<%= adm.status === 'aktif' ? 'Nonaktifkan Akun' : 'Aktifkan Akun' %>">
+                          <i class="fas <%= adm.status === 'aktif' ? 'fa-pause' : 'fa-play' %>"></i>
+                        </button>
+                      </form>
+                      <form action="/admin/admin-user/delete" method="POST" style="display:inline; margin:0;">
+                        <input type="hidden" name="admin_id" value="<%= adm.id %>">
+                        <button type="button" class="btn btn-sm btn-danger" onclick="confirmDeleteAdmin(this.form, '<%= adm.username %>')" title="Hapus Akun Admin">
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      </form>
+                    <% } %>
+                  </div>
+                </td>
+              </tr>
+            <% }); %>
+          <% } else { %>
+            <tr>
+              <td colspan="9" style="text-align:center; padding:40px; color:#64748b;">
+                <i class="fas fa-users-slash" style="font-size:32px; color:#cbd5e1; margin-bottom:10px; display:block;"></i>
+                Belum ada data admin terdaftar.
+              </td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- DAFTAR AKUN ADMIN (MOBILE CARDS LIST) -->
+    <div class="admin-mobile-cards" id="adminCardsContainer">
+      <% if (adminList && adminList.length > 0) { %>
+        <% adminList.forEach(function(adm) { %>
+          <% const isPrimary = adm.email === 'bapasmedan104@gmail.com' || adm.username === 'admin'; %>
+          <div class="admin-card-item admin-data-row" data-search="<%= (adm.nama_lengkap + ' ' + adm.username + ' ' + (adm.email || '') + ' ' + (adm.pos_wilayah || '')).toLowerCase() %>">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px;">
+              <div style="display:flex; align-items:center; gap:10px;">
+                <div style="width:40px; height:40px; border-radius:50%; background:<%= isPrimary ? '#dbeafe' : '#fef3c7' %>; color:<%= isPrimary ? '#1e40af' : '#b45309' %>; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:16px; flex-shrink:0;">
+                  <i class="fas <%= isPrimary ? 'fa-user-cog' : 'fa-user-tie' %>"></i>
+                </div>
+                <div>
+                  <strong style="color:#0f172a; font-size:14.5px;"><%= adm.nama_lengkap %></strong>
+                  <div style="font-size:11.5px; color:#64748b;"><%= adm.email || 'Tanpa email' %></div>
+                </div>
+              </div>
+              <div>
+                <% if (adm.status === 'aktif') { %>
+                  <span class="badge badge-success"><i class="fas fa-check-circle"></i> Aktif</span>
+                <% } else { %>
+                  <span class="badge badge-danger"><i class="fas fa-ban"></i> Nonaktif</span>
+                <% } %>
+              </div>
+            </div>
+
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:10px 12px; font-size:12.5px; line-height:1.5;">
+              <div><strong>Username:</strong> <code style="color:#003580; font-weight:700;"><%= adm.username %></code></div>
+              <div><strong>Pos / Wilayah:</strong> <i class="fas fa-map-marker-alt text-danger"></i> <%= adm.pos_wilayah || 'Semua Pos (Pusat)' %></div>
+              <div><strong>Role:</strong> <%= adm.role === 'super_admin' ? 'Super Administrator' : 'Petugas Pos / Verifikator' %></div>
+              <div><strong>No. HP / WA:</strong> <%= adm.no_telepon || '-' %></div>
+              <div><strong>Terakhir Login:</strong> <%= adm.last_login ? formatTanggalWaktu(adm.last_login) : 'Belum pernah' %></div>
+            </div>
+
+            <div style="display:flex; justify-content:flex-end; gap:6px; flex-wrap:wrap; border-top:1px solid #f1f5f9; padding-top:8px;">
+              <button type="button" class="btn btn-sm btn-primary" onclick="openEditAdminModal('<%= adm.id %>', '<%= (adm.username || '').replace(/'/g, "\\'") %>', '<%= (adm.nama_lengkap || '').replace(/'/g, "\\'") %>', '<%= (adm.email || '').replace(/'/g, "\\'") %>', '<%= (adm.pos_wilayah || '').replace(/'/g, "\\'") %>', '<%= adm.role || 'admin_pos' %>', '<%= adm.no_telepon || '' %>', '<%= adm.status || 'aktif' %>')">
+                <i class="fas fa-edit"></i> Edit
+              </button>
+              <button type="button" class="btn btn-sm btn-warning" onclick="openResetPasswordAdminModal('<%= adm.id %>', '<%= (adm.nama_lengkap || adm.username).replace(/'/g, "\\'") %>')">
+                <i class="fas fa-key"></i> Sandi
+              </button>
+              <% if (!isPrimary && adm.id !== currentAdmin.id) { %>
+                <form action="/admin/admin-user/toggle-status" method="POST" style="display:inline; margin:0;">
+                  <input type="hidden" name="admin_id" value="<%= adm.id %>">
+                  <button type="button" class="btn btn-sm <%= adm.status === 'aktif' ? 'btn-secondary' : 'btn-success' %>" onclick="confirmToggleStatus(this.form, '<%= adm.username %>', '<%= adm.status %>')">
+                    <i class="fas <%= adm.status === 'aktif' ? 'fa-pause' : 'fa-play' %>"></i> Status
+                  </button>
+                </form>
+                <form action="/admin/admin-user/delete" method="POST" style="display:inline; margin:0;">
+                  <input type="hidden" name="admin_id" value="<%= adm.id %>">
+                  <button type="button" class="btn btn-sm btn-danger" onclick="confirmDeleteAdmin(this.form, '<%= adm.username %>')">
+                    <i class="fas fa-trash"></i> Hapus
+                  </button>
+                </form>
+              <% } %>
+            </div>
+          </div>
+        <% }); %>
+      <% } %>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL TAMBAH ADMIN BARU -->
+<div class="modal" id="modalCreateAdmin">
+  <div class="modal-content">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; border-bottom:1.5px solid #e2e8f0; padding-bottom:10px;">
+      <h3 style="margin:0; font-size:18px; color:#002255; display:flex; align-items:center; gap:8px;">
+        <i class="fas fa-user-plus" style="color:#003580;"></i> Tambah Akun Admin / Petugas Pos
+      </h3>
+      <button type="button" onclick="closeCreateAdminModal()" style="background:none; border:none; font-size:24px; cursor:pointer; color:#64748b; line-height:1;">&times;</button>
+    </div>
+
+    <form action="/admin/admin-user/create" method="POST" autocomplete="off">
+      <div class="form-group">
+        <label for="c_username">Username Login *</label>
+        <input type="text" name="username" id="c_username" placeholder="Contoh: admin1, pos_tebingtinggi, pos_kabanjahe" required pattern="^[a-zA-Z0-9_.-]+$">
+        <small style="color:#64748b; font-size:11.5px; margin-top:3px; display:block;">Hanya huruf, angka, garis bawah, titik, atau strip (tanpa spasi).</small>
+      </div>
+
+      <div class="form-group">
+        <label for="c_nama_lengkap">Nama Lengkap Petugas / Pos *</label>
+        <input type="text" name="nama_lengkap" id="c_nama_lengkap" placeholder="Contoh: Admin Pos Tebing Tinggi (Petugas Budi)" required>
+      </div>
+
+      <div class="form-group">
+        <label for="c_pos_wilayah">Pos / Wilayah Kerja BAPAS *</label>
+        <select name="pos_wilayah" id="c_pos_wilayah" required>
+          <option value="Semua Wilayah (Pusat)">Semua Wilayah (Pusat BAPAS Medan)</option>
+          <option value="Pos Medan">Pos Medan</option>
+          <option value="Pos Tebing Tinggi">Pos Tebing Tinggi</option>
+          <option value="Pos Kabanjahe">Pos Kabanjahe</option>
+          <option value="Pos Lubuk Pakam">Pos Lubuk Pakam</option>
+          <option value="Pos Tanjung Balai">Pos Tanjung Balai</option>
+          <option value="Pos Sibolga">Pos Sibolga</option>
+          <option value="Pos Pematang Siantar">Pos Pematang Siantar</option>
+          <option value="Pos Binjai">Pos Binjai</option>
+          <option value="Pos Lainnya">Pos / Wilayah Lainnya</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="c_email">Email Petugas Pos (Opsional)</label>
+        <input type="email" name="email" id="c_email" placeholder="Contoh: pos.tebingtinggi@gmail.com">
+      </div>
+
+      <div class="form-group">
+        <label for="c_role">Role Akses *</label>
+        <select name="role" id="c_role" required>
+          <option value="admin_pos" selected>Petugas Pos / Verifikator (Monitoring & Verifikasi Wajib Lapor Pos)</option>
+          <option value="super_admin">Super Administrator (Akses Penuh Seluruh Sistem)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="c_telepon">No. WhatsApp / HP Petugas (Opsional)</label>
+        <input type="text" name="no_telepon" id="c_telepon" placeholder="Contoh: 081234567890">
+      </div>
+
+      <div class="form-group">
+        <label for="c_password">Kata Sandi Login *</label>
+        <input type="password" name="password" id="c_password" required minlength="5" placeholder="Minimal 5 karakter...">
+      </div>
+
+      <div class="form-group">
+        <label for="c_status">Status Akun</label>
+        <select name="status" id="c_status">
+          <option value="aktif" selected>Aktif (Dapat langsung login)</option>
+          <option value="nonaktif">Nonaktif</option>
+        </select>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px; border-top:1px solid #e2e8f0; padding-top:14px;">
+        <button type="button" class="btn btn-secondary" onclick="closeCreateAdminModal()">Batal</button>
+        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Buat Akun Admin</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL EDIT ADMIN -->
+<div class="modal" id="modalEditAdmin">
+  <div class="modal-content">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; border-bottom:1.5px solid #e2e8f0; padding-bottom:10px;">
+      <h3 style="margin:0; font-size:18px; color:#002255; display:flex; align-items:center; gap:8px;">
+        <i class="fas fa-user-edit" style="color:#003580;"></i> Edit Akun Admin / Petugas Pos
+      </h3>
+      <button type="button" onclick="closeEditAdminModal()" style="background:none; border:none; font-size:24px; cursor:pointer; color:#64748b; line-height:1;">&times;</button>
+    </div>
+
+    <form action="/admin/admin-user/update" method="POST" autocomplete="off">
+      <input type="hidden" name="admin_id" id="e_admin_id">
+
+      <div class="form-group">
+        <label for="e_username">Username Login *</label>
+        <input type="text" name="username" id="e_username" required pattern="^[a-zA-Z0-9_.-]+$">
+      </div>
+
+      <div class="form-group">
+        <label for="e_nama_lengkap">Nama Lengkap Petugas / Pos *</label>
+        <input type="text" name="nama_lengkap" id="e_nama_lengkap" required>
+      </div>
+
+      <div class="form-group">
+        <label for="e_pos_wilayah">Pos / Wilayah Kerja BAPAS *</label>
+        <select name="pos_wilayah" id="e_pos_wilayah" required>
+          <option value="Semua Wilayah (Pusat)">Semua Wilayah (Pusat BAPAS Medan)</option>
+          <option value="Pos Medan">Pos Medan</option>
+          <option value="Pos Tebing Tinggi">Pos Tebing Tinggi</option>
+          <option value="Pos Kabanjahe">Pos Kabanjahe</option>
+          <option value="Pos Lubuk Pakam">Pos Lubuk Pakam</option>
+          <option value="Pos Tanjung Balai">Pos Tanjung Balai</option>
+          <option value="Pos Sibolga">Pos Sibolga</option>
+          <option value="Pos Pematang Siantar">Pos Pematang Siantar</option>
+          <option value="Pos Binjai">Pos Binjai</option>
+          <option value="Pos Lainnya">Pos / Wilayah Lainnya</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="e_email">Email Petugas Pos</label>
+        <input type="email" name="email" id="e_email">
+      </div>
+
+      <div class="form-group">
+        <label for="e_role">Role Akses *</label>
+        <select name="role" id="e_role" required>
+          <option value="admin_pos">Petugas Pos / Verifikator</option>
+          <option value="super_admin">Super Administrator</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="e_telepon">No. WhatsApp / HP Petugas</label>
+        <input type="text" name="no_telepon" id="e_telepon">
+      </div>
+
+      <div class="form-group">
+        <label for="e_status">Status Akun</label>
+        <select name="status" id="e_status">
+          <option value="aktif">Aktif</option>
+          <option value="nonaktif">Nonaktif</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="e_password">Ganti Kata Sandi (Kosongkan jika tidak ingin diubah)</label>
+        <input type="password" name="password" id="e_password" minlength="5" placeholder="Biarkan kosong jika tetap menggunakan sandi lama...">
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px; border-top:1px solid #e2e8f0; padding-top:14px;">
+        <button type="button" class="btn btn-secondary" onclick="closeEditAdminModal()">Batal</button>
+        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Simpan Perubahan</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL RESET SANDI ADMIN TERTENTU -->
+<div class="modal" id="modalResetPasswordAdmin">
+  <div class="modal-content" style="max-width:480px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:1px solid #e2e8f0; padding-bottom:10px;">
+      <h3 style="margin:0; font-size:17px; color:#002255; display:flex; align-items:center; gap:8px;">
+        <i class="fas fa-key" style="color:#d97706;"></i> Reset Sandi Akun Admin
+      </h3>
+      <button type="button" onclick="closeResetPasswordAdminModal()" style="background:none; border:none; font-size:24px; cursor:pointer; color:#64748b; line-height:1;">&times;</button>
+    </div>
+    <p style="font-size:13.5px; color:#475569; margin-bottom:15px;">
+      Masukkan kata sandi baru untuk akun: <strong id="resetAdminNama" style="color:#0f172a;"></strong>
+    </p>
+    <form action="/admin/admin-user/reset-password" method="POST" autocomplete="off">
+      <input type="hidden" name="admin_id" id="r_admin_id">
+      <div class="form-group">
+        <label for="r_new_password">Kata Sandi Baru *</label>
+        <input type="password" name="new_password" id="r_new_password" required minlength="5" placeholder="Minimal 5 karakter...">
+      </div>
+      <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
+        <button type="button" class="btn btn-secondary" onclick="closeResetPasswordAdminModal()">Batal</button>
+        <button type="submit" class="btn btn-warning"><i class="fas fa-check"></i> Simpan Sandi Baru</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  function filterAdminList() {
+    const input = document.getElementById('adminSearchInput').value.toLowerCase().trim();
+    const rows = document.querySelectorAll('.admin-data-row');
+    let visible = 0;
+    rows.forEach(r => {
+      const searchData = r.getAttribute('data-search') || '';
+      if (!input || searchData.includes(input)) {
+        r.style.display = '';
+        visible++;
+      } else {
+        r.style.display = 'none';
+      }
+    });
+    const countEl = document.getElementById('adminCountText');
+    if (countEl) countEl.innerText = visible;
+  }
+
+  function openCreateAdminModal() {
+    document.getElementById('c_username').value = '';
+    document.getElementById('c_nama_lengkap').value = '';
+    document.getElementById('c_email').value = '';
+    document.getElementById('c_telepon').value = '';
+    document.getElementById('c_password').value = '';
+    document.getElementById('modalCreateAdmin').classList.add('active');
+  }
+
+  function closeCreateAdminModal() {
+    document.getElementById('modalCreateAdmin').classList.remove('active');
+  }
+
+  function openEditAdminModal(id, username, nama, email, pos, role, telp, status) {
+    document.getElementById('e_admin_id').value = id;
+    document.getElementById('e_username').value = username || '';
+    document.getElementById('e_nama_lengkap').value = nama || '';
+    document.getElementById('e_email').value = email || '';
+    document.getElementById('e_telepon').value = telp || '';
+    document.getElementById('e_password').value = '';
+
+    const posSelect = document.getElementById('e_pos_wilayah');
+    if (posSelect) {
+      let found = false;
+      for (let i = 0; i < posSelect.options.length; i++) {
+        if (posSelect.options[i].value === pos) {
+          posSelect.selectedIndex = i;
+          found = true;
+          break;
+        }
+      }
+      if (!found) {
+        const opt = new Option(pos, pos, true, true);
+        posSelect.add(opt);
+      }
+    }
+
+    const roleSelect = document.getElementById('e_role');
+    if (roleSelect) roleSelect.value = role || 'admin_pos';
+
+    const statusSelect = document.getElementById('e_status');
+    if (statusSelect) statusSelect.value = status || 'aktif';
+
+    document.getElementById('modalEditAdmin').classList.add('active');
+  }
+
+  function closeEditAdminModal() {
+    document.getElementById('modalEditAdmin').classList.remove('active');
+  }
+
+  function openResetPasswordAdminModal(id, nama) {
+    document.getElementById('r_admin_id').value = id;
+    document.getElementById('resetAdminNama').innerText = nama || 'Admin';
+    document.getElementById('r_new_password').value = '';
+    document.getElementById('modalResetPasswordAdmin').classList.add('active');
+  }
+
+  function closeResetPasswordAdminModal() {
+    document.getElementById('modalResetPasswordAdmin').classList.remove('active');
+  }
+
+  function confirmToggleStatus(form, username, currentStatus) {
+    const actionText = (currentStatus === 'aktif') ? 'menonaktifkan' : 'mengaktifkan';
+    customConfirm({
+      title: 'Ubah Status Akun Admin?',
+      text: `Apakah Anda yakin ingin ${actionText} akun admin "${username}"?`,
+      icon: 'question',
+      confirmColor: (currentStatus === 'aktif') ? '#d97706' : '#16a34a',
+      confirmText: `<i class="fas fa-check"></i> Ya, ${actionText.toUpperCase()}`,
+      cancelText: 'Batal'
+    }).then(res => {
+      if (res.isConfirmed) form.submit();
+    });
+  }
+
+  function confirmDeleteAdmin(form, username) {
+    customConfirm({
+      title: 'Hapus Akun Admin?',
+      text: `Akun admin "${username}" akan dihapus permanen dari sistem. Anda yakin?`,
+      icon: 'warning',
+      confirmColor: '#dc2626',
+      confirmText: '<i class="fas fa-trash"></i> Ya, Hapus Permanen',
+      cancelText: 'Batal'
+    }).then(res => {
+      if (res.isConfirmed) form.submit();
+    });
+  }
+</script>
+
+<%- include('../partials/modal_foto') %>
+
+</body>
+</html>

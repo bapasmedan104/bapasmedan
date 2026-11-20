@@ -17,7 +17,13 @@ const {
   getKonfigurasi,
   updateKonfigurasi,
   getAllPesanBantuan,
-  balasPesanBantuanAdmin
+  balasPesanBantuanAdmin,
+  getAllAdmins,
+  createAdminUser,
+  updateAdminUser,
+  resetAdminUserPassword,
+  toggleAdminUserStatus,
+  deleteAdminUser
 } = require('../models/db');
 const { invalidateConfigCache } = require('../middlewares/auth');
 const { getNamaBulan, formatTanggal, formatTanggalWaktu, getFileUrl } = require('../utils/helpers');
@@ -39,6 +45,7 @@ async function getDashboard(req, res) {
       clients: recentClients.slice(0, 10),
       config,
       pesanBantuan: pesanBantuan || [],
+      currentAdmin: req.session.adminUser,
       getNamaBulan,
       formatTanggal,
       formatTanggalWaktu
@@ -81,6 +88,7 @@ async function getRiwayatLapor(req, res) {
 
     res.render('admin/riwayat_lapor', {
       pageTitle: 'Riwayat Wajib Lapor - Admin BAPAS Medan',
+      currentAdmin: req.session.adminUser,
       laporList,
       filters,
       globalStat,
@@ -160,6 +168,7 @@ async function getKelolaClient(req, res) {
 
     res.render('admin/kelola_client', {
       pageTitle: 'Kelola Client - BAPAS Medan',
+      currentAdmin: req.session.adminUser,
       clients,
       filterOptions,
       stat,
@@ -434,12 +443,116 @@ async function getDetailLaporJson(req, res) {
   }
 }
 
+async function getKelolaAdmin(req, res) {
+  try {
+    const adminList = await getAllAdmins();
+    const stat = {
+      total_admin: adminList.length,
+      total_aktif: adminList.filter(a => a.status === 'aktif').length,
+      total_pos: adminList.filter(a => a.role === 'admin_pos').length
+    };
+
+    res.render('admin/kelola_admin', {
+      pageTitle: 'Kelola Akun Admin & Petugas Pos - BAPAS Medan',
+      adminList,
+      stat,
+      currentAdmin: req.session.adminUser,
+      formatTanggalWaktu
+    });
+  } catch (err) {
+    console.error('Error kelola admin:', err);
+    res.status(500).send('Terjadi kesalahan pada sistem saat memuat data admin: ' + err.message);
+  }
+}
+
+async function postCreateAdminUser(req, res) {
+  try {
+    const result = await createAdminUser(req.body);
+    if (result.success) {
+      req.session.successMessage = result.message;
+    } else {
+      req.session.errorMessage = result.message;
+    }
+  } catch (err) {
+    req.session.errorMessage = 'Gagal membuat akun admin: ' + err.message;
+  }
+  res.redirect('/admin/kelola-admin');
+}
+
+async function postUpdateAdminUser(req, res) {
+  try {
+    const adminId = req.body.admin_id;
+    const result = await updateAdminUser(adminId, req.body);
+    if (result.success) {
+      req.session.successMessage = result.message;
+    } else {
+      req.session.errorMessage = result.message;
+    }
+  } catch (err) {
+    req.session.errorMessage = 'Gagal memperbarui data admin: ' + err.message;
+  }
+  res.redirect('/admin/kelola-admin');
+}
+
+async function postResetAdminUserPassword(req, res) {
+  try {
+    const { admin_id, new_password } = req.body;
+    const result = await resetAdminUserPassword(admin_id, new_password);
+    if (result.success) {
+      req.session.successMessage = result.message;
+    } else {
+      req.session.errorMessage = result.message;
+    }
+  } catch (err) {
+    req.session.errorMessage = 'Gagal mereset kata sandi: ' + err.message;
+  }
+  res.redirect('/admin/kelola-admin');
+}
+
+async function postToggleAdminUserStatus(req, res) {
+  try {
+    const adminId = req.body.admin_id;
+    const requesterId = req.session && req.session.user ? req.session.user.id : null;
+    const result = await toggleAdminUserStatus(adminId, requesterId);
+    if (result.success) {
+      req.session.successMessage = result.message;
+    } else {
+      req.session.errorMessage = result.message;
+    }
+  } catch (err) {
+    req.session.errorMessage = 'Gagal mengubah status admin: ' + err.message;
+  }
+  res.redirect('/admin/kelola-admin');
+}
+
+async function postDeleteAdminUser(req, res) {
+  try {
+    const adminId = req.body.admin_id;
+    const requesterId = req.session && req.session.user ? req.session.user.id : null;
+    const result = await deleteAdminUser(adminId, requesterId);
+    if (result.success) {
+      req.session.successMessage = result.message;
+    } else {
+      req.session.errorMessage = result.message;
+    }
+  } catch (err) {
+    req.session.errorMessage = 'Gagal menghapus admin: ' + err.message;
+  }
+  res.redirect('/admin/kelola-admin');
+}
+
 module.exports = {
   getDashboard,
   getRiwayatLapor,
   getExportLaporCsv,
   getKelolaClient,
   getExportClientsCsv,
+  getKelolaAdmin,
+  postCreateAdminUser,
+  postUpdateAdminUser,
+  postResetAdminUserPassword,
+  postToggleAdminUserStatus,
+  postDeleteAdminUser,
   postCreateClient,
   postUpdateClient,
   postResetClientPassword,

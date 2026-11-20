@@ -460,15 +460,33 @@
     <a href="/admin/dashboard" class="active"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
     <a href="/admin/riwayat-lapor"><i class="fas fa-filter"></i> <span>Riwayat Lapor</span></a>
     <a href="/admin/kelola-client"><i class="fas fa-users-cog"></i> <span>Kelola Klien</span></a>
-    <a href="javascript:void(0)" onclick="openResetAdminModal()"><i class="fas fa-key"></i> <span>Sandi Admin</span></a>
+    <a href="/admin/kelola-admin"><i class="fas fa-user-shield"></i> <span>Kelola Admin Pos</span></a>
+    <a href="javascript:void(0)" onclick="openResetAdminModal()"><i class="fas fa-key"></i> <span>Sandi Saya</span></a>
     <a href="/logout" class="nav-logout"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
   </div>
 </div>
 
 <div class="container">
   <div class="header">
-    <h1>Dashboard Administrator</h1>
-    <p style="color:#666;">Pusat Manajemen Pelaporan Wajib Lapor Klien BAPAS Kelas I Medan</p>
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+      <div>
+        <h1>Dashboard Administrator</h1>
+        <p style="color:#666;">Pusat Manajemen Pelaporan Wajib Lapor Klien BAPAS Kelas I Medan</p>
+      </div>
+      <% if (typeof currentAdmin !== 'undefined' && currentAdmin) { %>
+        <div style="background:#ffffff; border:1px solid #cbd5e1; border-left:4px solid #f59e0b; border-radius:8px; padding:8px 14px; box-shadow:0 2px 6px rgba(0,0,0,0.04); display:flex; align-items:center; gap:10px;">
+          <div style="width:34px; height:34px; border-radius:50%; background:#dbeafe; color:#1e40af; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:14px;">
+            <i class="fas fa-user-tie"></i>
+          </div>
+          <div>
+            <div style="font-size:13px; font-weight:800; color:#0f172a;"><%= currentAdmin.nama_lengkap || currentAdmin.username %></div>
+            <div style="font-size:11px; color:#64748b;">
+              <span class="badge" style="padding:1px 6px; font-size:10px; background:<%= currentAdmin.role === 'super_admin' ? '#dbeafe' : '#fef3c7' %>; color:<%= currentAdmin.role === 'super_admin' ? '#1e40af' : '#b45309' %>;"><%= currentAdmin.role === 'super_admin' ? 'Super Admin' : 'Admin Pos' %></span> &bull; <%= currentAdmin.pos_wilayah || 'Semua Wilayah' %>
+            </div>
+          </div>
+        </div>
+      <% } %>
+    </div>
   </div>
 
   <%- include('../partials/alerts') %>
@@ -592,6 +610,9 @@
           </a>
           <a href="/admin/kelola-client" class="btn btn-success" style="justify-content:center; padding:14px;">
             <i class="fas fa-user-plus"></i> Kelola & Tambah Klien Baru
+          </a>
+          <a href="/admin/kelola-admin" class="btn btn-warning" style="justify-content:center; padding:14px; background:#f59e0b; color:#fff;">
+            <i class="fas fa-users-cog"></i> Kelola Akun Admin & Petugas Pos
           </a>
           <a href="/admin/riwayat-lapor/export-csv" class="btn btn-secondary" style="justify-content:center; padding:14px;">
             <i class="fas fa-file-excel"></i> Ekspor Semua Laporan ke CSV
