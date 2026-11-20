@@ -109,6 +109,20 @@
       width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: inherit; font-size: 14px;
     }
     .form-group input:focus, .form-group textarea:focus { outline: none; border-color: #1a3a52; box-shadow: 0 0 0 3px rgba(26,58,82,0.1); }
+    .cs-inbox-filter-bar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      white-space: nowrap;
+      scrollbar-width: none;
+      align-items: center;
+      padding-bottom: 4px;
+    }
+    .cs-inbox-filter-bar::-webkit-scrollbar {
+      display: none;
+    }
     .btn-cs-filter {
       background: #f8fafc;
       border: 1.5px solid #cbd5e1;
@@ -123,6 +137,8 @@
       align-items: center;
       gap: 6px;
       font-family: inherit;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
     .btn-cs-filter:hover {
       background: #f1f5f9;
@@ -137,6 +153,294 @@
     }
     .btn-cs-filter.active i {
       color: #fbbf24;
+    }
+
+    /* CS Kotak Masuk: Desktop Table vs Mobile Cards */
+    .cs-desktop-table { display: block; }
+    .cs-mobile-card-list { display: none; }
+
+    @media (max-width: 768px) {
+      .cs-desktop-table { display: none !important; }
+      .cs-mobile-card-list { display: flex !important; flex-direction: column !important; gap: 12px !important; }
+    }
+
+    .cs-inbox-card {
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: all 0.2s ease;
+      box-sizing: border-box;
+      width: 100%;
+    }
+    .cs-inbox-card:hover {
+      border-color: #003580;
+      box-shadow: 0 4px 12px rgba(0, 53, 128, 0.08);
+    }
+    .cs-card-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .cs-card-user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+      min-width: 0;
+    }
+    .cs-card-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+    .avatar-client {
+      background: #dcfce7;
+      color: #166534;
+      border: 1.5px solid #86efac;
+    }
+    .avatar-guest {
+      background: #e0f2fe;
+      color: #0369a1;
+      border: 1.5px solid #7dd3fc;
+    }
+    .cs-card-name {
+      font-size: 14px;
+      font-weight: 800;
+      color: #0f172a;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .cs-card-tags {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 3px;
+    }
+    .badge-tag-reg {
+      background: #16a34a;
+      color: #ffffff;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .badge-tag-guest {
+      background: #e0f2fe;
+      color: #0369a1;
+      border: 1px solid #7dd3fc;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .cs-card-tel {
+      font-size: 11px;
+      color: #64748b;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .cs-card-time {
+      font-size: 11px;
+      color: #94a3b8;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .cs-card-msg-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+    .cs-card-last-text {
+      font-size: 13px;
+      color: #1e293b;
+      line-height: 1.45;
+      word-break: break-word;
+    }
+    .badge-tag-admin {
+      background: #003580;
+      color: #fff;
+      font-size: 9.5px;
+      padding: 1px 6px;
+      border-radius: 6px;
+      font-weight: 700;
+      margin-right: 4px;
+    }
+    .badge-tag-bot {
+      background: #d97706;
+      color: #fff;
+      font-size: 9.5px;
+      padding: 1px 6px;
+      border-radius: 6px;
+      font-weight: 700;
+      margin-right: 4px;
+    }
+    .cs-card-masa-info {
+      margin-top: 5px;
+      font-size: 11px;
+      color: #b45309;
+      font-weight: 600;
+    }
+    .cs-card-bottom-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .cs-card-status-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .status-pill-badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .pill-terjawab {
+      background: #dcfce7;
+      color: #166534;
+      border: 1px solid #86efac;
+    }
+    .pill-selesai {
+      background: #f1f5f9;
+      color: #475569;
+      border: 1px solid #cbd5e1;
+    }
+    .pill-menunggu {
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
+      animation: pulse 2s infinite;
+    }
+    .cs-card-total-msgs {
+      font-size: 11px;
+      color: #64748b;
+    }
+    .btn-card-buka-chat {
+      background: linear-gradient(135deg, #003580 0%, #002255 100%);
+      color: #ffffff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      font-family: inherit;
+      box-shadow: 0 2px 6px rgba(0, 53, 128, 0.2);
+    }
+    .btn-card-buka-chat:hover {
+      background: #001938;
+      transform: translateY(-1px);
+    }
+
+    /* Modal Live Chat Stream */
+    #modalBalasBantuan.active {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      padding: 12px !important;
+    }
+    #modalBalasBantuan .modal-content {
+      max-width: 650px !important;
+      width: 100% !important;
+      max-height: 92vh !important;
+      height: auto !important;
+      display: flex !important;
+      flex-direction: column !important;
+      padding: 16px !important;
+      border-radius: 12px !important;
+      box-sizing: border-box !important;
+      overflow: hidden !important;
+    }
+    .admin-live-chat-stream {
+      flex: 1 1 auto !important;
+      min-height: 250px !important;
+      max-height: 52vh !important;
+      background: #f8fafc !important;
+      border: 1.5px solid #cbd5e1 !important;
+      border-radius: 10px !important;
+      padding: 14px 12px !important;
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+      display: flex !important;
+      flex-direction: column !important;
+      flex-wrap: nowrap !important;
+      gap: 12px !important;
+      box-sizing: border-box !important;
+      width: 100% !important;
+    }
+    .admin-chat-bubble {
+      box-sizing: border-box !important;
+      border-radius: 10px !important;
+      padding: 10px 14px !important;
+      word-break: break-word !important;
+      width: fit-content !important;
+    }
+    .bubble-user {
+      align-self: flex-start !important;
+      max-width: 92% !important;
+      background: #ffffff !important;
+      border: 1.5px solid #cbd5e1 !important;
+      border-left: 4px solid #003580 !important;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04) !important;
+    }
+    .bubble-bot {
+      align-self: flex-start !important;
+      max-width: 92% !important;
+      background: #fefce8 !important;
+      border: 1.5px solid #fef08a !important;
+      border-left: 4px solid #eab308 !important;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04) !important;
+    }
+    .bubble-admin {
+      align-self: flex-end !important;
+      max-width: 88% !important;
+      background: linear-gradient(135deg, #003580 0%, #002255 100%) !important;
+      color: #ffffff !important;
+      border-radius: 10px 10px 2px 10px !important;
+      box-shadow: 0 2px 6px rgba(0, 53, 128, 0.25) !important;
+    }
+    .admin-bubble-client-card {
+      width: 100% !important;
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+      background: #f0fdf4 !important;
+      border: 1.5px solid #86efac !important;
+      border-radius: 8px !important;
+      padding: 10px 12px !important;
+      margin-top: 4px !important;
+      color: #1e293b !important;
     }
     @keyframes pulse {
       0%, 100% { opacity: 1; }
@@ -441,8 +745,8 @@
       </p>
 
       <!-- FILTER KATEGORI OBROLAN (KLIEN vs TAMU vs MENUNGGU BALASAN) -->
-      <div class="cs-inbox-filter-bar" style="display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; align-items:center;">
-        <span style="font-size:12.5px; font-weight:700; color:#475569; margin-right:4px;"><i class="fas fa-filter"></i> Kategori:</span>
+      <div class="cs-inbox-filter-bar">
+        <span style="font-size:12.5px; font-weight:700; color:#475569; margin-right:4px; flex-shrink:0;"><i class="fas fa-filter"></i> Kategori:</span>
         <button type="button" class="btn btn-sm btn-cs-filter active" id="filterBtnAll" onclick="filterCsInbox('all', this)">
           <i class="fas fa-comments"></i> Semua Obrolan (<%= (typeof pesanBantuan !== 'undefined' && pesanBantuan) ? pesanBantuan.length : 0 %>)
         </button>
@@ -457,7 +761,8 @@
         </button>
       </div>
 
-      <div class="table-responsive">
+      <!-- DESKTOP VIEW: TABEL STANDAR LENGKAP -->
+      <div class="cs-desktop-table table-responsive">
         <table class="table">
           <thead>
             <tr>
@@ -547,32 +852,108 @@
           </tbody>
         </table>
       </div>
+
+      <!-- MOBILE VIEW: RESPONSIF CARD LIST KHUSUS HP -->
+      <div class="cs-mobile-card-list" id="csMobileCardsContainer">
+        <% if (typeof pesanBantuan !== 'undefined' && pesanBantuan && pesanBantuan.length > 0) { %>
+          <% pesanBantuan.forEach(function(p) { %>
+            <div class="cs-inbox-card cs-thread-row" data-kategori="<%= p.is_verified ? 'client' : 'guest' %>" data-status="<%= p.status %>">
+              <div class="cs-card-top-row">
+                <div class="cs-card-user-info">
+                  <div class="cs-card-avatar <%= p.is_verified ? 'avatar-client' : 'avatar-guest' %>">
+                    <i class="fas <%= p.is_verified ? 'fa-user-check' : 'fa-user' %>"></i>
+                  </div>
+                  <div style="min-width:0; flex:1;">
+                    <div class="cs-card-name"><%= p.nama %></div>
+                    <div class="cs-card-tags">
+                      <% if (p.is_verified) { %>
+                        <span class="badge-tag-reg"><i class="fas fa-id-badge"></i> <%= (p.detail_klien && p.detail_klien.no_register) ? p.detail_klien.no_register : (p.kontak || 'Klien Resmi') %></span>
+                      <% } else { %>
+                        <span class="badge-tag-guest"><i class="fas fa-user"></i> Tamu Umum</span>
+                      <% } %>
+                      <% if (p.kontak) { %>
+                        <span class="cs-card-tel"><i class="fas fa-phone-alt"></i> <%= p.kontak %></span>
+                      <% } %>
+                    </div>
+                  </div>
+                </div>
+                <div class="cs-card-time">
+                  <i class="far fa-clock"></i> <%= formatTanggalWaktu(p.updated_at || p.created_at) %>
+                </div>
+              </div>
+
+              <div class="cs-card-msg-box">
+                <div class="cs-card-last-text">
+                  <% if (p.last_pengirim === 'admin') { %>
+                    <span class="badge-tag-admin"><i class="fas fa-reply"></i> Anda:</span>
+                  <% } else if (p.last_pengirim === 'bot') { %>
+                    <span class="badge-tag-bot"><i class="fas fa-robot"></i> Asisten:</span>
+                  <% } %>
+                  <%= p.pesan_terakhir %>
+                </div>
+                <% if (p.detail_klien && p.detail_klien.masa_wajib_lapor) { %>
+                  <div class="cs-card-masa-info">
+                    <i class="fas fa-calendar-alt"></i> Masa Lapor: <%= p.detail_klien.masa_wajib_lapor %>
+                  </div>
+                <% } %>
+              </div>
+
+              <div class="cs-card-bottom-row">
+                <div class="cs-card-status-wrap">
+                  <% if (p.status === 'terjawab') { %>
+                    <span class="status-pill-badge pill-terjawab"><i class="fas fa-check-double"></i> Sudah Dibalas</span>
+                  <% } else if (p.status === 'selesai') { %>
+                    <span class="status-pill-badge pill-selesai"><i class="fas fa-flag-checkered"></i> Selesai</span>
+                  <% } else { %>
+                    <span class="status-pill-badge pill-menunggu"><i class="fas fa-clock"></i> Perlu Dibalas</span>
+                  <% } %>
+                  <span class="cs-card-total-msgs"><i class="fas fa-comments"></i> <%= p.total_pesan %> pesan</span>
+                </div>
+                <button type="button" class="btn-card-buka-chat" onclick="openBalasBantuanModal('<%= p.session_id %>', '<%= (p.nama || '').replace(/'/g, "\\'") %>')">
+                  <i class="fas fa-comments"></i> Buka Obrolan
+                </button>
+              </div>
+            </div>
+          <% }); %>
+          <div id="cardCsFilterEmpty" style="display:none; text-align:center; padding:30px; color:#64748b; background:#fff; border:1px dashed #cbd5e1; border-radius:10px;">
+            <i class="fas fa-filter" style="font-size:24px; color:#cbd5e1; display:block; margin-bottom:8px;"></i>
+            Tidak ada percakapan dalam kategori filter ini.
+          </div>
+        <% } else { %>
+          <div style="text-align:center; padding:30px; color:#64748b; background:#fff; border:1px dashed #cbd5e1; border-radius:10px;">
+            <i class="fas fa-inbox" style="font-size:28px; color:#cbd5e1; display:block; margin-bottom:8px;"></i>
+            Belum ada pesan bantuan masuk dari pengunjung atau klien.
+          </div>
+        <% } %>
+      </div>
     </div>
   </div>
 </div>
 
 <!-- MODAL BALAS PESAN BANTUAN CS (LIVE CHAT PANEL) -->
 <div class="modal" id="modalBalasBantuan">
-  <div class="modal-content" style="max-width:620px; width:95%; max-height:90vh; display:flex; flex-direction:column;">
+  <div class="modal-content">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1.5px solid #e2e8f0; padding-bottom:10px; flex-shrink:0;">
       <div>
-        <h3 style="margin:0; font-size:17px; color:#002255; display:flex; align-items:center; gap:8px;">
+        <h3 style="margin:0; font-size:16px; color:#002255; display:flex; align-items:center; gap:8px;">
           <i class="fas fa-headset" style="color:#003580;"></i> Ruang Obrolan CS: <span id="balasNamaUser" style="color:#0f172a; font-weight:800;"></span>
         </h3>
-        <span style="font-size:11.5px; color:#64748b;">Sesi: <code id="balasSessionIdText" style="color:#003580;"></code> &bull; Tersambung Real-Time</span>
+        <span style="font-size:11px; color:#64748b;">Sesi: <code id="balasSessionIdText" style="color:#003580;"></code> &bull; Tersambung Real-Time</span>
       </div>
-      <button type="button" onclick="closeBalasBantuanModal()" style="background:none; border:none; font-size:26px; cursor:pointer; color:#64748b; line-height:1;">&times;</button>
+      <button type="button" onclick="closeBalasBantuanModal()" style="background:#f1f5f9; border:1px solid #cbd5e1; border-radius:6px; padding:5px 10px; font-size:12px; font-weight:700; cursor:pointer; color:#475569; display:inline-flex; align-items:center; gap:4px; line-height:1;">
+        <i class="fas fa-times"></i> Tutup
+      </button>
     </div>
 
     <!-- Live Chat Stream Box for Admin -->
-    <div id="adminLiveChatStream" style="background:#f1f5f9; border:1px solid #cbd5e1; border-radius:10px; padding:14px; height:320px; min-height:200px; overflow-y:auto; display:flex; flex-direction:column; gap:10px; margin-bottom:12px; flex:1;">
+    <div id="adminLiveChatStream" class="admin-live-chat-stream">
       <div style="text-align:center; color:#94a3b8; font-size:12.5px; margin:auto;">
         <i class="fas fa-spinner fa-spin"></i> Memuat riwayat obrolan...
       </div>
     </div>
 
     <!-- Reply Form -->
-    <form id="formBalasBantuan" onsubmit="kirimBalasanAdmin(event)" style="flex-shrink:0;">
+    <form id="formBalasBantuan" onsubmit="kirimBalasanAdmin(event)" style="flex-shrink:0; margin-top:10px;">
       <input type="hidden" id="balasSessionId">
       <div style="display:flex; gap:10px; align-items:flex-end;">
         <textarea id="balasPesanText" rows="2" style="flex:1; padding:10px 14px; border:1.5px solid #cbd5e1; border-radius:8px; font-family:inherit; font-size:13.5px; resize:none; box-sizing:border-box;" placeholder="Tuliskan balasan petugas di sini (Tekan Enter untuk mengirim)..." required onkeydown="handleAdminTextareaKey(event)"></textarea>
@@ -627,6 +1008,8 @@
     if (btn) btn.classList.add('active');
 
     const rows = document.querySelectorAll('#tableCsInboxBody tr.cs-thread-row');
+    const cards = document.querySelectorAll('#csMobileCardsContainer .cs-thread-row');
+    
     let visibleCount = 0;
     rows.forEach(r => {
       const kat = r.getAttribute('data-kategori');
@@ -637,17 +1020,29 @@
       else if (type === 'guest' && kat === 'guest') show = true;
       else if (type === 'pending' && st === 'menunggu') show = true;
 
-      if (show) {
-        r.style.display = '';
-        visibleCount++;
-      } else {
-        r.style.display = 'none';
-      }
+      r.style.display = show ? '' : 'none';
+      if (show) visibleCount++;
     });
 
-    const emptyNotice = document.getElementById('rowCsFilterEmpty');
-    if (emptyNotice) {
-      emptyNotice.style.display = (visibleCount === 0 && rows.length > 0) ? '' : 'none';
+    cards.forEach(c => {
+      const kat = c.getAttribute('data-kategori');
+      const st = c.getAttribute('data-status');
+      let show = false;
+      if (type === 'all') show = true;
+      else if (type === 'client' && kat === 'client') show = true;
+      else if (type === 'guest' && kat === 'guest') show = true;
+      else if (type === 'pending' && st === 'menunggu') show = true;
+
+      c.style.display = show ? '' : 'none';
+    });
+
+    const emptyRowNotice = document.getElementById('rowCsFilterEmpty');
+    if (emptyRowNotice) {
+      emptyRowNotice.style.display = (visibleCount === 0 && rows.length > 0) ? '' : 'none';
+    }
+    const emptyCardNotice = document.getElementById('cardCsFilterEmpty');
+    if (emptyCardNotice) {
+      emptyCardNotice.style.display = (visibleCount === 0 && cards.length > 0) ? '' : 'none';
     }
   }
 
@@ -765,7 +1160,7 @@
             let userContentHtml = '';
             if (m.tipe_pesan === 'client_card' && m.detail_klien) {
               userContentHtml = `
-                <div style="background:#f0fdf4; border:1.5px solid #86efac; border-radius:8px; padding:10px 12px; margin-top:6px; color:#1e293b;">
+                <div class="admin-bubble-client-card">
                   <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #bbf7d0; padding-bottom:5px; margin-bottom:6px;">
                     <strong style="color:#15803d; font-size:12px;"><i class="fas fa-shield-alt"></i> DATA KLIEN TERVERIFIKASI RESMI</strong>
                     <span style="background:#16a34a; color:#fff; font-size:10px; padding:1px 6px; border-radius:10px; font-weight:700;">DATABASE BAPAS</span>
@@ -789,7 +1184,7 @@
             }
 
             html += `
-              <div style="align-self:flex-start; max-width:85%; background:#ffffff; border:1px solid #cbd5e1; border-left:4px solid #003580; border-radius:8px; padding:10px 14px; box-shadow:0 1px 3px rgba(0,0,0,0.04);">
+              <div class="admin-chat-bubble bubble-user">
                 <div style="font-size:11.5px; font-weight:700; color:#003580; margin-bottom:4px; display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
                   <i class="fas ${m.is_verified ? 'fa-id-badge text-success' : 'fa-user'}"></i> 
                   <span>${escapeAdminHtml(m.nama || 'Pengguna')} (${escapeAdminHtml(m.kontak || '-')})</span>
@@ -803,7 +1198,7 @@
             const isAutoAnswer = m.tipe_pesan && m.tipe_pesan.startsWith('katalog_jawaban');
             const formattedBot = escapeAdminHtml(m.pesan).replace(/\n/g, '<br>');
             html += `
-              <div style="align-self:flex-start; max-width:85%; background:#fefce8; border:1px solid #fef08a; border-left:4px solid #eab308; border-radius:8px; padding:10px 14px;">
+              <div class="admin-chat-bubble bubble-bot">
                 <div style="font-size:11.5px; font-weight:700; color:#854d0e; margin-bottom:4px; display:flex; align-items:center; gap:6px;">
                   <i class="fas fa-robot"></i> <span>Asisten Virtual BAPAS:</span>
                   ${isAutoAnswer ? '<span style="background:#003580; color:#fff; font-size:9.5px; padding:1px 6px; border-radius:10px; font-weight:700;"><i class="fas fa-check"></i> Respon Katalog</span>' : ''}
@@ -815,7 +1210,7 @@
           } else {
             // Admin message
             html += `
-              <div style="align-self:flex-end; max-width:82%; background:#003580; color:#ffffff; border-radius:8px; padding:10px 14px; box-shadow:0 2px 6px rgba(0,53,128,0.25);">
+              <div class="admin-chat-bubble bubble-admin">
                 <div style="font-size:11.5px; font-weight:700; color:#93c5fd; margin-bottom:3px;"><i class="fas fa-headset"></i> ${escapeAdminHtml(m.admin_name || 'Petugas CS')} (Anda):</div>
                 <div style="font-size:13.5px; line-height:1.5; word-break:break-word;">${escapeAdminHtml(m.pesan)}</div>
                 <div style="font-size:10.5px; color:#cbd5e1; margin-top:4px; text-align:right;">${time}</div>
