@@ -79,6 +79,39 @@
       width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: inherit; font-size: 14px;
     }
     .form-group input:focus, .form-group textarea:focus { outline: none; border-color: #1a3a52; box-shadow: 0 0 0 3px rgba(26,58,82,0.1); }
+    .btn-cs-filter {
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      color: #475569;
+      font-weight: 700;
+      font-size: 12px;
+      border-radius: 20px;
+      padding: 6px 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: inherit;
+    }
+    .btn-cs-filter:hover {
+      background: #f1f5f9;
+      border-color: #94a3b8;
+      color: #0f172a;
+    }
+    .btn-cs-filter.active {
+      background: #003580;
+      border-color: #003580;
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(0, 53, 128, 0.25);
+    }
+    .btn-cs-filter.active i {
+      color: #fbbf24;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
   </style>
 </head>
 <body>
@@ -365,69 +398,114 @@
       <div class="card-title" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
         <div style="display:flex; align-items:center; gap:10px;">
           <i class="fas fa-headset" style="color:#003580;"></i>
-          <span>Pesan Masuk Customer Service Real-Time (<%= (typeof pesanBantuan !== 'undefined' && pesanBantuan) ? pesanBantuan.length : 0 %>)</span>
+          <span>Kotak Masuk Customer Service (<%= (typeof pesanBantuan !== 'undefined' && pesanBantuan) ? pesanBantuan.length : 0 %> Percakapan)</span>
         </div>
         <div style="display:flex; gap:10px;">
           <button type="button" class="btn btn-sm btn-secondary" onclick="location.reload()" style="display:inline-flex; align-items:center; gap:6px;">
-            <i class="fas fa-sync-alt"></i> Segarkan Obrolan
+            <i class="fas fa-sync-alt"></i> Segarkan Kotak Masuk
           </button>
         </div>
       </div>
-      <p style="color:#64748b; font-size:13.5px; margin-bottom:18px;">
-        Daftar pesan dan permohonan bantuan dari klien atau pengunjung melalui widget Pusat Bantuan di website. Klik tombol <strong>Buka Obrolan & Balas</strong> untuk melihat riwayat percakapan lengkap dan membalas secara real-time.
+      <p style="color:#64748b; font-size:13.5px; margin-bottom:16px;">
+        Setiap baris di bawah ini adalah <strong>satu ruang percakapan utuh</strong> dari Klien Binaan atau Pengunjung Umum. Seluruh riwayat pesan otomatis terkumpul di dalam ruang obrolannya masing-masing. Klik tombol <strong>Buka Obrolan</strong> untuk melihat riwayat pesan lengkap dan membalas secara real-time.
       </p>
+
+      <!-- FILTER KATEGORI OBROLAN (KLIEN vs TAMU vs MENUNGGU BALASAN) -->
+      <div class="cs-inbox-filter-bar" style="display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; align-items:center;">
+        <span style="font-size:12.5px; font-weight:700; color:#475569; margin-right:4px;"><i class="fas fa-filter"></i> Kategori:</span>
+        <button type="button" class="btn btn-sm btn-cs-filter active" id="filterBtnAll" onclick="filterCsInbox('all', this)">
+          <i class="fas fa-comments"></i> Semua Obrolan (<%= (typeof pesanBantuan !== 'undefined' && pesanBantuan) ? pesanBantuan.length : 0 %>)
+        </button>
+        <button type="button" class="btn btn-sm btn-cs-filter" id="filterBtnClient" onclick="filterCsInbox('client', this)">
+          <i class="fas fa-id-card"></i> Klien Binaan Resmi (<%= (typeof pesanBantuan !== 'undefined' && pesanBantuan) ? pesanBantuan.filter(p => p.is_verified).length : 0 %>)
+        </button>
+        <button type="button" class="btn btn-sm btn-cs-filter" id="filterBtnGuest" onclick="filterCsInbox('guest', this)">
+          <i class="fas fa-user-friends"></i> Pengunjung / Tamu (<%= (typeof pesanBantuan !== 'undefined' && pesanBantuan) ? pesanBantuan.filter(p => !p.is_verified).length : 0 %>)
+        </button>
+        <button type="button" class="btn btn-sm btn-cs-filter" id="filterBtnPending" onclick="filterCsInbox('pending', this)">
+          <i class="fas fa-clock text-warning"></i> Perlu Dibalas (<%= (typeof pesanBantuan !== 'undefined' && pesanBantuan) ? pesanBantuan.filter(p => p.status === 'menunggu').length : 0 %>)
+        </button>
+      </div>
 
       <div class="table-responsive">
         <table class="table">
           <thead>
             <tr>
-              <th style="width:140px;">Waktu Kirim</th>
-              <th style="min-width:140px;">Nama Pengirim</th>
-              <th style="min-width:130px;">Kontak / No HP</th>
-              <th style="min-width:280px;">Isi Pesan Terakhir</th>
-              <th style="width:110px;">Status</th>
-              <th style="width:140px; text-align:center;">Aksi</th>
+              <th style="width:145px;">Pesan Terakhir</th>
+              <th style="min-width:180px;">Identitas Pengirim</th>
+              <th style="min-width:130px;">Kontak / Telp</th>
+              <th style="min-width:320px;">Isi Pesan Terakhir</th>
+              <th style="width:125px; text-align:center;">Status</th>
+              <th style="width:150px; text-align:center;">Aksi</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody id="tableCsInboxBody">
             <% if (typeof pesanBantuan !== 'undefined' && pesanBantuan && pesanBantuan.length > 0) { %>
               <% pesanBantuan.forEach(function(p) { %>
-                <tr>
+                <tr class="cs-thread-row" data-kategori="<%= p.is_verified ? 'client' : 'guest' %>" data-status="<%= p.status %>">
                   <td style="font-size:12px; color:#64748b; white-space:nowrap;">
-                    <%= formatTanggalWaktu(p.created_at) %>
+                    <i class="far fa-clock"></i> <%= formatTanggalWaktu(p.updated_at || p.created_at) %>
                   </td>
                   <td>
-                    <strong><%= p.nama %></strong>
-                    <% if (p.is_verified || (p.detail_klien && p.detail_klien.no_register)) { %>
-                      <span class="badge badge-success" style="font-size:10.5px; margin-left:4px; background:#16a34a; color:#fff;" title="Klien Terverifikasi Database Resmi">
-                        <i class="fas fa-check-circle"></i> Klien (<%= (p.detail_klien && p.detail_klien.no_register) ? p.detail_klien.no_register : 'Terverifikasi' %>)
-                      </span>
-                    <% } else if (p.pengirim === 'admin') { %>
-                      <span class="badge badge-primary" style="font-size:10px; margin-left:4px;">Admin</span>
-                    <% } else if (p.pengirim === 'bot') { %>
-                      <span class="badge badge-warning" style="font-size:10px; margin-left:4px;">Virtual CS</span>
-                    <% } else { %>
-                      <span class="badge" style="font-size:10px; margin-left:4px; background:#e2e8f0; color:#475569;">Umum</span>
+                    <div style="font-weight:700; color:#0f172a; font-size:13.5px; display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+                      <span><%= p.nama %></span>
+                      <% if (p.is_verified) { %>
+                        <span class="badge badge-success" style="font-size:10.5px; background:#16a34a; color:#fff;" title="Klien Terverifikasi Database Resmi">
+                          <i class="fas fa-check-circle"></i> Klien Binaan (<%= (p.detail_klien && p.detail_klien.no_register) ? p.detail_klien.no_register : (p.kontak || 'Resmi') %>)
+                        </span>
+                      <% } else { %>
+                        <span class="badge" style="font-size:10.5px; background:#e0f2fe; color:#0369a1; border:1px solid #7dd3fc;">
+                          <i class="fas fa-user"></i> Pengunjung Umum
+                        </span>
+                      <% } %>
+                    </div>
+                    <% if (p.detail_klien && p.detail_klien.masa_wajib_lapor) { %>
+                      <small style="color:#b45309; font-size:11px; display:block; margin-top:2px;">
+                        <i class="fas fa-calendar-alt"></i> Masa Lapor: <%= p.detail_klien.masa_wajib_lapor %>
+                      </small>
                     <% } %>
                   </td>
-                  <td><%= p.kontak || '-' %></td>
-                  <td style="font-size:13.5px; line-height:1.5;">
-                    <%= p.pesan %>
+                  <td style="font-size:12.5px; color:#334155;">
+                    <i class="fas fa-phone-alt" style="font-size:10px; color:#94a3b8;"></i> <%= p.kontak || '-' %>
                   </td>
                   <td>
-                    <% if (p.pengirim === 'admin') { %>
-                      <span class="badge badge-success"><i class="fas fa-check"></i> Terjawab</span>
+                    <div style="font-size:13px; color:#1e293b; line-height:1.45; word-break:break-word; max-width:450px;">
+                      <% if (p.last_pengirim === 'admin') { %>
+                        <span class="badge badge-primary" style="font-size:9.5px; margin-right:4px;"><i class="fas fa-reply"></i> Anda:</span>
+                      <% } else if (p.last_pengirim === 'bot') { %>
+                        <span class="badge badge-warning" style="font-size:9.5px; margin-right:4px;"><i class="fas fa-robot"></i> Asisten:</span>
+                      <% } %>
+                      <%= p.pesan_terakhir %>
+                    </div>
+                    <div style="font-size:11px; color:#64748b; margin-top:4px; display:flex; align-items:center; gap:8px;">
+                      <span><i class="fas fa-comments" style="color:#003580;"></i> <%= p.total_pesan %> pesan</span>
+                      <% if (p.status === 'menunggu') { %>
+                        <span style="color:#d97706; font-weight:700;"><i class="fas fa-exclamation-circle"></i> Memerlukan respon</span>
+                      <% } %>
+                    </div>
+                  </td>
+                  <td style="text-align:center;">
+                    <% if (p.status === 'terjawab') { %>
+                      <span class="badge badge-success"><i class="fas fa-check-double"></i> Sudah Dibalas</span>
+                    <% } else if (p.status === 'selesai') { %>
+                      <span class="badge" style="background:#f1f5f9; color:#475569; border:1px solid #cbd5e1;"><i class="fas fa-flag-checkered"></i> Sesi Selesai</span>
                     <% } else { %>
-                      <span class="badge badge-warning"><i class="fas fa-clock"></i> Menunggu</span>
+                      <span class="badge badge-warning" style="animation:pulse 2s infinite;"><i class="fas fa-clock"></i> Perlu Dibalas</span>
                     <% } %>
                   </td>
                   <td style="text-align:center;">
                     <button type="button" class="btn btn-sm btn-primary" onclick="openBalasBantuanModal('<%= p.session_id %>', '<%= (p.nama || '').replace(/'/g, "\\'") %>')">
-                      <i class="fas fa-comments"></i> Buka Chat
+                      <i class="fas fa-comments"></i> Buka Obrolan
                     </button>
                   </td>
                 </tr>
               <% }); %>
+              <tr id="rowCsFilterEmpty" style="display:none;">
+                <td colspan="6" style="text-align:center; padding:30px; color:#64748b;">
+                  <i class="fas fa-filter" style="font-size:24px; color:#cbd5e1; display:block; margin-bottom:8px;"></i>
+                  Tidak ada percakapan dalam kategori filter ini.
+                </td>
+              </tr>
             <% } else { %>
               <tr>
                 <td colspan="6" style="text-align:center; padding:30px; color:#64748b;">
@@ -512,6 +590,35 @@
     if (btn) btn.classList.add('active');
     const target = document.getElementById('tab-' + tabName);
     if (target) target.classList.add('active');
+  }
+
+  function filterCsInbox(type, btn) {
+    document.querySelectorAll('.btn-cs-filter').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+
+    const rows = document.querySelectorAll('#tableCsInboxBody tr.cs-thread-row');
+    let visibleCount = 0;
+    rows.forEach(r => {
+      const kat = r.getAttribute('data-kategori');
+      const st = r.getAttribute('data-status');
+      let show = false;
+      if (type === 'all') show = true;
+      else if (type === 'client' && kat === 'client') show = true;
+      else if (type === 'guest' && kat === 'guest') show = true;
+      else if (type === 'pending' && st === 'menunggu') show = true;
+
+      if (show) {
+        r.style.display = '';
+        visibleCount++;
+      } else {
+        r.style.display = 'none';
+      }
+    });
+
+    const emptyNotice = document.getElementById('rowCsFilterEmpty');
+    if (emptyNotice) {
+      emptyNotice.style.display = (visibleCount === 0 && rows.length > 0) ? '' : 'none';
+    }
   }
 
   function openTolakModal(laporId, clientName) {

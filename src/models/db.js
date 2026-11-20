@@ -1067,9 +1067,96 @@ async function getPesanBantuanBySession(sessionId) {
 
 async function getAllPesanBantuan(limit = 100) {
   const col = db.collection('pusat_bantuan_chat');
-  const snap = await col.limit(limit).get();
-  const list = docsToArray(snap);
-  return list.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+  const snap = await col.get();
+  const allDocs = docsToArray(snap);
+
+  // Urutkan seluruh pesan secara kronologis (dari pesan terlama ke terbaru)
+  allDocs.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+
+  const groups = {};
+
+  for (const m of allDocs) {
+    const sId = m.session_id || 'unknown';
+    if (!groups[sId]) {
+      groups[sId] = {
+        session_id: sId,
+        nama: (m.pengirim === 'user' ? m.nama : '') || '',
+        kontak: (m.pengirim === 'user' ? m.kontak : '') || '-',
+        is_verified: false,
+        detail_klien: null,
+        kategori_pengguna: 'guest', // 'registered' | 'guest'
+        pesan_terakhir: '',
+        tipe_pesan_terakhir: '',
+        last_pengirim: '',
+        last_sender_name: '',
+        status: 'menunggu', // 'menunggu' | 'terjawab' | 'selesai'
+        total_pesan: 0,
+        unread_user_count: 0,
+        created_at: m.created_at, // waktu mulai obrolan
+        updated_at: m.created_at  // waktu pesan terakhir
+      };
+    }
+
+    const g = groups[sId];
+    g.total_pesan += 1;
+    g.updated_at = m.created_at || g.updated_at;
+    g.last_pengirim = m.pengirim;
+    g.tipe_pesan_terakhir = m.tipe_pesan || 'text';
+
+    if (m.pengirim === 'user') {
+      g.unread_user_count += 1;
+      if (m.nama && m.nama !== 'Pengunjung') {
+        g.nama = m.nama;
+      } else if (!g.nama) {
+        g.nama = m.nama || 'Pengunjung';
+      }
+      if (m.kontak && m.kontak !== '-') {
+        g.kontak = m.kontak;
+      }
+    } else if (m.pengirim === 'admin') {
+      g.unread_user_count = 0; // Admin sudah menjawab
+    }
+
+    if (m.is_verified || m.tipe_pesan === 'client_card' || m.detail_klien) {
+      g.is_verified = true;
+      g.kategori_pengguna = 'registered';
+      if (m.detail_klien) {
+        g.detail_klien = m.detail_klien;
+        if (m.detail_klien.nama_lengkap) g.nama = m.detail_klien.nama_lengkap;
+        if (m.detail_klien.no_telepon || m.detail_klien.no_register) {
+          g.kontak = m.detail_klien.no_telepon || m.detail_klien.no_register;
+        }
+      }
+    }
+
+    // Tentukan isi cuplikan pesan terakhir & nama pengirim terakhir
+    g.pesan_terakhir = m.pesan || '';
+    if (m.pengirim === 'admin') {
+      g.last_sender_name = m.admin_name || 'Petugas CS';
+      g.status = 'terjawab';
+    } else if (m.pengirim === 'bot') {
+      g.last_sender_name = 'Asisten Virtual';
+      if (m.tipe_pesan === 'session_ended') {
+        g.status = 'selesai';
+      }
+    } else {
+      g.last_sender_name = g.nama || 'Pengguna';
+      g.status = 'menunggu';
+    }
+  }
+
+  // Lengkapi default nama jika belum ada
+  const threadList = Object.values(groups).map(g => {
+    if (!g.nama) {
+      g.nama = g.is_verified ? 'Klien Binaan' : 'Pengunjung Umum';
+    }
+    return g;
+  });
+
+  // Urutkan percakapan berdasarkan waktu pesan terakhir (paling baru di atas)
+  threadList.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
+
+  return limit ? threadList.slice(0, limit) : threadList;
 }
 
 async function balasPesanBantuanAdmin(sessionId, pesan, adminName) {
