@@ -94,21 +94,23 @@
 
 <!-- NAVBAR -->
 <div class="navbar">
-  <div style="display:flex; align-items:center; gap:10px; font-weight:700; font-size:15px;">
-    <i class="fas fa-gavel"></i> BAPAS MEDAN - CLIENT PORTAL
+  <div style="font-weight:800; font-size:15px; display:flex; align-items:center; gap:8px;">
+    <i class="fas fa-shield-alt" style="color:#f59e0b;"></i>
+    <span>BAPAS MEDAN &bull; PORTAL KLIEN</span>
   </div>
-  <div style="display:flex; align-items:center; gap:12px;">
-    <a href="/client/profil" style="display:flex; align-items:center; gap:8px;">
-      <% if (client && client.foto_profil) { %>
-        <img src="<%= getFileUrl(client.foto_profil, 'profil') %>" alt="Profil" style="width:28px; height:28px; border-radius:50%; object-fit:cover; border:2px solid #fff;" onerror="this.onerror=null; this.src='/logo_pemasyarakatan-removebg-preview.png';">
-      <% } else { %>
-        <span style="width:26px; height:26px; border-radius:50%; background:rgba(255,255,255,0.2); display:inline-flex; align-items:center; justify-content:center; font-size:13px;"><i class="fas fa-user"></i></span>
-      <% } %>
-      <span><%= client ? client.nama_lengkap : 'Profil' %></span>
-    </a>
+  <div>
+    <a href="/client/dashboard" class="active"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
     <a href="/client/riwayat"><i class="fas fa-history"></i> <span>Riwayat</span></a>
     <a href="/client/jadwal"><i class="fas fa-calendar-alt"></i> <span>Jadwal</span></a>
-    <a href="/logout" style="background:rgba(255,255,255,0.2); padding:6px 12px; border-radius:4px;"><i class="fas fa-sign-out-alt"></i> <span>Keluar</span></a>
+    <a href="/client/profil" style="display:inline-flex; align-items:center; gap:6px;">
+      <% if (client && client.foto_profil) { %>
+        <img src="<%= getFileUrl(client.foto_profil, 'profil') %>" alt="Profil" style="width:22px; height:22px; border-radius:50%; object-fit:cover; border:1px solid #fff;" onerror="this.onerror=null; this.src='/logo_pemasyarakatan-removebg-preview.png';">
+      <% } else { %>
+        <i class="fas fa-user-circle"></i>
+      <% } %>
+      <span class="nav-user-name"><%= client ? client.nama_lengkap : 'Profil' %></span>
+    </a>
+    <a href="/logout" class="nav-logout"><i class="fas fa-sign-out-alt"></i> <span>Keluar</span></a>
   </div>
 </div>
 

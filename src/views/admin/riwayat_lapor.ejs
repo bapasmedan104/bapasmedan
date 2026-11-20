@@ -117,15 +117,16 @@
 
 <!-- NAVBAR -->
 <div class="navbar no-print">
-  <div style="font-weight:700; font-size:16px;">
-    <i class="fas fa-gavel"></i> BAPAS MEDAN - ADMIN
+  <div style="font-weight:800; font-size:15px; display:flex; align-items:center; gap:8px;">
+    <i class="fas fa-shield-alt" style="color:#f59e0b;"></i>
+    <span>BAPAS MEDAN &bull; ADMIN</span>
   </div>
   <div>
-    <a href="/admin/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
-    <a href="/admin/riwayat-lapor" style="font-weight:700; border-bottom:2px solid #ffc107; padding-bottom:4px;"><i class="fas fa-filter"></i> Riwayat Lapor</a>
-    <a href="/admin/kelola-client"><i class="fas fa-users-cog"></i> Kelola Klien</a>
-    <a href="javascript:void(0)" onclick="openResetAdminModal()"><i class="fas fa-key"></i> Sandi Admin</a>
-    <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    <a href="/admin/dashboard"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
+    <a href="/admin/riwayat-lapor" class="active"><i class="fas fa-filter"></i> <span>Riwayat Lapor</span></a>
+    <a href="/admin/kelola-client"><i class="fas fa-users-cog"></i> <span>Kelola Klien</span></a>
+    <a href="javascript:void(0)" onclick="openResetAdminModal()"><i class="fas fa-key"></i> <span>Sandi Admin</span></a>
+    <a href="/logout" class="nav-logout"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
   </div>
 </div>
 
