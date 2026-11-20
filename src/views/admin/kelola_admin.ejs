@@ -190,7 +190,7 @@
         <tbody id="tableAdminBody">
           <% if (adminList && adminList.length > 0) { %>
             <% adminList.forEach(function(adm, idx) { %>
-              <% const isPrimary = adm.email === 'bapasmedan104@gmail.com' || adm.username === 'admin'; %>
+              <% const isPrimary = adm.email === 'bapasmedan104@gmail.com' || adm.username === 'bapasmedan104'; %>
               <tr class="admin-data-row" data-search="<%= (adm.nama_lengkap + ' ' + adm.username + ' ' + (adm.email || '') + ' ' + (adm.pos_wilayah || '')).toLowerCase() %>">
                 <td><%= idx + 1 %></td>
                 <td>
@@ -274,7 +274,7 @@
     <div class="admin-mobile-cards" id="adminCardsContainer">
       <% if (adminList && adminList.length > 0) { %>
         <% adminList.forEach(function(adm) { %>
-          <% const isPrimary = adm.email === 'bapasmedan104@gmail.com' || adm.username === 'admin'; %>
+          <% const isPrimary = adm.email === 'bapasmedan104@gmail.com' || adm.username === 'bapasmedan104'; %>
           <div class="admin-card-item admin-data-row" data-search="<%= (adm.nama_lengkap + ' ' + adm.username + ' ' + (adm.email || '') + ' ' + (adm.pos_wilayah || '')).toLowerCase() %>">
             <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px;">
               <div style="display:flex; align-items:center; gap:10px;">

@@ -326,7 +326,7 @@ async function deleteAdminUser(adminId, requesterAdminId) {
   if (!snap.exists) return { success: false, message: 'Akun admin tidak ditemukan' };
 
   const existing = snap.data();
-  if (existing.email === 'bapasmedan104@gmail.com' || existing.username === 'admin') {
+  if (existing.email === 'bapasmedan104@gmail.com' || existing.username === 'bapasmedan104') {
     return { success: false, message: 'Akun Super Administrator Utama tidak boleh dihapus demi keamanan sistem!' };
   }
   if (adminId === requesterAdminId) {
