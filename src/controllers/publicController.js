@@ -388,9 +388,9 @@ async function postAkhiriSesiBantuan(req, res) {
       return res.status(400).json({ success: false, message: 'Session ID diperlukan.' });
     }
     const cleanSessionId = session_id;
-    // Hapus seluruh pesan sesi secara permanen dari Firebase
+    // Hapus seluruh pesan sesi secara permanen dari database
     const result = await hapusPermanenPusatBantuan(cleanSessionId);
-    return res.json({ success: true, message: 'Sesi bantuan berhasil diakhiri dan dihapus permanen dari Firebase.', data: result });
+    return res.json({ success: true, message: 'Sesi bantuan berhasil diakhiri dan dihapus permanen dari sistem.', data: result });
   } catch (err) {
     return res.status(500).json({ success: false, message: 'Gagal mengakhiri sesi: ' + err.message });
   }

@@ -432,13 +432,13 @@ async function postAkhiriPesanBantuanAdmin(req, res) {
     const adminUser = req.session && req.session.adminUser ? req.session.adminUser : null;
     const adminName = adminUser ? adminUser.nama_lengkap : 'Petugas CS BAPAS Medan';
 
-    // Hapus seluruh pesan sesi secara permanen dari Firebase & Firestore
+    // Hapus seluruh pesan sesi secara permanen dari database
     const result = await hapusPermanenPusatBantuan(session_id);
     if (adminUser) {
-      await logActivity('admin', adminUser.id || 'admin', 'Hapus Chat CS Permanen', `Admin ${adminName} mengakhiri dan menghapus percakapan sesi ${session_id} secara permanen dari Firebase`);
+      await logActivity('admin', adminUser.id || 'admin', 'Hapus Chat CS Permanen', `Admin ${adminName} mengakhiri dan menghapus percakapan sesi ${session_id} secara permanen`);
     }
 
-    return res.json({ success: true, message: 'Percakapan telah diakhiri dan seluruh riwayat pesan berhasil dihapus permanen dari Firebase.', data: result });
+    return res.json({ success: true, message: 'Percakapan telah diakhiri dan seluruh riwayat pesan berhasil dihapus permanen dari sistem.', data: result });
   } catch (err) {
     return res.status(500).json({ success: false, message: 'Gagal mengakhiri dan menghapus percakapan: ' + err.message });
   }

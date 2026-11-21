@@ -1941,7 +1941,7 @@
     const namaUser = document.getElementById('balasNamaUser').innerText || 'pengguna';
     if (!sessionId) return;
 
-    if (!confirm('Apakah Anda yakin ingin mengakhiri percakapan dengan ' + namaUser + '?\n\nPERINGATAN: Seluruh riwayat obrolan sesi ini akan OTOMATIS DIHAPUS PERMANEN dari Firebase dan database.')) {
+    if (!confirm('Apakah Anda yakin ingin mengakhiri percakapan dengan ' + namaUser + '?\n\nPERINGATAN: Seluruh riwayat obrolan sesi ini akan OTOMATIS DIHAPUS PERMANEN dari sistem database.')) {
       return;
     }
 
@@ -1960,7 +1960,7 @@
       const data = await res.json();
       if (data.success) {
         closeBalasBantuanModal();
-        alert('Percakapan telah diakhiri dan seluruh riwayat pesan berhasil DIHAPUS PERMANEN dari Firebase.');
+        alert('Percakapan telah diakhiri dan seluruh riwayat pesan berhasil DIHAPUS PERMANEN.');
         
         // Hapus baris tabel dan kartu dari tampilan dashboard secara instan
         const allBtns = document.querySelectorAll(`button[onclick*="${sessionId}"]`);

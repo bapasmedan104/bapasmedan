@@ -742,7 +742,7 @@
     if (typeof Swal !== 'undefined') {
       Swal.fire({
         title: 'Hapus Laporan Permanen?',
-        text: 'Laporan ini akan DIHAPUS PERMANEN dari Firebase Cloud. Data tidak dapat dipulihkan!',
+        text: 'Laporan ini akan DIHAPUS PERMANEN dari sistem database. Data tidak dapat dipulihkan!',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#dc3545',
@@ -753,7 +753,7 @@
         if (result.isConfirmed) form.submit();
       });
     } else {
-      if (confirm('Laporan ini akan DIHAPUS PERMANEN dari Firebase. Anda yakin?')) {
+      if (confirm('Laporan ini akan DIHAPUS PERMANEN dari sistem database. Anda yakin?')) {
         form.submit();
       }
     }

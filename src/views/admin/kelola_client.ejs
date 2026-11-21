@@ -513,13 +513,13 @@
   <div class="modal-content">
     <h3 style="color:#dc3545; margin-bottom:12px; font-size:18px;"><i class="fas fa-trash"></i> Konfirmasi Hapus Data Klien</h3>
     <p style="font-size:14px; color:#555; margin-bottom:20px;">
-      Apakah Anda yakin ingin menghapus data klien <strong id="hapusNamaKlien"></strong>? Seluruh data laporan dan riwayat wajib lapor klien tersebut juga akan <strong>terhapus permanen dari Firebase Cloud</strong>.
+      Apakah Anda yakin ingin menghapus data klien <strong id="hapusNamaKlien"></strong>? Seluruh data laporan dan riwayat wajib lapor klien tersebut juga akan <strong>terhapus permanen dari sistem database</strong>.
     </p>
     <form action="/admin/client/delete" method="POST">
       <input type="hidden" name="client_id" id="hapusClientId">
       <div style="display:flex; justify-content:flex-end; gap:10px;">
         <button type="button" class="btn btn-secondary" onclick="closeHapusModal()">Batal</button>
-        <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i> Ya, Hapus Permanen dari Firebase</button>
+        <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i> Ya, Hapus Permanen</button>
       </div>
     </form>
   </div>
@@ -571,7 +571,7 @@
           </button>
         </div>
         <small style="color:#64748b; font-size:11.5px; margin-top:6px; display:block;">
-          Kata sandi baru ini akan langsung tersimpan di Cloud Firebase dan dapat langsung digunakan oleh klien untuk login.
+          Kata sandi baru ini akan langsung tersimpan di sistem server dan dapat langsung digunakan oleh klien untuk login.
         </small>
       </div>
 

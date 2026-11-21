@@ -1,18 +1,16 @@
 <!-- =======================================================
-     WIDGET PUSAT BANTUAN TERPADU BAPAS KELAS I MEDAN (LAYAR PENUH)
-     Memiliki 2 Kategori:
-     1. Langkah-Langkah Bantuan (Panduan Lengkap & Interaktif)
-     2. Customer Service Real-Time (Live Chat BAPAS Tanpa WhatsApp)
+     CUSTOMER SERVICE REAL-TIME RESMI BAPAS KELAS I MEDAN (LAYAR PENUH)
+     Layanan Percakapan Interaktif Real-Time Langsung (Live Chat)
      ======================================================= -->
 
-<!-- TOMBOL FLOATING PUSAT BANTUAN -->
-<div id="btnPusatBantuanFloating" class="btn-pusat-bantuan-floating" onclick="bukaPusatBantuan()" title="Buka Pusat Bantuan & Customer Service">
+<!-- TOMBOL FLOATING CUSTOMER SERVICE -->
+<div id="btnPusatBantuanFloating" class="btn-pusat-bantuan-floating" onclick="bukaPusatBantuan()" title="Buka Customer Service BAPAS Medan">
   <div class="pulse-online-badge"></div>
   <i class="fas fa-headset"></i>
-  <span class="btn-bantuan-text">Pusat Bantuan</span>
+  <span class="btn-bantuan-text">Customer Service</span>
 </div>
 
-<!-- CONTAINER LAYAR PENUH PUSAT BANTUAN -->
+<!-- CONTAINER LAYAR PENUH CUSTOMER SERVICE -->
 <div id="modalPusatBantuan" class="fullscreen-bantuan-overlay" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="bantuanModalTitle">
   <div class="fullscreen-bantuan-wrapper">
     
@@ -25,7 +23,7 @@
         </div>
         <div>
           <h2 id="bantuanModalTitle" class="header-title-text">
-            <i class="fas fa-life-ring" style="color:#f59e0b;"></i> Pusat Bantuan & Layanan
+            <i class="fas fa-headset" style="color:#f59e0b;"></i> Customer Service Resmi BAPAS Medan
           </h2>
           <span class="header-subtitle-text">Balai Pemasyarakatan (BAPAS) Kelas I Medan &bull; Kemenimipas RI</span>
         </div>
@@ -37,159 +35,11 @@
       </button>
     </header>
 
-    <!-- Navigation Tabs (2 Kategori) -->
-    <nav class="bantuan-tabs-nav" aria-label="Pilihan Kategori Bantuan">
-      <button type="button" id="tabHeadLangkah" class="bantuan-tab-btn active" onclick="switchKategoriBantuan('langkah')">
-        <i class="fas fa-book-reader"></i>
-        <span>1. Langkah-Langkah Bantuan</span>
-      </button>
-      <button type="button" id="tabHeadCS" class="bantuan-tab-btn" onclick="switchKategoriBantuan('cs')">
-        <div class="cs-indicator-dot"></div>
-        <i class="fas fa-comments"></i>
-        <span>2. Customer Service Real-Time</span>
-      </button>
-    </nav>
-
-    <!-- Main Content Area -->
+    <!-- Main Content Area: Customer Service Real-Time (Tanpa Tab Panduan yang Membingungkan) -->
     <main class="fullscreen-bantuan-content">
       
-      <!-- ==============================================
-           KATEGORI 1: LANGKAH-LANGKAH BANTUAN (PANDUAN)
-           ============================================== -->
-      <section id="kategoriLangkah" class="kategori-pane active" aria-labelledby="tabHeadLangkah">
-        <div class="kategori-inner-container">
-          
-          <div class="banner-panduan-info">
-            <i class="fas fa-info-circle banner-info-icon"></i>
-            <div>
-              <strong>Panduan Interaktif Pelayanan Wajib Lapor Online</strong>
-              <p style="margin:2px 0 0; font-size:12.5px; color:#166534;">
-                Pilih topik panduan di bawah untuk melihat solusi langkah demi langkah penggunaan sistem wajib lapor.
-              </p>
-            </div>
-          </div>
-
-          <!-- Accordion Group -->
-          <div class="faq-accordion-group">
-            
-            <!-- Langkah 1: Login -->
-            <details class="bantuan-item" open>
-              <summary>
-                <span><i class="fas fa-sign-in-alt text-primary"></i> Langkah 1: Cara Masuk / Login ke Akun Klien</span>
-                <i class="fas fa-chevron-down arrow-icon"></i>
-              </summary>
-              <div class="bantuan-content">
-                <p>Untuk masuk ke portal wajib lapor online BAPAS Kelas I Medan:</p>
-                <ol>
-                  <li>Kunjungi tautan masuk resmi di <a href="/login" style="color:#003580; font-weight:700;">bapas1medan.com/login</a>.</li>
-                  <li>Masukkan <strong>Nomor WhatsApp</strong> aktif atau <strong>Nomor Register Klien</strong> yang tercatat di Surat Keputusan (contoh: <code>REG-2026</code>).</li>
-                  <li>Masukkan Kata Sandi akun Anda yang telah didaftarkan oleh Pembimbing Kemasyarakatan (PK).</li>
-                  <li>Selesaikan verifikasi keamanan Cloudflare Turnstile, lalu klik tombol <strong>Masuk ke Portal Klien</strong>.</li>
-                </ol>
-                <div class="note-tips">
-                  <i class="fas fa-lightbulb" style="color:#d97706;"></i>
-                  <span>Jika mengalami kendala kata sandi atau akun belum aktif, Anda dapat langsung mengirim pesan di tab <strong>2. Customer Service Real-Time</strong>.</span>
-                </div>
-              </div>
-            </details>
-
-            <!-- Langkah 2: Jadwal Wajib Lapor -->
-            <details class="bantuan-item">
-              <summary>
-                <span><i class="fas fa-calendar-alt text-primary"></i> Langkah 2: Jadwal & Waktu Wajib Lapor Dibuka</span>
-                <i class="fas fa-chevron-down arrow-icon"></i>
-              </summary>
-              <div class="bantuan-content">
-                <div class="jadwal-badge-box">
-                  <strong style="color:#002255; font-size:13.5px; display:block; margin-bottom:4px;">
-                    <i class="fas fa-bullhorn" style="color:#003580;"></i> Jadwal Resmi Berdasarkan Sistem:
-                  </strong>
-                  <span style="color:#1e293b; font-size:13px; font-weight:600;">
-                    <% if (typeof konfigurasi !== 'undefined' && konfigurasi && konfigurasi.teks_pengumuman) { %>
-                      <%= konfigurasi.teks_pengumuman %>
-                    <% } else { %>
-                      Layanan dibuka setiap tanggal <strong><%= (typeof konfigurasi !== 'undefined' && konfigurasi && konfigurasi.tanggal_mulai_input) ? konfigurasi.tanggal_mulai_input : 1 %> s/d <%= (typeof konfigurasi !== 'undefined' && konfigurasi && konfigurasi.tanggal_akhir_input) ? konfigurasi.tanggal_akhir_input : 15 %> setiap bulannya</strong>.
-                    <% } %>
-                  </span>
-                </div>
-                <p>Klien diwajibkan melapor tepat waktu di dalam rentang tanggal tersebut. Di luar tanggal ini, sistem pelaporan daring ditutup secara otomatis untuk proses evaluasi dan audit pembimbingan.</p>
-              </div>
-            </details>
-
-            <!-- Langkah 3: Profil Klien -->
-            <details class="bantuan-item">
-              <summary>
-                <span><i class="fas fa-user-edit text-primary"></i> Langkah 3: Melengkapi Profil & Masa Wajib Lapor Otomatis</span>
-                <i class="fas fa-chevron-down arrow-icon"></i>
-              </summary>
-              <div class="bantuan-content">
-                <ol>
-                  <li>Sebelum membuat laporan pertama, periksa dan perbarui data profil Anda melalui menu <strong>Profil Klien</strong>.</li>
-                  <li>Lengkapi Nama Lengkap sesuai KTP, Nomor WhatsApp Aktif, dan Alamat Domisili tinggal saat ini.</li>
-                  <li>Kolom <strong>Masa / Periode Wajib Lapor</strong> kini terisi secara <strong>otomatis</strong> sesuai tanggal SK bimbingan yang telah ditetapkan oleh admin BAPAS, sehingga Anda tidak perlu menghitung atau mengisi manual.</li>
-                  <li>Klik tombol <strong>Simpan & Perbarui Profil</strong>.</li>
-                </ol>
-              </div>
-            </details>
-
-            <!-- Langkah 4: Kamera & Bukti Presensi -->
-            <details class="bantuan-item">
-              <summary>
-                <span><i class="fas fa-camera text-primary"></i> Langkah 4: Pengambilan Foto Bukti via Kamera (Depan & Belakang)</span>
-                <i class="fas fa-chevron-down arrow-icon"></i>
-              </summary>
-              <div class="bantuan-content">
-                <p>Demi keaslian dan keabsahan presensi kehadiran bimbingan kemasyarakatan, foto bukti wajib lapor diambil langsung melalui kamera ponsel:</p>
-                <ul>
-                  <li><strong>Ambil Foto dengan Kamera:</strong> Klik tombol "Buka Kamera". Sistem menyediakan tombol putar kamera untuk berganti antara <em>Kamera Depan (Swafoto/Selfie)</em> dan <em>Kamera Belakang</em> ponsel Anda. Klik "Ambil Foto" saat posisi wajah Anda telah pas dan jelas.</li>
-                  <li><strong>Keaslian Presensi:</strong> Pengambilan foto langsung dari kamera memastikan kehadiran nyata klien binaan saat pelaporan rutin bulanan.</li>
-                  <li>Pastikan wajah terlihat jelas, pencahayaan cukup, serta tidak mengenakan kacamata hitam tebal atau penutup wajah.</li>
-                </ul>
-              </div>
-            </details>
-
-            <!-- Langkah 5: GPS & Izin Lokasi -->
-            <details class="bantuan-item">
-              <summary>
-                <span><i class="fas fa-map-marker-alt text-primary"></i> Langkah 5: Mengatasi Kendala Lokasi GPS</span>
-                <i class="fas fa-chevron-down arrow-icon"></i>
-              </summary>
-              <div class="bantuan-content">
-                <p>Sistem mewajibkan deteksi titik koordinat presensi yang sah demi keabsahan laporan:</p>
-                <ul>
-                  <li>Saat browser ponsel menampilkan permintaan izin lokasi (<em>Location Permission</em>), pilih <strong>Izinkan / Allow</strong>.</li>
-                  <li>Pastikan GPS pada ponsel Android/iPhone dalam kondisi Aktif (Akurasi Tinggi).</li>
-                  <li><strong>Peringatan Tegas:</strong> Sistem BAPAS Medan secara otomatis mendeteksi dan menolak laporan yang menggunakan aplikasi lokasi palsu (Fake GPS / Mock Location).</li>
-                </ul>
-              </div>
-            </details>
-
-            <!-- Langkah 6: Laporan Ditolak -->
-            <details class="bantuan-item">
-              <summary>
-                <span><i class="fas fa-exclamation-circle text-primary"></i> Langkah 6: Jika Laporan Ditolak oleh Petugas Pembimbing</span>
-                <i class="fas fa-chevron-down arrow-icon"></i>
-              </summary>
-              <div class="bantuan-content">
-                <p>Apabila laporan Anda berstatus <strong>Ditolak</strong>:</p>
-                <ul>
-                  <li>Buka menu <strong>Riwayat Lapor</strong> pada dashboard klien.</li>
-                  <li>Pada tabel riwayat lapor yang berstatus ditolak, periksa <strong>Catatan / Alasan Penolakan</strong> dari petugas PK (contoh: foto buram atau deskripsi pekerjaan belum lengkap).</li>
-                  <li>Segera lakukan perbaikan dan kirimkan laporan revisi sebelum tanggal penutupan wajib lapor bulan berjalan.</li>
-                </ul>
-              </div>
-            </details>
-
-          </div>
-        </div>
-      </section>
-
-      <!-- ==============================================
-           KATEGORI 2: CUSTOMER SERVICE REAL-TIME (LIVE CHAT RESMI)
-           TANPA WHATSAPP - SEPENUHNYA IN-APP REAL-TIME
-           DENGAN PILIHAN: SUDAH / BELUM PUNYA NO. REGISTRASI
-           ============================================== -->
-      <section id="kategoriCS" class="kategori-pane" aria-labelledby="tabHeadCS">
+      <!-- CUSTOMER SERVICE REAL-TIME (LIVE CHAT RESMI BAPAS MEDAN) -->
+      <section id="kategoriCS" class="kategori-pane active" style="display:flex; width:100%; height:100%; flex-direction:column;" aria-labelledby="bantuanModalTitle">
         <div class="cs-full-container">
           
           <!-- CS Status Header Bar -->
@@ -2280,7 +2130,7 @@ function keluarPercakapanCS() {
 }
 
 async function akhiriPercakapanCS() {
-  if (!confirm('Apakah Anda yakin ingin mengakhiri sesi percakapan Customer Service ini?\n\nSeluruh riwayat pesan obrolan ini akan otomatis dihapus secara permanen dari Firebase/server demi privasi & keamanan Anda.')) {
+  if (!confirm('Apakah Anda yakin ingin mengakhiri sesi percakapan Customer Service ini?\n\nSeluruh riwayat pesan obrolan ini akan otomatis dihapus secara permanen dari server database demi privasi & keamanan Anda.')) {
     return;
   }
   const sId = getBapasSessionId();
@@ -2299,7 +2149,7 @@ async function akhiriPercakapanCS() {
     console.warn('Gagal memproses akhir sesi:', err);
   }
   mulaiObrolanBaruCS();
-  alert('Percakapan telah diakhiri dan seluruh riwayat pesan telah DIHAPUS PERMANEN dari Firebase.');
+  alert('Percakapan telah diakhiri dan seluruh riwayat pesan telah DIHAPUS PERMANEN.');
 }
 
 function mulaiObrolanBaruCS() {
@@ -2615,12 +2465,10 @@ function bukaPusatBantuan() {
     document.body.style.overflow = 'hidden';
     initCsViewState();
     
-    // Jika tab CS sedang aktif dan identitas sudah dipilih, mulai polling chat
-    if (document.getElementById('kategoriCS').classList.contains('active')) {
-      const nama = localStorage.getItem('bapas_cs_nama');
-      if (nama) {
-        startChatPolling();
-      }
+    // Langsung mulai polling obrolan Customer Service jika sudah ada identitas
+    const nama = localStorage.getItem('bapas_cs_nama');
+    if (nama) {
+      startChatPolling();
     }
   }
 }
@@ -2635,27 +2483,10 @@ function tutupPusatBantuan() {
 }
 
 function switchKategoriBantuan(kat) {
-  const btnLangkah = document.getElementById('tabHeadLangkah');
-  const btnCS = document.getElementById('tabHeadCS');
-  const paneLangkah = document.getElementById('kategoriLangkah');
-  const paneCS = document.getElementById('kategoriCS');
-
-  if (kat === 'langkah') {
-    btnLangkah.classList.add('active');
-    btnCS.classList.remove('active');
-    paneLangkah.classList.add('active');
-    paneCS.classList.remove('active');
-    stopChatPolling();
-  } else {
-    btnCS.classList.add('active');
-    btnLangkah.classList.remove('active');
-    paneCS.classList.add('active');
-    paneLangkah.classList.remove('active');
-    initCsViewState();
-    const nama = localStorage.getItem('bapas_cs_nama');
-    if (nama) {
-      startChatPolling();
-    }
+  initCsViewState();
+  const nama = localStorage.getItem('bapas_cs_nama');
+  if (nama) {
+    startChatPolling();
   }
 }
 
