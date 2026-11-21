@@ -400,6 +400,11 @@
               </div>
             </div>
 
+            <!-- Floating Scroll-to-Bottom Button When Scrolled Up -->
+            <button type="button" id="csBtnScrollBottom" class="cs-btn-scroll-bottom" onclick="scrollCsChatToBottom()" style="display:none;" title="Lihat pesan terbaru">
+              <i class="fas fa-arrow-down"></i> <span>Pesan Baru</span>
+            </button>
+
             <!-- Quick Action Catalog Bar (Khusus Klien Terverifikasi & Pertanyaan Populer) -->
             <div id="csQuickKatalogBar" class="cs-quick-katalog-bar" style="display:none;">
               <span class="quick-katalog-title"><i class="fas fa-bolt"></i> Bantuan Cepat:</span>
@@ -1296,7 +1301,35 @@
   flex-direction: column;
   gap: 14px;
   margin-bottom: 12px;
-  scroll-behavior: smooth;
+}
+.cs-btn-scroll-bottom {
+  position: absolute;
+  bottom: 80px;
+  right: 24px;
+  z-index: 90;
+  background: #003580;
+  color: #ffffff;
+  border: 1.5px solid #60a5fa;
+  border-radius: 50px;
+  padding: 6px 14px;
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 53, 128, 0.4);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  animation: csBounceIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.cs-btn-scroll-bottom:hover {
+  background: #002255;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 53, 128, 0.55);
+}
+@keyframes csBounceIn {
+  from { opacity: 0; transform: translateY(12px) scale(0.9); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 .chat-msg {
   display: flex;
@@ -2414,8 +2447,8 @@ async function pilihTopikKatalog(topikKey) {
     console.warn('Gagal mengirim jawaban bot katalog:', err);
   }
 
-  // Segarkan pesan percakapan
-  loadChatMessages();
+  // Segarkan pesan percakapan dan paksa scroll ke pesan terbaru
+  loadChatMessages(true);
 }
 
 function bukaPusatBantuan() {
@@ -2469,7 +2502,7 @@ function switchKategoriBantuan(kat) {
   }
 }
 
-async function loadChatMessages() {
+async function loadChatMessages(forceScroll = false) {
   const sId = getBapasSessionId();
   try {
     const res = await fetch('/api/pusat-bantuan/pesan/' + sId);
@@ -2485,10 +2518,11 @@ async function loadChatMessages() {
         return;
       }
 
-      const currentJson = JSON.stringify(data.data);
-      if (currentJson !== lastRenderedChatJson) {
+      // Buat signature stabil dari seluruh pesan agar urutan key JSON server tidak memicu re-render palsu
+      const currentJson = data.data.map(m => `${m.id || ''}:${m.created_at || ''}:${m.status || ''}:${(m.pesan || '').length}`).join('|');
+      if (currentJson !== lastRenderedChatJson || forceScroll) {
         lastRenderedChatJson = currentJson;
-        renderChatStream(data.data);
+        renderChatStream(data.data, forceScroll);
       }
     }
   } catch (err) {
@@ -2496,9 +2530,14 @@ async function loadChatMessages() {
   }
 }
 
-function renderChatStream(messages) {
+function renderChatStream(messages, forceScroll = false) {
   const box = document.getElementById('chatStreamBox');
   if (!box) return;
+
+  // Catat posisi scroll sebelum innerHTML diganti untuk mencegah scroll melompat saat user membaca di atas
+  const prevScrollTop = box.scrollTop;
+  const isNearBottom = (box.scrollHeight - box.scrollTop - box.clientHeight) < 80;
+  const isFirstRender = !box.dataset.hasRendered;
 
   const currentCsNama = (localStorage.getItem('bapas_cs_nama') || '').trim().toLowerCase();
   const currentCsRegister = (localStorage.getItem('bapas_cs_register') || '').trim();
@@ -2741,7 +2780,31 @@ function renderChatStream(messages) {
   }
 
   box.innerHTML = html;
-  box.scrollTop = box.scrollHeight;
+  box.dataset.hasRendered = 'true';
+
+  const btnScroll = document.getElementById('csBtnScrollBottom');
+
+  // Hanya auto-scroll ke paling bawah jika:
+  // 1. Dipaksa oleh aksi user seperti kirim pesan (forceScroll = true)
+  // 2. Render pertama kali saat membuka chat (isFirstRender = true)
+  // 3. User memang sedang berada di paling bawah (isNearBottom = true)
+  if (forceScroll || isFirstRender || isNearBottom) {
+    box.scrollTop = box.scrollHeight;
+    if (btnScroll) btnScroll.style.display = 'none';
+  } else {
+    // Pengguna sedang membaca pesan di atas: jangan paksa scroll ke bawah!
+    box.scrollTop = prevScrollTop;
+    if (btnScroll) btnScroll.style.display = 'inline-flex';
+  }
+}
+
+function scrollCsChatToBottom() {
+  const box = document.getElementById('chatStreamBox');
+  if (box) {
+    box.scrollTo({ top: box.scrollHeight, behavior: 'smooth' });
+  }
+  const btn = document.getElementById('csBtnScrollBottom');
+  if (btn) btn.style.display = 'none';
 }
 
 function renderVerifiedClientCardHtml(client, messageText) {
@@ -2819,10 +2882,10 @@ document.addEventListener('keydown', (e) => {
 });
 
 function startChatPolling() {
-  loadChatMessages();
+  loadChatMessages(true);
   if (!bapasChatPollTimer) {
     // Polling setiap 3 detik agar pesan respon dari admin tampil secara real-time
-    bapasChatPollTimer = setInterval(loadChatMessages, 3000);
+    bapasChatPollTimer = setInterval(() => loadChatMessages(false), 3000);
   }
 }
 
@@ -2832,6 +2895,20 @@ function stopChatPolling() {
     bapasChatPollTimer = null;
   }
 }
+
+// Pasang listener scroll pada chatStreamBox untuk menyembunyikan tombol floating saat user kembali ke bawah
+document.addEventListener('DOMContentLoaded', () => {
+  const box = document.getElementById('chatStreamBox');
+  if (box) {
+    box.addEventListener('scroll', () => {
+      const isNearBottom = (box.scrollHeight - box.scrollTop - box.clientHeight) < 80;
+      const btnScroll = document.getElementById('csBtnScrollBottom');
+      if (isNearBottom && btnScroll) {
+        btnScroll.style.display = 'none';
+      }
+    });
+  }
+});
 
 async function handleKirimPesanCS(e) {
   e.preventDefault();
@@ -2879,7 +2956,7 @@ async function handleKirimPesanCS(e) {
     if (result.success) {
       inputPesan.value = '';
       cancelReplyCS();
-      loadChatMessages();
+      loadChatMessages(true);
     } else {
       alert(result.message || 'Gagal mengirim pesan bantuan.');
     }

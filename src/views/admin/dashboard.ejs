@@ -400,6 +400,35 @@
       box-sizing: border-box !important;
       width: 100% !important;
     }
+    .admin-btn-scroll-bottom {
+      position: absolute;
+      bottom: 85px;
+      right: 25px;
+      z-index: 100;
+      background: #003580;
+      color: #ffffff;
+      border: 1.5px solid #60a5fa;
+      border-radius: 50px;
+      padding: 6px 14px;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(0, 53, 128, 0.4);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      animation: adminBounceIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .admin-btn-scroll-bottom:hover {
+      background: #002255;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(0, 53, 128, 0.55);
+    }
+    @keyframes adminBounceIn {
+      from { opacity: 0; transform: translateY(12px) scale(0.9); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
     .admin-chat-bubble {
       box-sizing: border-box !important;
       border-radius: 10px !important;
@@ -1156,6 +1185,11 @@
       </div>
     </div>
 
+    <!-- Floating Scroll-to-Bottom Button for Admin When Scrolled Up -->
+    <button type="button" id="adminBtnScrollBottom" class="admin-btn-scroll-bottom" onclick="scrollAdminChatToBottom()" style="display:none;" title="Lihat balasan terbaru">
+      <i class="fas fa-arrow-down"></i> <span>Pesan Baru</span>
+    </button>
+
     <!-- Reply Preview Bar for Admin -->
     <div id="adminReplyPreviewBar" class="admin-reply-preview-bar" style="display:none;">
       <div class="admin-reply-preview-body">
@@ -1398,8 +1432,14 @@
       const json = await res.json();
       if (!json.success || !Array.isArray(json.data)) return;
 
-      const currentJson = JSON.stringify(json.data);
+      // Buat signature stabil dari seluruh pesan agar perbedaan urutan key JSON server tidak memicu re-render palsu
+      const currentJson = json.data.map(m => `${m.id || ''}:${m.created_at || ''}:${m.status || ''}:${(m.pesan || '').length}`).join('|');
       if (currentJson === lastAdminChatJson && !forceScroll) return;
+
+      // Catat posisi scroll sebelum DOM diganti
+      const prevScrollTop = stream.scrollTop;
+      const isNearBottom = (stream.scrollHeight - stream.scrollTop - stream.clientHeight) < 80;
+      const isFirstRender = !lastAdminChatJson;
       lastAdminChatJson = currentJson;
 
       let html = '';
@@ -1520,7 +1560,21 @@
       }
 
       stream.innerHTML = html;
-      stream.scrollTop = stream.scrollHeight;
+
+      const btnScrollAdmin = document.getElementById('adminBtnScrollBottom');
+
+      // Hanya auto-scroll ke bawah jika:
+      // 1. Dipaksa (misal modal baru dibuka atau admin baru kirim balasan)
+      // 2. Render pertama kali
+      // 3. Admin memang sedang berada di paling bawah (isNearBottom)
+      if (forceScroll || isFirstRender || isNearBottom) {
+        stream.scrollTop = stream.scrollHeight;
+        if (btnScrollAdmin) btnScrollAdmin.style.display = 'none';
+      } else {
+        // Admin sedang membaca pesan di atas: pertahankan posisi scroll agar tidak melompat ke bawah!
+        stream.scrollTop = prevScrollTop;
+        if (btnScrollAdmin) btnScrollAdmin.style.display = 'inline-flex';
+      }
 
       // Kunci input dan sesuaikan antarmuka jika percakapan telah diakhiri
       const isEnded = json.data.some(m => m.tipe_pesan === 'session_ended' || m.status === 'selesai');
@@ -1656,6 +1710,26 @@
       btn.innerHTML = '<i class="fas fa-paper-plane"></i> Kirim';
     }
   }
+
+  function scrollAdminChatToBottom() {
+    const stream = document.getElementById('adminLiveChatStream');
+    if (stream) {
+      stream.scrollTo({ top: stream.scrollHeight, behavior: 'smooth' });
+    }
+    const btn = document.getElementById('adminBtnScrollBottom');
+    if (btn) btn.style.display = 'none';
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const adminStream = document.getElementById('adminLiveChatStream');
+    if (adminStream) {
+      adminStream.addEventListener('scroll', () => {
+        const isNear = (adminStream.scrollHeight - adminStream.scrollTop - adminStream.clientHeight) < 80;
+        const btn = document.getElementById('adminBtnScrollBottom');
+        if (isNear && btn) btn.style.display = 'none';
+      });
+    }
+  });
 </script>
 
 <%- include('../partials/modal_foto') %>

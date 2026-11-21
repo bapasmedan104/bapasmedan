@@ -1368,7 +1368,11 @@ async function getPesanBantuanBySession(sessionId) {
   const col = db.collection('pusat_bantuan_chat');
   const snap = await col.where('session_id', '==', sessionId).get();
   const list = docsToArray(snap);
-  return list.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+  return list.sort((a, b) => {
+    const diff = new Date(a.created_at) - new Date(b.created_at);
+    if (diff !== 0) return diff;
+    return String(a.id || '').localeCompare(String(b.id || ''));
+  });
 }
 
 async function getAllPesanBantuan(limit = 100) {
