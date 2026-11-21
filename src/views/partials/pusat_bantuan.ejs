@@ -31,10 +31,15 @@
         </div>
       </div>
 
-      <button type="button" class="btn-back-fullscreen" onclick="tutupPusatBantuan()" aria-label="Kembali ke Portal BAPAS" title="Kembali ke Halaman Sebelumnya">
-        <i class="fas fa-arrow-left"></i>
-        <span class="btn-back-label">Kembali</span>
-      </button>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <button type="button" id="btnHeaderPanduan" class="btn-header-panduan" onclick="switchKategoriBantuan('langkah')" title="Buka Panduan Bantuan" style="display:none;">
+          <i class="fas fa-book-open"></i> <span class="btn-panduan-label">Panduan</span>
+        </button>
+        <button type="button" class="btn-back-fullscreen" onclick="tutupPusatBantuan()" aria-label="Kembali ke Portal BAPAS" title="Kembali ke Halaman Sebelumnya">
+          <i class="fas fa-arrow-left"></i>
+          <span class="btn-back-label">Kembali</span>
+        </button>
+      </div>
     </header>
 
     <!-- Navigation Tabs (2 Kategori) -->
@@ -193,7 +198,7 @@
         <div class="cs-full-container">
           
           <!-- CS Status Header Bar -->
-          <div class="cs-status-bar">
+          <div class="cs-status-bar" id="csStatusBar">
             <div class="cs-status-info">
               <div class="pulse-green-dot"></div>
               <div>
@@ -204,13 +209,13 @@
             <div class="cs-status-actions">
               <div id="csIdentityPill" class="cs-identity-pill" style="display:none;"></div>
               <button type="button" id="btnGantiIdentitasCS" class="btn-cs-action btn-cs-ganti" onclick="gantiIdentitasCS()" title="Ganti identitas atau nomor registrasi obrolan" style="display:none;">
-                <i class="fas fa-user-edit"></i> <span>Ganti Identitas</span>
+                <i class="fas fa-user-edit"></i> <span class="btn-cs-label">Ganti Identitas</span>
               </button>
               <button type="button" id="btnKeluarCS" class="btn-cs-action btn-cs-keluar" onclick="keluarPercakapanCS()" title="Tutup / keluar dari percakapan tanpa menghapus riwayat obrolan" style="display:none;">
-                <i class="fas fa-sign-out-alt"></i> <span>Keluar Percakapan</span>
+                <i class="fas fa-sign-out-alt"></i> <span class="btn-cs-label">Keluar Percakapan</span>
               </button>
               <button type="button" id="btnAkhiriCS" class="btn-cs-action btn-cs-akhiri" onclick="akhiriPercakapanCS()" title="Akhiri sesi percakapan bantuan ini secara tuntas" style="display:none;">
-                <i class="fas fa-stop-circle"></i> <span>Akhiri Percakapan</span>
+                <i class="fas fa-stop-circle"></i> <span class="btn-cs-label">Akhiri Percakapan</span>
               </button>
               <div class="cs-badge-secure" id="csBadgeSecure">
                 <i class="fas fa-shield-alt"></i> Obrolan Resmi
@@ -629,6 +634,28 @@
 .btn-back-fullscreen:hover i,
 .btn-close-fullscreen:hover i {
   transform: translateX(-3px);
+}
+
+.btn-header-panduan {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 8px 14px;
+  border-radius: 30px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.25s ease;
+  font-family: inherit;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+.btn-header-panduan:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: #ffffff;
+  transform: translateY(-1px);
 }
 
 /* Tabs Navigation */
@@ -1286,21 +1313,29 @@
   display: flex;
   flex-direction: column;
   min-height: 0;
+  min-width: 0 !important;
+  width: 100% !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
 }
 
 /* Chat Stream */
 .cs-chat-stream {
   flex: 1;
   min-height: 0;
+  min-width: 0 !important;
+  width: 100% !important;
   background: #f1f5f9;
   border: 1px solid #cbd5e1;
   border-radius: 12px;
   padding: 18px;
   overflow-y: auto;
+  overflow-x: hidden !important;
   display: flex;
   flex-direction: column;
   gap: 14px;
   margin-bottom: 12px;
+  box-sizing: border-box !important;
 }
 .cs-btn-scroll-bottom {
   position: absolute;
@@ -1335,12 +1370,16 @@
   display: flex;
   gap: 10px;
   max-width: 85%;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
 }
 .chat-msg-bot, .chat-msg-admin {
   align-self: flex-start;
+  margin-right: auto;
 }
 .chat-msg-user {
   align-self: flex-end;
+  margin-left: auto;
   flex-direction: row-reverse;
 }
 .chat-avatar {
@@ -1365,6 +1404,12 @@
   line-height: 1.55;
   color: #1e293b;
   box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+  word-break: break-word !important;
+  overflow-wrap: anywhere !important;
+  overflow: hidden !important;
 }
 .chat-msg-user .chat-bubble {
   background: linear-gradient(135deg, #003580 0%, #002255 100%);
@@ -1729,10 +1774,14 @@
   margin-bottom: 8px;
   cursor: pointer;
   transition: opacity 0.15s, transform 0.15s;
-  max-width: 100%;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  width: 100% !important;
   display: block;
   text-decoration: none;
   text-align: left;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
 }
 .chat-quoted-box:hover {
   opacity: 0.9;
@@ -1745,14 +1794,21 @@
   display: flex;
   align-items: center;
   gap: 4px;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
 }
 .quoted-text {
   font-size: 12px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
   display: block;
   opacity: 0.9;
+  max-width: 100% !important;
+  min-width: 0 !important;
 }
 .chat-msg-user .chat-quoted-box {
   background: rgba(255, 255, 255, 0.18);
@@ -1886,33 +1942,101 @@
 
 /* RESPONSIVE DESIGN UNTUK MOBILE */
 @media (max-width: 768px) {
+  /* Pengaturan Mode Chat Aktif di HP (Layar Penuh Maksimal, Bebas Sesak) */
+  .chat-active-mode .bantuan-tabs-nav {
+    display: none !important;
+  }
+  .chat-active-mode .fullscreen-bantuan-header {
+    padding: 8px 12px !important;
+  }
+  .chat-active-mode .fullscreen-bantuan-header .header-logo-img {
+    height: 26px !important;
+  }
+  .chat-active-mode .fullscreen-bantuan-header .header-title-text {
+    font-size: 14.5px !important;
+  }
+  .chat-active-mode .fullscreen-bantuan-header .header-subtitle-text {
+    display: none !important;
+  }
+  .chat-active-mode .btn-back-fullscreen,
+  .chat-active-mode .btn-header-panduan {
+    padding: 5px 10px !important;
+    font-size: 11.5px !important;
+  }
+
+  /* Status Bar di mode chat: SANGAT RINGKAS (Hemat 100px+ ruang vertikal) */
+  .cs-status-bar.in-chat-mode {
+    padding: 6px 10px !important;
+    margin-bottom: 6px !important;
+    gap: 6px !important;
+    border-radius: 8px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+  }
+  .cs-status-bar.in-chat-mode .cs-status-info {
+    display: none !important;
+  }
+  .cs-status-bar.in-chat-mode .cs-status-actions {
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 6px !important;
+    flex-wrap: nowrap !important;
+    margin-top: 0 !important;
+  }
+  .cs-status-bar.in-chat-mode .cs-identity-pill {
+    padding: 3px 8px !important;
+    font-size: 11px !important;
+    max-width: 48% !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    flex-shrink: 1 !important;
+  }
+  .cs-status-bar.in-chat-mode .btn-cs-action {
+    padding: 4px 8px !important;
+    font-size: 11px !important;
+    border-radius: 6px !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+  }
+  .cs-status-bar.in-chat-mode .btn-cs-keluar {
+    display: none !important;
+  }
+  .cs-status-bar.in-chat-mode .cs-badge-secure {
+    display: none !important;
+  }
+
   .fullscreen-bantuan-header {
-    padding: 12px 14px;
+    padding: 10px 14px;
   }
   .header-logo-img {
-    height: 34px;
+    height: 32px;
   }
   .header-title-text {
-    font-size: 16px;
+    font-size: 15px;
   }
   .header-subtitle-text {
     font-size: 11px;
   }
   .btn-back-fullscreen,
   .btn-close-fullscreen {
-    padding: 6px 14px;
-    font-size: 12.5px;
+    padding: 6px 12px;
+    font-size: 12px;
   }
   .bantuan-tab-btn {
     font-size: 12px;
-    padding: 12px 8px;
+    padding: 11px 8px;
     gap: 6px;
   }
   .kategori-inner-container {
     padding: 14px 12px 30px;
   }
   .cs-full-container {
-    padding: 10px 10px 14px;
+    padding: 8px 10px 12px;
   }
   .cs-status-bar {
     padding: 10px 12px;
@@ -1929,18 +2053,62 @@
     font-size: 11px;
     border-radius: 5px;
   }
-  .cs-quick-katalog-bar {
-    padding: 5px 8px;
-    gap: 6px;
-    margin-bottom: 8px;
+
+  /* Chat Messages & Stream Responsive */
+  .cs-chat-stream {
+    padding: 10px 8px !important;
+    gap: 10px !important;
+    margin-bottom: 6px !important;
+    border-radius: 10px !important;
   }
-  .quick-katalog-title {
-    font-size: 11px;
+  .chat-msg {
+    max-width: 88% !important;
+    min-width: 0 !important;
+  }
+  .chat-bubble {
+    padding: 9px 12px !important;
+    font-size: 13px !important;
+    line-height: 1.45 !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+  }
+  .chat-avatar {
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 11px !important;
+  }
+
+  /* Quick Katalog Bar: 1 baris horizontal scrollable */
+  .cs-quick-katalog-bar {
+    padding: 4px 6px !important;
+    gap: 4px !important;
+    margin-bottom: 6px !important;
+    overflow-x: auto !important;
+    flex-wrap: nowrap !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .cs-quick-katalog-bar::-webkit-scrollbar {
+    display: none;
+  }
+  .quick-katalog-chips {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    gap: 5px !important;
+    scrollbar-width: none;
+  }
+  .quick-katalog-chips::-webkit-scrollbar {
+    display: none;
   }
   .katalog-chip-pill {
-    padding: 4px 8px;
-    font-size: 11px;
+    padding: 3px 8px !important;
+    font-size: 10.5px !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
   }
+
   .katalog-opt-btn {
     padding: 8px 10px;
     gap: 10px;
@@ -1982,18 +2150,35 @@
   .preview-details-table td {
     font-size: 12px;
   }
+
+  /* Bottom Chat Input */
+  .cs-bottom-bar {
+    padding: 8px 10px !important;
+    border-radius: 10px !important;
+  }
+  .cs-main-input {
+    padding: 8px 12px !important;
+    font-size: 13px !important;
+  }
   .btn-send-label {
     display: none;
   }
   .cs-btn-send {
-    padding: 12px 16px;
-    border-radius: 50%;
-    width: 44px;
-    height: 44px;
-    justify-content: center;
+    padding: 0 !important;
+    border-radius: 50% !important;
+    width: 38px !important;
+    height: 38px !important;
+    justify-content: center !important;
+    align-items: center !important;
+    flex-shrink: 0 !important;
   }
-  .chat-msg {
-    max-width: 94%;
+  .cs-reply-preview-bar {
+    padding: 6px 10px !important;
+    margin-bottom: 6px !important;
+  }
+  .cs-reply-preview-text {
+    max-width: 200px !important;
+    font-size: 11px !important;
   }
   .btn-pusat-bantuan-floating {
     bottom: 16px;
@@ -2049,9 +2234,15 @@ function initCsViewState() {
   const btnKeluar = document.getElementById('btnKeluarCS');
   const btnAkhiri = document.getElementById('btnAkhiriCS');
   const quickKatalogBar = document.getElementById('csQuickKatalogBar');
+  const wrapper = document.querySelector('.fullscreen-bantuan-wrapper');
+  const statusBar = document.getElementById('csStatusBar') || document.querySelector('.cs-status-bar');
+  const btnHeaderPanduan = document.getElementById('btnHeaderPanduan');
 
   if (csNama && (csType === 'guest' || (csType === 'registered' && csRegister))) {
     // Sesi sudah memiliki identitas, buka percakapan aktif
+    if (wrapper) wrapper.classList.add('chat-active-mode');
+    if (statusBar) statusBar.classList.add('in-chat-mode');
+    if (btnHeaderPanduan) btnHeaderPanduan.style.display = 'inline-flex';
     if (prechatContainer) prechatContainer.style.display = 'none';
     if (activeChatContainer) activeChatContainer.style.display = 'flex';
     if (identityPill) {
@@ -2072,6 +2263,9 @@ function initCsViewState() {
     }
   } else {
     // Tampilkan layar pre-chat selection
+    if (wrapper) wrapper.classList.remove('chat-active-mode');
+    if (statusBar) statusBar.classList.remove('in-chat-mode');
+    if (btnHeaderPanduan) btnHeaderPanduan.style.display = 'none';
     if (prechatContainer) prechatContainer.style.display = 'flex';
     if (activeChatContainer) activeChatContainer.style.display = 'none';
     if (identityPill) identityPill.style.display = 'none';
@@ -2482,8 +2676,12 @@ function switchKategoriBantuan(kat) {
   const btnCS = document.getElementById('tabHeadCS');
   const paneLangkah = document.getElementById('kategoriLangkah');
   const paneCS = document.getElementById('kategoriCS');
+  const wrapper = document.querySelector('.fullscreen-bantuan-wrapper');
+  const btnHeaderPanduan = document.getElementById('btnHeaderPanduan');
 
   if (kat === 'langkah') {
+    if (wrapper) wrapper.classList.remove('chat-active-mode');
+    if (btnHeaderPanduan) btnHeaderPanduan.style.display = 'none';
     btnLangkah.classList.add('active');
     btnCS.classList.remove('active');
     paneLangkah.classList.add('active');
