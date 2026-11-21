@@ -566,8 +566,8 @@ img, video, canvas {
   }
 
   /* Flex wrap adjustments khusus non-table */
-  div[style*="display:flex"][style*="gap:"]:not(.table-action-box):not(.navbar):not(#adminLiveChatStream):not(.admin-live-chat-stream):not(.cs-inbox-filter-bar):not(.cs-chat-stream),
-  div[style*="display: flex"][style*="gap:"]:not(.table-action-box):not(.navbar):not(#adminLiveChatStream):not(.admin-live-chat-stream):not(.cs-inbox-filter-bar):not(.cs-chat-stream) {
+  div[style*="display:flex"][style*="gap:"]:not(.table-action-box):not(.navbar):not(#adminLiveChatStream):not(.admin-live-chat-stream):not(.cs-inbox-filter-bar):not(.cs-chat-stream):not(.admin-chat-bubble):not(.chat-bubble):not(.chat-msg),
+  div[style*="display: flex"][style*="gap:"]:not(.table-action-box):not(.navbar):not(#adminLiveChatStream):not(.admin-live-chat-stream):not(.cs-inbox-filter-bar):not(.cs-chat-stream):not(.admin-chat-bubble):not(.chat-bubble):not(.chat-msg) {
     flex-wrap: wrap;
   }
 }

@@ -670,10 +670,19 @@
       }
       .admin-chat-bubble {
         max-width: 92% !important;
+        flex-shrink: 0 !important;
+        height: auto !important;
+        overflow: visible !important;
       }
       .bubble-admin {
         max-width: 92% !important;
+        flex-shrink: 0 !important;
+        height: auto !important;
       }
+    }
+    .admin-live-chat-stream > * {
+      flex-shrink: 0 !important;
+      max-height: none !important;
     }
     .admin-chat-bubble {
       box-sizing: border-box !important;
@@ -684,7 +693,11 @@
       width: fit-content !important;
       max-width: 88% !important;
       min-width: 0 !important;
-      overflow: hidden !important;
+      flex-shrink: 0 !important;
+      height: auto !important;
+      min-height: min-content !important;
+      max-height: none !important;
+      overflow: visible !important;
     }
     .bubble-user {
       align-self: flex-start !important;
@@ -693,6 +706,8 @@
       border: 1.5px solid #cbd5e1 !important;
       border-left: 4px solid #003580 !important;
       box-shadow: 0 1px 4px rgba(0,0,0,0.04) !important;
+      flex-shrink: 0 !important;
+      height: auto !important;
     }
     .bubble-bot {
       align-self: flex-start !important;
@@ -701,6 +716,8 @@
       border: 1.5px solid #fef08a !important;
       border-left: 4px solid #eab308 !important;
       box-shadow: 0 1px 4px rgba(0,0,0,0.04) !important;
+      flex-shrink: 0 !important;
+      height: auto !important;
     }
     .bubble-admin {
       align-self: flex-end !important;
@@ -709,6 +726,8 @@
       color: #ffffff !important;
       border-radius: 10px 10px 2px 10px !important;
       box-shadow: 0 2px 6px rgba(0, 53, 128, 0.25) !important;
+      flex-shrink: 0 !important;
+      height: auto !important;
     }
     .admin-bubble-client-card {
       width: 100% !important;
@@ -720,6 +739,10 @@
       padding: 10px 12px !important;
       margin-top: 4px !important;
       color: #1e293b !important;
+      flex-shrink: 0 !important;
+      height: auto !important;
+      max-height: none !important;
+      overflow: visible !important;
     }
     /* WhatsApp Quote Reply Styling */
     .admin-reply-preview-bar {
@@ -1459,7 +1482,7 @@
       <div class="admin-chat-stream-inner">
         
         <!-- Alert Banner Sesi Selesai / Ditutup -->
-        <div id="adminChatClosedBanner" style="display:none; padding:12px 16px; background:#fef2f2; border:1.5px solid #fecaca; border-radius:10px; color:#991b1b; font-size:13px; font-weight:600; margin:14px 16px 0 16px; align-items:center; gap:10px; box-shadow:0 2px 8px rgba(220,38,38,0.06);">
+        <div id="adminChatClosedBanner" style="display:none; padding:12px 16px; background:#fef2f2; border:1.5px solid #fecaca; border-radius:10px; color:#991b1b; font-size:13px; font-weight:600; margin:14px 16px 0 16px; align-items:center; gap:10px; box-shadow:0 2px 8px rgba(220,38,38,0.06); flex-shrink:0;">
           <i class="fas fa-lock" style="font-size:16px; color:#dc2626;"></i>
           <div>
             <strong>Sesi Percakapan Ditutup:</strong>
@@ -1503,7 +1526,7 @@
         <form id="formBalasBantuan" onsubmit="kirimBalasanAdmin(event)" style="margin:0;">
           <input type="hidden" id="balasSessionId">
           <div style="display:flex; gap:10px; align-items:center;">
-            <textarea id="balasPesanText" rows="1" style="flex:1; padding:12px 16px; border:1.5px solid #cbd5e1; border-radius:10px; font-family:inherit; font-size:14px; resize:none; box-sizing:border-box; line-height:1.4; max-height:120px; transition:border-color 0.2s;" placeholder="Tuliskan balasan petugas di sini (Tekan Enter untuk kirim)..." required onkeydown="handleAdminTextareaKey(event)"></textarea>
+            <textarea id="balasPesanText" rows="2" style="flex:1; padding:10px 14px; border:1.5px solid #cbd5e1; border-radius:10px; font-family:inherit; font-size:13.5px; resize:none; box-sizing:border-box; line-height:1.45; min-height:46px; max-height:120px; transition:border-color 0.2s;" placeholder="Tuliskan balasan petugas di sini (Tekan Enter untuk kirim)..." required onkeydown="handleAdminTextareaKey(event)"></textarea>
             <button type="submit" class="btn btn-primary" id="btnSubmitBalasan" style="height:46px; padding:0 22px; display:inline-flex; align-items:center; gap:8px; flex-shrink:0; border-radius:10px; font-weight:700; background:linear-gradient(135deg, #001e4d 0%, #003580 100%);">
               <i class="fas fa-paper-plane"></i> <span>Kirim</span>
             </button>
@@ -1760,7 +1783,7 @@
         json.data.forEach(m => {
           if (m.tipe_pesan === 'session_ended') {
             html += `
-              <div style="text-align:center; padding:8px 14px; background:#f1f5f9; border:1px dashed #94a3b8; border-radius:6px; color:#475569; font-size:12px; margin:8px auto; width:90%;">
+              <div style="text-align:center; padding:8px 14px; background:#f1f5f9; border:1px dashed #94a3b8; border-radius:6px; color:#475569; font-size:12px; margin:8px auto; width:90%; flex-shrink:0;">
                 <i class="fas fa-flag-checkered" style="color:#10b981;"></i> <strong>${escapeAdminHtml(m.pesan)}</strong>
               </div>
             `;
