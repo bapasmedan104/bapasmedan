@@ -6,7 +6,8 @@
 const {
   kirimPesanBantuan,
   getPesanBantuanBySession,
-  getClientByRegister
+  getClientByRegister,
+  isSesiBantuanSelesai
 } = require('../models/db');
 const { getNamaBulan } = require('../utils/helpers');
 
@@ -268,6 +269,18 @@ async function postKirimPesanBantuan(req, res) {
     }
     const cleanSessionId = session_id || `cs_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
     
+    // Validasi apakah percakapan telah diakhiri
+    if (session_id) {
+      const isEnded = await isSesiBantuanSelesai(session_id);
+      if (isEnded) {
+        return res.status(403).json({
+          success: false,
+          is_ended: true,
+          message: 'Percakapan ini telah diakhiri. Tidak dapat mengirim pesan lagi.'
+        });
+      }
+    }
+
     let senderName = (nama && typeof nama === 'string' && nama.trim()) ? nama.trim() : '';
     if (!senderName && req.session && req.session.clientUser && req.session.clientUser.nama_lengkap) {
       senderName = req.session.clientUser.nama_lengkap.trim();
@@ -335,6 +348,19 @@ async function postKirimBotBantuan(req, res) {
       return res.status(400).json({ success: false, message: 'Data pesan bot tidak lengkap.' });
     }
     const cleanSessionId = session_id;
+
+    // Cegah respon bot jika sesi sudah diakhiri
+    if (cleanSessionId) {
+      const isEnded = await isSesiBantuanSelesai(cleanSessionId);
+      if (isEnded) {
+        return res.status(403).json({
+          success: false,
+          is_ended: true,
+          message: 'Percakapan ini telah diakhiri. Tidak dapat mengirim respon bot.'
+        });
+      }
+    }
+
     const botMsg = await kirimPesanBantuan({
       session_id: cleanSessionId,
       nama: 'Asisten Layanan BAPAS',

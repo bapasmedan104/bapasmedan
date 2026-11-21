@@ -978,16 +978,27 @@
 <!-- MODAL BALAS PESAN BANTUAN CS (LIVE CHAT PANEL) -->
 <div class="modal" id="modalBalasBantuan">
   <div class="modal-content">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1.5px solid #e2e8f0; padding-bottom:10px; flex-shrink:0;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1.5px solid #e2e8f0; padding-bottom:10px; flex-shrink:0; gap:10px;">
       <div>
         <h3 style="margin:0; font-size:16px; color:#002255; display:flex; align-items:center; gap:8px;">
           <i class="fas fa-headset" style="color:#003580;"></i> Ruang Obrolan CS: <span id="balasNamaUser" style="color:#0f172a; font-weight:800;"></span>
         </h3>
         <span style="font-size:11px; color:#64748b;">Sesi: <code id="balasSessionIdText" style="color:#003580;"></code> &bull; Tersambung Real-Time</span>
       </div>
-      <button type="button" onclick="closeBalasBantuanModal()" style="background:#f1f5f9; border:1px solid #cbd5e1; border-radius:6px; padding:5px 10px; font-size:12px; font-weight:700; cursor:pointer; color:#475569; display:inline-flex; align-items:center; gap:4px; line-height:1;">
-        <i class="fas fa-times"></i> Tutup
-      </button>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <button type="button" id="btnAkhiriSesiAdmin" onclick="akhiriSesiChatAdmin()" style="background:#fee2e2; border:1px solid #f87171; border-radius:6px; padding:5px 12px; font-size:12px; font-weight:700; cursor:pointer; color:#dc2626; display:inline-flex; align-items:center; gap:5px; line-height:1;" title="Akhiri sesi percakapan ini secara permanen">
+          <i class="fas fa-stop-circle"></i> Akhiri Percakapan
+        </button>
+        <button type="button" onclick="closeBalasBantuanModal()" style="background:#f1f5f9; border:1px solid #cbd5e1; border-radius:6px; padding:5px 10px; font-size:12px; font-weight:700; cursor:pointer; color:#475569; display:inline-flex; align-items:center; gap:4px; line-height:1;">
+          <i class="fas fa-times"></i> Tutup
+        </button>
+      </div>
+    </div>
+
+    <!-- Alert Banner Sesi Selesai / Ditutup -->
+    <div id="adminChatClosedBanner" style="display:none; padding:10px 14px; background:#fef2f2; border:1.5px solid #fecaca; border-radius:8px; color:#991b1b; font-size:12.5px; font-weight:600; margin-bottom:10px; align-items:center; gap:8px;">
+      <i class="fas fa-lock" style="font-size:14px; color:#dc2626;"></i>
+      <span>Percakapan ini telah diakhiri. Tidak dapat mengirim pesan balasan lagi.</span>
     </div>
 
     <!-- Live Chat Stream Box for Admin -->
@@ -1006,7 +1017,7 @@
           <i class="fas fa-paper-plane"></i> Kirim
         </button>
       </div>
-      <small style="color:#64748b; font-size:11.5px; display:block; margin-top:6px;">
+      <small id="balasPesanHelp" style="color:#64748b; font-size:11.5px; display:block; margin-top:6px;">
         <i class="fas fa-info-circle"></i> Balasan yang Anda kirim akan langsung tampil di layar obrolan pengguna secara real-time.
       </small>
     </form>
@@ -1267,8 +1278,113 @@
 
       stream.innerHTML = html;
       stream.scrollTop = stream.scrollHeight;
+
+      // Kunci input dan sesuaikan antarmuka jika percakapan telah diakhiri
+      const isEnded = json.data.some(m => m.tipe_pesan === 'session_ended' || m.status === 'selesai');
+      const closedBanner = document.getElementById('adminChatClosedBanner');
+      const btnAkhiri = document.getElementById('btnAkhiriSesiAdmin');
+      const ta = document.getElementById('balasPesanText');
+      const btnKirim = document.getElementById('btnSubmitBalasan');
+      const helpText = document.getElementById('balasPesanHelp');
+
+      if (isEnded) {
+        if (closedBanner) closedBanner.style.display = 'flex';
+        if (btnAkhiri) btnAkhiri.style.display = 'none';
+        if (ta) {
+          ta.disabled = true;
+          ta.placeholder = 'Percakapan ini telah diakhiri. Tidak dapat mengirim pesan lagi.';
+          ta.style.backgroundColor = '#f1f5f9';
+          ta.style.cursor = 'not-allowed';
+        }
+        if (btnKirim) {
+          btnKirim.disabled = true;
+          btnKirim.style.opacity = '0.5';
+          btnKirim.style.cursor = 'not-allowed';
+        }
+        if (helpText) {
+          helpText.innerHTML = '<i class="fas fa-lock" style="color:#ef4444;"></i> Percakapan resmi ditutup. Petugas maupun klien tidak dapat mengirim pesan tambahan pada sesi ini.';
+        }
+      } else {
+        if (closedBanner) closedBanner.style.display = 'none';
+        if (btnAkhiri) btnAkhiri.style.display = 'inline-flex';
+        if (ta) {
+          ta.disabled = false;
+          ta.placeholder = 'Tuliskan balasan petugas di sini (Tekan Enter untuk mengirim)...';
+          ta.style.backgroundColor = '#fff';
+          ta.style.cursor = 'text';
+        }
+        if (btnKirim) {
+          btnKirim.disabled = false;
+          btnKirim.style.opacity = '1';
+          btnKirim.style.cursor = 'pointer';
+        }
+        if (helpText) {
+          helpText.innerHTML = '<i class="fas fa-info-circle"></i> Balasan yang Anda kirim akan langsung tampil di layar obrolan pengguna secara real-time.';
+        }
+      }
     } catch (e) {
       console.warn('Gagal memuat chat:', e);
+    }
+  }
+
+  async function akhiriSesiChatAdmin() {
+    const sessionId = document.getElementById('balasSessionId').value;
+    const namaUser = document.getElementById('balasNamaUser').innerText || 'pengguna';
+    if (!sessionId) return;
+
+    if (!confirm('Apakah Anda yakin ingin mengakhiri percakapan dengan ' + namaUser + '?\n\nSetelah diakhiri, percakapan akan ditutup secara permanen dan tidak dapat mengirim pesan lagi.')) {
+      return;
+    }
+
+    const btn = document.getElementById('btnAkhiriSesiAdmin');
+    if (btn) {
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengakhiri...';
+    }
+
+    try {
+      const res = await fetch('/admin/pusat-bantuan/akhiri', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ session_id: sessionId })
+      });
+      const data = await res.json();
+      if (data.success) {
+        lastAdminChatJson = ''; // Reset cache agar render ulang terpancing
+        await loadAdminChatHistory(sessionId, true);
+        
+        // Perbarui badge status pada tabel/kartu dashboard secara langsung
+        const allBtns = document.querySelectorAll(`button[onclick*="${sessionId}"]`);
+        allBtns.forEach(b => {
+          const row = b.closest('tr');
+          if (row) {
+            const cells = row.querySelectorAll('td');
+            if (cells.length >= 4) {
+              cells[cells.length - 2].innerHTML = '<span class="badge" style="background:#f1f5f9; color:#475569; border:1px solid #cbd5e1;"><i class="fas fa-flag-checkered"></i> Sesi Selesai</span>';
+            }
+          }
+          const card = b.closest('.cs-thread-card');
+          if (card) {
+            const statusWrap = card.querySelector('.cs-card-status-wrap');
+            if (statusWrap) {
+              const pill = statusWrap.querySelector('.status-pill-badge');
+              if (pill) {
+                pill.className = 'status-pill-badge pill-selesai';
+                pill.innerHTML = '<i class="fas fa-flag-checkered"></i> Selesai';
+              }
+            }
+          }
+        });
+      } else {
+        alert(data.message || 'Gagal mengakhiri percakapan');
+      }
+    } catch (err) {
+      alert('Terjadi kesalahan jaringan: ' + err.message);
+    } finally {
+      if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-stop-circle"></i> Akhiri Percakapan';
+      }
     }
   }
 

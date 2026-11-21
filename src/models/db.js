@@ -1316,10 +1316,28 @@ async function cekPeriodeInput() {
 // ============================================
 // PUSAT BANTUAN & CS REAL-TIME
 // ============================================
+async function isSesiBantuanSelesai(sessionId) {
+  if (!sessionId) return false;
+  const col = db.collection('pusat_bantuan_chat');
+  const snap = await col.where('session_id', '==', sessionId).get();
+  const list = docsToArray(snap);
+  return list.some(m => m.tipe_pesan === 'session_ended' || m.status === 'selesai');
+}
+
 async function kirimPesanBantuan(data) {
   const col = db.collection('pusat_bantuan_chat');
+  const targetSessionId = data.session_id || `cs_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+
+  // Cegah pengiriman pesan baru jika sesi sudah diakhiri
+  if (data.tipe_pesan !== 'session_ended') {
+    const isEnded = await isSesiBantuanSelesai(targetSessionId);
+    if (isEnded) {
+      throw new Error('Percakapan ini telah diakhiri. Tidak dapat mengirim pesan lagi.');
+    }
+  }
+
   const payload = {
-    session_id: data.session_id || `cs_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+    session_id: targetSessionId,
     nama: (data.nama || 'Pengunjung').trim(),
     kontak: (data.kontak || '-').trim(),
     pesan: (data.pesan || '').trim(),
@@ -1368,6 +1386,7 @@ async function getAllPesanBantuan(limit = 100) {
         last_pengirim: '',
         last_sender_name: '',
         status: 'menunggu', // 'menunggu' | 'terjawab' | 'selesai'
+        is_ended: false,
         total_pesan: 0,
         unread_user_count: 0,
         created_at: m.created_at, // waktu mulai obrolan
@@ -1380,6 +1399,10 @@ async function getAllPesanBantuan(limit = 100) {
     g.updated_at = m.created_at || g.updated_at;
     g.last_pengirim = m.pengirim;
     g.tipe_pesan_terakhir = m.tipe_pesan || 'text';
+
+    if (m.tipe_pesan === 'session_ended' || m.status === 'selesai') {
+      g.is_ended = true;
+    }
 
     if (m.pengirim === 'user') {
       g.unread_user_count += 1;
@@ -1409,14 +1432,20 @@ async function getAllPesanBantuan(limit = 100) {
 
     // Tentukan isi cuplikan pesan terakhir & nama pengirim terakhir
     g.pesan_terakhir = m.pesan || '';
-    if (m.pengirim === 'admin') {
+    if (g.is_ended) {
+      g.status = 'selesai';
+      if (m.pengirim === 'admin') {
+        g.last_sender_name = m.admin_name || 'Petugas CS';
+      } else if (m.pengirim === 'bot') {
+        g.last_sender_name = 'Sistem / Bot';
+      } else {
+        g.last_sender_name = g.nama || 'Pengguna';
+      }
+    } else if (m.pengirim === 'admin') {
       g.last_sender_name = m.admin_name || 'Petugas CS';
       g.status = 'terjawab';
     } else if (m.pengirim === 'bot') {
       g.last_sender_name = 'Asisten Virtual';
-      if (m.tipe_pesan === 'session_ended') {
-        g.status = 'selesai';
-      }
     } else {
       g.last_sender_name = g.nama || 'Pengguna';
       g.status = 'menunggu';
@@ -1446,6 +1475,20 @@ async function balasPesanBantuanAdmin(sessionId, pesan, adminName) {
     pengirim: 'admin',
     admin_name: adminName || 'Petugas CS BAPAS',
     status: 'dibalas'
+  });
+}
+
+async function akhiriPesanBantuanAdmin(sessionId, adminName) {
+  const petugas = (adminName || 'Petugas CS BAPAS').trim();
+  return await kirimPesanBantuan({
+    session_id: sessionId,
+    nama: petugas,
+    kontak: 'BAPAS Medan',
+    pesan: `[SESI SELESAI] Percakapan ini telah diakhiri oleh Petugas Customer Service BAPAS Kelas I Medan (${petugas}). Terima kasih telah menghubungi kami.`,
+    pengirim: 'bot',
+    admin_name: petugas,
+    tipe_pesan: 'session_ended',
+    status: 'selesai'
   });
 }
 
@@ -1531,6 +1574,8 @@ module.exports = {
   getPesanBantuanBySession,
   getAllPesanBantuan,
   balasPesanBantuanAdmin,
+  akhiriPesanBantuanAdmin,
+  isSesiBantuanSelesai,
   getStatistikAdmin,
   getStatistikClient,
   getAllAdmins,

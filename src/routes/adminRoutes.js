@@ -44,6 +44,7 @@ router.post('/konfigurasi/update', adminController.postUpdateKonfigurasi);
 
 // Pusat Bantuan & CS Real-Time
 router.post('/pusat-bantuan/balas', adminController.postBalasPesanBantuan);
+router.post('/pusat-bantuan/akhiri', adminController.postAkhiriPesanBantuanAdmin);
 router.get('/pusat-bantuan/semua', adminController.getPusatBantuanListJson);
 
 module.exports = router;

@@ -18,6 +18,7 @@ const {
   updateKonfigurasi,
   getAllPesanBantuan,
   balasPesanBantuanAdmin,
+  akhiriPesanBantuanAdmin,
   getAllAdmins,
   createAdminUser,
   updateAdminUser,
@@ -420,6 +421,20 @@ async function postBalasPesanBantuan(req, res) {
   }
 }
 
+async function postAkhiriPesanBantuanAdmin(req, res) {
+  try {
+    const { session_id } = req.body;
+    if (!session_id) {
+      return res.status(400).json({ success: false, message: 'Session ID wajib diisi.' });
+    }
+    const adminName = req.session && req.session.adminUser ? req.session.adminUser.nama_lengkap : 'Petugas CS BAPAS Medan';
+    const result = await akhiriPesanBantuanAdmin(session_id, adminName);
+    return res.json({ success: true, message: 'Percakapan berhasil diakhiri oleh petugas CS.', data: result });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: 'Gagal mengakhiri percakapan: ' + err.message });
+  }
+}
+
 async function getPusatBantuanListJson(req, res) {
   try {
     const list = await getAllPesanBantuan(100);
@@ -576,5 +591,6 @@ module.exports = {
   postUpdateKonfigurasi,
   getDetailLaporJson,
   postBalasPesanBantuan,
+  postAkhiriPesanBantuanAdmin,
   getPusatBantuanListJson
 };

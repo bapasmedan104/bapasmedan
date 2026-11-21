@@ -1928,26 +1928,37 @@ function keluarPercakapanCS() {
 }
 
 async function akhiriPercakapanCS() {
-  if (!confirm('Apakah Anda yakin ingin mengakhiri sesi percakapan Customer Service ini? Percakapan yang sedang berjalan akan diselesaikan.')) {
+  if (!confirm('Apakah Anda yakin ingin mengakhiri sesi percakapan Customer Service ini? Setelah diakhiri, percakapan akan ditutup dan tidak dapat mengirim pesan lagi.')) {
     return;
   }
   const sId = getBapasSessionId();
   const nama = localStorage.getItem('bapas_cs_nama') || 'Pengguna';
   
   try {
-    await fetch('/api/pusat-bantuan/akhiri', {
+    const res = await fetch('/api/pusat-bantuan/akhiri', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         session_id: sId,
         nama: nama,
-        pesan: `[SESI SELESAI] Sesi percakapan bantuan telah diselesaikan oleh ${nama}.`
+        pesan: `[SESI SELESAI] Sesi percakapan bantuan telah diselesaikan oleh ${nama}. Terima kasih atas komunikasi Anda.`
       })
     });
+    const result = await res.json();
+    if (result.success) {
+      lastRenderedChatJson = '';
+      loadChatMessages();
+    } else {
+      alert(result.message || 'Gagal mengakhiri sesi.');
+    }
   } catch (err) {
     console.warn('Gagal memproses akhir sesi:', err);
+    lastRenderedChatJson = '';
+    loadChatMessages();
   }
+}
 
+function mulaiObrolanBaruCS() {
   stopChatPolling();
   localStorage.setItem('bapas_cs_force_select', 'true');
   localStorage.removeItem('bapas_cs_session');
@@ -2164,6 +2175,11 @@ function mulaiChatPengunjung() {
 }
 
 async function pilihTopikKatalog(topikKey) {
+  const inputPesan = document.getElementById('csInputPesan');
+  if (inputPesan && inputPesan.disabled) {
+    alert('Percakapan telah diakhiri. Tidak dapat mengirim pesan lagi. Silakan klik "Mulai Obrolan Baru" untuk memulai percakapan baru.');
+    return;
+  }
   const sId = getBapasSessionId();
   const nama = localStorage.getItem('bapas_cs_nama') || 'Klien BAPAS';
   const noReg = localStorage.getItem('bapas_cs_register') || '-';
@@ -2334,6 +2350,43 @@ function renderChatStream(messages) {
     </div>
   `;
 
+  const isSessionEnded = messages.some(m => m.tipe_pesan === 'session_ended' || m.status === 'selesai');
+  const inputPesan = document.getElementById('csInputPesan');
+  const btnKirim = document.getElementById('btnKirimCS');
+  const btnAkhiri = document.getElementById('btnAkhiriCS');
+
+  if (isSessionEnded) {
+    if (inputPesan) {
+      inputPesan.disabled = true;
+      inputPesan.placeholder = 'Percakapan telah diakhiri. Tidak dapat mengirim pesan lagi.';
+      inputPesan.style.backgroundColor = '#f1f5f9';
+      inputPesan.style.cursor = 'not-allowed';
+    }
+    if (btnKirim) {
+      btnKirim.disabled = true;
+      btnKirim.style.opacity = '0.5';
+      btnKirim.style.cursor = 'not-allowed';
+    }
+    if (btnAkhiri) {
+      btnAkhiri.style.display = 'none';
+    }
+  } else {
+    if (inputPesan) {
+      inputPesan.disabled = false;
+      inputPesan.placeholder = 'Tuliskan pesan Anda di sini (Tekan Enter untuk mengirim)...';
+      inputPesan.style.backgroundColor = '#fff';
+      inputPesan.style.cursor = 'text';
+    }
+    if (btnKirim) {
+      btnKirim.disabled = false;
+      btnKirim.style.opacity = '1';
+      btnKirim.style.cursor = 'pointer';
+    }
+    if (btnAkhiri) {
+      btnAkhiri.style.display = 'inline-flex';
+    }
+  }
+
   messages.forEach(m => {
     // 1. Session Ended Message
     if (m.tipe_pesan === 'session_ended') {
@@ -2481,6 +2534,22 @@ function renderChatStream(messages) {
     }
   });
 
+  if (isSessionEnded) {
+    html += `
+      <div class="chat-system-ended-banner" style="background:#fef2f2; border:1.5px solid #fecaca; border-radius:10px; padding:16px 18px; margin:16px 8px; text-align:center; color:#991b1b; box-shadow:0 2px 8px rgba(220,38,38,0.08);">
+        <div style="font-size:14px; font-weight:800; display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:6px;">
+          <i class="fas fa-lock" style="color:#dc2626;"></i> Percakapan Telah Diakhiri
+        </div>
+        <p style="margin:0 0 12px; font-size:12.5px; color:#475569; line-height:1.5;">
+          Sesi percakapan ini telah ditutup secara resmi. Tidak dapat mengirim pesan tambahan pada sesi ini. Jika Anda memerlukan bantuan atau pertanyaan baru, silakan mulai obrolan baru.
+        </p>
+        <button type="button" onclick="mulaiObrolanBaruCS()" class="btn-mulai-baru" style="background:#003580; color:#fff; border:none; border-radius:8px; padding:9px 18px; font-size:13px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:8px; box-shadow:0 2px 6px rgba(0,53,128,0.25);">
+          <i class="fas fa-plus-circle"></i> Mulai Obrolan Baru
+        </button>
+      </div>
+    `;
+  }
+
   box.innerHTML = html;
   box.scrollTop = box.scrollHeight;
 }
@@ -2530,6 +2599,11 @@ async function handleKirimPesanCS(e) {
   e.preventDefault();
   const inputPesan = document.getElementById('csInputPesan');
   const btnKirim = document.getElementById('btnKirimCS');
+
+  if (inputPesan && inputPesan.disabled) {
+    alert('Percakapan ini telah diakhiri. Tidak dapat mengirim pesan lagi. Silakan klik "Mulai Obrolan Baru" untuk memulai percakapan baru.');
+    return;
+  }
 
   const pesan = (inputPesan.value || '').trim();
   const nama = localStorage.getItem('bapas_cs_nama') || 'Pengunjung';
