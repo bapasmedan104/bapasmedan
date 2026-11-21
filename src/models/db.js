@@ -1336,6 +1336,15 @@ async function kirimPesanBantuan(data) {
     }
   }
 
+  let cleanReplyTo = null;
+  if (data.reply_to && typeof data.reply_to === 'object') {
+    cleanReplyTo = {
+      id: String(data.reply_to.id || ''),
+      sender: String(data.reply_to.sender || '').substring(0, 100),
+      text: String(data.reply_to.text || '').substring(0, 300)
+    };
+  }
+
   const payload = {
     session_id: targetSessionId,
     nama: (data.nama || 'Pengunjung').trim(),
@@ -1347,6 +1356,7 @@ async function kirimPesanBantuan(data) {
     is_verified: Boolean(data.is_verified),
     detail_klien: data.detail_klien || null,
     tipe_pesan: data.tipe_pesan || 'text',
+    reply_to: cleanReplyTo,
     created_at: new Date().toISOString()
   };
   const ref = await col.add(payload);
@@ -1466,7 +1476,7 @@ async function getAllPesanBantuan(limit = 100) {
   return limit ? threadList.slice(0, limit) : threadList;
 }
 
-async function balasPesanBantuanAdmin(sessionId, pesan, adminName) {
+async function balasPesanBantuanAdmin(sessionId, pesan, adminName, replyTo = null) {
   return await kirimPesanBantuan({
     session_id: sessionId,
     nama: adminName || 'Petugas CS BAPAS',
@@ -1474,7 +1484,8 @@ async function balasPesanBantuanAdmin(sessionId, pesan, adminName) {
     pesan: pesan,
     pengirim: 'admin',
     admin_name: adminName || 'Petugas CS BAPAS',
-    status: 'dibalas'
+    status: 'dibalas',
+    reply_to: replyTo
   });
 }
 

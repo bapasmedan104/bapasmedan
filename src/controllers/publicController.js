@@ -263,7 +263,7 @@ async function postCekRegistrasiClient(req, res) {
 
 async function postKirimPesanBantuan(req, res) {
   try {
-    const { session_id, nama, kontak, pesan, is_verified, detail_klien, tipe_pesan } = req.body;
+    const { session_id, nama, kontak, pesan, is_verified, detail_klien, tipe_pesan, reply_to } = req.body;
     if (!pesan || !pesan.trim()) {
       return res.status(400).json({ success: false, message: 'Pesan tidak boleh kosong.' });
     }
@@ -308,7 +308,8 @@ async function postKirimPesanBantuan(req, res) {
       admin_name: '',
       is_verified: Boolean(is_verified),
       detail_klien: detail_klien || null,
-      tipe_pesan: tipe_pesan || 'text'
+      tipe_pesan: tipe_pesan || 'text',
+      reply_to: reply_to || null
     });
 
     // Balasan otomatis instan dari Asisten BAPAS pada pesan pertama sesi

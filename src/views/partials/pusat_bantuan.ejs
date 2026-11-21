@@ -424,6 +424,19 @@
 
             <!-- Bottom Chat Input Bar -->
             <footer class="cs-bottom-bar">
+              <!-- WhatsApp Quote Reply Bar for User -->
+              <div id="csReplyPreviewBar" class="cs-reply-preview-bar" style="display:none;">
+                <div class="cs-reply-preview-body">
+                  <div class="cs-reply-preview-sender">
+                    <i class="fas fa-reply"></i> Membalas <strong id="csReplySenderName">...</strong>
+                  </div>
+                  <div id="csReplySnippetText" class="cs-reply-preview-text">...</div>
+                </div>
+                <button type="button" class="cs-btn-cancel-reply" onclick="cancelReplyCS()" title="Batalkan balasan">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+
               <form id="formKirimBantuanCS" class="cs-form-wrap" onsubmit="handleKirimPesanCS(event)">
                 <div class="cs-input-action-row">
                   <input 
@@ -1627,6 +1640,155 @@
   text-align: center;
 }
 
+/* WhatsApp Quote Reply Styling for CS */
+.cs-reply-preview-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f1f5f9;
+  border-left: 4px solid #003580;
+  border-radius: 8px 8px 0 0;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 12.5px;
+}
+.cs-reply-preview-body {
+  flex: 1;
+  overflow: hidden;
+  padding-right: 8px;
+}
+.cs-reply-preview-sender {
+  font-weight: 700;
+  color: #003580;
+  font-size: 12px;
+  margin-bottom: 2px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.cs-reply-preview-text {
+  color: #475569;
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cs-btn-cancel-reply {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #64748b;
+  padding: 5px;
+  font-size: 14px;
+  border-radius: 50%;
+  line-height: 1;
+  transition: all 0.15s;
+}
+.cs-btn-cancel-reply:hover {
+  color: #dc2626;
+  background: #e2e8f0;
+}
+
+.chat-quoted-box {
+  border-radius: 6px;
+  padding: 6px 10px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.15s;
+  max-width: 100%;
+  display: block;
+  text-decoration: none;
+  text-align: left;
+}
+.chat-quoted-box:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+.quoted-sender {
+  font-weight: 700;
+  font-size: 11.5px;
+  margin-bottom: 2px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.quoted-text {
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  opacity: 0.9;
+}
+.chat-msg-user .chat-quoted-box {
+  background: rgba(255, 255, 255, 0.18);
+  border-left: 3.5px solid #60a5fa;
+  color: #f1f5f9;
+}
+.chat-msg-user .quoted-sender {
+  color: #bfdbfe;
+}
+.chat-msg-user .quoted-text {
+  color: #e2e8f0;
+}
+.chat-msg-admin .chat-quoted-box {
+  background: #f1f5f9;
+  border-left: 3.5px solid #16a34a;
+  color: #334155;
+}
+.chat-msg-admin .quoted-sender {
+  color: #16a34a;
+}
+.chat-msg-admin .quoted-text {
+  color: #475569;
+}
+.chat-msg-bot .chat-quoted-box {
+  background: #fef08a;
+  border-left: 3.5px solid #ca8a04;
+  color: #713f12;
+}
+.chat-msg-bot .quoted-sender {
+  color: #854d0e;
+}
+.chat-msg-bot .quoted-text {
+  color: #713f12;
+}
+
+.btn-cs-reply {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  transition: all 0.15s;
+}
+.btn-cs-reply:hover {
+  color: #003580;
+  background: #e2e8f0;
+}
+.chat-msg-user .btn-cs-reply {
+  color: #bfdbfe;
+}
+.chat-msg-user .btn-cs-reply:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+@keyframes quoteFlash {
+  0% { box-shadow: 0 0 0 4px #f59e0b; }
+  100% { box-shadow: none; }
+}
+.chat-msg-highlight {
+  animation: quoteFlash 1.8s ease;
+}
+
 /* Bottom Chat Input */
 .cs-bottom-bar {
   flex-shrink: 0;
@@ -1959,6 +2121,7 @@ async function akhiriPercakapanCS() {
 }
 
 function mulaiObrolanBaruCS() {
+  cancelReplyCS();
   stopChatPolling();
   localStorage.setItem('bapas_cs_force_select', 'true');
   localStorage.removeItem('bapas_cs_session');
@@ -2356,6 +2519,7 @@ function renderChatStream(messages) {
   const btnAkhiri = document.getElementById('btnAkhiriCS');
 
   if (isSessionEnded) {
+    cancelReplyCS();
     if (inputPesan) {
       inputPesan.disabled = true;
       inputPesan.placeholder = 'Percakapan telah diakhiri. Tidak dapat mengirim pesan lagi.';
@@ -2469,6 +2633,17 @@ function renderChatStream(messages) {
 
     const timeFormatted = m.created_at ? new Date(m.created_at).toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit', timeZone: 'Asia/Jakarta' }) : '';
 
+    let quoteHtml = '';
+    if (m.reply_to && m.reply_to.text) {
+      const targetId = m.reply_to.id ? `cs-msg-${escapeHtml(m.reply_to.id)}` : '';
+      quoteHtml = `
+        <div class="chat-quoted-box" onclick="scrollToCsQuotedMsg('${targetId}')" title="Klik untuk melihat pesan yang dibalas">
+          <span class="quoted-sender"><i class="fas fa-reply" style="font-size:10px;"></i> ${escapeHtml(m.reply_to.sender || 'Pesan')}</span>
+          <span class="quoted-text">${escapeHtml(m.reply_to.text || '')}</span>
+        </div>
+      `;
+    }
+
     if (isUser) {
       let contentHtml = '';
       if (m.tipe_pesan === 'client_card') {
@@ -2496,17 +2671,24 @@ function renderChatStream(messages) {
 
       const displayName = m.nama || localStorage.getItem('bapas_cs_nama') || 'Anda';
       const isReg = m.is_verified || Boolean(m.detail_klien) || Boolean(currentCsRegister);
+      const rawSnippet = (m.pesan || (m.tipe_pesan === 'client_card' ? 'Data Klien Terverifikasi' : '')).replace(/\s+/g, ' ').trim().substring(0, 150);
 
       html += `
-        <div class="chat-msg chat-msg-user">
+        <div class="chat-msg chat-msg-user" id="cs-msg-${escapeHtml(m.id || '')}">
           <div class="chat-bubble">
             <div class="chat-sender-name-user">
               <i class="fas ${isReg ? 'fa-id-badge' : 'fa-user-circle'}"></i> 
               <span>${escapeHtml(displayName)}</span>
               ${isReg ? '<span class="bubble-tag-verified"><i class="fas fa-check-circle"></i> Terverifikasi</span>' : ''}
             </div>
+            ${quoteHtml}
             ${contentHtml}
-            <span class="chat-time">${timeFormatted} &bull; Terkirim</span>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:6px;">
+              <button type="button" class="btn-cs-reply" onclick="handleReplyCsClick(this)" data-id="${escapeHtml(m.id || '')}" data-sender="${escapeHtml(displayName)}" data-text="${escapeHtml(rawSnippet)}">
+                <i class="fas fa-reply"></i> Balas
+              </button>
+              <span class="chat-time" style="margin-top:0;">${timeFormatted} &bull; Terkirim</span>
+            </div>
           </div>
         </div>
       `;
@@ -2514,9 +2696,10 @@ function renderChatStream(messages) {
       const senderTitle = isBot ? 'Asisten Layanan BAPAS' : (m.admin_name || m.nama || 'Petugas CS BAPAS');
       const isAutoAnswer = m.tipe_pesan && m.tipe_pesan.startsWith('katalog_jawaban');
       const formattedBotText = escapeHtml(m.pesan).replace(/\n/g, '<br>');
+      const rawSnippet = (m.pesan || '').replace(/\s+/g, ' ').trim().substring(0, 150);
 
       html += `
-        <div class="chat-msg ${isBot ? 'chat-msg-bot' : 'chat-msg-admin'}">
+        <div class="chat-msg ${isBot ? 'chat-msg-bot' : 'chat-msg-admin'}" id="cs-msg-${escapeHtml(m.id || '')}">
           <div class="chat-avatar" style="${isBot ? '' : 'background:linear-gradient(135deg, #10b981 0%, #059669 100%);'}">
             <i class="fas ${isBot ? 'fa-robot' : 'fa-headset'}"></i>
           </div>
@@ -2526,8 +2709,14 @@ function renderChatStream(messages) {
               <span>${escapeHtml(senderTitle)}:</span>
               ${isAutoAnswer ? '<span class="badge-katalog-inquiry" style="background:#003580; color:#fff; font-size:9.5px; margin-left:6px;"><i class="fas fa-check"></i> Jawaban Resmi</span>' : ''}
             </div>
+            ${quoteHtml}
             <p class="chat-text">${formattedBotText}</p>
-            <span class="chat-time">${timeFormatted}</span>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:6px;">
+              <button type="button" class="btn-cs-reply" onclick="handleReplyCsClick(this)" data-id="${escapeHtml(m.id || '')}" data-sender="${escapeHtml(senderTitle)}" data-text="${escapeHtml(rawSnippet)}">
+                <i class="fas fa-reply"></i> Balas
+              </button>
+              <span class="chat-time" style="margin-top:0;">${timeFormatted}</span>
+            </div>
           </div>
         </div>
       `;
@@ -2579,6 +2768,54 @@ function renderVerifiedClientCardHtml(client, messageText) {
     </div>
   `;
 }
+
+let csActiveReply = null;
+
+function handleReplyCsClick(btn) {
+  const inputPesan = document.getElementById('csInputPesan');
+  if (inputPesan && inputPesan.disabled) {
+    alert('Percakapan ini telah diakhiri. Tidak dapat membalas pesan.');
+    return;
+  }
+  const msgId = btn.getAttribute('data-id') || '';
+  const sender = btn.getAttribute('data-sender') || 'Pesan';
+  const text = btn.getAttribute('data-text') || '';
+  triggerCsReply(msgId, sender, text);
+}
+
+function triggerCsReply(msgId, sender, text) {
+  csActiveReply = { id: msgId, sender: sender, text: text };
+  const nameEl = document.getElementById('csReplySenderName');
+  const snipEl = document.getElementById('csReplySnippetText');
+  const bar = document.getElementById('csReplyPreviewBar');
+  if (nameEl) nameEl.innerText = sender;
+  if (snipEl) snipEl.innerText = text;
+  if (bar) bar.style.display = 'flex';
+  const input = document.getElementById('csInputPesan');
+  if (input) {
+    input.focus();
+  }
+}
+
+function cancelReplyCS() {
+  csActiveReply = null;
+  const bar = document.getElementById('csReplyPreviewBar');
+  if (bar) bar.style.display = 'none';
+}
+
+function scrollToCsQuotedMsg(elementId) {
+  if (!elementId) return;
+  const el = document.getElementById(elementId);
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    el.classList.add('chat-msg-highlight');
+    setTimeout(() => el.classList.remove('chat-msg-highlight'), 1800);
+  }
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') cancelReplyCS();
+});
 
 function startChatPolling() {
   loadChatMessages();
@@ -2633,12 +2870,14 @@ async function handleKirimPesanCS(e) {
         pesan: pesan,
         is_verified: isVerified,
         detail_klien: detailKlien,
-        tipe_pesan: 'text'
+        tipe_pesan: 'text',
+        reply_to: csActiveReply
       })
     });
     const result = await res.json();
     if (result.success) {
       inputPesan.value = '';
+      cancelReplyCS();
       loadChatMessages();
     } else {
       alert(result.message || 'Gagal mengirim pesan bantuan.');

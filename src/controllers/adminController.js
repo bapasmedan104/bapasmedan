@@ -409,12 +409,12 @@ async function postUpdateKonfigurasi(req, res) {
 
 async function postBalasPesanBantuan(req, res) {
   try {
-    const { session_id, pesan } = req.body;
+    const { session_id, pesan, reply_to } = req.body;
     if (!session_id || !pesan || !pesan.trim()) {
       return res.status(400).json({ success: false, message: 'Session ID dan Pesan balasan wajib diisi.' });
     }
     const adminName = req.session && req.session.adminUser ? req.session.adminUser.nama_lengkap : 'Petugas CS BAPAS Medan';
-    const result = await balasPesanBantuanAdmin(session_id, pesan.trim(), adminName);
+    const result = await balasPesanBantuanAdmin(session_id, pesan.trim(), adminName, reply_to || null);
     return res.json({ success: true, message: 'Balasan berhasil dikirim ke pengguna.', data: result });
   } catch (err) {
     return res.status(500).json({ success: false, message: 'Gagal membalas pesan: ' + err.message });

@@ -442,6 +442,154 @@
       margin-top: 4px !important;
       color: #1e293b !important;
     }
+    /* WhatsApp Quote Reply Styling */
+    .admin-reply-preview-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #f1f5f9;
+      border-left: 4px solid #003580;
+      border-radius: 8px 8px 0 0;
+      padding: 7px 12px;
+      margin-bottom: 2px;
+      font-size: 12px;
+      border: 1px solid #cbd5e1;
+      border-bottom: none;
+    }
+    .admin-reply-preview-body {
+      flex: 1;
+      overflow: hidden;
+      padding-right: 8px;
+    }
+    .admin-reply-preview-sender {
+      font-weight: 700;
+      color: #003580;
+      font-size: 11.5px;
+      margin-bottom: 2px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .admin-reply-preview-text {
+      color: #475569;
+      font-size: 11.5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .admin-btn-cancel-reply {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: #64748b;
+      padding: 4px 6px;
+      font-size: 13px;
+      border-radius: 50%;
+      line-height: 1;
+    }
+    .admin-btn-cancel-reply:hover {
+      color: #dc2626;
+      background: #e2e8f0;
+    }
+
+    .chat-quoted-box {
+      border-radius: 6px;
+      padding: 5px 8px;
+      margin-bottom: 6px;
+      cursor: pointer;
+      transition: opacity 0.15s, transform 0.15s;
+      max-width: 100%;
+      display: block;
+      text-decoration: none;
+      text-align: left;
+    }
+    .chat-quoted-box:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+    .quoted-sender {
+      font-weight: 700;
+      font-size: 11px;
+      margin-bottom: 2px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .quoted-text {
+      font-size: 11.5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: block;
+      opacity: 0.9;
+    }
+    .bubble-admin .chat-quoted-box {
+      background: rgba(255, 255, 255, 0.18);
+      border-left: 3.5px solid #93c5fd;
+      color: #f1f5f9;
+    }
+    .bubble-admin .quoted-sender {
+      color: #bfdbfe;
+    }
+    .bubble-admin .quoted-text {
+      color: #e2e8f0;
+    }
+    .bubble-user .chat-quoted-box {
+      background: #f1f5f9;
+      border-left: 3.5px solid #003580;
+      color: #334155;
+    }
+    .bubble-user .quoted-sender {
+      color: #003580;
+    }
+    .bubble-user .quoted-text {
+      color: #475569;
+    }
+    .bubble-bot .chat-quoted-box {
+      background: #fef08a;
+      border-left: 3.5px solid #ca8a04;
+      color: #713f12;
+    }
+    .bubble-bot .quoted-sender {
+      color: #854d0e;
+    }
+    .bubble-bot .quoted-text {
+      color: #713f12;
+    }
+
+    .btn-bubble-reply {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      font-size: 10.5px;
+      font-weight: 600;
+      padding: 1px 6px;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      transition: all 0.15s;
+    }
+    .btn-bubble-reply:hover {
+      color: #003580;
+      background: #e2e8f0;
+    }
+    .bubble-admin .btn-bubble-reply {
+      color: #bfdbfe;
+    }
+    .bubble-admin .btn-bubble-reply:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    @keyframes quoteFlash {
+      0% { box-shadow: 0 0 0 4px #f59e0b; }
+      100% { box-shadow: none; }
+    }
+    .chat-msg-highlight {
+      animation: quoteFlash 1.8s ease;
+    }
     @keyframes pulse {
       0%, 100% { opacity: 1; }
       50% { opacity: 0.6; }
@@ -1008,8 +1156,21 @@
       </div>
     </div>
 
+    <!-- Reply Preview Bar for Admin -->
+    <div id="adminReplyPreviewBar" class="admin-reply-preview-bar" style="display:none;">
+      <div class="admin-reply-preview-body">
+        <div class="admin-reply-preview-sender">
+          <i class="fas fa-reply"></i> Membalas <strong id="adminReplySenderName">...</strong>
+        </div>
+        <div id="adminReplySnippetText" class="admin-reply-preview-text">...</div>
+      </div>
+      <button type="button" class="admin-btn-cancel-reply" onclick="cancelReplyAdmin()" title="Batalkan balasan">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
     <!-- Reply Form -->
-    <form id="formBalasBantuan" onsubmit="kirimBalasanAdmin(event)" style="flex-shrink:0; margin-top:10px;">
+    <form id="formBalasBantuan" onsubmit="kirimBalasanAdmin(event)" style="flex-shrink:0; margin-top:6px;">
       <input type="hidden" id="balasSessionId">
       <div style="display:flex; gap:10px; align-items:flex-end;">
         <textarea id="balasPesanText" rows="2" style="flex:1; padding:10px 14px; border:1.5px solid #cbd5e1; border-radius:8px; font-family:inherit; font-size:13.5px; resize:none; box-sizing:border-box;" placeholder="Tuliskan balasan petugas di sini (Tekan Enter untuk mengirim)..." required onkeydown="handleAdminTextareaKey(event)"></textarea>
@@ -1145,8 +1306,50 @@
 
   let adminChatPollTimer = null;
   let lastAdminChatJson = '';
+  let adminActiveReply = null;
+
+  function handleReplyAdminClick(btn) {
+    const isEnded = document.getElementById('balasPesanText')?.disabled;
+    if (isEnded) {
+      alert('Percakapan ini telah diakhiri. Tidak dapat membalas pesan.');
+      return;
+    }
+    const msgId = btn.getAttribute('data-id') || '';
+    const sender = btn.getAttribute('data-sender') || 'Pesan';
+    const text = btn.getAttribute('data-text') || '';
+    triggerAdminReply(msgId, sender, text);
+  }
+
+  function triggerAdminReply(msgId, sender, text) {
+    adminActiveReply = { id: msgId, sender: sender, text: text };
+    const senderEl = document.getElementById('adminReplySenderName');
+    const snipEl = document.getElementById('adminReplySnippetText');
+    const bar = document.getElementById('adminReplyPreviewBar');
+    if (senderEl) senderEl.innerText = sender;
+    if (snipEl) snipEl.innerText = text;
+    if (bar) bar.style.display = 'flex';
+    const ta = document.getElementById('balasPesanText');
+    if (ta) ta.focus();
+  }
+
+  function cancelReplyAdmin() {
+    adminActiveReply = null;
+    const bar = document.getElementById('adminReplyPreviewBar');
+    if (bar) bar.style.display = 'none';
+  }
+
+  function scrollToAdminQuotedMsg(elementId) {
+    if (!elementId) return;
+    const el = document.getElementById(elementId);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      el.classList.add('chat-msg-highlight');
+      setTimeout(() => el.classList.remove('chat-msg-highlight'), 1800);
+    }
+  }
 
   function openBalasBantuanModal(sessionId, nama) {
+    cancelReplyAdmin();
     document.getElementById('balasSessionId').value = sessionId;
     document.getElementById('balasNamaUser').innerText = nama || 'Pengguna';
     document.getElementById('balasSessionIdText').innerText = sessionId;
@@ -1166,6 +1369,7 @@
   }
 
   function closeBalasBantuanModal() {
+    cancelReplyAdmin();
     document.getElementById('modalBalasBantuan').classList.remove('active');
     if (adminChatPollTimer) {
       clearInterval(adminChatPollTimer);
@@ -1174,6 +1378,10 @@
   }
 
   function handleAdminTextareaKey(e) {
+    if (e.key === 'Escape') {
+      cancelReplyAdmin();
+      return;
+    }
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       document.getElementById('formBalasBantuan').dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
@@ -1208,11 +1416,24 @@
             return;
           }
 
+          let quoteHtml = '';
+          if (m.reply_to && m.reply_to.text) {
+            const targetId = m.reply_to.id ? `admin-msg-${escapeAdminHtml(m.reply_to.id)}` : '';
+            quoteHtml = `
+              <div class="chat-quoted-box" onclick="scrollToAdminQuotedMsg('${targetId}')" title="Klik untuk lompat ke pesan yang dibalas">
+                <span class="quoted-sender"><i class="fas fa-reply" style="font-size:10px;"></i> ${escapeAdminHtml(m.reply_to.sender || 'Pesan')}</span>
+                <span class="quoted-text">${escapeAdminHtml(m.reply_to.text || '')}</span>
+              </div>
+            `;
+          }
+
           const isBot = m.pengirim === 'bot' || m.nama === 'Asisten Layanan BAPAS';
           const isUser = !isBot && (m.pengirim === 'user' || m.tipe_pesan === 'client_card');
           const time = m.created_at ? new Date(m.created_at).toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit', timeZone: 'Asia/Jakarta' }) : '';
           
           if (isUser) {
+            const senderTitle = m.nama || 'Pengguna';
+            const rawSnippet = (m.pesan || (m.tipe_pesan === 'client_card' ? 'Data Klien Terverifikasi' : '')).replace(/\s+/g, ' ').trim().substring(0, 150);
             let userContentHtml = '';
             if (m.tipe_pesan === 'client_card' && m.detail_klien) {
               userContentHtml = `
@@ -1240,36 +1461,58 @@
             }
 
             html += `
-              <div class="admin-chat-bubble bubble-user">
+              <div class="admin-chat-bubble bubble-user" id="admin-msg-${escapeAdminHtml(m.id || '')}">
                 <div style="font-size:11.5px; font-weight:700; color:#003580; margin-bottom:4px; display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
                   <i class="fas ${m.is_verified ? 'fa-id-badge text-success' : 'fa-user'}"></i> 
                   <span>${escapeAdminHtml(m.nama || 'Pengguna')} (${escapeAdminHtml(m.kontak || '-')})</span>
                   ${m.is_verified ? '<span style="background:#16a34a; color:#fff; font-size:9.5px; padding:1px 6px; border-radius:10px; font-weight:700;"><i class="fas fa-check"></i> Klien Terverifikasi</span>' : '<span style="background:#e2e8f0; color:#475569; font-size:9.5px; padding:1px 6px; border-radius:10px;">Umum</span>'}
                 </div>
+                ${quoteHtml}
                 ${userContentHtml}
-                <div style="font-size:10.5px; color:#94a3b8; margin-top:4px; text-align:right;">${time}</div>
+                <div style="font-size:10.5px; color:#94a3b8; margin-top:5px; display:flex; justify-content:space-between; align-items:center;">
+                  <button type="button" class="btn-bubble-reply" onclick="handleReplyAdminClick(this)" data-id="${escapeAdminHtml(m.id || '')}" data-sender="${escapeAdminHtml(senderTitle)}" data-text="${escapeAdminHtml(rawSnippet)}">
+                    <i class="fas fa-reply"></i> Balas
+                  </button>
+                  <span>${time}</span>
+                </div>
               </div>
             `;
           } else if (isBot) {
+            const senderTitle = 'Asisten Virtual BAPAS';
+            const rawSnippet = (m.pesan || '').replace(/\s+/g, ' ').trim().substring(0, 150);
             const isAutoAnswer = m.tipe_pesan && m.tipe_pesan.startsWith('katalog_jawaban');
             const formattedBot = escapeAdminHtml(m.pesan).replace(/\n/g, '<br>');
             html += `
-              <div class="admin-chat-bubble bubble-bot">
+              <div class="admin-chat-bubble bubble-bot" id="admin-msg-${escapeAdminHtml(m.id || '')}">
                 <div style="font-size:11.5px; font-weight:700; color:#854d0e; margin-bottom:4px; display:flex; align-items:center; gap:6px;">
                   <i class="fas fa-robot"></i> <span>Asisten Virtual BAPAS:</span>
                   ${isAutoAnswer ? '<span style="background:#003580; color:#fff; font-size:9.5px; padding:1px 6px; border-radius:10px; font-weight:700;"><i class="fas fa-check"></i> Respon Katalog</span>' : ''}
                 </div>
+                ${quoteHtml}
                 <div style="font-size:13px; color:#713f12; line-height:1.55; word-break:break-word;">${formattedBot}</div>
-                <div style="font-size:10.5px; color:#a16207; margin-top:4px; text-align:right;">${time} &bull; Otomatis</div>
+                <div style="font-size:10.5px; color:#a16207; margin-top:5px; display:flex; justify-content:space-between; align-items:center;">
+                  <button type="button" class="btn-bubble-reply" onclick="handleReplyAdminClick(this)" data-id="${escapeAdminHtml(m.id || '')}" data-sender="${escapeAdminHtml(senderTitle)}" data-text="${escapeAdminHtml(rawSnippet)}">
+                    <i class="fas fa-reply"></i> Balas
+                  </button>
+                  <span>${time} &bull; Otomatis</span>
+                </div>
               </div>
             `;
           } else {
             // Admin message
+            const senderTitle = `${m.admin_name || 'Petugas CS'} (Anda)`;
+            const rawSnippet = (m.pesan || '').replace(/\s+/g, ' ').trim().substring(0, 150);
             html += `
-              <div class="admin-chat-bubble bubble-admin">
+              <div class="admin-chat-bubble bubble-admin" id="admin-msg-${escapeAdminHtml(m.id || '')}">
                 <div style="font-size:11.5px; font-weight:700; color:#93c5fd; margin-bottom:3px;"><i class="fas fa-headset"></i> ${escapeAdminHtml(m.admin_name || 'Petugas CS')} (Anda):</div>
+                ${quoteHtml}
                 <div style="font-size:13.5px; line-height:1.5; word-break:break-word;">${escapeAdminHtml(m.pesan)}</div>
-                <div style="font-size:10.5px; color:#cbd5e1; margin-top:4px; text-align:right;">${time}</div>
+                <div style="font-size:10.5px; color:#cbd5e1; margin-top:5px; display:flex; justify-content:space-between; align-items:center;">
+                  <button type="button" class="btn-bubble-reply" onclick="handleReplyAdminClick(this)" data-id="${escapeAdminHtml(m.id || '')}" data-sender="${escapeAdminHtml(senderTitle)}" data-text="${escapeAdminHtml(rawSnippet)}">
+                    <i class="fas fa-reply"></i> Balas
+                  </button>
+                  <span>${time}</span>
+                </div>
               </div>
             `;
           }
@@ -1288,6 +1531,7 @@
       const helpText = document.getElementById('balasPesanHelp');
 
       if (isEnded) {
+        cancelReplyAdmin();
         if (closedBanner) closedBanner.style.display = 'flex';
         if (btnAkhiri) btnAkhiri.style.display = 'none';
         if (ta) {
@@ -1408,11 +1652,12 @@
       const res = await fetch('/admin/pusat-bantuan/balas', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ session_id: sessionId, pesan: pesan })
+        body: JSON.stringify({ session_id: sessionId, pesan: pesan, reply_to: adminActiveReply })
       });
       const data = await res.json();
       if (data.success) {
         pesanInput.value = '';
+        cancelReplyAdmin();
         pesanInput.focus();
         await loadAdminChatHistory(sessionId, true);
       } else {
