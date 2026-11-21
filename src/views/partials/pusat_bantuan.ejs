@@ -31,15 +31,10 @@
         </div>
       </div>
 
-      <div style="display:flex; align-items:center; gap:8px;">
-        <button type="button" id="btnHeaderPanduan" class="btn-header-panduan" onclick="switchKategoriBantuan('langkah')" title="Buka Panduan Bantuan" style="display:none;">
-          <i class="fas fa-book-open"></i> <span class="btn-panduan-label">Panduan</span>
-        </button>
-        <button type="button" class="btn-back-fullscreen" onclick="tutupPusatBantuan()" aria-label="Kembali ke Portal BAPAS" title="Kembali ke Halaman Sebelumnya">
-          <i class="fas fa-arrow-left"></i>
-          <span class="btn-back-label">Kembali</span>
-        </button>
-      </div>
+      <button type="button" class="btn-back-fullscreen" onclick="tutupPusatBantuan()" aria-label="Kembali ke Portal BAPAS" title="Kembali ke Halaman Sebelumnya">
+        <i class="fas fa-arrow-left"></i>
+        <span class="btn-back-label">Kembali</span>
+      </button>
     </header>
 
     <!-- Navigation Tabs (2 Kategori) -->
@@ -634,28 +629,6 @@
 .btn-back-fullscreen:hover i,
 .btn-close-fullscreen:hover i {
   transform: translateX(-3px);
-}
-
-.btn-header-panduan {
-  background: rgba(255, 255, 255, 0.15);
-  border: 1.5px solid rgba(255, 255, 255, 0.35);
-  color: #ffffff;
-  font-size: 13px;
-  font-weight: 700;
-  padding: 8px 14px;
-  border-radius: 30px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  transition: all 0.25s ease;
-  font-family: inherit;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-}
-.btn-header-panduan:hover {
-  background: rgba(255, 255, 255, 0.25);
-  border-color: #ffffff;
-  transform: translateY(-1px);
 }
 
 /* Tabs Navigation */
@@ -1942,26 +1915,45 @@
 
 /* RESPONSIVE DESIGN UNTUK MOBILE */
 @media (max-width: 768px) {
-  /* Pengaturan Mode Chat Aktif di HP (Layar Penuh Maksimal, Bebas Sesak) */
-  .chat-active-mode .bantuan-tabs-nav {
-    display: none !important;
-  }
-  .chat-active-mode .fullscreen-bantuan-header {
+  /* Header Ramping di HP */
+  .fullscreen-bantuan-header {
     padding: 8px 12px !important;
   }
-  .chat-active-mode .fullscreen-bantuan-header .header-logo-img {
-    height: 26px !important;
+  .header-logo-img {
+    height: 28px !important;
   }
-  .chat-active-mode .fullscreen-bantuan-header .header-title-text {
+  .header-title-text {
     font-size: 14.5px !important;
   }
-  .chat-active-mode .fullscreen-bantuan-header .header-subtitle-text {
+  .header-subtitle-text {
     display: none !important;
   }
-  .chat-active-mode .btn-back-fullscreen,
-  .chat-active-mode .btn-header-panduan {
-    padding: 5px 10px !important;
+  .btn-back-fullscreen,
+  .btn-close-fullscreen {
+    padding: 5px 12px !important;
     font-size: 11.5px !important;
+  }
+
+  /* Tab Navigasi SELALU TERLIHAT JELAS di HP (Mudah bolak-balik antara Panduan & CS kapan saja) */
+  .bantuan-tabs-nav {
+    display: flex !important;
+    background: #ffffff !important;
+    border-bottom: 2px solid #e2e8f0 !important;
+    flex-shrink: 0 !important;
+  }
+  .bantuan-tab-btn {
+    flex: 1 !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    padding: 11px 8px !important;
+    gap: 6px !important;
+    border-bottom: 3px solid transparent !important;
+    transition: all 0.2s ease !important;
+  }
+  .bantuan-tab-btn.active {
+    color: #003580 !important;
+    border-bottom-color: #003580 !important;
+    background: #f8fafc !important;
   }
 
   /* Status Bar di mode chat: SANGAT RINGKAS (Hemat 100px+ ruang vertikal) */
@@ -2008,29 +2000,6 @@
   }
   .cs-status-bar.in-chat-mode .cs-badge-secure {
     display: none !important;
-  }
-
-  .fullscreen-bantuan-header {
-    padding: 10px 14px;
-  }
-  .header-logo-img {
-    height: 32px;
-  }
-  .header-title-text {
-    font-size: 15px;
-  }
-  .header-subtitle-text {
-    font-size: 11px;
-  }
-  .btn-back-fullscreen,
-  .btn-close-fullscreen {
-    padding: 6px 12px;
-    font-size: 12px;
-  }
-  .bantuan-tab-btn {
-    font-size: 12px;
-    padding: 11px 8px;
-    gap: 6px;
   }
   .kategori-inner-container {
     padding: 14px 12px 30px;
@@ -2234,15 +2203,11 @@ function initCsViewState() {
   const btnKeluar = document.getElementById('btnKeluarCS');
   const btnAkhiri = document.getElementById('btnAkhiriCS');
   const quickKatalogBar = document.getElementById('csQuickKatalogBar');
-  const wrapper = document.querySelector('.fullscreen-bantuan-wrapper');
   const statusBar = document.getElementById('csStatusBar') || document.querySelector('.cs-status-bar');
-  const btnHeaderPanduan = document.getElementById('btnHeaderPanduan');
 
   if (csNama && (csType === 'guest' || (csType === 'registered' && csRegister))) {
     // Sesi sudah memiliki identitas, buka percakapan aktif
-    if (wrapper) wrapper.classList.add('chat-active-mode');
     if (statusBar) statusBar.classList.add('in-chat-mode');
-    if (btnHeaderPanduan) btnHeaderPanduan.style.display = 'inline-flex';
     if (prechatContainer) prechatContainer.style.display = 'none';
     if (activeChatContainer) activeChatContainer.style.display = 'flex';
     if (identityPill) {
@@ -2263,9 +2228,7 @@ function initCsViewState() {
     }
   } else {
     // Tampilkan layar pre-chat selection
-    if (wrapper) wrapper.classList.remove('chat-active-mode');
     if (statusBar) statusBar.classList.remove('in-chat-mode');
-    if (btnHeaderPanduan) btnHeaderPanduan.style.display = 'none';
     if (prechatContainer) prechatContainer.style.display = 'flex';
     if (activeChatContainer) activeChatContainer.style.display = 'none';
     if (identityPill) identityPill.style.display = 'none';
@@ -2676,12 +2639,8 @@ function switchKategoriBantuan(kat) {
   const btnCS = document.getElementById('tabHeadCS');
   const paneLangkah = document.getElementById('kategoriLangkah');
   const paneCS = document.getElementById('kategoriCS');
-  const wrapper = document.querySelector('.fullscreen-bantuan-wrapper');
-  const btnHeaderPanduan = document.getElementById('btnHeaderPanduan');
 
   if (kat === 'langkah') {
-    if (wrapper) wrapper.classList.remove('chat-active-mode');
-    if (btnHeaderPanduan) btnHeaderPanduan.style.display = 'none';
     btnLangkah.classList.add('active');
     btnCS.classList.remove('active');
     paneLangkah.classList.add('active');
