@@ -364,33 +364,219 @@
       transform: translateY(-1px);
     }
 
-    /* Modal Live Chat Stream */
+    /* ========================================================
+       FULLSCREEN RUANG OBROLAN ADMIN CS (LAYAR PENUH RESMI)
+       ======================================================== */
+    #modalBalasBantuan {
+      display: none;
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      bottom: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      height: 100dvh !important;
+      background: #001938 !important;
+      z-index: 999999 !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      border: none !important;
+      border-radius: 0 !important;
+      box-sizing: border-box !important;
+      flex-direction: column !important;
+      overflow: hidden !important;
+      animation: adminFadeInFullscreen 0.2s ease-out;
+    }
     #modalBalasBantuan.active {
       display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      padding: 12px !important;
     }
-    #modalBalasBantuan .modal-content {
-      max-width: 650px !important;
-      width: 100% !important;
-      max-height: 92vh !important;
-      height: auto !important;
+    @keyframes adminFadeInFullscreen {
+      from { opacity: 0; transform: scale(0.99); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .admin-chat-fullscreen-wrapper {
       display: flex !important;
       flex-direction: column !important;
-      padding: 16px !important;
-      border-radius: 12px !important;
-      box-sizing: border-box !important;
+      width: 100% !important;
+      height: 100% !important;
+      max-width: 100% !important;
+      max-height: 100% !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      border: none !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      background: #f1f5f9 !important;
       overflow: hidden !important;
+      box-sizing: border-box !important;
+      position: relative !important;
+    }
+
+    /* Top Fullscreen Header */
+    .admin-chat-header {
+      background: linear-gradient(135deg, #001938 0%, #002b66 100%);
+      color: #ffffff;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 3px solid #f59e0b;
+      flex-shrink: 0;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+      z-index: 20;
+    }
+    .admin-chat-header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+      flex: 1;
+    }
+    .btn-chat-header-back {
+      background: rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 8px;
+      padding: 7px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+    .btn-chat-header-back:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: translateX(-2px);
+    }
+    .chat-header-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #003580;
+      border: 2px solid #f59e0b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-size: 18px;
+      flex-shrink: 0;
+      position: relative;
+    }
+    .chat-header-online-dot {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 10px;
+      height: 10px;
+      background: #10b981;
+      border: 2px solid #001938;
+      border-radius: 50%;
+    }
+    .chat-header-info {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+    .chat-header-title {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 800;
+      color: #ffffff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .chat-header-meta {
+      font-size: 11px;
+      color: #93c5fd;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-top: 2px;
+    }
+    .admin-chat-header-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .btn-chat-header-akhiri {
+      background: #fee2e2;
+      border: 1px solid #f87171;
+      border-radius: 8px;
+      padding: 7px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      color: #dc2626;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      line-height: 1;
+      transition: all 0.2s ease;
+    }
+    .btn-chat-header-akhiri:hover {
+      background: #fecaca;
+      transform: translateY(-1px);
+    }
+    .btn-chat-header-close {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 8px;
+      width: 32px;
+      height: 32px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-size: 15px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .btn-chat-header-close:hover {
+      background: #ef4444;
+      border-color: #ef4444;
+    }
+
+    /* Main Chat Stream Container */
+    .admin-chat-stream-wrapper {
+      flex: 1 1 auto;
+      height: 100%;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      background: #f1f5f9;
+    }
+    .admin-chat-stream-inner {
+      width: 100%;
+      max-width: 960px;
+      margin: 0 auto;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      position: relative;
     }
     .admin-live-chat-stream {
       flex: 1 1 auto !important;
-      min-height: 250px !important;
-      max-height: 52vh !important;
-      background: #f8fafc !important;
-      border: 1.5px solid #cbd5e1 !important;
-      border-radius: 10px !important;
-      padding: 14px 12px !important;
+      height: 100% !important;
+      min-height: 0 !important;
+      max-height: none !important;
+      background: transparent !important;
+      border: none !important;
+      border-radius: 0 !important;
+      padding: 16px 16px 80px 16px !important;
       overflow-y: auto !important;
       overflow-x: hidden !important;
       display: flex !important;
@@ -400,9 +586,11 @@
       box-sizing: border-box !important;
       width: 100% !important;
     }
+
+    /* Floating Scroll to Bottom Button */
     .admin-btn-scroll-bottom {
       position: absolute;
-      bottom: 85px;
+      bottom: 20px;
       right: 25px;
       z-index: 100;
       background: #003580;
@@ -428,6 +616,64 @@
     @keyframes adminBounceIn {
       from { opacity: 0; transform: translateY(12px) scale(0.9); }
       to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* Bottom Chat Footer */
+    .admin-chat-footer {
+      background: #ffffff;
+      border-top: 1.5px solid #cbd5e1;
+      padding: 12px 20px;
+      flex-shrink: 0;
+      box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.05);
+      z-index: 20;
+    }
+    .admin-chat-footer-inner {
+      width: 100%;
+      max-width: 960px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    /* Responsive Mobile adjustments */
+    @media (max-width: 768px) {
+      .admin-chat-header {
+        padding: 10px 12px;
+        gap: 8px;
+      }
+      .btn-chat-back-label {
+        display: none;
+      }
+      .btn-chat-header-back {
+        padding: 7px 10px;
+      }
+      .chat-header-title {
+        font-size: 13.5px;
+      }
+      .chat-header-avatar {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+      }
+      .btn-chat-header-akhiri span {
+        display: none;
+      }
+      .btn-chat-header-akhiri {
+        padding: 7px 10px;
+      }
+      .admin-live-chat-stream {
+        padding: 12px 10px 70px 10px !important;
+      }
+      .admin-chat-footer {
+        padding: 10px 12px;
+      }
+      .admin-chat-bubble {
+        max-width: 92% !important;
+      }
+      .bubble-admin {
+        max-width: 92% !important;
+      }
     }
     .admin-chat-bubble {
       box-sizing: border-box !important;
@@ -1152,70 +1398,114 @@
   </div>
 </div>
 
-<!-- MODAL BALAS PESAN BANTUAN CS (LIVE CHAT PANEL) -->
-<div class="modal" id="modalBalasBantuan">
-  <div class="modal-content">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1.5px solid #e2e8f0; padding-bottom:10px; flex-shrink:0; gap:10px;">
-      <div>
-        <h3 style="margin:0; font-size:16px; color:#002255; display:flex; align-items:center; gap:8px;">
-          <i class="fas fa-headset" style="color:#003580;"></i> Ruang Obrolan CS: <span id="balasNamaUser" style="color:#0f172a; font-weight:800;"></span>
-        </h3>
-        <span style="font-size:11px; color:#64748b;">Sesi: <code id="balasSessionIdText" style="color:#003580;"></code> &bull; Tersambung Real-Time</span>
-      </div>
-      <div style="display:flex; align-items:center; gap:8px;">
-        <button type="button" id="btnAkhiriSesiAdmin" onclick="akhiriSesiChatAdmin()" style="background:#fee2e2; border:1px solid #f87171; border-radius:6px; padding:5px 12px; font-size:12px; font-weight:700; cursor:pointer; color:#dc2626; display:inline-flex; align-items:center; gap:5px; line-height:1;" title="Akhiri sesi percakapan ini secara permanen">
-          <i class="fas fa-stop-circle"></i> Akhiri Percakapan
+<!-- MODAL BALAS PESAN BANTUAN CS (FULLSCREEN LIVE CHAT PANEL) -->
+<div id="modalBalasBantuan" class="admin-chat-fullscreen-overlay">
+  <div class="admin-chat-fullscreen-wrapper">
+    
+    <!-- Top Fullscreen Header -->
+    <header class="admin-chat-header">
+      <div class="admin-chat-header-left">
+        <button type="button" class="btn-chat-header-back" onclick="closeBalasBantuanModal()" title="Kembali ke Dashboard">
+          <i class="fas fa-arrow-left"></i>
+          <span class="btn-chat-back-label">Kembali</span>
         </button>
-        <button type="button" onclick="closeBalasBantuanModal()" style="background:#f1f5f9; border:1px solid #cbd5e1; border-radius:6px; padding:5px 10px; font-size:12px; font-weight:700; cursor:pointer; color:#475569; display:inline-flex; align-items:center; gap:4px; line-height:1;">
-          <i class="fas fa-times"></i> Tutup
-        </button>
-      </div>
-    </div>
 
-    <!-- Alert Banner Sesi Selesai / Ditutup -->
-    <div id="adminChatClosedBanner" style="display:none; padding:10px 14px; background:#fef2f2; border:1.5px solid #fecaca; border-radius:8px; color:#991b1b; font-size:12.5px; font-weight:600; margin-bottom:10px; align-items:center; gap:8px;">
-      <i class="fas fa-lock" style="font-size:14px; color:#dc2626;"></i>
-      <span>Percakapan ini telah diakhiri. Tidak dapat mengirim pesan balasan lagi.</span>
-    </div>
-
-    <!-- Live Chat Stream Box for Admin -->
-    <div id="adminLiveChatStream" class="admin-live-chat-stream">
-      <div style="text-align:center; color:#94a3b8; font-size:12.5px; margin:auto;">
-        <i class="fas fa-spinner fa-spin"></i> Memuat riwayat obrolan...
-      </div>
-    </div>
-
-    <!-- Floating Scroll-to-Bottom Button for Admin When Scrolled Up -->
-    <button type="button" id="adminBtnScrollBottom" class="admin-btn-scroll-bottom" onclick="scrollAdminChatToBottom()" style="display:none;" title="Lihat balasan terbaru">
-      <i class="fas fa-arrow-down"></i> <span>Pesan Baru</span>
-    </button>
-
-    <!-- Reply Preview Bar for Admin -->
-    <div id="adminReplyPreviewBar" class="admin-reply-preview-bar" style="display:none;">
-      <div class="admin-reply-preview-body">
-        <div class="admin-reply-preview-sender">
-          <i class="fas fa-reply"></i> Membalas <strong id="adminReplySenderName">...</strong>
+        <div class="chat-header-avatar">
+          <i class="fas fa-user-shield"></i>
+          <span class="chat-header-online-dot"></span>
         </div>
-        <div id="adminReplySnippetText" class="admin-reply-preview-text">...</div>
-      </div>
-      <button type="button" class="admin-btn-cancel-reply" onclick="cancelReplyAdmin()" title="Batalkan balasan">
-        <i class="fas fa-times"></i>
-      </button>
-    </div>
 
-    <!-- Reply Form -->
-    <form id="formBalasBantuan" onsubmit="kirimBalasanAdmin(event)" style="flex-shrink:0; margin-top:6px;">
-      <input type="hidden" id="balasSessionId">
-      <div style="display:flex; gap:10px; align-items:flex-end;">
-        <textarea id="balasPesanText" rows="2" style="flex:1; padding:10px 14px; border:1.5px solid #cbd5e1; border-radius:8px; font-family:inherit; font-size:13.5px; resize:none; box-sizing:border-box;" placeholder="Tuliskan balasan petugas di sini (Tekan Enter untuk mengirim)..." required onkeydown="handleAdminTextareaKey(event)"></textarea>
-        <button type="submit" class="btn btn-primary" id="btnSubmitBalasan" style="height:44px; padding:0 18px; display:inline-flex; align-items:center; gap:6px; flex-shrink:0;">
-          <i class="fas fa-paper-plane"></i> Kirim
+        <div class="chat-header-info">
+          <h3 class="chat-header-title">
+            <i class="fas fa-headset" style="color:#f59e0b; font-size:14px;"></i>
+            <span>Ruang Obrolan CS:</span>
+            <span id="balasNamaUser" style="color:#ffffff; font-weight:800;"></span>
+          </h3>
+          <div class="chat-header-meta">
+            <i class="fas fa-shield-alt"></i> Sesi: <code id="balasSessionIdText" style="color:#fde047; font-weight:700;"></code>
+            <span style="margin: 0 4px;">&bull;</span>
+            <span style="color:#4ade80;"><i class="fas fa-circle" style="font-size:8px;"></i> Tersambung Real-Time</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="admin-chat-header-right">
+        <button type="button" id="btnAkhiriSesiAdmin" onclick="akhiriSesiChatAdmin()" class="btn-chat-header-akhiri" title="Akhiri sesi percakapan ini secara permanen">
+          <i class="fas fa-stop-circle"></i> <span>Akhiri Percakapan</span>
+        </button>
+        <button type="button" class="btn-chat-header-close" onclick="closeBalasBantuanModal()" title="Tutup Ruang Obrolan">
+          <i class="fas fa-times"></i>
         </button>
       </div>
-      <small id="balasPesanHelp" style="color:#64748b; font-size:11.5px; display:block; margin-top:6px;">
-        <i class="fas fa-info-circle"></i> Balasan yang Anda kirim akan langsung tampil di layar obrolan pengguna secara real-time.
-      </small>
-    </form>
+    </header>
+
+    <!-- Main Chat Body -->
+    <main class="admin-chat-stream-wrapper">
+      <div class="admin-chat-stream-inner">
+        
+        <!-- Alert Banner Sesi Selesai / Ditutup -->
+        <div id="adminChatClosedBanner" style="display:none; padding:12px 16px; background:#fef2f2; border:1.5px solid #fecaca; border-radius:10px; color:#991b1b; font-size:13px; font-weight:600; margin:14px 16px 0 16px; align-items:center; gap:10px; box-shadow:0 2px 8px rgba(220,38,38,0.06);">
+          <i class="fas fa-lock" style="font-size:16px; color:#dc2626;"></i>
+          <div>
+            <strong>Sesi Percakapan Ditutup:</strong>
+            <span style="display:block; font-size:12px; color:#b91c1c; font-weight:normal; margin-top:2px;">Percakapan ini telah diakhiri. Tidak dapat mengirim pesan balasan lagi pada sesi ini.</span>
+          </div>
+        </div>
+
+        <!-- Live Chat Stream Box for Admin -->
+        <div id="adminLiveChatStream" class="admin-live-chat-stream">
+          <div style="text-align:center; color:#94a3b8; font-size:12.5px; margin:auto;">
+            <i class="fas fa-spinner fa-spin"></i> Memuat riwayat obrolan...
+          </div>
+        </div>
+
+        <!-- Floating Scroll-to-Bottom Button for Admin When Scrolled Up -->
+        <button type="button" id="adminBtnScrollBottom" class="admin-btn-scroll-bottom" onclick="scrollAdminChatToBottom()" style="display:none;" title="Lihat balasan terbaru">
+          <i class="fas fa-arrow-down"></i> <span>Pesan Baru</span>
+        </button>
+
+      </div>
+    </main>
+
+    <!-- Bottom Chat Footer -->
+    <footer class="admin-chat-footer">
+      <div class="admin-chat-footer-inner">
+        
+        <!-- Reply Preview Bar for Admin -->
+        <div id="adminReplyPreviewBar" class="admin-reply-preview-bar" style="display:none;">
+          <div class="admin-reply-preview-body">
+            <div class="admin-reply-preview-sender">
+              <i class="fas fa-reply"></i> Membalas <strong id="adminReplySenderName">...</strong>
+            </div>
+            <div id="adminReplySnippetText" class="admin-reply-preview-text">...</div>
+          </div>
+          <button type="button" class="admin-btn-cancel-reply" onclick="cancelReplyAdmin()" title="Batalkan balasan">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <!-- Reply Form -->
+        <form id="formBalasBantuan" onsubmit="kirimBalasanAdmin(event)" style="margin:0;">
+          <input type="hidden" id="balasSessionId">
+          <div style="display:flex; gap:10px; align-items:center;">
+            <textarea id="balasPesanText" rows="1" style="flex:1; padding:12px 16px; border:1.5px solid #cbd5e1; border-radius:10px; font-family:inherit; font-size:14px; resize:none; box-sizing:border-box; line-height:1.4; max-height:120px; transition:border-color 0.2s;" placeholder="Tuliskan balasan petugas di sini (Tekan Enter untuk kirim)..." required onkeydown="handleAdminTextareaKey(event)"></textarea>
+            <button type="submit" class="btn btn-primary" id="btnSubmitBalasan" style="height:46px; padding:0 22px; display:inline-flex; align-items:center; gap:8px; flex-shrink:0; border-radius:10px; font-weight:700; background:linear-gradient(135deg, #001e4d 0%, #003580 100%);">
+              <i class="fas fa-paper-plane"></i> <span>Kirim</span>
+            </button>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:6px; font-size:11.5px; color:#64748b; flex-wrap:wrap; gap:6px;">
+            <span id="balasPesanHelp">
+              <i class="fas fa-info-circle" style="color:#0284c7;"></i> Balasan langsung tampil real-time di layar klien.
+            </span>
+            <span style="color:#94a3b8;">
+              <i class="fas fa-keyboard"></i> Enter: Kirim | Shift+Enter: Baris Baru
+            </span>
+          </div>
+        </form>
+
+      </div>
+    </footer>
+
   </div>
 </div>
 
@@ -1389,6 +1679,7 @@
     document.getElementById('balasSessionIdText').innerText = sessionId;
     document.getElementById('balasPesanText').value = '';
     document.getElementById('modalBalasBantuan').classList.add('active');
+    document.body.style.overflow = 'hidden';
     
     // Muat riwayat pesan dan mulai sinkronisasi real-time
     loadAdminChatHistory(sessionId, true);
@@ -1405,6 +1696,7 @@
   function closeBalasBantuanModal() {
     cancelReplyAdmin();
     document.getElementById('modalBalasBantuan').classList.remove('active');
+    document.body.style.overflow = '';
     if (adminChatPollTimer) {
       clearInterval(adminChatPollTimer);
       adminChatPollTimer = null;
@@ -1413,7 +1705,11 @@
 
   function handleAdminTextareaKey(e) {
     if (e.key === 'Escape') {
-      cancelReplyAdmin();
+      if (adminActiveReply) {
+        cancelReplyAdmin();
+      } else {
+        closeBalasBantuanModal();
+      }
       return;
     }
     if (e.key === 'Enter' && !e.shiftKey) {
