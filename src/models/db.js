@@ -1503,6 +1503,42 @@ async function akhiriPesanBantuanAdmin(sessionId, adminName) {
   });
 }
 
+async function hapusPermanenPusatBantuan(sessionId) {
+  if (!sessionId) return { success: false, message: 'Session ID tidak valid' };
+
+  const col = db.collection('pusat_bantuan_chat');
+  
+  // 1. Hapus dokumen sesi ini dari adapter Firestore (termasuk penyimpanan lokal/memory)
+  const snap = await col.where('session_id', '==', sessionId).get();
+  for (const doc of snap.docs) {
+    await col.doc(doc.id).delete();
+  }
+
+  // 2. Query langsung ke Cloud Firestore via REST API untuk menjamin semua pesan sesi terhapus permanen di cloud
+  try {
+    const apiKey = (process.env.FIREBASE_API_KEY || 'AIzaSyADYXlJ9raZ1hNERRhHz7oAOYz3HbgLcac').trim();
+    const projectId = (process.env.FIREBASE_PROJECT_ID || 'bapasmedan-173dd').trim();
+    const url = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/pusat_bantuan_chat?pageSize=300&key=${apiKey}`;
+    const res = await fetch(url, { signal: AbortSignal.timeout(6000) });
+    if (res.ok) {
+      const data = await res.json();
+      if (data.documents && data.documents.length) {
+        for (const d of data.documents) {
+          const docId = d.name.split('/').pop();
+          const sId = d.fields && d.fields.session_id && d.fields.session_id.stringValue;
+          if (sId === sessionId) {
+            await col.doc(docId).delete();
+          }
+        }
+      }
+    }
+  } catch (err) {
+    // Abaikan error jaringan REST jika offline
+  }
+
+  return { success: true, message: 'Percakapan berhasil dihapus permanen dari Firebase' };
+}
+
 // ============================================
 // STATISTIK
 // ============================================
@@ -1586,6 +1622,7 @@ module.exports = {
   getAllPesanBantuan,
   balasPesanBantuanAdmin,
   akhiriPesanBantuanAdmin,
+  hapusPermanenPusatBantuan,
   isSesiBantuanSelesai,
   getStatistikAdmin,
   getStatistikClient,

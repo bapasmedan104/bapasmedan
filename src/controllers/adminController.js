@@ -1,4 +1,5 @@
 const {
+  logActivity,
   getStatistikAdmin,
   getLaporMenungguVerifikasi,
   getAllLaporAdmin,
@@ -19,6 +20,7 @@ const {
   getAllPesanBantuan,
   balasPesanBantuanAdmin,
   akhiriPesanBantuanAdmin,
+  hapusPermanenPusatBantuan,
   getAllAdmins,
   createAdminUser,
   updateAdminUser,
@@ -427,11 +429,18 @@ async function postAkhiriPesanBantuanAdmin(req, res) {
     if (!session_id) {
       return res.status(400).json({ success: false, message: 'Session ID wajib diisi.' });
     }
-    const adminName = req.session && req.session.adminUser ? req.session.adminUser.nama_lengkap : 'Petugas CS BAPAS Medan';
-    const result = await akhiriPesanBantuanAdmin(session_id, adminName);
-    return res.json({ success: true, message: 'Percakapan berhasil diakhiri oleh petugas CS.', data: result });
+    const adminUser = req.session && req.session.adminUser ? req.session.adminUser : null;
+    const adminName = adminUser ? adminUser.nama_lengkap : 'Petugas CS BAPAS Medan';
+
+    // Hapus seluruh pesan sesi secara permanen dari Firebase & Firestore
+    const result = await hapusPermanenPusatBantuan(session_id);
+    if (adminUser) {
+      await logActivity('admin', adminUser.id || 'admin', 'Hapus Chat CS Permanen', `Admin ${adminName} mengakhiri dan menghapus percakapan sesi ${session_id} secara permanen dari Firebase`);
+    }
+
+    return res.json({ success: true, message: 'Percakapan telah diakhiri dan seluruh riwayat pesan berhasil dihapus permanen dari Firebase.', data: result });
   } catch (err) {
-    return res.status(500).json({ success: false, message: 'Gagal mengakhiri percakapan: ' + err.message });
+    return res.status(500).json({ success: false, message: 'Gagal mengakhiri dan menghapus percakapan: ' + err.message });
   }
 }
 

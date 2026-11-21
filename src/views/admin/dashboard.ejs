@@ -1576,14 +1576,14 @@
     const namaUser = document.getElementById('balasNamaUser').innerText || 'pengguna';
     if (!sessionId) return;
 
-    if (!confirm('Apakah Anda yakin ingin mengakhiri percakapan dengan ' + namaUser + '?\n\nSetelah diakhiri, percakapan akan ditutup secara permanen dan tidak dapat mengirim pesan lagi.')) {
+    if (!confirm('Apakah Anda yakin ingin mengakhiri percakapan dengan ' + namaUser + '?\n\nPERINGATAN: Seluruh riwayat obrolan sesi ini akan OTOMATIS DIHAPUS PERMANEN dari Firebase dan database.')) {
       return;
     }
 
     const btn = document.getElementById('btnAkhiriSesiAdmin');
     if (btn) {
       btn.disabled = true;
-      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengakhiri...';
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menghapus...';
     }
 
     try {
@@ -1594,30 +1594,16 @@
       });
       const data = await res.json();
       if (data.success) {
-        lastAdminChatJson = ''; // Reset cache agar render ulang terpancing
-        await loadAdminChatHistory(sessionId, true);
+        closeBalasBantuanModal();
+        alert('Percakapan telah diakhiri dan seluruh riwayat pesan berhasil DIHAPUS PERMANEN dari Firebase.');
         
-        // Perbarui badge status pada tabel/kartu dashboard secara langsung
+        // Hapus baris tabel dan kartu dari tampilan dashboard secara instan
         const allBtns = document.querySelectorAll(`button[onclick*="${sessionId}"]`);
         allBtns.forEach(b => {
           const row = b.closest('tr');
-          if (row) {
-            const cells = row.querySelectorAll('td');
-            if (cells.length >= 4) {
-              cells[cells.length - 2].innerHTML = '<span class="badge" style="background:#f1f5f9; color:#475569; border:1px solid #cbd5e1;"><i class="fas fa-flag-checkered"></i> Sesi Selesai</span>';
-            }
-          }
+          if (row) row.remove();
           const card = b.closest('.cs-thread-card');
-          if (card) {
-            const statusWrap = card.querySelector('.cs-card-status-wrap');
-            if (statusWrap) {
-              const pill = statusWrap.querySelector('.status-pill-badge');
-              if (pill) {
-                pill.className = 'status-pill-badge pill-selesai';
-                pill.innerHTML = '<i class="fas fa-flag-checkered"></i> Selesai';
-              }
-            }
-          }
+          if (card) card.remove();
         });
       } else {
         alert(data.message || 'Gagal mengakhiri percakapan');

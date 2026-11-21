@@ -7,7 +7,8 @@ const {
   kirimPesanBantuan,
   getPesanBantuanBySession,
   getClientByRegister,
-  isSesiBantuanSelesai
+  isSesiBantuanSelesai,
+  hapusPermanenPusatBantuan
 } = require('../models/db');
 const { getNamaBulan } = require('../utils/helpers');
 
@@ -382,24 +383,14 @@ async function postKirimBotBantuan(req, res) {
 
 async function postAkhiriSesiBantuan(req, res) {
   try {
-    const { session_id, nama, pesan } = req.body;
+    const { session_id } = req.body;
     if (!session_id) {
       return res.status(400).json({ success: false, message: 'Session ID diperlukan.' });
     }
-    const senderName = nama || 'Pengguna';
     const cleanSessionId = session_id;
-    const endNotice = pesan || `[SESI SELESAI] Sesi percakapan bantuan telah diselesaikan oleh ${senderName}.`;
-    const endMsg = await kirimPesanBantuan({
-      session_id: cleanSessionId,
-      nama: senderName,
-      kontak: 'Sesi Selesai',
-      pesan: endNotice,
-      pengirim: 'bot',
-      admin_name: 'Sistem Layanan BAPAS',
-      tipe_pesan: 'session_ended',
-      status: 'selesai'
-    });
-    return res.json({ success: true, message: 'Sesi bantuan berhasil diakhiri', data: endMsg });
+    // Hapus seluruh pesan sesi secara permanen dari Firebase
+    const result = await hapusPermanenPusatBantuan(cleanSessionId);
+    return res.json({ success: true, message: 'Sesi bantuan berhasil diakhiri dan dihapus permanen dari Firebase.', data: result });
   } catch (err) {
     return res.status(500).json({ success: false, message: 'Gagal mengakhiri sesi: ' + err.message });
   }

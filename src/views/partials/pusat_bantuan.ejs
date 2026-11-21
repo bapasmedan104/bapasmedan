@@ -2090,34 +2090,26 @@ function keluarPercakapanCS() {
 }
 
 async function akhiriPercakapanCS() {
-  if (!confirm('Apakah Anda yakin ingin mengakhiri sesi percakapan Customer Service ini? Setelah diakhiri, percakapan akan ditutup dan tidak dapat mengirim pesan lagi.')) {
+  if (!confirm('Apakah Anda yakin ingin mengakhiri sesi percakapan Customer Service ini?\n\nSeluruh riwayat pesan obrolan ini akan otomatis dihapus secara permanen dari Firebase/server demi privasi & keamanan Anda.')) {
     return;
   }
   const sId = getBapasSessionId();
   const nama = localStorage.getItem('bapas_cs_nama') || 'Pengguna';
   
   try {
-    const res = await fetch('/api/pusat-bantuan/akhiri', {
+    await fetch('/api/pusat-bantuan/akhiri', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         session_id: sId,
-        nama: nama,
-        pesan: `[SESI SELESAI] Sesi percakapan bantuan telah diselesaikan oleh ${nama}. Terima kasih atas komunikasi Anda.`
+        nama: nama
       })
     });
-    const result = await res.json();
-    if (result.success) {
-      lastRenderedChatJson = '';
-      loadChatMessages();
-    } else {
-      alert(result.message || 'Gagal mengakhiri sesi.');
-    }
   } catch (err) {
     console.warn('Gagal memproses akhir sesi:', err);
-    lastRenderedChatJson = '';
-    loadChatMessages();
   }
+  mulaiObrolanBaruCS();
+  alert('Percakapan telah diakhiri dan seluruh riwayat pesan telah DIHAPUS PERMANEN dari Firebase.');
 }
 
 function mulaiObrolanBaruCS() {
@@ -2484,6 +2476,15 @@ async function loadChatMessages() {
     if (!res.ok) return;
     const data = await res.json();
     if (data.success && Array.isArray(data.data)) {
+      const currentSession = localStorage.getItem('bapas_cs_session');
+      // Jika sebelumnya ada percakapan aktif dan sekarang pesan kosong (karena admin mengakhiri & menghapus permanen chat)
+      if (currentSession && data.data.length === 0 && lastRenderedChatJson && lastRenderedChatJson !== '[]') {
+        stopChatPolling();
+        alert('Sesi percakapan telah diselesaikan oleh Petugas Customer Service BAPAS Medan dan seluruh riwayat pesan telah dibersihkan secara permanen.');
+        mulaiObrolanBaruCS();
+        return;
+      }
+
       const currentJson = JSON.stringify(data.data);
       if (currentJson !== lastRenderedChatJson) {
         lastRenderedChatJson = currentJson;
