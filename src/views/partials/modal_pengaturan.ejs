@@ -1,0 +1,723 @@
+<!-- =======================================================
+     MODAL PENGATURAN SITUS WEB RESMI BAPAS KELAS I MEDAN
+     Berisi:
+     1. Pilihan Bahasa (Google Translate Otomatis Multi-Bahasa)
+     2. Kontrol Refresh Halaman (1 Detik Default, 5 Menit, Manual)
+     ======================================================= -->
+
+<!-- MODAL OVERLAY -->
+<div id="modalPengaturanSitus" class="settings-modal-overlay" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="modalSettingsTitle">
+  <div class="settings-modal-window">
+    
+    <!-- Modal Header -->
+    <div class="settings-modal-header">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <div class="settings-header-icon">
+          <i class="fas fa-sliders-h"></i>
+        </div>
+        <div>
+          <h3 id="modalSettingsTitle" class="settings-header-title">Pengaturan Situs Web</h3>
+          <span class="settings-header-subtitle">Balai Pemasyarakatan (BAPAS) Kelas I Medan</span>
+        </div>
+      </div>
+      <button type="button" class="btn-close-settings" onclick="tutupModalPengaturan()" aria-label="Tutup Pengaturan" title="Tutup">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="settings-modal-body">
+      
+      <!-- ==============================================
+           SECTION 1: PILIHAN BAHASA (GOOGLE TRANSLATE)
+           ============================================== -->
+      <div class="settings-section">
+        <div class="settings-section-title">
+          <i class="fas fa-globe text-primary"></i>
+          <div>
+            <strong>Pilihan Bahasa / Language</strong>
+            <span class="settings-section-desc">Diterjemahkan secara otomatis oleh Google Translate ke bahasa pilihan Anda</span>
+          </div>
+        </div>
+
+        <!-- Google Translate Widget Element (Hidden standard container) -->
+        <div id="google_translate_element" style="display:none;"></div>
+
+        <!-- Tombol Cepat Bahasa Pilihan (Flag Chips) -->
+        <div class="language-chips-grid">
+          <button type="button" class="lang-chip active" onclick="applyGoogleLanguage('id', this)" title="Bahasa Indonesia">
+            <span class="flag-icon">🇮🇩</span>
+            <span class="lang-name">Indonesia</span>
+          </button>
+          <button type="button" class="lang-chip" onclick="applyGoogleLanguage('en', this)" title="English (Inggris)">
+            <span class="flag-icon">🇬🇧</span>
+            <span class="lang-name">English</span>
+          </button>
+          <button type="button" class="lang-chip" onclick="applyGoogleLanguage('ms', this)" title="Bahasa Melayu">
+            <span class="flag-icon">🇲🇾</span>
+            <span class="lang-name">Melayu</span>
+          </button>
+          <button type="button" class="lang-chip" onclick="applyGoogleLanguage('ar', this)" title="العربية (Arab)">
+            <span class="flag-icon">🇸🇦</span>
+            <span class="lang-name">العربية</span>
+          </button>
+          <button type="button" class="lang-chip" onclick="applyGoogleLanguage('zh-CN', this)" title="中文 (Mandarin)">
+            <span class="flag-icon">🇨🇳</span>
+            <span class="lang-name">中文</span>
+          </button>
+          <button type="button" class="lang-chip" onclick="applyGoogleLanguage('ja', this)" title="日本語 (Jepang)">
+            <span class="flag-icon">🇯🇵</span>
+            <span class="lang-name">日本語</span>
+          </button>
+          <button type="button" class="lang-chip" onclick="applyGoogleLanguage('fr', this)" title="Français (Prancis)">
+            <span class="flag-icon">🇫🇷</span>
+            <span class="lang-name">Français</span>
+          </button>
+          <button type="button" class="lang-chip" onclick="applyGoogleLanguage('de', this)" title="Deutsch (Jerman)">
+            <span class="flag-icon">🇩🇪</span>
+            <span class="lang-name">Deutsch</span>
+          </button>
+          <button type="button" class="lang-chip" onclick="applyGoogleLanguage('ko', this)" title="한국어 (Korea)">
+            <span class="flag-icon">🇰🇷</span>
+            <span class="lang-name">한국어</span>
+          </button>
+        </div>
+
+        <div style="margin-top:10px; display:flex; align-items:center; gap:8px;">
+          <label for="selectMoreLanguages" style="font-size:12px; font-weight:700; color:#475569;">
+            <i class="fas fa-language"></i> Pilihan Bahasa Lainnya:
+          </label>
+          <select id="selectMoreLanguages" class="settings-select" onchange="applyGoogleLanguage(this.value, null)" style="flex:1;">
+            <option value="">-- Pilih Bahasa Lain --</option>
+            <option value="id">Bahasa Indonesia</option>
+            <option value="en">English (Inggris)</option>
+            <option value="ms">Bahasa Melayu</option>
+            <option value="ar">العربية (Arab)</option>
+            <option value="zh-CN">中文 (Mandarin Tradisional/Sederhana)</option>
+            <option value="ja">日本語 (Jepang)</option>
+            <option value="ko">한국어 (Korea)</option>
+            <option value="fr">Français (Prancis)</option>
+            <option value="de">Deutsch (Jerman)</option>
+            <option value="es">Español (Spanyol)</option>
+            <option value="nl">Nederlands (Belanda)</option>
+            <option value="ru">Русский (Rusia)</option>
+            <option value="th">ไทย (Thailand)</option>
+            <option value="vi">Tiếng Việt (Vietnam)</option>
+            <option value="hi">हिन्दी (Hindi)</option>
+          </select>
+        </div>
+      </div>
+
+      <hr style="border:none; border-top:1px solid #e2e8f0; margin:18px 0;">
+
+      <!-- ==============================================
+           SECTION 2: REFRESH HALAMAN REAL-TIME
+           ============================================== -->
+      <div class="settings-section">
+        <div class="settings-section-title">
+          <i class="fas fa-sync-alt text-primary"></i>
+          <div>
+            <strong>Pembaruan Halaman (Auto-Refresh)</strong>
+            <span class="settings-section-desc">Pilih interval pembaruan data informasi dan pengumuman secara otomatis</span>
+          </div>
+        </div>
+
+        <!-- Status Card Refresh -->
+        <div class="settings-refresh-status-box">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span class="refresh-pulse-dot" id="pubRefreshPulseDot"></span>
+            <div>
+              <div id="pubRefreshStatusLabel" style="font-size:13px; font-weight:800; color:#0f172a;">
+                Mode: <span style="color:#059669;">1 Detik (Real-Time)</span>
+              </div>
+              <div style="font-size:11.5px; color:#64748b;">
+                Pembaruan terakhir: <span id="pubRefreshLastTime" style="font-weight:700;">Memuat...</span>
+              </div>
+            </div>
+          </div>
+          <span class="refresh-countdown-pill" id="pubRefreshCountdownPill" title="Hitung mundur refresh">1s</span>
+        </div>
+
+        <!-- Mode Selector -->
+        <div style="margin-top:14px; display:flex; flex-direction:column; gap:8px;">
+          <label style="font-size:12.5px; font-weight:700; color:#334155;">
+            Pilih Mode Refresh:
+          </label>
+          <div class="refresh-radio-group">
+            <label class="refresh-radio-card active" id="labelRadio1s">
+              <input type="radio" name="publicRefreshRadio" value="1s" checked onchange="changePublicRefreshMode(this.value)">
+              <div class="radio-content">
+                <div class="radio-title"><i class="fas fa-bolt" style="color:#f59e0b;"></i> 1 Detik (Default / Real-Time)</div>
+                <div class="radio-sub">Data pengumuman & berita baru langsung masuk seketika tanpa delay</div>
+              </div>
+            </label>
+            <label class="refresh-radio-card" id="labelRadio5m">
+              <input type="radio" name="publicRefreshRadio" value="5m" onchange="changePublicRefreshMode(this.value)">
+              <div class="radio-content">
+                <div class="radio-title"><i class="fas fa-clock" style="color:#0284c7;"></i> 5 Menit (Santai)</div>
+                <div class="radio-sub">Pembaruan berkala hemat kuota internet dan daya baterai</div>
+              </div>
+            </label>
+            <label class="refresh-radio-card" id="labelRadioManual">
+              <input type="radio" name="publicRefreshRadio" value="manual" onchange="changePublicRefreshMode(this.value)">
+              <div class="radio-content">
+                <div class="radio-title"><i class="fas fa-pause-circle" style="color:#64748b;"></i> Manual / Jeda</div>
+                <div class="radio-sub">Auto-refresh dinonaktifkan, hanya update saat tombol ditekan</div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Tombol Refresh Manual -->
+        <div style="margin-top:14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+          <button type="button" class="btn-settings-manual-sync" onclick="triggerPublicManualRefresh()" id="btnPubManualRefresh">
+            <i class="fas fa-sync-alt" id="iconPubManualRefresh"></i>
+            <span>Refresh Halaman Sekarang</span>
+          </button>
+          <span style="font-size:11.5px; color:#64748b; font-style:italic;">
+            <i class="fas fa-shield-alt"></i> Tanpa layar berkedip (Seamless Fetch)
+          </span>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="settings-modal-footer">
+      <span style="font-size:12px; color:#64748b;">
+        <i class="fas fa-check-circle" style="color:#10b981;"></i> Pengaturan otomatis tersimpan di perangkat ini.
+      </span>
+      <button type="button" class="btn btn-primary" onclick="tutupModalPengaturan()" style="padding:8px 20px; font-size:13px; font-weight:700;">
+        Tutup
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<style>
+/* CSS MODAL PENGATURAN */
+.settings-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 25, 56, 0.75);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  box-sizing: border-box;
+  animation: fadeInSettings 0.2s ease-out;
+}
+@keyframes fadeInSettings {
+  from { opacity: 0; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
+}
+.settings-modal-window {
+  background: #ffffff;
+  border-radius: 14px;
+  width: 100%;
+  max-width: 580px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+  border: 1px solid #cbd5e1;
+}
+.settings-modal-header {
+  background: linear-gradient(135deg, #001938 0%, #002b66 100%);
+  color: #ffffff;
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 3px solid #f59e0b;
+}
+.settings-header-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #003580;
+  border: 1.5px solid #f59e0b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 16px;
+}
+.settings-header-title {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 800;
+  color: #ffffff;
+}
+.settings-header-subtitle {
+  font-size: 11.5px;
+  color: #93c5fd;
+  display: block;
+}
+.btn-close-settings {
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: #fff;
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  transition: all 0.2s;
+}
+.btn-close-settings:hover {
+  background: #ef4444;
+  border-color: #ef4444;
+}
+.settings-modal-body {
+  padding: 20px;
+  overflow-y: auto;
+  flex: 1;
+  box-sizing: border-box;
+}
+.settings-section-title {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.settings-section-title i {
+  font-size: 20px;
+  margin-top: 2px;
+  color: #003580;
+}
+.settings-section-title strong {
+  display: block;
+  font-size: 14.5px;
+  color: #0f172a;
+}
+.settings-section-desc {
+  font-size: 12px;
+  color: #64748b;
+  display: block;
+  margin-top: 2px;
+}
+/* Grid Flag Chips */
+.language-chips-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(105px, 1fr));
+  gap: 8px;
+  margin-top: 10px;
+}
+.lang-chip {
+  background: #f8fafc;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #1e293b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+  text-align: left;
+}
+.lang-chip .flag-icon {
+  font-size: 16px;
+  line-height: 1;
+}
+.lang-chip:hover {
+  border-color: #003580;
+  background: #f0fdf4;
+  transform: translateY(-1px);
+}
+.lang-chip.active {
+  background: #003580;
+  color: #ffffff;
+  border-color: #002255;
+  box-shadow: 0 2px 6px rgba(0, 53, 128, 0.25);
+}
+.settings-select {
+  padding: 7px 12px;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1e293b;
+  background: #fff;
+  outline: none;
+  cursor: pointer;
+}
+/* Refresh status box */
+.settings-refresh-status-box {
+  background: #f8fafc;
+  border: 1.5px solid #cbd5e1;
+  border-left: 4px solid #10b981;
+  border-radius: 8px;
+  padding: 10px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.refresh-countdown-pill {
+  background: #001e4d;
+  color: #fde047;
+  font-family: monospace;
+  font-weight: 800;
+  font-size: 12px;
+  padding: 3px 10px;
+  border-radius: 12px;
+}
+/* Radio cards */
+.refresh-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.refresh-radio-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 14px;
+  background: #f8fafc;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.refresh-radio-card input[type="radio"] {
+  margin-top: 3px;
+  cursor: pointer;
+  accent-color: #003580;
+}
+.refresh-radio-card:hover {
+  border-color: #94a3b8;
+  background: #f1f5f9;
+}
+.refresh-radio-card.active {
+  border-color: #003580;
+  background: #eff6ff;
+  border-left: 4px solid #003580;
+}
+.radio-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0f172a;
+}
+.radio-sub {
+  font-size: 11.5px;
+  color: #64748b;
+  margin-top: 2px;
+}
+.btn-settings-manual-sync {
+  background: linear-gradient(135deg, #001e4d 0%, #003580 100%);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 2px 6px rgba(0, 53, 128, 0.2);
+  transition: all 0.2s;
+}
+.btn-settings-manual-sync:hover {
+  background: #001938;
+  transform: translateY(-1px);
+}
+.btn-settings-manual-sync.loading i {
+  animation: fa-spin 0.75s linear infinite;
+}
+.settings-modal-footer {
+  padding: 12px 20px;
+  background: #f8fafc;
+  border-top: 1px solid #cbd5e1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+/* Sembunyikan elemen bawaan Google Translate yang mengganggu header */
+.goog-te-banner-frame.skiptranslate, 
+.goog-te-banner-frame {
+  display: none !important;
+}
+body {
+  top: 0px !important;
+}
+.goog-tooltip {
+  display: none !important;
+}
+.goog-tooltip:hover {
+  display: none !important;
+}
+.goog-text-highlight {
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+</style>
+
+<!-- Google Translate Init Script -->
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  if (window.google && window.google.translate) {
+    new window.google.translate.TranslateElement({
+      pageLanguage: 'id',
+      includedLanguages: 'id,en,ms,ar,zh-CN,ja,fr,de,ko,es,nl,ru,th,vi,hi',
+      layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
+      autoDisplay: false
+    }, 'google_translate_element');
+  }
+}
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async defer></script>
+
+<script>
+(function() {
+  const STORAGE_LANG_KEY = 'bapas_site_lang';
+  const STORAGE_REFRESH_KEY = 'bapas_public_refresh_mode';
+
+  let pubRefreshTimer = null;
+  let pubCountdownTimer = null;
+  let pubRemainingSeconds = 1;
+  let isPubUpdating = false;
+
+  // 1. OPEN / CLOSE MODAL
+  window.bukaModalPengaturan = function() {
+    const modal = document.getElementById('modalPengaturanSitus');
+    if (modal) {
+      modal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+      syncModalUiState();
+    }
+  };
+
+  window.tutupModalPengaturan = function() {
+    const modal = document.getElementById('modalPengaturanSitus');
+    if (modal) {
+      modal.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+  };
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      window.tutupModalPengaturan();
+    }
+  });
+
+  // 2. GOOGLE TRANSLATE LOGIC
+  window.applyGoogleLanguage = function(langCode, btnEl) {
+    if (!langCode) return;
+    localStorage.setItem(STORAGE_LANG_KEY, langCode);
+
+    // Update active class on chips
+    document.querySelectorAll('.lang-chip').forEach(c => c.classList.remove('active'));
+    if (btnEl) {
+      btnEl.classList.add('active');
+    } else {
+      const matchChip = Array.from(document.querySelectorAll('.lang-chip')).find(b => b.getAttribute('onclick').includes(`'${langCode}'`));
+      if (matchChip) matchChip.classList.add('active');
+    }
+
+    // Set Cookie Google Translate: googtrans=/id/<langCode>
+    const cookieValue = (langCode === 'id') ? '' : `/id/${langCode}`;
+    const domain = window.location.hostname;
+    
+    document.cookie = `googtrans=${cookieValue}; path=/;`;
+    document.cookie = `googtrans=${cookieValue}; path=/; domain=${domain}`;
+    document.cookie = `googtrans=${cookieValue}; path=/; domain=.${domain}`;
+
+    // Coba ubah select internal Google Translate jika sudah dimuat
+    const gSelect = document.querySelector('#google_translate_element select');
+    if (gSelect) {
+      gSelect.value = langCode;
+      gSelect.dispatchEvent(new Event('change'));
+    } else {
+      // Muat ulang halaman jika Google Translate butuh reload cookie
+      window.location.reload();
+    }
+  };
+
+  // 3. AUTO-REFRESH LOGIC
+  function getPubStoredMode() {
+    return localStorage.getItem(STORAGE_REFRESH_KEY) || '1s';
+  }
+
+  function setPubStoredMode(val) {
+    localStorage.setItem(STORAGE_REFRESH_KEY, val);
+  }
+
+  function updatePubStatusDisplay(mode) {
+    const pulseDot = document.getElementById('pubRefreshPulseDot');
+    const statusLabel = document.getElementById('pubRefreshStatusLabel');
+    const badge = document.getElementById('pubRefreshCountdownPill');
+
+    if (mode === '1s') {
+      if (pulseDot) pulseDot.className = 'refresh-pulse-dot';
+      if (statusLabel) statusLabel.innerHTML = 'Mode: <span style="color:#059669;">1 Detik (Default / Real-Time)</span>';
+      if (badge) badge.innerText = `${pubRemainingSeconds}s`;
+    } else if (mode === '5m') {
+      if (pulseDot) pulseDot.className = 'refresh-pulse-dot';
+      if (statusLabel) statusLabel.innerHTML = 'Mode: <span style="color:#0284c7;">5 Menit (Santai)</span>';
+      const mins = Math.floor(pubRemainingSeconds / 60);
+      const secs = pubRemainingSeconds % 60;
+      if (badge) badge.innerText = `${mins}m ${secs < 10 ? '0' : ''}${secs}s`;
+    } else {
+      if (pulseDot) pulseDot.className = 'refresh-pulse-dot paused';
+      if (statusLabel) statusLabel.innerHTML = 'Mode: <span style="color:#64748b;">Manual / Jeda</span>';
+      if (badge) badge.innerText = 'OFF';
+    }
+  }
+
+  function updatePubLastTime() {
+    const el = document.getElementById('pubRefreshLastTime');
+    if (el) {
+      const now = new Date();
+      el.innerText = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit', timeZone: 'Asia/Jakarta' }) + ' WIB';
+    }
+  }
+
+  async function performPublicUpdate(isManual = false) {
+    if (isPubUpdating) return;
+    
+    // Jangan ganggu jika user sedang membuka modal obrolan CS atau mengetik
+    const csModal = document.getElementById('modalPusatBantuan');
+    if (csModal && csModal.style.display === 'flex') return;
+    const settingsModal = document.getElementById('modalPengaturanSitus');
+    if (settingsModal && settingsModal.style.display === 'flex' && !isManual) return;
+
+    isPubUpdating = true;
+    const pulseDot = document.getElementById('pubRefreshPulseDot');
+    const btnManual = document.getElementById('btnPubManualRefresh');
+    if (pulseDot) pulseDot.classList.add('updating');
+    if (btnManual) btnManual.classList.add('loading');
+
+    try {
+      const res = await fetch(window.location.href, {
+        headers: { 'X-Requested-With': 'XMLHttpRequest', 'Cache-Control': 'no-cache' }
+      });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const text = await res.text();
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(text, 'text/html');
+
+      // 1. Update Pengumuman Jadwal Wajib Lapor di Beranda
+      const curBanner = document.querySelector('.banner-pengumuman, .jadwal-box, .hero-section');
+      const newBanner = doc.querySelector('.banner-pengumuman, .jadwal-box, .hero-section');
+      if (curBanner && newBanner && curBanner.innerHTML !== newBanner.innerHTML) {
+        curBanner.innerHTML = newBanner.innerHTML;
+      }
+
+      // 2. Update Berita Terbaru di Beranda / Halaman Berita
+      const curNews = document.querySelector('.news-grid, .berita-grid, .grid-berita');
+      const newNews = doc.querySelector('.news-grid, .berita-grid, .grid-berita');
+      if (curNews && newNews && curNews.innerHTML !== newNews.innerHTML) {
+        curNews.innerHTML = newNews.innerHTML;
+      }
+
+      updatePubLastTime();
+    } catch (err) {
+      console.warn('Public background update:', err.message);
+    } finally {
+      isPubUpdating = false;
+      if (pulseDot) pulseDot.classList.remove('updating');
+      if (btnManual) btnManual.classList.remove('loading');
+      updatePubStatusDisplay(getPubStoredMode());
+    }
+  }
+
+  function startPubTimers() {
+    if (pubRefreshTimer) clearInterval(pubRefreshTimer);
+    if (pubCountdownTimer) clearInterval(pubCountdownTimer);
+
+    const mode = getPubStoredMode();
+    if (mode === 'manual') {
+      pubRemainingSeconds = 0;
+      updatePubStatusDisplay('manual');
+      return;
+    }
+
+    const intervalSeconds = mode === '1s' ? 1 : 300;
+    pubRemainingSeconds = intervalSeconds;
+    updatePubStatusDisplay(mode);
+
+    pubCountdownTimer = setInterval(() => {
+      if (mode === '1s') {
+        pubRemainingSeconds = 1;
+        updatePubStatusDisplay('1s');
+      } else {
+        pubRemainingSeconds--;
+        if (pubRemainingSeconds <= 0) {
+          pubRemainingSeconds = intervalSeconds;
+        }
+        updatePubStatusDisplay('5m');
+      }
+    }, 1000);
+
+    pubRefreshTimer = setInterval(() => {
+      performPublicUpdate(false);
+    }, intervalSeconds * 1000);
+  }
+
+  window.changePublicRefreshMode = function(val) {
+    setPubStoredMode(val);
+    syncRadioActiveCards(val);
+    startPubTimers();
+  };
+
+  function syncRadioActiveCards(val) {
+    document.querySelectorAll('.refresh-radio-card').forEach(c => c.classList.remove('active'));
+    if (val === '1s') {
+      const el = document.getElementById('labelRadio1s');
+      if (el) el.classList.add('active');
+    } else if (val === '5m') {
+      const el = document.getElementById('labelRadio5m');
+      if (el) el.classList.add('active');
+    } else {
+      const el = document.getElementById('labelRadioManual');
+      if (el) el.classList.add('active');
+    }
+  }
+
+  window.triggerPublicManualRefresh = function() {
+    performPublicUpdate(true);
+  };
+
+  function syncModalUiState() {
+    const curLang = localStorage.getItem(STORAGE_LANG_KEY) || 'id';
+    document.querySelectorAll('.lang-chip').forEach(c => c.classList.remove('active'));
+    const matchChip = Array.from(document.querySelectorAll('.lang-chip')).find(b => b.getAttribute('onclick').includes(`'${curLang}'`));
+    if (matchChip) matchChip.classList.add('active');
+
+    const curMode = getPubStoredMode();
+    const radio = document.querySelector(`input[name="publicRefreshRadio"][value="${curMode}"]`);
+    if (radio) radio.checked = true;
+    syncRadioActiveCards(curMode);
+    updatePubLastTime();
+    updatePubStatusDisplay(curMode);
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    syncModalUiState();
+    startPubTimers();
+  });
+
+})();
+</script>
