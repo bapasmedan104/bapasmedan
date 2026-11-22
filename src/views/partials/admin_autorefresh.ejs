@@ -1,0 +1,411 @@
+<!-- =======================================================
+     PANEL KONTROL REFRESH OTOMATIS (REAL-TIME SEAMLESS)
+     Dua Mode: 1 Detik (Default/Real-Time) & 5 Menit (Santai)
+     Plus Tombol Refresh Manual (Instant Fetch)
+     ======================================================= -->
+<div class="admin-refresh-panel no-print" id="adminRefreshPanel">
+  <div class="refresh-panel-left">
+    <div class="refresh-live-indicator">
+      <span class="refresh-pulse-dot" id="refreshPulseDot"></span>
+      <span class="refresh-status-text" id="refreshStatusText">Mode: <strong>1 Detik (Real-Time)</strong></span>
+    </div>
+    <span class="refresh-counter-badge" id="refreshCounterBadge" title="Hitung mundur refresh berikutnya">1s</span>
+    <span class="refresh-last-time" id="refreshLastTime" title="Waktu pembaruan data terakhir">
+      <i class="far fa-clock"></i> <span id="refreshLastTimeText">Memuat...</span>
+    </span>
+  </div>
+
+  <div class="refresh-panel-right">
+    <div class="refresh-mode-selector">
+      <label for="adminRefreshModeSelect">
+        <i class="fas fa-sliders-h" style="color:#003580;"></i> Interval:
+      </label>
+      <select id="adminRefreshModeSelect" class="refresh-select" onchange="changeAdminRefreshMode(this.value)">
+        <option value="1s" selected>⚡ Otomatis 1 Detik (Default)</option>
+        <option value="5m">⏱️ Otomatis 5 Menit</option>
+        <option value="manual">⏸️ Manual / Jeda</option>
+      </select>
+    </div>
+
+    <button type="button" class="btn-refresh-manual" onclick="triggerManualRefresh()" id="btnManualRefresh" title="Segarkan data sekarang secara instan tanpa reload browser">
+      <i class="fas fa-sync-alt" id="iconManualRefresh"></i>
+      <span class="btn-refresh-text">Refresh Sekarang</span>
+    </button>
+  </div>
+</div>
+
+<style>
+.admin-refresh-panel {
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  border-left: 4px solid #003580;
+  border-radius: 10px;
+  padding: 10px 16px;
+  margin-bottom: 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  box-shadow: 0 2px 8px rgba(0, 53, 128, 0.06);
+  transition: all 0.2s ease;
+}
+.admin-refresh-panel:hover {
+  border-color: #94a3b8;
+  box-shadow: 0 4px 14px rgba(0, 53, 128, 0.1);
+}
+.refresh-panel-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.refresh-live-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #1e293b;
+}
+.refresh-pulse-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #10b981;
+  display: inline-block;
+  box-shadow: 0 0 0 rgba(16, 185, 129, 0.4);
+  animation: pulseDotLive 1.5s infinite;
+  flex-shrink: 0;
+}
+.refresh-pulse-dot.paused {
+  background: #f59e0b;
+  animation: none;
+}
+.refresh-pulse-dot.updating {
+  background: #0284c7;
+  animation: pulseDotUpdating 0.6s infinite;
+}
+@keyframes pulseDotLive {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+@keyframes pulseDotUpdating {
+  0% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(2, 132, 199, 0.7); }
+  70% { transform: scale(1.1); box-shadow: 0 0 0 7px rgba(2, 132, 199, 0); }
+  100% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(2, 132, 199, 0); }
+}
+.refresh-counter-badge {
+  background: #001e4d;
+  color: #fde047;
+  font-family: monospace;
+  font-weight: 800;
+  font-size: 11.5px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.5px;
+  display: inline-block;
+  min-width: 32px;
+  text-align: center;
+}
+.refresh-last-time {
+  font-size: 11.5px;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.refresh-panel-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.refresh-mode-selector {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.refresh-mode-selector label {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #334155;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+.refresh-select {
+  padding: 6px 12px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #0f172a;
+  background: #f8fafc;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 6px;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.refresh-select:focus {
+  border-color: #003580;
+  background: #ffffff;
+}
+.btn-refresh-manual {
+  padding: 7px 16px;
+  background: linear-gradient(135deg, #001e4d 0%, #003580 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  box-shadow: 0 2px 6px rgba(0, 53, 128, 0.25);
+  transition: all 0.2s ease;
+}
+.btn-refresh-manual:hover {
+  background: linear-gradient(135deg, #001230 0%, #002255 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 53, 128, 0.35);
+}
+.btn-refresh-manual:active {
+  transform: translateY(0);
+}
+.btn-refresh-manual.loading i {
+  animation: fa-spin 0.75s linear infinite;
+}
+@keyframes flashRowHighlight {
+  0% { background-color: #dcfce7; }
+  100% { background-color: transparent; }
+}
+.row-new-highlight {
+  animation: flashRowHighlight 2.5s ease-out;
+}
+
+@media (max-width: 768px) {
+  .admin-refresh-panel {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+  .refresh-panel-left, .refresh-panel-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .refresh-mode-selector {
+    flex: 1;
+  }
+  .refresh-select {
+    width: 100%;
+    font-size: 11.5px;
+  }
+  .btn-refresh-manual {
+    padding: 6px 12px;
+    font-size: 11.5px;
+  }
+  .btn-refresh-text {
+    display: inline;
+  }
+}
+</style>
+
+<script>
+(function() {
+  const STORAGE_KEY = 'bapas_admin_refresh_mode';
+  let refreshTimer = null;
+  let countdownTimer = null;
+  let remainingSeconds = 1;
+  let isUpdating = false;
+
+  function getStoredMode() {
+    return localStorage.getItem(STORAGE_KEY) || '1s';
+  }
+
+  function setStoredMode(val) {
+    localStorage.setItem(STORAGE_KEY, val);
+  }
+
+  function isUserBusy() {
+    // 1. Cek apakah ada modal pop-up yang sedang terbuka
+    const openModal = document.querySelector('.modal[style*="display: block"], .modal[style*="display:flex"], #modalBalasBantuan.active, #modalFoto[style*="display: block"], #modalFoto[style*="display: flex"], #modalTolak[style*="display: block"]');
+    if (openModal) return true;
+
+    // 2. Cek apakah admin sedang fokus mengetik di elemen form (input/textarea)
+    const active = document.activeElement;
+    if (active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.tagName === 'SELECT')) {
+      if (active.id !== 'adminRefreshModeSelect') {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function updateStatusDisplay(mode, paused = false) {
+    const pulseDot = document.getElementById('refreshPulseDot');
+    const statusText = document.getElementById('refreshStatusText');
+    const badge = document.getElementById('refreshCounterBadge');
+
+    if (paused) {
+      if (pulseDot) pulseDot.className = 'refresh-pulse-dot paused';
+      if (statusText) statusText.innerHTML = '<span style="color:#b45309;"><i class="fas fa-pause-circle"></i> Dijeda (Form/Modal Aktif)</span>';
+      return;
+    }
+
+    if (mode === '1s') {
+      if (pulseDot) pulseDot.className = 'refresh-pulse-dot';
+      if (statusText) statusText.innerHTML = 'Mode: <strong style="color:#059669;">1 Detik (Real-Time)</strong>';
+      if (badge) badge.innerText = `${remainingSeconds}s`;
+    } else if (mode === '5m') {
+      if (pulseDot) pulseDot.className = 'refresh-pulse-dot';
+      if (statusText) statusText.innerHTML = 'Mode: <strong style="color:#0284c7;">5 Menit (Santai)</strong>';
+      const mins = Math.floor(remainingSeconds / 60);
+      const secs = remainingSeconds % 60;
+      if (badge) badge.innerText = `${mins}m ${secs < 10 ? '0' : ''}${secs}s`;
+    } else {
+      if (pulseDot) pulseDot.className = 'refresh-pulse-dot paused';
+      if (statusText) statusText.innerHTML = 'Mode: <strong style="color:#64748b;">Manual / Jeda</strong>';
+      if (badge) badge.innerText = 'OFF';
+    }
+  }
+
+  function updateLastTimeLabel() {
+    const textEl = document.getElementById('refreshLastTimeText');
+    if (textEl) {
+      const now = new Date();
+      textEl.innerText = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit', timeZone: 'Asia/Jakarta' }) + ' WIB';
+    }
+  }
+
+  async function performSeamlessUpdate(isManual = false) {
+    if (isUpdating) return;
+    if (!isManual && isUserBusy()) {
+      updateStatusDisplay(getStoredMode(), true);
+      return;
+    }
+
+    isUpdating = true;
+    const pulseDot = document.getElementById('refreshPulseDot');
+    const btnRefresh = document.getElementById('btnManualRefresh');
+    if (pulseDot) pulseDot.classList.add('updating');
+    if (btnRefresh) btnRefresh.classList.add('loading');
+
+    try {
+      const currentUrl = window.location.href;
+      const res = await fetch(currentUrl, {
+        headers: { 'X-Requested-With': 'XMLHttpRequest', 'Cache-Control': 'no-cache' }
+      });
+
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const text = await res.text();
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(text, 'text/html');
+
+      // 1. Update Statistik Angka (.stat-grid)
+      const currentStat = document.querySelector('.stat-grid');
+      const newStat = doc.querySelector('.stat-grid');
+      if (currentStat && newStat && currentStat.innerHTML !== newStat.innerHTML) {
+        currentStat.innerHTML = newStat.innerHTML;
+      }
+
+      // 2. Update Badge Notifikasi Tab (.tabs-nav)
+      const currentTabs = document.querySelector('.tabs-nav');
+      const newTabs = doc.querySelector('.tabs-nav');
+      if (currentTabs && newTabs) {
+        const curBtns = currentTabs.querySelectorAll('.tab-btn');
+        const newBtns = newTabs.querySelectorAll('.tab-btn');
+        curBtns.forEach((btn, idx) => {
+          if (newBtns[idx] && btn.innerText !== newBtns[idx].innerText) {
+            btn.innerHTML = newBtns[idx].innerHTML;
+          }
+        });
+      }
+
+      // 3. Update Tabel Laporan / Tabel Klien / Tabel Riwayat
+      // Cari seluruh tabel utama
+      const currentTables = document.querySelectorAll('.table tbody');
+      const newTables = doc.querySelectorAll('.table tbody');
+      currentTables.forEach((tb, i) => {
+        if (newTables[i] && tb.innerHTML !== newTables[i].innerHTML) {
+          tb.innerHTML = newTables[i].innerHTML;
+          tb.classList.add('row-new-highlight');
+          setTimeout(() => tb.classList.remove('row-new-highlight'), 2500);
+        }
+      });
+
+      // 4. Update Daftar Thread CS Bantuan jika ada
+      const curThreadList = document.querySelector('.cs-threads-container, #csThreadList, .cs-thread-grid');
+      const newThreadList = doc.querySelector('.cs-threads-container, #csThreadList, .cs-thread-grid');
+      if (curThreadList && newThreadList && curThreadList.innerHTML !== newThreadList.innerHTML) {
+        curThreadList.innerHTML = newThreadList.innerHTML;
+      }
+
+      updateLastTimeLabel();
+    } catch (err) {
+      console.warn('Seamless background update notification:', err.message);
+    } finally {
+      isUpdating = false;
+      if (pulseDot) pulseDot.classList.remove('updating');
+      if (btnRefresh) btnRefresh.classList.remove('loading');
+      updateStatusDisplay(getStoredMode(), false);
+    }
+  }
+
+  function startTimers() {
+    if (refreshTimer) clearInterval(refreshTimer);
+    if (countdownTimer) clearInterval(countdownTimer);
+
+    const mode = getStoredMode();
+    if (mode === 'manual') {
+      remainingSeconds = 0;
+      updateStatusDisplay('manual');
+      return;
+    }
+
+    const intervalSeconds = mode === '1s' ? 1 : 300;
+    remainingSeconds = intervalSeconds;
+    updateStatusDisplay(mode);
+
+    // Countdown timer setiap detik
+    countdownTimer = setInterval(() => {
+      if (mode === '1s') {
+        remainingSeconds = 1;
+        updateStatusDisplay('1s');
+      } else {
+        remainingSeconds--;
+        if (remainingSeconds <= 0) {
+          remainingSeconds = intervalSeconds;
+        }
+        updateStatusDisplay('5m');
+      }
+    }, 1000);
+
+    // Refresh fetch timer
+    refreshTimer = setInterval(() => {
+      performSeamlessUpdate(false);
+    }, intervalSeconds * 1000);
+  }
+
+  window.changeAdminRefreshMode = function(val) {
+    setStoredMode(val);
+    startTimers();
+  };
+
+  window.triggerManualRefresh = function() {
+    performSeamlessUpdate(true);
+  };
+
+  // Inisialisasi saat halaman selesai dimuat
+  document.addEventListener('DOMContentLoaded', () => {
+    const mode = getStoredMode();
+    const selectEl = document.getElementById('adminRefreshModeSelect');
+    if (selectEl) {
+      selectEl.value = mode;
+    }
+    updateLastTimeLabel();
+    startTimers();
+  });
+
+})();
+</script>
