@@ -372,29 +372,6 @@
         flex-shrink: 0 !important;
       }
     }
-    .btn-settings-quick {
-      display: none;
-      background: rgba(255, 255, 255, 0.15);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      color: #ffffff;
-      border-radius: 6px;
-      width: 36px;
-      height: 36px;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: 15px;
-      transition: all 0.2s;
-    }
-    .btn-settings-quick:hover {
-      background: rgba(255, 255, 255, 0.25);
-      transform: rotate(45deg);
-    }
-    @media (max-width: 900px) {
-      .btn-settings-quick {
-        display: inline-flex;
-      }
-    }
   </style>
 </head>
 <body class="has-public-navbar">
@@ -494,15 +471,10 @@
         </a>
       </li>
     </ul>
-    <div style="display:flex; align-items:center; gap:8px;">
-      <button type="button" class="btn-settings-quick" onclick="bukaModalPengaturan()" title="Pengaturan Situs (Bahasa & Refresh)" aria-label="Buka Pengaturan">
-        <i class="fas fa-cog"></i>
-      </button>
-      <button type="button" class="hamburger" id="hamburger" onclick="toggleMobileNav(event)" aria-label="Buka Menu Navigasi" aria-expanded="false">
-        <span class="hamburger-label" id="hamburgerLabel">Menu</span>
-        <i class="fas fa-bars" id="hamburgerIcon"></i>
-      </button>
-    </div>
+    <button type="button" class="hamburger" id="hamburger" onclick="toggleMobileNav(event)" aria-label="Buka Menu Navigasi" aria-expanded="false">
+      <span class="hamburger-label" id="hamburgerLabel">Menu</span>
+      <i class="fas fa-bars" id="hamburgerIcon"></i>
+    </button>
   </div>
 </nav>
 
