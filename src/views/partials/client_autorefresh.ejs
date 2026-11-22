@@ -1,0 +1,422 @@
+<!-- =======================================================
+     PANEL KONTROL REFRESH OTOMATIS (PORTAL KLIEN REAL-TIME)
+     Dua Mode: 1 Detik (Default/Real-Time) & 5 Menit (Santai)
+     Plus Tombol Refresh Manual (Instant Fetch)
+     ======================================================= -->
+<div class="client-refresh-panel no-print" id="clientRefreshPanel">
+  <div class="refresh-panel-left">
+    <div class="refresh-live-indicator">
+      <span class="refresh-pulse-dot" id="clientRefreshPulseDot"></span>
+      <span class="refresh-status-text" id="clientRefreshStatusText">Status: <strong>1 Detik (Real-Time)</strong></span>
+    </div>
+    <span class="refresh-counter-badge" id="clientRefreshCounterBadge" title="Hitung mundur refresh berikutnya">1s</span>
+    <span class="refresh-last-time" id="clientRefreshLastTime" title="Waktu pembaruan data terakhir">
+      <i class="far fa-clock"></i> <span id="clientRefreshLastTimeText">Memuat...</span>
+    </span>
+  </div>
+
+  <div class="refresh-panel-right">
+    <div class="refresh-mode-selector">
+      <label for="clientRefreshModeSelect">
+        <i class="fas fa-sliders-h" style="color:#003580;"></i> Interval:
+      </label>
+      <select id="clientRefreshModeSelect" class="refresh-select" onchange="changeClientRefreshMode(this.value)">
+        <option value="1s" selected>⚡ Otomatis 1 Detik (Default)</option>
+        <option value="5m">⏱️ Otomatis 5 Menit</option>
+        <option value="manual">⏸️ Manual / Jeda</option>
+      </select>
+    </div>
+
+    <button type="button" class="btn-refresh-manual" onclick="triggerClientManualRefresh()" id="btnClientManualRefresh" title="Segarkan data sekarang secara instan tanpa reload browser">
+      <i class="fas fa-sync-alt" id="iconClientManualRefresh"></i>
+      <span class="btn-refresh-text">Refresh Sekarang</span>
+    </button>
+  </div>
+</div>
+
+<style>
+.client-refresh-panel {
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  border-left: 4px solid #003580;
+  border-radius: 10px;
+  padding: 10px 16px;
+  margin-bottom: 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  box-shadow: 0 2px 8px rgba(0, 53, 128, 0.06);
+  transition: all 0.2s ease;
+}
+.client-refresh-panel:hover {
+  border-color: #94a3b8;
+  box-shadow: 0 4px 14px rgba(0, 53, 128, 0.1);
+}
+.client-refresh-panel .refresh-panel-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.client-refresh-panel .refresh-live-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #1e293b;
+}
+.client-refresh-panel .refresh-pulse-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #10b981;
+  display: inline-block;
+  box-shadow: 0 0 0 rgba(16, 185, 129, 0.4);
+  animation: pulseDotLiveClient 1.5s infinite;
+  flex-shrink: 0;
+}
+.client-refresh-panel .refresh-pulse-dot.paused {
+  background: #f59e0b;
+  animation: none;
+}
+.client-refresh-panel .refresh-pulse-dot.updating {
+  background: #0284c7;
+  animation: pulseDotUpdatingClient 0.6s infinite;
+}
+@keyframes pulseDotLiveClient {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+@keyframes pulseDotUpdatingClient {
+  0% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(2, 132, 199, 0.7); }
+  70% { transform: scale(1.1); box-shadow: 0 0 0 7px rgba(2, 132, 199, 0); }
+  100% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(2, 132, 199, 0); }
+}
+.client-refresh-panel .refresh-counter-badge {
+  background: #001e4d;
+  color: #fde047;
+  font-family: monospace;
+  font-weight: 800;
+  font-size: 11.5px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.5px;
+  display: inline-block;
+  min-width: 32px;
+  text-align: center;
+}
+.client-refresh-panel .refresh-last-time {
+  font-size: 11.5px;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.client-refresh-panel .refresh-panel-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.client-refresh-panel .refresh-mode-selector {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.client-refresh-panel .refresh-mode-selector label {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #334155;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+.client-refresh-panel .refresh-select {
+  padding: 6px 12px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #0f172a;
+  background: #f8fafc;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 6px;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.client-refresh-panel .refresh-select:focus {
+  border-color: #003580;
+  background: #ffffff;
+}
+.client-refresh-panel .btn-refresh-manual {
+  padding: 7px 16px;
+  background: linear-gradient(135deg, #001e4d 0%, #003580 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  box-shadow: 0 2px 6px rgba(0, 53, 128, 0.25);
+  transition: all 0.2s ease;
+}
+.client-refresh-panel .btn-refresh-manual:hover {
+  background: linear-gradient(135deg, #001230 0%, #002255 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 53, 128, 0.35);
+}
+.client-refresh-panel .btn-refresh-manual:active {
+  transform: translateY(0);
+}
+.client-refresh-panel .btn-refresh-manual.loading i {
+  animation: fa-spin 0.75s linear infinite;
+}
+@keyframes flashRowHighlightClient {
+  0% { background-color: #dcfce7; }
+  100% { background-color: transparent; }
+}
+.row-new-highlight-client {
+  animation: flashRowHighlightClient 2.5s ease-out;
+}
+
+@media (max-width: 768px) {
+  .client-refresh-panel {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+  .client-refresh-panel .refresh-panel-left, 
+  .client-refresh-panel .refresh-panel-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .client-refresh-panel .refresh-mode-selector {
+    flex: 1;
+  }
+  .client-refresh-panel .refresh-select {
+    width: 100%;
+    font-size: 11.5px;
+  }
+  .client-refresh-panel .btn-refresh-manual {
+    padding: 6px 12px;
+    font-size: 11.5px;
+  }
+  .client-refresh-panel .btn-refresh-text {
+    display: inline;
+  }
+}
+</style>
+
+<script>
+(function() {
+  const STORAGE_KEY = 'bapas_client_refresh_mode';
+  let refreshTimer = null;
+  let countdownTimer = null;
+  let remainingSeconds = 1;
+  let isUpdating = false;
+
+  function getStoredMode() {
+    return localStorage.getItem(STORAGE_KEY) || '1s';
+  }
+
+  function setStoredMode(val) {
+    localStorage.setItem(STORAGE_KEY, val);
+  }
+
+  function isUserBusy() {
+    // 1. Cek apakah kamera sedang aktif / menyala
+    const video = document.getElementById('videoElement');
+    if (video && video.srcObject && video.srcObject.active) return true;
+    const stopCamBtn = document.getElementById('stopCamBtn');
+    if (stopCamBtn && stopCamBtn.style.display !== 'none') return true;
+
+    // 2. Cek apakah ada modal pop-up yang sedang terbuka
+    const openModal = document.querySelector('.modal[style*="display: block"], .modal[style*="display:flex"], #modalFoto[style*="display: block"], #modalFoto[style*="display: flex"], #modalPusatBantuan[style*="display: flex"], #modalPusatBantuan[style*="display: block"]');
+    if (openModal) return true;
+
+    // 3. Cek apakah klien sedang mengetik di input/textarea
+    const active = document.activeElement;
+    if (active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.tagName === 'SELECT')) {
+      if (active.id !== 'clientRefreshModeSelect') {
+        return true;
+      }
+    }
+
+    // 4. Cek apakah form laporan sedang dalam proses pengisian
+    const formLapor = document.getElementById('formLapor');
+    if (formLapor) {
+      const inputs = formLapor.querySelectorAll('input:not([type="hidden"]), textarea');
+      for (const inp of inputs) {
+        if (inp.value && inp.value.trim().length > 0) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
+  function updateStatusDisplay(mode, paused = false) {
+    const pulseDot = document.getElementById('clientRefreshPulseDot');
+    const statusText = document.getElementById('clientRefreshStatusText');
+    const badge = document.getElementById('clientRefreshCounterBadge');
+
+    if (paused) {
+      if (pulseDot) pulseDot.className = 'refresh-pulse-dot paused';
+      if (statusText) statusText.innerHTML = '<span style="color:#b45309;"><i class="fas fa-pause-circle"></i> Dijeda (Sedang Mengisi Form)</span>';
+      return;
+    }
+
+    if (mode === '1s') {
+      if (pulseDot) pulseDot.className = 'refresh-pulse-dot';
+      if (statusText) statusText.innerHTML = 'Status: <strong style="color:#059669;">1 Detik (Real-Time)</strong>';
+      if (badge) badge.innerText = `${remainingSeconds}s`;
+    } else if (mode === '5m') {
+      if (pulseDot) pulseDot.className = 'refresh-pulse-dot';
+      if (statusText) statusText.innerHTML = 'Status: <strong style="color:#0284c7;">5 Menit (Santai)</strong>';
+      const mins = Math.floor(remainingSeconds / 60);
+      const secs = remainingSeconds % 60;
+      if (badge) badge.innerText = `${mins}m ${secs < 10 ? '0' : ''}${secs}s`;
+    } else {
+      if (pulseDot) pulseDot.className = 'refresh-pulse-dot paused';
+      if (statusText) statusText.innerHTML = 'Status: <strong style="color:#64748b;">Manual / Jeda</strong>';
+      if (badge) badge.innerText = 'OFF';
+    }
+  }
+
+  function updateLastTimeLabel() {
+    const textEl = document.getElementById('clientRefreshLastTimeText');
+    if (textEl) {
+      const now = new Date();
+      textEl.innerText = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit', timeZone: 'Asia/Jakarta' }) + ' WIB';
+    }
+  }
+
+  async function performSeamlessUpdate(isManual = false) {
+    if (isUpdating) return;
+    if (!isManual && isUserBusy()) {
+      updateStatusDisplay(getStoredMode(), true);
+      return;
+    }
+
+    isUpdating = true;
+    const pulseDot = document.getElementById('clientRefreshPulseDot');
+    const btnRefresh = document.getElementById('btnClientManualRefresh');
+    if (pulseDot) pulseDot.classList.add('updating');
+    if (btnRefresh) btnRefresh.classList.add('loading');
+
+    try {
+      const currentUrl = window.location.href;
+      const res = await fetch(currentUrl, {
+        headers: { 'X-Requested-With': 'XMLHttpRequest', 'Cache-Control': 'no-cache' }
+      });
+
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const text = await res.text();
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(text, 'text/html');
+
+      // 1. Update Kartu Statistik Klien (.stat-grid)
+      const currentStat = document.querySelector('.stat-grid');
+      const newStat = doc.querySelector('.stat-grid');
+      if (currentStat && newStat && currentStat.innerHTML !== newStat.innerHTML) {
+        currentStat.innerHTML = newStat.innerHTML;
+      }
+
+      // 2. Update Status Laporan Bulan Ini (Status: Menunggu / Diterima / Ditolak)
+      // Hanya update jika form TIDAK sedang diisi oleh klien
+      const currentFormLapor = document.getElementById('formLapor');
+      if (!currentFormLapor) {
+        // Jika form tidak sedang ditampilkan (misal sudah disubmit), update seluruh card status
+        const currentCards = document.querySelectorAll('.container > .card');
+        const newCards = doc.querySelectorAll('.container > .card');
+        if (currentCards.length > 0 && newCards.length > 0) {
+          if (currentCards[0].innerHTML !== newCards[0].innerHTML) {
+            currentCards[0].innerHTML = newCards[0].innerHTML;
+            currentCards[0].classList.add('row-new-highlight-client');
+            setTimeout(() => currentCards[0].classList.remove('row-new-highlight-client'), 2500);
+          }
+        }
+      }
+
+      // 3. Update Tabel Riwayat Lapor (.table tbody)
+      const currentTables = document.querySelectorAll('.table tbody');
+      const newTables = doc.querySelectorAll('.table tbody');
+      currentTables.forEach((tb, i) => {
+        if (newTables[i] && tb.innerHTML !== newTables[i].innerHTML) {
+          tb.innerHTML = newTables[i].innerHTML;
+          tb.classList.add('row-new-highlight-client');
+          setTimeout(() => tb.classList.remove('row-new-highlight-client'), 2500);
+        }
+      });
+
+      updateLastTimeLabel();
+    } catch (err) {
+      console.warn('Seamless client update error:', err.message);
+    } finally {
+      isUpdating = false;
+      if (pulseDot) pulseDot.classList.remove('updating');
+      if (btnRefresh) btnRefresh.classList.remove('loading');
+      updateStatusDisplay(getStoredMode(), false);
+    }
+  }
+
+  function startTimers() {
+    if (refreshTimer) clearInterval(refreshTimer);
+    if (countdownTimer) clearInterval(countdownTimer);
+
+    const mode = getStoredMode();
+    if (mode === 'manual') {
+      remainingSeconds = 0;
+      updateStatusDisplay('manual');
+      return;
+    }
+
+    const intervalSeconds = mode === '1s' ? 1 : 300;
+    remainingSeconds = intervalSeconds;
+    updateStatusDisplay(mode);
+
+    countdownTimer = setInterval(() => {
+      if (mode === '1s') {
+        remainingSeconds = 1;
+        updateStatusDisplay('1s');
+      } else {
+        remainingSeconds--;
+        if (remainingSeconds <= 0) {
+          remainingSeconds = intervalSeconds;
+        }
+        updateStatusDisplay('5m');
+      }
+    }, 1000);
+
+    refreshTimer = setInterval(() => {
+      performSeamlessUpdate(false);
+    }, intervalSeconds * 1000);
+  }
+
+  window.changeClientRefreshMode = function(val) {
+    setStoredMode(val);
+    startTimers();
+  };
+
+  window.triggerClientManualRefresh = function() {
+    performSeamlessUpdate(true);
+  };
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const mode = getStoredMode();
+    const selectEl = document.getElementById('clientRefreshModeSelect');
+    if (selectEl) {
+      selectEl.value = mode;
+    }
+    updateLastTimeLabel();
+    startTimers();
+  });
+
+})();
+</script>
