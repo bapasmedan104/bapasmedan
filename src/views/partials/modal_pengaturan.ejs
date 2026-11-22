@@ -1,7 +1,7 @@
 <!-- =======================================================
      MODAL PENGATURAN SITUS WEB RESMI BAPAS KELAS I MEDAN
      Berisi:
-     1. Pilihan Bahasa (Google Translate Otomatis Multi-Bahasa)
+     1. Pilihan Bahasa (Terjemahan Otomatis Multi-Bahasa)
      2. Kontrol Refresh Halaman (1 Detik Default, 5 Menit, Manual)
      ======================================================= -->
 
@@ -29,14 +29,14 @@
     <div class="settings-modal-body">
       
       <!-- ==============================================
-           SECTION 1: PILIHAN BAHASA (GOOGLE TRANSLATE)
+           SECTION 1: PILIHAN BAHASA (MULTI-LANGUAGE)
            ============================================== -->
       <div class="settings-section">
         <div class="settings-section-title">
           <i class="fas fa-globe text-primary"></i>
           <div>
             <strong>Pilihan Bahasa / Language</strong>
-            <span class="settings-section-desc">Diterjemahkan secara otomatis oleh Google Translate ke bahasa pilihan Anda</span>
+            <span class="settings-section-desc">Terjemahan otomatis multi-bahasa resmi ke bahasa pilihan Anda</span>
           </div>
         </div>
 
@@ -452,28 +452,63 @@
   flex-wrap: wrap;
   gap: 10px;
 }
-/* Sembunyikan elemen bawaan Google Translate yang mengganggu header */
-.goog-te-banner-frame.skiptranslate, 
-.goog-te-banner-frame {
+/* ========================================================
+   SEMBUNYIKAN TOTAL BANNER & BRANDING GOOGLE TRANSLATE
+   ======================================================== */
+.goog-te-banner-frame,
+.goog-te-banner-frame.skiptranslate,
+[class*="goog-te-banner"],
+[class*="VIpgJd"],
+iframe[class*="goog-te-banner"],
+iframe[class*="VIpgJd"],
+iframe[id*=":"],
+iframe[class*="goog"],
+#goog-gt-tt,
+#goog-gt-vt,
+.goog-te-balloon-frame,
+.goog-tooltip,
+.goog-tooltip:hover,
+body > .skiptranslate,
+div.skiptranslate,
+#google_translate_element {
   display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0px !important;
+  max-height: 0px !important;
+  width: 0px !important;
+  max-width: 0px !important;
+  position: absolute !important;
+  top: -99999px !important;
+  left: -99999px !important;
+  z-index: -99999 !important;
+  pointer-events: none !important;
+  clip: rect(0 0 0 0) !important;
+  clip-path: inset(50%) !important;
 }
+
+html,
 body {
   top: 0px !important;
+  position: static !important;
+  margin-top: 0px !important;
 }
-.goog-tooltip {
-  display: none !important;
-}
-.goog-tooltip:hover {
-  display: none !important;
-}
+
 .goog-text-highlight {
   background-color: transparent !important;
+  background: transparent !important;
   border: none !important;
+  box-shadow: none !important;
+}
+
+font[style] {
+  background: transparent !important;
+  background-color: transparent !important;
   box-shadow: none !important;
 }
 </style>
 
-<!-- Google Translate Init Script -->
+<!-- Translation Widget Init Script -->
 <script type="text/javascript">
 function googleTranslateElementInit() {
   if (window.google && window.google.translate) {
@@ -497,6 +532,51 @@ function googleTranslateElementInit() {
   let pubCountdownTimer = null;
   let pubRemainingSeconds = 1;
   let isPubUpdating = false;
+
+  // FUNGSI NETRALISIR BANNER & PERGESERAN LAYOUT
+  function neutralizeTranslationBanners() {
+    try {
+      if (document.body) {
+        if (document.body.style.top && document.body.style.top !== '0px') {
+          document.body.style.setProperty('top', '0px', 'important');
+        }
+        if (document.body.style.marginTop && document.body.style.marginTop !== '0px') {
+          document.body.style.setProperty('margin-top', '0px', 'important');
+        }
+      }
+      if (document.documentElement && document.documentElement.style.top && document.documentElement.style.top !== '0px') {
+        document.documentElement.style.setProperty('top', '0px', 'important');
+      }
+
+      const elementsToHide = document.querySelectorAll(
+        'body > .skiptranslate, [class*="VIpgJd"], iframe[class*="goog"], iframe[id*=":"], #goog-gt-tt, #goog-gt-vt, .goog-te-banner-frame'
+      );
+      elementsToHide.forEach(function(el) {
+        el.style.setProperty('display', 'none', 'important');
+        el.style.setProperty('visibility', 'hidden', 'important');
+        el.style.setProperty('height', '0px', 'important');
+        el.style.setProperty('width', '0px', 'important');
+        el.style.setProperty('opacity', '0', 'important');
+        el.style.setProperty('pointer-events', 'none', 'important');
+      });
+    } catch (e) {}
+  }
+
+  // Observer agar banner langsung hilang seketika saat diinjeksikan
+  try {
+    const bannerObserver = new MutationObserver(neutralizeTranslationBanners);
+    if (document.documentElement) {
+      bannerObserver.observe(document.documentElement, {
+        attributes: true,
+        childList: true,
+        subtree: true,
+        attributeFilter: ['style', 'class']
+      });
+    }
+  } catch (e) {}
+
+  setInterval(neutralizeTranslationBanners, 150);
+  window.addEventListener('load', neutralizeTranslationBanners);
 
   // 1. OPEN / CLOSE MODAL
   window.bukaModalPengaturan = function() {
@@ -522,7 +602,7 @@ function googleTranslateElementInit() {
     }
   });
 
-  // 2. GOOGLE TRANSLATE LOGIC
+  // 2. TRANSLATION LOGIC
   window.applyGoogleLanguage = function(langCode, btnEl) {
     if (!langCode) return;
     localStorage.setItem(STORAGE_LANG_KEY, langCode);
@@ -532,27 +612,36 @@ function googleTranslateElementInit() {
     if (btnEl) {
       btnEl.classList.add('active');
     } else {
-      const matchChip = Array.from(document.querySelectorAll('.lang-chip')).find(b => b.getAttribute('onclick').includes(`'${langCode}'`));
+      const matchChip = Array.from(document.querySelectorAll('.lang-chip')).find(b => b.getAttribute('onclick') && b.getAttribute('onclick').includes(`'${langCode}'`));
       if (matchChip) matchChip.classList.add('active');
     }
 
-    // Set Cookie Google Translate: googtrans=/id/<langCode>
-    const cookieValue = (langCode === 'id') ? '' : `/id/${langCode}`;
     const domain = window.location.hostname;
     
-    document.cookie = `googtrans=${cookieValue}; path=/;`;
-    document.cookie = `googtrans=${cookieValue}; path=/; domain=${domain}`;
-    document.cookie = `googtrans=${cookieValue}; path=/; domain=.${domain}`;
+    // Clear old cookies first
+    document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+    document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${domain};`;
+    document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.${domain};`;
 
-    // Coba ubah select internal Google Translate jika sudah dimuat
+    if (langCode !== 'id') {
+      const cookieValue = `/id/${langCode}`;
+      document.cookie = `googtrans=${cookieValue}; path=/;`;
+      document.cookie = `googtrans=${cookieValue}; path=/; domain=${domain}`;
+      document.cookie = `googtrans=${cookieValue}; path=/; domain=.${domain}`;
+    }
+
+    // Trigger select internal jika sudah ada
     const gSelect = document.querySelector('#google_translate_element select');
     if (gSelect) {
       gSelect.value = langCode;
       gSelect.dispatchEvent(new Event('change'));
-    } else {
-      // Muat ulang halaman jika Google Translate butuh reload cookie
-      window.location.reload();
+      neutralizeTranslationBanners();
     }
+    
+    // Refresh halus agar translasi bersih dan banner tidak pernah muncul
+    setTimeout(function() {
+      window.location.reload();
+    }, 150);
   };
 
   // 3. AUTO-REFRESH LOGIC

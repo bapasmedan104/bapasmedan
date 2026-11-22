@@ -1370,3 +1370,59 @@ table.table tbody tr:hover {
     flex-shrink: 0 !important;
   }
 }
+
+/* ========================================================
+   SEMBUNYIKAN TOTAL BANNER & BRANDING GOOGLE TRANSLATE
+   ======================================================== */
+.goog-te-banner-frame,
+.goog-te-banner-frame.skiptranslate,
+[class*="goog-te-banner"],
+[class*="VIpgJd"],
+iframe[class*="goog-te-banner"],
+iframe[class*="VIpgJd"],
+iframe[id*=":"],
+iframe[class*="goog"],
+#goog-gt-tt,
+#goog-gt-vt,
+.goog-te-balloon-frame,
+.goog-tooltip,
+.goog-tooltip:hover,
+body > .skiptranslate,
+div.skiptranslate,
+#google_translate_element {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0px !important;
+  max-height: 0px !important;
+  width: 0px !important;
+  max-width: 0px !important;
+  position: absolute !important;
+  top: -99999px !important;
+  left: -99999px !important;
+  z-index: -99999 !important;
+  pointer-events: none !important;
+  clip: rect(0 0 0 0) !important;
+  clip-path: inset(50%) !important;
+}
+
+html,
+body {
+  top: 0px !important;
+  position: static !important;
+  margin-top: 0px !important;
+}
+
+.goog-text-highlight {
+  background-color: transparent !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+font[style] {
+  background: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
